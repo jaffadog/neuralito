@@ -6,7 +6,6 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import Observations.InstancesCreator;
 import Observations.ObsData;
 import Observations.ObsDataLoader;
 import buoy.BuoyData;
@@ -15,6 +14,7 @@ import buoy.BuoyDataLoader;
 import util.Util;
 import weka.ArfData;
 import weka.ArfManager;
+import weka.InstancesCreator;
 import weka.core.Instances;
 import ww3.WWManager;
 import ww3.WaveWatchData;

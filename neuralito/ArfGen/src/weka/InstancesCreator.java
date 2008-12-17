@@ -1,4 +1,4 @@
-package Observations;
+package weka;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 
-import weka.ArfData;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
