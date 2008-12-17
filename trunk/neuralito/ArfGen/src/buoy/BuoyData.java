@@ -69,13 +69,12 @@ public class BuoyData {
 							return true;
 		return false;
 	}
+	
 	public String toString(){
 				
-		DateFormat formatter = new SimpleDateFormat();
-		formatter.setTimeZone(Util.utcTimeZone);
-		String date =  formatter.format(this.date.getTime()) ;
-		String string  = "Buoy: "+ date + " WH:"+  DecimalFormat.getInstance().format(this.waveHeight) +" WP:"+ DecimalFormat.getInstance().format(this.wavePeriod) + " WD:"+ DecimalFormat.getInstance().format(this.waveDirection) ;
-		return string;
+	
+		return	"Buoy: "+ Util.getDateFormatter().format(date.getTime()) + " WH:"+  Util.getDecimalFormatter().format(this.waveHeight) +" WP:"+ Util.getDecimalFormatter().format(this.wavePeriod) + " WD:"+ Util.getDecimalFormatter().format(this.waveDirection) ;
+		
 		
 	}
 }

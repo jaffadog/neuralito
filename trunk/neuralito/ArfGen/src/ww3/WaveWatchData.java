@@ -71,17 +71,6 @@ public class WaveWatchData implements java.io.Serializable{
 	}
 	
 	public boolean equalsDate(Calendar date){
-		
-		
-//		System.out.println("Time zone buoy:" + date.getTimeZone());
-//		System.out.println("WW3 time zone:" + this.getTime().getTimeZone());
-//		
-//		System.out.println(this.time.getTime() + " = " +this.time.get(Calendar.YEAR) + "/" + this.time.get(Calendar.MONTH) + "/" + this.time.get(Calendar.DAY_OF_MONTH));
-//		System.out.println(date.getTime() + " = " +date.get(Calendar.YEAR) + "/" + date.get(Calendar.MONTH) + "/" + date.get(Calendar.DAY_OF_MONTH));
-//		
-		Calendar c = new GregorianCalendar();
-		c.setTime(this.getDate().getTime());
-		this.time = c;
 		if (this.time.get(Calendar.YEAR) == date.get(Calendar.YEAR))
 			if (this.time.get(Calendar.MONTH) == date.get(Calendar.MONTH))
 				if (this.time.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
@@ -99,12 +88,7 @@ public class WaveWatchData implements java.io.Serializable{
 		return false;
 	}
 	public String toString(){
-		DateFormat formatter = new SimpleDateFormat();
-		formatter.setTimeZone(Util.utcTimeZone);
-		String date =  formatter.format(this.time.getTime()) ;
-		String string  ="WW3: "+ date + " WH:"+ DecimalFormat.getInstance().format(this.height) +" WP:"+ NumberFormat.getInstance().format(this.period) + " WD:"+DecimalFormat.getInstance().format(this.direction);
-		return string;
-		
+		return "WW3: "+ Util.getDateFormatter().format(this.time.getTime()) + " WH:"+ Util.getDecimalFormatter().format(this.height) +" WP:"+ Util.getDecimalFormatter().format(this.period) + " WD:"+Util.getDecimalFormatter().format(this.direction);
 	}
 	
 }

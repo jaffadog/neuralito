@@ -67,7 +67,7 @@ public class Main {
 		//ww3DataSet = (Vector<WaveWatchData>) ww3Direction.executeFilter(ww3DataSet);
 		
 		Util.printCollection(buoyDataSet);
-		//Util.printCollection(ww3DataSet);
+		Util.printCollection(ww3DataSet);
 		//Util.printCollection(obsDataSet);
 			
 		//Unify buoy, observations and ww3 data.
