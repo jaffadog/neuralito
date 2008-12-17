@@ -24,6 +24,7 @@ public Collection getWWData(){
 		Vector vec = (Vector) obj;
 		return vec;
 	} catch (Exception e) {
+		
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
@@ -37,7 +38,7 @@ public static void loadDataFromGrib() {
 			day = "0" + Integer.toString(i);
 		else
 			day = Integer.toString(i);
-		WaveWatchReader reader = new WaveWatchReader(
+		GribReader reader = new GribReader(
 				"files/WW3_2002/nww3.hs.2002" + day + ".grb",
 				"files/WW3_2002/nww3.tp.2002" + day + ".grb",
 				"files/WW3_2002/nww3.dp.2002" + day + ".grb");
