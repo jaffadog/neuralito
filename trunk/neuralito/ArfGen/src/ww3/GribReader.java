@@ -7,12 +7,12 @@ import java.util.Vector;
 import net.sourceforge.jgrib.GribFile;
 
 
-public class WaveWatchReader {
+public class GribReader {
 	
 	private GribFile gribHeight;
 	private GribFile gribPeriod;
 	private GribFile gribDirection;
-	public WaveWatchReader(String heightsFile, String periodFile, String directionFile){
+	public GribReader(String heightsFile, String periodFile, String directionFile){
 		try {
 			gribHeight = new GribFile(heightsFile);
 			gribPeriod = new GribFile(periodFile);
@@ -24,6 +24,12 @@ public class WaveWatchReader {
 		}
 		
 	}
+	/**
+	 * Reads the grib file and obtain the wavewatch data.
+	 * @param latitude The latitude to extract the grib data
+	 * @param longitude The longitud to extract the grib data
+	 * @return Collection of WaveWatchData at the given latitud longitud. 
+	 */
 	public Collection<WaveWatchData> getWaveWatchData(double latitude, double longitude){
 				
 		Collection dataSet = new Vector();
