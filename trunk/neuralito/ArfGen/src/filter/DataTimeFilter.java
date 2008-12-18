@@ -2,6 +2,7 @@ package filter;
 
 import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import buoy.BuoyData;
@@ -16,6 +17,7 @@ public class DataTimeFilter extends Filter {
 	public DataTimeFilter(){}
 	
 	public DataTimeFilter(Calendar minTime, Calendar maxTime){
+		
 		this.minTime = minTime;
 		this.maxTime = maxTime;
 	}
@@ -24,23 +26,27 @@ public class DataTimeFilter extends Filter {
 	public Vector<BuoyData> executeFilter(Vector<?> dataSet) {
 		Vector<BuoyData> dataset = (Vector<BuoyData>) dataSet;
 		Vector<BuoyData> dataFiltered = new Vector<BuoyData>();
-		for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();){
-			BuoyData data = e.nextElement();
-			
-			if (! InRange(data.getDate())){
-				//do nothing
+		
+		if (this.compareTime(this.minTime, this.maxTime) == 1){
+			Vector<Filter> filters = new Vector<Filter>();
+			filters.add(new DataTimeFilter(this.minTime, new GregorianCalendar(0, 0, 0, 23, 59)));
+			filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, 0, 0), this.maxTime));
+			Filter compuestFilter = new OrFilter(filters);
+			dataFiltered = (Vector<BuoyData>) compuestFilter.executeFilter(dataSet);
+		}
+		else{
+			for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();){
+				BuoyData data = e.nextElement();
+				
+				if (this.compareTime(data.getDate(), this.minTime) == -1 ||
+						this.compareTime(data.getDate(), this.maxTime) == 1){
+						//do nothing
+				}
+				else
+					dataFiltered.add(data);
 			}
-			else
-				dataFiltered.add(data);
 		}
 		return dataFiltered;
-	}
-
-	private boolean InRange(Calendar date) {
-		
-		if ( (date.get(Calendar.HOUR_OF_DAY) > 6 ) && (date.get(Calendar.HOUR_OF_DAY) < 17)) 
-			return false;
-		else return true;
 	}
 
 	public Calendar getMaxTime() {
@@ -81,10 +87,4 @@ public class DataTimeFilter extends Filter {
 				}
 		return 0;
 	}
-//	public boolean inBetween(Calendar time, Calendar min, Calendar max){
-//		if (time.get(Calendar.HOUR_OF_DAY) < min.get(Calendar.HOUR_OF_DAY) || time.get(Calendar.HOUR_OF_DAY) > max.get(Calendar.HOUR_OF_DAY))
-//		
-//		return false;
-//	}
-
 }
