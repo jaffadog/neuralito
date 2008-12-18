@@ -1,30 +1,22 @@
 
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
-
-import Observations.ObsData;
-import Observations.ObsDataLoader;
-import buoy.BuoyData;
-import buoy.BuoyDataLoader;
 
 import util.Util;
 import weka.ArfData;
 import weka.ArfManager;
-import weka.InstancesCreator;
-import weka.core.Instances;
 import ww3.WWManager;
 import ww3.WaveWatchData;
+import Observations.ObsData;
+import Observations.ObsDataLoader;
+import buoy.BuoyData;
+import buoy.BuoyDataLoader;
 import filter.AndFilter;
 import filter.DataTimeFilter;
-import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
-import filter.Ww3MaxWaveHeightFilter;
-import filter.ww3Filter.WW3DirectionFilter;
+import filter.ww3Filter.WW3CouplingFilter;
 
 public class Main {
 	public static final double minDirection = 35.0;
@@ -52,12 +44,14 @@ public class Main {
 	// Init Buoy Filters. 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, beginningHour, beginningMinutes), new GregorianCalendar(0, 0, 0, endHour, endMinutes))); 
 		//filters.add(DataWaveDirectionFilter(minDirection, maxDirection));
-		//filters.add(new MaxWaveHeightFilter());
+		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 	//Init WW3 Filter
-		Filter ww3Direction = new WW3DirectionFilter(minDirection,maxDirection);
-		Filter ww3MaxWaveHeight = new Ww3MaxWaveHeightFilter();
+		//Filter ww3Direction = new WW3DirectionFilter(minDirection,maxDirection);
 		//Filter ww3MaxWaveHeight = new Ww3MaxWaveHeightFilter();
+		//Filter ww3MaxWaveHeight = new Ww3MaxWaveHeightFilter();
+		
+		//Util.printCollection(ww3DataSet);
 		
 	//
 	//	Util.printCollection(buoyDataSet);
@@ -65,8 +59,10 @@ public class Main {
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		//ww3DataSet = (Vector<WaveWatchData>) ww3MaxWaveHeight.executeFilter(ww3DataSet);
 		//ww3DataSet = (Vector<WaveWatchData>) ww3Direction.executeFilter(ww3DataSet);
-		
+		Filter ww3coupling = new WW3CouplingFilter(buoyDataSet);
+		ww3DataSet = (Vector<WaveWatchData>) ww3coupling.executeFilter(ww3DataSet);
 		Util.printCollection(buoyDataSet);
+		//Util.printCollection(buoyDataSet);
 		Util.printCollection(ww3DataSet);
 		//Util.printCollection(obsDataSet);
 			
@@ -79,12 +75,12 @@ public class Main {
 		//arfManager.print(arfDataSet);
 		//Util.printCollection(arfDataSet);
 		
-		//Create Weka trainning data set
-		InstancesCreator creator = new InstancesCreator();
-		Instances instances = (creator.generateTrainningData("North Shore Oahu", arfDataSet)); 
-		//Create Weka trainning data set into file.
-		creator.generateFile("North Shore Oahu", arfDataSet);
-		
+//		//Create Weka trainning data set
+//		InstancesCreator creator = new InstancesCreator();
+//		Instances instances = (creator.generateTrainningData("North Shore Oahu", arfDataSet)); 
+//		//Create Weka trainning data set into file.
+//		creator.generateFile("North Shore Oahu", arfDataSet);
+//		
 		//Print Data set
 		//System.out.println("Class attribute: " +instances.classAttribute().name());
 		//System.out.println(instances);
