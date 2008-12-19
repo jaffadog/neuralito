@@ -12,13 +12,21 @@ import java.util.TimeZone;
 
 public final class Util {
 	public final static  TimeZone utcTimeZone = new SimpleTimeZone(0,"UTC");
+	public static final double minDirection = 35.0;
+	public static final double maxDirection = 137.0;
+	public static final int beginningHour = 17; // 7 am +10 hours to reach UTC time
+	public static final int beginningMinutes = 30;
+	public static final int endHour = 6;//20 pm + 10 hours to reach utc time
+	public static final int endMinutes = 30;
 	
 	public static void printCollection(Collection col){
 		
-		
+		int i = 0;
 		for (Iterator iterator = col.iterator(); iterator.hasNext();) {
+			
 			Object object = (Object) iterator.next();
-			System.out.println(object);
+			System.out.println(i + " :" + object);
+			i++;
 		}
 				
 	}
