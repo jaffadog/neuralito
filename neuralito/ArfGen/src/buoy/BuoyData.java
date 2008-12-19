@@ -1,17 +1,13 @@
 package buoy;
 
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.SimpleTimeZone;
 
 import util.Util;
 
 
 
-public class BuoyData {
+public class BuoyData implements Comparable{
 	
 	private Calendar date = null;
 	private Double waveHeight = null;
@@ -76,6 +72,18 @@ public class BuoyData {
 		return	"Buoy: "+ Util.getDateFormatter().format(date.getTime()) + " WH:"+  Util.getDecimalFormatter().format(this.waveHeight) +" WP:"+ Util.getDecimalFormatter().format(this.wavePeriod) + " WD:"+ Util.getDecimalFormatter().format(this.waveDirection) ;
 		
 		
+	}
+
+	public int compareTo(Object o) {
+		BuoyData buoyData = (BuoyData)o;
+		int result = this.getDate().compareTo(buoyData.getDate());
+		
+		if (result < 0)
+	        return -1;
+	    if (result > 0)
+	        return 1;
+
+		return 0;
 	}
 }
 
