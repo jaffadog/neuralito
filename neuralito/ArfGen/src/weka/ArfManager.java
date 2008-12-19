@@ -24,7 +24,7 @@ public class ArfManager {
 	public ArfManager(){
 		
 	}
-	public void SetGenerationStrategy(GenerationStrategy strat){
+	public void setGenerationStrategy(GenerationStrategy strat){
 		this.generationStrategy = strat;
 	}
 	public DataSet generateDataSet(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet){
