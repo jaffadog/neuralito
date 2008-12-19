@@ -1,5 +1,6 @@
 package filter;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -24,6 +25,7 @@ public class OrFilter extends CompuestFilter{
 			Vector<BuoyData> parcialData = (Vector<BuoyData>) filter.executeFilter(dataset);
 			this.addNotEquals(filteredData, parcialData);
 		}
+		Collections.sort(filteredData);
 		return filteredData;
 	}
 	
