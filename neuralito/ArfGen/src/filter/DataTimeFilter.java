@@ -38,12 +38,17 @@ public class DataTimeFilter extends Filter {
 			for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();){
 				BuoyData data = e.nextElement();
 				
-				if (this.compareTime(data.getDate(), this.minTime) == -1 ||
-						this.compareTime(data.getDate(), this.maxTime) == 1){
-						//do nothing
-				}
-				else
+//				if (this.compareTime(data.getDate(), this.minTime) == -1 ||
+//						this.compareTime(data.getDate(), this.maxTime) == 1){
+//						//do nothing
+//				}
+//			}
+//			else
+//				dataFiltered.add(data);
+				if(InRange(data.getDate())){
 					dataFiltered.add(data);
+				}
+			
 			}
 		}
 		return dataFiltered;
@@ -86,5 +91,11 @@ public class DataTimeFilter extends Filter {
 								return 0;
 				}
 		return 0;
+	}
+private boolean InRange(Calendar date) {
+		
+		if ( (date.get(Calendar.HOUR_OF_DAY) > 6 ) && (date.get(Calendar.HOUR_OF_DAY) < 17)) 
+			return false;
+		else return true;
 	}
 }

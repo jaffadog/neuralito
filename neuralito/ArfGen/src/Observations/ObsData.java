@@ -18,13 +18,19 @@ public class ObsData {
 	public void setDate(Calendar date) {
 		this.date = date;
 	}
-
+	/**
+	 * Return the visual observation of wave height. Observation are made from Sunset beach when surf is < 15 (HSF) and from Waimea when surf >15(HSF). 
+	 * @return Wave height in  through to crest scale meters.
+	 */
 	public Double getNShore() {
 		return nShore;
 	}
-
+	/**
+	 * Convert the given shore wave height into  through to crest scale meters. 
+	 * @param shore wave height observed from shore in hawaiian scale feet
+	 */
 	public void setNShore(Double shore) {
-		nShore = shore;
+		nShore = shore*0.3048*2; //*0.30 is to convert foot to meter, and *2 is to convert from Hawaiaan Scale Feet to Through To Crest Scale Feet.
 	}
 	
 	public boolean equalsDate(Calendar date){
@@ -45,10 +51,8 @@ public class ObsData {
 		return false;
 	}
 	public String toString(){
-		DateFormat formatter = new SimpleDateFormat();
-		formatter.setTimeZone(Util.utcTimeZone);
-		String date =  formatter.format(this.date.getTime()) ;
-		String string  ="V.Obs: "+ date + " WH: "+ this.nShore ;
+		String date =  Util.getDateFormatter().format(this.date.getTime()) ;
+		String string  ="V.Obs: "+ date + " WH: "+ Util.getDecimalFormatter().format(this.nShore );
 		return string;
 		
 	}

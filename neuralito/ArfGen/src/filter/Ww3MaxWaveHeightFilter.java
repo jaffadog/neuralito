@@ -10,7 +10,7 @@ import ww3.WaveWatchData;
 
 
 public class Ww3MaxWaveHeightFilter extends Filter {
-	
+	@Deprecated
 	public Ww3MaxWaveHeightFilter(){}
 	
 	@Override
