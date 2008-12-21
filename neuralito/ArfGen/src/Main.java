@@ -5,8 +5,10 @@ import java.util.Vector;
 import util.Util;
 import weka.ArfManager;
 import weka.DataSet;
+import weka.GenerationStrategy;
 import weka.InstancesCreator;
 import weka.NoDirectionStrategy;
+import weka.core.Instances;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -30,20 +32,41 @@ public class Main {
 		Vector<BuoyData> buoyDataSet;
 		Vector<WaveWatchData> ww3DataSet;
 		Vector<ObsData> obsDataSet;
-	//Load buoy data Ww3 Vobs
+
+	//Choose generation Strategy
+		GenerationStrategy generationStrategy = new NoDirectionStrategy("NoDirectionStrategy"," Descripcion de la estrategia....");
+		
+				
+		
+	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(".//files//b106-2002.txt");
 		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData();
 		obsDataSet  = new ObsDataLoader().loadObsData(".//files//oahu2002.dat");
-	//Generate DataSet	
+		System.out.println("**************************************************************");
+		System.out.println("***********************Before Applying Filters****************");
+		System.out.println("**************************************************************");
+		Util.printCollection("Buoy Data Set",buoyDataSet);
+		Util.printCollection("WW3 Data Set",ww3DataSet);
+		Util.printCollection("Visual Observations",obsDataSet);
+		
+	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
-		arfManager.SetGenerationStrategy(new NoDirectionStrategy());
+		arfManager.setGenerationStrategy(generationStrategy);
 		DataSet dataSet = arfManager.generateDataSet(buoyDataSet, obsDataSet, ww3DataSet);
-	//Print DataSet
+		System.out.println("**************************************************************");
+		System.out.println("*************General DataSet After Applying Filters***********");
+		System.out.println("**************************************************************");
 		Util.printCollection(dataSet.getInstances());
+	
 	//Generate Weka Data Set
 		InstancesCreator creator = new InstancesCreator();
-		creator.generateTrainningData(dataSet.getName(), dataSet.getInstances());
-			
+		Instances wekaDataSet = creator.generateTrainningData(dataSet.getName(), dataSet.getInstances());
+		System.out.println("**************************************************************");
+		System.out.println("*************Weka DataSet After Applying Filters**************");
+		System.out.println("**************************************************************");
+		Util.printWekaInstances(wekaDataSet);
+		//Generate Weka arff File
+		creator.generateFile(dataSet.getName(), wekaDataSet);
 	}
 	
 	

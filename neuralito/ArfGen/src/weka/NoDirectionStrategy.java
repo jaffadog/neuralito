@@ -17,9 +17,25 @@ import ww3.WaveWatchData;
 
 public class NoDirectionStrategy implements GenerationStrategy {
 
+	private String name;
+	private String description;
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public NoDirectionStrategy(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
 	@Override
 	public DataSet generateTrainningData(Vector<BuoyData> buoyDataSet,
 			Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet) {
+		
+		
+		
 		Vector<Filter> filters = new Vector<Filter>();
 	 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
@@ -30,7 +46,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 		Filter ww3coupling = new WW3CouplingFilter(buoyDataSet);
 		ww3DataSet = (Vector<WaveWatchData>) ww3coupling.executeFilter(ww3DataSet);
 		
-		return new DataSet("No Direction Filter Data Set", mergeData(buoyDataSet, obsDataSet, ww3DataSet));
+		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet));
 	}
 	private Vector<ArfData> mergeData(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet){
 		Vector<ArfData> arfDataSet = new Vector<ArfData>();
@@ -59,6 +75,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 				arfDataSet.add(arfData);
 			}
 		}
+		
 		return arfDataSet;
 	}
 

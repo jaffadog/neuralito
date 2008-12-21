@@ -78,6 +78,19 @@ public class InstancesCreator {
 		}
 		 		
 	}
+	public void generateFile(String fileName, Instances dataSet){
+		 ArffSaver saver = new ArffSaver();
+		 saver.setInstances(dataSet);
+		 try {
+			saver.setFile(new File("files/" + dataSet.relationName() + ".arff"));
+			saver.setDestination( new File("files/" + fileName + ".arff"));   // **not** necessary in 3.5.4 and later
+			saver.writeBatch();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 		
+	}
 	
 	
 }
