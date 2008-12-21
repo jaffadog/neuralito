@@ -10,5 +10,6 @@ public interface GenerationStrategy {
 
 	DataSet generateTrainningData(Vector<BuoyData> buoyDataSet,
 			Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet);
-
+	public String getName();
+	public String getDescription();
 }
