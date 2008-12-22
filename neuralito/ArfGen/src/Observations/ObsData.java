@@ -30,7 +30,7 @@ public class ObsData {
 	 * @param shore wave height observed from shore in hawaiian scale feet
 	 */
 	public void setNShore(Double shore) {
-		nShore = shore*0.3048*2; //*0.30 is to convert foot to meter, and *2 is to convert from Hawaiaan Scale Feet to Through To Crest Scale Feet.
+		nShore = shore * 0.3048 * 2; //*0.30 is to convert foot to meter, and *2 is to convert from Hawaiaan Scale Feet to Through To Crest Scale Feet.
 	}
 	
 	public boolean equalsDate(Calendar date){

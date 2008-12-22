@@ -7,35 +7,34 @@ import java.util.Vector;
 
 import buoy.BuoyData;
 
-
 public class DataTimeFilter extends Filter {
 
 	private Calendar minTime = null;
-	
+
 	private Calendar maxTime = null;
-	
-	public DataTimeFilter(){}
-	
-	public DataTimeFilter(Calendar minTime, Calendar maxTime){
-		
+
+	public DataTimeFilter() {
+	}
+
+	public DataTimeFilter(Calendar minTime, Calendar maxTime) {
+
 		this.minTime = minTime;
 		this.maxTime = maxTime;
 	}
-	
+
 	@Override
 	public Vector<BuoyData> executeFilter(Vector<?> dataSet) {
 		Vector<BuoyData> dataset = (Vector<BuoyData>) dataSet;
 		Vector<BuoyData> dataFiltered = new Vector<BuoyData>();
-		
-		if (this.compareTime(this.minTime, this.maxTime) == 1){
+
+		if (this.compareTime(this.minTime, this.maxTime) == 1) {
 			Vector<Filter> filters = new Vector<Filter>();
 			filters.add(new DataTimeFilter(this.minTime, new GregorianCalendar(0, 0, 0, 23, 59)));
 			filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, 0, 0), this.maxTime));
 			Filter compuestFilter = new OrFilter(filters);
 			dataFiltered = (Vector<BuoyData>) compuestFilter.executeFilter(dataSet);
-		}
-		else{
-			for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();){
+		} else {
+			for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();) {
 				BuoyData data = e.nextElement();
 				
 				if (this.compareTime(data.getDate(), this.minTime) == -1 || this.compareTime(data.getDate(), this.maxTime) == 1){
@@ -44,10 +43,6 @@ public class DataTimeFilter extends Filter {
 				else
 					dataFiltered.add(data);
 			}
-			
-//				if(InRange(data.getDate())){
-//					dataFiltered.add(data);
-//				}
 		}
 		return dataFiltered;
 	}
@@ -67,33 +62,34 @@ public class DataTimeFilter extends Filter {
 	public void setMinTime(Calendar minTime) {
 		this.minTime = minTime;
 	}
-	
-	private int compareTime(Calendar time1, Calendar time2){
-		//-1 time1 < time 2
-		//0 time1 = time 2
-		//1 time1 > time 2
+
+	private int compareTime(Calendar time1, Calendar time2) {
+		// 1 time1 < time 2
+		// 0 time1 = time 2
+		// 1 time1 > time 2
 		if (time1.get(Calendar.HOUR_OF_DAY) < time2.get(Calendar.HOUR_OF_DAY))
 			return -1;
-		else 
-			if (time1.get(Calendar.HOUR_OF_DAY) > time2.get(Calendar.HOUR_OF_DAY))
+		else if (time1.get(Calendar.HOUR_OF_DAY) > time2
+				.get(Calendar.HOUR_OF_DAY))
+			return 1;
+		else if (time1.get(Calendar.HOUR_OF_DAY) == time2
+				.get(Calendar.HOUR_OF_DAY)) {
+			if (time1.get(Calendar.MINUTE) < time2.get(Calendar.MINUTE))
+				return -1;
+			else if (time1.get(Calendar.MINUTE) > time2.get(Calendar.MINUTE))
 				return 1;
-			else 
-				if (time1.get(Calendar.HOUR_OF_DAY) == time2.get(Calendar.HOUR_OF_DAY)){
-					if (time1.get(Calendar.MINUTE) < time2.get(Calendar.MINUTE))
-						return -1;
-					else
-						if (time1.get(Calendar.MINUTE) > time2.get(Calendar.MINUTE))
-							return 1;
-						else
-							if (time1.get(Calendar.MINUTE) == time2.get(Calendar.MINUTE))
-								return 0;
-				}
+			else if (time1.get(Calendar.MINUTE) == time2.get(Calendar.MINUTE))
+				return 0;
+		}
 		return 0;
 	}
-private boolean InRange(Calendar date) {
-		
-		if ( (date.get(Calendar.HOUR_OF_DAY) > 6 ) && (date.get(Calendar.HOUR_OF_DAY) < 17)) 
+	/*
+	private boolean InRange(Calendar date) {
+
+		if ((date.get(Calendar.HOUR_OF_DAY) > 6) && (date.get(Calendar.HOUR_OF_DAY) < 17))
 			return false;
-		else return true;
+		else
+			return true;
 	}
+	*/
 }
