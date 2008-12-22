@@ -5,9 +5,11 @@ import java.util.Vector;
 
 import filter.AndFilter;
 import filter.DataTimeFilter;
+import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 import filter.ww3Filter.WW3CouplingFilter;
+import filter.ww3Filter.WW3DirectionFilter;
 
 import Observations.ObsData;
 import buoy.BuoyData;
@@ -15,7 +17,7 @@ import util.Util;
 import ww3.WaveWatchData;
 
 
-public class NoDirectionStrategy implements GenerationStrategy {
+public class FullFiltersStrategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
@@ -26,7 +28,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 	public String getName() {
 		return name;
 	}
-	public NoDirectionStrategy(String name, String description) {
+	public FullFiltersStrategy(String name, String description) {
 		this.name = name;
 		this.description = description;
 	}
@@ -40,11 +42,16 @@ public class NoDirectionStrategy implements GenerationStrategy {
 	 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
 		filters.add(new MaxWaveHeightFilter());
+		filters.add(new DataWaveDirectionFilter(new Double(200),new Double(350)));
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		
-		Filter ww3coupling = new WW3CouplingFilter(buoyDataSet, 12, true);
-		ww3DataSet = (Vector<WaveWatchData>) ww3coupling.executeFilter(ww3DataSet);
+		filters.removeAllElements();
+		
+		filters.add(new WW3DirectionFilter(new Double(200),new Double(350)));
+		filters.add(new WW3CouplingFilter(buoyDataSet, 12, true));
+		compuestFilter = new AndFilter(filters);
+		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
 		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet));
 	}
