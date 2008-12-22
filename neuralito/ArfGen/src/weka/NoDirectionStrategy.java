@@ -43,7 +43,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		
-		Filter ww3coupling = new WW3CouplingFilter(buoyDataSet);
+		Filter ww3coupling = new WW3CouplingFilter(buoyDataSet, 12);
 		ww3DataSet = (Vector<WaveWatchData>) ww3coupling.executeFilter(ww3DataSet);
 		
 		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet));
