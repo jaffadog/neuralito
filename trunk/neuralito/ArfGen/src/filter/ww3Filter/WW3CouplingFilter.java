@@ -11,12 +11,18 @@ import buoy.BuoyData;
 import filter.Filter;
 
 public class WW3CouplingFilter extends Filter {
-	private Collection buoyData;
+	private Collection<BuoyData> buoyData;
 	private int maxHoursDifference = 12;
+	private boolean sameDayRestrict = true;
 
-	public WW3CouplingFilter(Collection buoyData, int maxHourDifference) {
+	public WW3CouplingFilter(Collection<BuoyData> buoyData) {
+		this.buoyData = buoyData;
+	}
+	
+	public WW3CouplingFilter(Collection<BuoyData> buoyData, int maxHoursDifference, boolean sameDayRestrict) {
 		this.buoyData = buoyData;
 		this.maxHoursDifference = maxHoursDifference;
+		this.sameDayRestrict = sameDayRestrict;
 	}
 
 	@Override
@@ -62,8 +68,13 @@ public class WW3CouplingFilter extends Filter {
 	
 	private WaveWatchData checkHoursDifference(WaveWatchData wwData, BuoyData buoy){
 		long maxHourDiffMillisec = this.maxHoursDifference * 3600000; 
+		
+		if (this.sameDayRestrict && !buoy.equalsDate(wwData.getDate()))
+			return null;
+		
 		if (Math.abs(wwData.getDate().getTimeInMillis() - buoy.getDate().getTimeInMillis()) > maxHourDiffMillisec)
 			return null;
+		
 		return wwData;
 	}
 	
