@@ -14,6 +14,7 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.datasetStrategy.GenerationStrategy;
 import ww3.WaveWatchData;
 
 public class ArfManager {

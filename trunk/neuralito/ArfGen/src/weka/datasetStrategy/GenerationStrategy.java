@@ -1,7 +1,8 @@
-package weka;
+package weka.datasetStrategy;
 
 import java.util.Vector;
 
+import weka.DataSet;
 import ww3.WaveWatchData;
 import Observations.ObsData;
 import buoy.BuoyData;

@@ -1,4 +1,4 @@
-package weka;
+package weka.datasetStrategy;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
@@ -12,6 +12,8 @@ import filter.ww3Filter.WW3CouplingFilter;
 import Observations.ObsData;
 import buoy.BuoyData;
 import util.Util;
+import weka.ArfData;
+import weka.DataSet;
 import ww3.WaveWatchData;
 
 
@@ -19,6 +21,20 @@ public class NoDirectionStrategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
+	
+	public NoDirectionStrategy() {
+		this.name = "NoDirectionStrategy";
+		this.description = "Esta estrategia contiene los siguientes datos: \n\n" +
+			"Boyas: Periodo de ola, altura maxima por dia, tomando solo los valores en que hay luz solar \n" +
+			"WW3: Periodo de ola, altura de la ola a la misma hora de la medicion de la Boya escogida (aprox) \n" +
+			"Observacion: Observacion visual que representa la altura maxima que alcanzaron las olas en ese dia \n";
+	}
+	
+	public NoDirectionStrategy(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -26,10 +42,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 	public String getName() {
 		return name;
 	}
-	public NoDirectionStrategy(String name, String description) {
-		this.name = name;
-		this.description = description;
-	}
+	
 	@Override
 	public DataSet generateTrainningData(Vector<BuoyData> buoyDataSet,
 			Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet) {
