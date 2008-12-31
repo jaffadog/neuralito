@@ -1,0 +1,16 @@
+TODO LIST
+---------
+---------
+
+
+Maxi
+----
+
+-generalizar los elementos que se la pasan a una estrategia, tal vez con un hash o vector
+-ver como levantar diferentes conjuntos de datos
+-estrategia: solo ww3 y observacion
+-estrategia: todo usando el filtro de direccion
+
+Esteban
+-------
+
