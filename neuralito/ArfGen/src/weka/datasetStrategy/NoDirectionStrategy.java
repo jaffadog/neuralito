@@ -1,20 +1,20 @@
 package weka.datasetStrategy;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.Hashtable;
 import java.util.Vector;
 
+import util.Util;
+import weka.ArfData;
+import weka.DataSet;
+import ww3.WaveWatchData;
+import Observations.ObsData;
+import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 import filter.ww3Filter.WW3CouplingFilter;
-
-import Observations.ObsData;
-import buoy.BuoyData;
-import util.Util;
-import weka.ArfData;
-import weka.DataSet;
-import ww3.WaveWatchData;
 
 
 public class NoDirectionStrategy implements GenerationStrategy {
@@ -44,13 +44,13 @@ public class NoDirectionStrategy implements GenerationStrategy {
 	}
 	
 	@Override
-	public DataSet generateTrainningData(Vector<BuoyData> buoyDataSet,
-			Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet) {
-		
-		
+	public DataSet generateTrainningData(Hashtable<String, Object> dataCollection) {
+		Vector<BuoyData> buoyDataSet = (Vector<BuoyData>) dataCollection.get("buoyData");
+		Vector<ObsData> obsDataSet = (Vector<ObsData>) dataCollection.get("obsData");
+		Vector<WaveWatchData> ww3DataSet = (Vector<WaveWatchData>) dataCollection.get("ww3Data");
 		
 		Vector<Filter> filters = new Vector<Filter>();
-	 
+		 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
 		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
@@ -61,6 +61,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 		
 		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet));
 	}
+	
 	private Vector<ArfData> mergeData(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet){
 		Vector<ArfData> arfDataSet = new Vector<ArfData>();
 		for (Enumeration<BuoyData> e = buoyDataSet.elements(); e.hasMoreElements();){

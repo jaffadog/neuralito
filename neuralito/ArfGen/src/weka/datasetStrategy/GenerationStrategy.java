@@ -1,5 +1,6 @@
 package weka.datasetStrategy;
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 import weka.DataSet;
@@ -8,9 +9,10 @@ import Observations.ObsData;
 import buoy.BuoyData;
 
 public interface GenerationStrategy {
-
-	DataSet generateTrainningData(Vector<BuoyData> buoyDataSet,
-			Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet);
+	
+	public DataSet generateTrainningData(Hashtable<String,Object> dataCollection);
+	
 	public String getName();
+	
 	public String getDescription();
 }

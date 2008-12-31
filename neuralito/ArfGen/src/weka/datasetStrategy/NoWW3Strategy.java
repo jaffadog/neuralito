@@ -1,6 +1,7 @@
 package weka.datasetStrategy;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import filter.AndFilter;
@@ -42,23 +43,23 @@ public class NoWW3Strategy implements GenerationStrategy {
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
-	public DataSet generateTrainningData(Vector<BuoyData> buoyDataSet,
-			Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet) {
-		
-		
+	public DataSet generateTrainningData(Hashtable<String, Object> dataCollection) {
+		Vector<BuoyData> buoyDataSet = (Vector<BuoyData>) dataCollection.get("buoyData");
+		Vector<ObsData> obsDataSet = (Vector<ObsData>) dataCollection.get("obsData");
 		
 		Vector<Filter> filters = new Vector<Filter>();
-	 
+		 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
-		filters.add(new DataWaveDirectionFilter(new Double(150), new Double(350)));
+		filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
 		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 				
 		return new DataSet( name, mergeData(buoyDataSet, obsDataSet));
 	}
+	
 	private Vector<ArfData> mergeData(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet){
 		Vector<ArfData> arfDataSet = new Vector<ArfData>();
 		for (Enumeration<BuoyData> e = buoyDataSet.elements(); e.hasMoreElements();){
