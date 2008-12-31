@@ -1,8 +1,6 @@
 package Observations;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
@@ -26,6 +24,19 @@ public class ObsDataLoader {
 		for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
 			Vector<String> lineValues = e.nextElement();
 			obsData.add(this.generateData(lineValues));
+		}
+		return obsData;
+	}
+	
+	public Vector<ObsData> loadObsData(String[] fileNames){
+		Vector<ObsData> obsData = new Vector<ObsData>();
+		for (int f = 0; f < fileNames.length; f++){
+			String fileName = fileNames[f];
+			Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
+			for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
+				Vector<String> lineValues = e.nextElement();
+				obsData.add(this.generateData(lineValues));
+			}
 		}
 		return obsData;
 	}

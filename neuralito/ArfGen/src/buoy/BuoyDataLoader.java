@@ -27,6 +27,18 @@ public class BuoyDataLoader {
 		return buoyData;
 	}
 	
+	public Vector<BuoyData> loadBuoyData(String[] fileNames){
+		Vector<BuoyData> buoyData = new Vector<BuoyData>();
+		for (int f = 0; f < fileNames.length; f++){
+			String fileName = fileNames[f];
+			Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
+			for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
+				Vector<String> lineValues = e.nextElement();
+				buoyData.add(this.generateData(lineValues));
+			}
+		}
+		return buoyData;
+	}
 //	specific method to generate the data, depends of the input file structure
 	private BuoyData generateData(Vector<String> lineValues){
 		BuoyData data = new BuoyData();
