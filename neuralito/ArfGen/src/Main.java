@@ -1,5 +1,6 @@
 
 
+import java.util.Hashtable;
 import java.util.Vector;
 
 import util.Util;
@@ -8,7 +9,7 @@ import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
 import weka.datasetStrategy.GenerationStrategy;
-import weka.datasetStrategy.NoDirectionStrategy;
+import weka.datasetStrategy.NoWW3Strategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -34,25 +35,31 @@ public class Main {
 		Vector<ObsData> obsDataSet;
 
 	//Choose generation Strategy
-		GenerationStrategy generationStrategy = new NoDirectionStrategy("NoDirectionStrategy"," Descripcion de la estrategia....");
+		GenerationStrategy generationStrategy = new NoWW3Strategy();
 		
-				
+		String[] buoyFiles = new String[]{".//files//b106-2002.txt", ".//files//b106-2003.txt"};
+		String[] obsFiles = new String[]{".//files//oahu2002.dat", ".//files//oahu2003.dat"};		
 		
 	//	Load buoy data Ww3 Vobs
-		buoyDataSet = new BuoyDataLoader().loadBuoyData(".//files//b106-2002.txt");
+		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
 		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData();
-		obsDataSet  = new ObsDataLoader().loadObsData(".//files//oahu2002.dat");
-		System.out.println("**************************************************************");
-		System.out.println("***********************Before Applying Filters****************");
-		System.out.println("**************************************************************");
-		Util.printCollection("Buoy Data Set",buoyDataSet);
-		Util.printCollection("WW3 Data Set",ww3DataSet);
-		Util.printCollection("Visual Observations",obsDataSet);
+		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
+		
+		Hashtable<String, Object> dataCollection = new Hashtable<String, Object>();
+		dataCollection.put("buoyData", buoyDataSet);
+		dataCollection.put("obsData", obsDataSet);
+		dataCollection.put("ww3Data", ww3DataSet);
+//		System.out.println("**************************************************************");
+//		System.out.println("***********************Before Applying Filters****************");
+//		System.out.println("**************************************************************");
+//		Util.printCollection("Buoy Data Set",buoyDataSet);
+//		Util.printCollection("WW3 Data Set",ww3DataSet);
+//		Util.printCollection("Visual Observations",obsDataSet);
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
 		arfManager.setGenerationStrategy(generationStrategy);
-		DataSet dataSet = arfManager.generateDataSet(buoyDataSet, obsDataSet, ww3DataSet);
+		DataSet dataSet = arfManager.generateDataSet(dataCollection);
 		System.out.println("**************************************************************");
 		System.out.println("*************General DataSet After Applying Filters***********");
 		System.out.println("**************************************************************");
@@ -64,7 +71,7 @@ public class Main {
 		System.out.println("**************************************************************");
 		System.out.println("*************Weka DataSet After Applying Filters**************");
 		System.out.println("**************************************************************");
-		Util.printWekaInstances(wekaDataSet);
+//		Util.printWekaInstances(wekaDataSet);
 		//Generate Weka arff File
 		creator.generateFile(dataSet.getName(), wekaDataSet);
 	}
