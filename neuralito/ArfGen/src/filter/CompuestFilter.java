@@ -28,5 +28,5 @@ public abstract class CompuestFilter extends Filter{
 		this.filters = filters;
 	}
 
-	public  abstract Vector<BuoyData> executeFilter(Vector<?> dataSet);
+	public  abstract Vector<?> executeFilter(Vector<?> dataSet);
 }

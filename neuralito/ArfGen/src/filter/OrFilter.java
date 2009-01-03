@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import buoy.BuoyData;
+import util.WaveData;
 
 
 public class OrFilter extends CompuestFilter{
@@ -17,23 +17,22 @@ public class OrFilter extends CompuestFilter{
 		super(filters);
 	}
 
-	public Vector<BuoyData> executeFilter(Vector<?> dataSet){
-		Vector<BuoyData> dataset = (Vector<BuoyData>) dataSet;
-		Vector<BuoyData> filteredData = new Vector<BuoyData>();
+	public Vector<?> executeFilter(Vector<?> dataSet){
+		Vector filteredData = new Vector();
 		for (Enumeration<Filter> e = this.filters.elements(); e.hasMoreElements();){
 			Filter filter = e.nextElement();
-			Vector<BuoyData> parcialData = (Vector<BuoyData>) filter.executeFilter(dataset);
+			Vector parcialData = (Vector) filter.executeFilter(dataSet);
 			this.addNotEquals(filteredData, parcialData);
 		}
 		Collections.sort(filteredData);
 		return filteredData;
 	}
 	
-	private void addNotEquals(Vector<BuoyData> filteredData, Vector<BuoyData> parcialData){
-		for (Enumeration<BuoyData> e = parcialData.elements(); e.hasMoreElements();){
-			BuoyData buoyData = e.nextElement();
-			if (!filteredData.contains(buoyData))
-				filteredData.add(buoyData);
+	private void addNotEquals(Vector filteredData, Vector parcialData){
+		for (Enumeration<Object> e = parcialData.elements(); e.hasMoreElements();){
+			Object waveData = e.nextElement();
+			if (!filteredData.contains(waveData))
+				filteredData.add(waveData);
 		}
 	}
 }

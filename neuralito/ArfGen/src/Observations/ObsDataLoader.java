@@ -37,6 +37,7 @@ public class ObsDataLoader {
 				Vector<String> lineValues = e.nextElement();
 				obsData.add(this.generateData(lineValues));
 			}
+			this.fileReader = new FileDataReader();
 		}
 		return obsData;
 	}
