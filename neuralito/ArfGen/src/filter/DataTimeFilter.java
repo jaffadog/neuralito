@@ -13,8 +13,7 @@ public class DataTimeFilter extends Filter {
 
 	private Calendar maxTime = null;
 
-	public DataTimeFilter() {
-	}
+	public DataTimeFilter() {}
 
 	public DataTimeFilter(Calendar minTime, Calendar maxTime) {
 
