@@ -14,7 +14,7 @@ import filter.AndFilter;
 import filter.DataTimeFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
-import filter.ww3Filter.WW3CouplingFilter;
+import filter.WW3CouplingFilter;
 
 
 public class NoDirectionStrategy implements GenerationStrategy {
