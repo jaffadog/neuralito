@@ -1,4 +1,4 @@
-package filter.ww3Filter;
+package filter;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -9,7 +9,6 @@ import ww3.WaveWatchData;
 
 import buoy.BuoyData;
 
-import filter.Filter;
 
 public class WW3CouplingFilter extends Filter {
 	private Collection<BuoyData> buoyData;
