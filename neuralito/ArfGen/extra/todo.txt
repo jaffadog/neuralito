@@ -7,7 +7,7 @@ Maxi
 ----
 
 -estrategia: solo ww3 y observacion
--estrategia: todo usando el filtro de direccion
+
 
 Esteban
 -------
