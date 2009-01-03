@@ -3,9 +3,9 @@ package buoy;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
-import java.util.SimpleTimeZone;
 import java.util.Vector;
 
+import util.Util;
 import weka.FileDataReader;
 
 
@@ -36,6 +36,7 @@ public class BuoyDataLoader {
 				Vector<String> lineValues = e.nextElement();
 				buoyData.add(this.generateData(lineValues));
 			}
+			this.fileReader = new FileDataReader();
 		}
 		return buoyData;
 	}
@@ -44,7 +45,7 @@ public class BuoyDataLoader {
 		BuoyData data = new BuoyData();
 		
 		//date
-		Calendar date = new GregorianCalendar(new SimpleTimeZone(0,"fruta"));
+		Calendar date = new GregorianCalendar(Util.utcTimeZone);
 		date.set(new Integer(lineValues.elementAt(0)), new Integer(lineValues.elementAt(1)) - 1, new Integer(lineValues.elementAt(2)), new Integer(lineValues.elementAt(3)), new Integer(lineValues.elementAt(4)));
 		//Calendar date = new GregorianCalendar(new Integer(lineValues.elementAt(0)), new Integer(lineValues.elementAt(1)) - 1, new Integer(lineValues.elementAt(2)), new Integer(lineValues.elementAt(3)), new Integer(lineValues.elementAt(4)));
 		data.setDate(date);

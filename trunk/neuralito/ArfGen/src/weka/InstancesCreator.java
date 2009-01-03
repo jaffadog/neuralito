@@ -1,18 +1,14 @@
 package weka;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Vector;
-
 
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
-import ww3.WaveWatchData;
 
 public class InstancesCreator {
 
@@ -30,24 +26,24 @@ public class InstancesCreator {
 	
 		Instances data;
 		// 	Creates the numeric attributes
-		FastVector attributes = new FastVector(7);
+		FastVector attributes = new FastVector(4);
 		attributes.addElement(new Attribute("buoyHeight"));
 		attributes.addElement(new Attribute("buoyPeriod"));
 		attributes.addElement(new Attribute("buoyDirection"));
-		attributes.addElement(new Attribute("ww3Height"));
-		attributes.addElement(new Attribute("ww3Period"));
-		attributes.addElement(new Attribute("ww3Direction"));
+//		attributes.addElement(new Attribute("ww3Height"));
+//		attributes.addElement(new Attribute("ww3Period"));
+//		attributes.addElement(new Attribute("ww3Direction"));
 		attributes.addElement(new Attribute("visualObservation"));
 		// Creates an empty data set
 		data = new Instances(relationName, attributes, 1000);
-		data.setClassIndex(7-1);
+		data.setClassIndex(4-1);
 		return data;
 		
 	}
 	private Instance makeInstance(Instances dataSet, ArfData data){
  		
 		//Create empty instance with 7 attributes
-		Instance instance = new Instance(7);
+		Instance instance = new Instance(4);
 
 		// give the instances access to the data set
 		instance.setDataset(dataSet);
@@ -56,9 +52,9 @@ public class InstancesCreator {
 		instance.setValue(dataSet.attribute("buoyHeight"), data.getBuoyData().getWaveHeight());
 		instance.setValue(dataSet.attribute("buoyPeriod"), data.getBuoyData().getWavePeriod());
 		instance.setValue(dataSet.attribute("buoyDirection"), data.getBuoyData().getWaveDirection());
-		instance.setValue(dataSet.attribute("ww3Height"), data.getWw3Data().getHeight());
-		instance.setValue(dataSet.attribute("ww3Period"), data.getWw3Data().getPeriod());
-		instance.setValue(dataSet.attribute("ww3Direction"), data.getWw3Data().getDirection());
+//		instance.setValue(dataSet.attribute("ww3Height"), data.getWw3Data().getHeight());
+//		instance.setValue(dataSet.attribute("ww3Period"), data.getWw3Data().getPeriod());
+//		instance.setValue(dataSet.attribute("ww3Direction"), data.getWw3Data().getDirection());
 		instance.setValue(dataSet.attribute("visualObservation"), data.getObsData().getNShore());
 		
 		return instance;

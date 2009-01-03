@@ -4,19 +4,16 @@ import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import util.Util;
+import weka.ArfData;
+import weka.DataSet;
+import Observations.ObsData;
+import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
 import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
-import filter.ww3Filter.WW3CouplingFilter;
-
-import Observations.ObsData;
-import buoy.BuoyData;
-import util.Util;
-import weka.ArfData;
-import weka.DataSet;
-import ww3.WaveWatchData;
 
 
 public class NoWW3Strategy implements GenerationStrategy {

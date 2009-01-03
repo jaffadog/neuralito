@@ -4,10 +4,11 @@ package buoy;
 import java.util.Calendar;
 
 import util.Util;
+import util.WaveData;
 
 
 
-public class BuoyData implements Comparable{
+public class BuoyData implements WaveData, Comparable{
 	
 	private Calendar date = null;
 	private Double waveHeight = null;
@@ -22,7 +23,7 @@ public class BuoyData implements Comparable{
 		this.date = date;
 	}
 	
-	public Double getWaveDirection() {
+	public double getWaveDirection() {
 		return waveDirection;
 	}
 	
@@ -30,7 +31,7 @@ public class BuoyData implements Comparable{
 		this.waveDirection = waveDirection;
 	}
 	
-	public Double getWaveHeight() {
+	public double getWaveHeight() {
 		return waveHeight;
 	}
 	
@@ -38,7 +39,7 @@ public class BuoyData implements Comparable{
 		this.waveHeight = waveHeight;
 	}
 	
-	public Double getWavePeriod() {
+	public double getWavePeriod() {
 		return wavePeriod;
 	}
 	
@@ -67,11 +68,7 @@ public class BuoyData implements Comparable{
 	}
 	
 	public String toString(){
-				
-	
 		return	"Buoy: "+ Util.getDateFormatter().format(date.getTime()) + " WH:"+  Util.getDecimalFormatter().format(this.waveHeight) +" WP:"+ Util.getDecimalFormatter().format(this.wavePeriod) + " WD:"+ Util.getDecimalFormatter().format(this.waveDirection) ;
-		
-		
 	}
 
 	public int compareTo(Object o) {

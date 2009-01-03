@@ -18,25 +18,13 @@ import buoy.BuoyData;
 import buoy.BuoyDataLoader;
 
 public class Main {
-	public static final double minDirection = 35.0;
-	public static final double maxDirection = 137.0;
-	public static final int beginningHour = 6; // 7 am +10 hours to reach UTC time
-	public static final int beginningMinutes = 30;
-	public static final int endHour = 17;//20 pm + 10 hours to reach utc time
-	public static final int endMinutes = 30;
-	
-	/**
-	 * @param args
-	 */
+
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		Vector<BuoyData> buoyDataSet;
 		Vector<WaveWatchData> ww3DataSet;
 		Vector<ObsData> obsDataSet;
-
-	//Choose generation Strategy
-		GenerationStrategy generationStrategy = new NoWW3Strategy();
-		
+	// Set data files for load
 		String[] buoyFiles = new String[]{".//files//b106-2002.txt", ".//files//b106-2003.txt"};
 		String[] obsFiles = new String[]{".//files//oahu2002.dat", ".//files//oahu2003.dat"};		
 		
@@ -56,6 +44,9 @@ public class Main {
 //		Util.printCollection("WW3 Data Set",ww3DataSet);
 //		Util.printCollection("Visual Observations",obsDataSet);
 		
+	//Choose generation Strategy
+		GenerationStrategy generationStrategy = new NoWW3Strategy();
+		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
 		arfManager.setGenerationStrategy(generationStrategy);
@@ -71,7 +62,7 @@ public class Main {
 		System.out.println("**************************************************************");
 		System.out.println("*************Weka DataSet After Applying Filters**************");
 		System.out.println("**************************************************************");
-//		Util.printWekaInstances(wekaDataSet);
+		//Util.printWekaInstances(wekaDataSet);
 		//Generate Weka arff File
 		creator.generateFile(dataSet.getName(), wekaDataSet);
 	}

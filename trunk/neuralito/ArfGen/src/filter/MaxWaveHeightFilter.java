@@ -3,7 +3,8 @@ package filter;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import buoy.BuoyData;
+import util.WaveData;
+
 
 
 public class MaxWaveHeightFilter extends Filter {
@@ -11,12 +12,12 @@ public class MaxWaveHeightFilter extends Filter {
 	public MaxWaveHeightFilter(){}
 	
 	@Override
-	public Vector<BuoyData> executeFilter(Vector<?> dataSet) {
-		Vector<BuoyData> dataset = (Vector<BuoyData>) dataSet;
-		Vector<BuoyData> dataFiltered = new Vector<BuoyData>();
-		BuoyData currentMaxHeight = null;
-		for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();){
-			BuoyData data = e.nextElement();
+	public Vector<WaveData> executeFilter(Vector<?> dataSet) {
+		Vector<WaveData> dataset = (Vector<WaveData>) dataSet;
+		Vector<WaveData> dataFiltered = new Vector<WaveData>();
+		WaveData currentMaxHeight = null;
+		for (Enumeration<WaveData> e = dataset.elements(); e.hasMoreElements();){
+			WaveData data = e.nextElement();
 			
 			if (currentMaxHeight == null)
 				currentMaxHeight = data;
@@ -34,7 +35,7 @@ public class MaxWaveHeightFilter extends Filter {
 		return dataFiltered;
 	}
 	
-	private BuoyData maxHeightRead(BuoyData currentMaxHeight, BuoyData currentData){
+	private WaveData maxHeightRead(WaveData currentMaxHeight, WaveData currentData){
 		if (currentMaxHeight.getWaveHeight() < currentData.getWaveHeight())
 			return currentData;
 		else

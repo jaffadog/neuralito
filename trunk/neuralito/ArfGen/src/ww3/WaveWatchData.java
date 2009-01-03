@@ -1,17 +1,12 @@
 package ww3;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.Format;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
+
+import buoy.BuoyData;
 
 import util.Util;
+import util.WaveData;
 
-
-
-public class WaveWatchData implements java.io.Serializable{
+public class WaveWatchData implements WaveData, java.io.Serializable, Comparable{
 	
 	/**
 	 * 
@@ -25,13 +20,13 @@ public class WaveWatchData implements java.io.Serializable{
 	private double direction;
 	
 	public double getWaveHeight(){
-		return 0;
+		return this.height;
 	}
 	public double getWavePeriod(){
-		return 0;
+		return this.period;
 	}
 	public double getWaveDirection(){
-		return 0;
+		return this.direction;
 	}
 	public Calendar getDate() {
 		return time;
@@ -87,8 +82,21 @@ public class WaveWatchData implements java.io.Serializable{
 							return true;
 		return false;
 	}
+	
 	public String toString(){
 		return "WW3: "+ Util.getDateFormatter().format(this.time.getTime()) + " WH:"+ Util.getDecimalFormatter().format(this.height) +" WP:"+ Util.getDecimalFormatter().format(this.period) + " WD:"+Util.getDecimalFormatter().format(this.direction);
+	}
+	
+	public int compareTo(Object o) {
+		WaveWatchData ww3Data = (WaveWatchData)o;
+		int result = this.getDate().compareTo(ww3Data.getDate());
+		
+		if (result < 0)
+	        return -1;
+	    if (result > 0)
+	        return 1;
+
+		return 0;
 	}
 	
 }

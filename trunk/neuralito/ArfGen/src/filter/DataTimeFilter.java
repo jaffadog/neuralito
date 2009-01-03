@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import buoy.BuoyData;
+import util.WaveData;
 
 public class DataTimeFilter extends Filter {
 
@@ -23,19 +23,19 @@ public class DataTimeFilter extends Filter {
 	}
 
 	@Override
-	public Vector<BuoyData> executeFilter(Vector<?> dataSet) {
-		Vector<BuoyData> dataset = (Vector<BuoyData>) dataSet;
-		Vector<BuoyData> dataFiltered = new Vector<BuoyData>();
+	public Vector<WaveData> executeFilter(Vector<?> dataSet) {
+		Vector<WaveData> dataset = (Vector<WaveData>) dataSet;
+		Vector<WaveData> dataFiltered = new Vector<WaveData>();
 
 		if (this.compareTime(this.minTime, this.maxTime) == 1) {
 			Vector<Filter> filters = new Vector<Filter>();
 			filters.add(new DataTimeFilter(this.minTime, new GregorianCalendar(0, 0, 0, 23, 59)));
 			filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, 0, 0), this.maxTime));
 			Filter compuestFilter = new OrFilter(filters);
-			dataFiltered = (Vector<BuoyData>) compuestFilter.executeFilter(dataSet);
+			dataFiltered = (Vector<WaveData>) compuestFilter.executeFilter(dataSet);
 		} else {
-			for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();) {
-				BuoyData data = e.nextElement();
+			for (Enumeration<WaveData> e = dataset.elements(); e.hasMoreElements();) {
+				WaveData data = e.nextElement();
 				
 				if (this.compareTime(data.getDate(), this.minTime) == -1 || this.compareTime(data.getDate(), this.maxTime) == 1){
 						//do nothing

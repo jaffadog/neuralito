@@ -3,7 +3,7 @@ package filter;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import buoy.BuoyData;
+import util.WaveData;
 
 
 public class DataWaveDirectionFilter extends Filter {
@@ -20,11 +20,11 @@ public class DataWaveDirectionFilter extends Filter {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Vector<BuoyData> executeFilter(Vector<?> dataSet) {
-		Vector<BuoyData> dataset = (Vector<BuoyData>) dataSet;
-		Vector<BuoyData> dataFiltered = new Vector<BuoyData>();
-		for (Enumeration<BuoyData> e = dataset.elements(); e.hasMoreElements();){
-			BuoyData data = e.nextElement();
+	public Vector<WaveData> executeFilter(Vector<?> dataSet) {
+		Vector<WaveData> dataset = (Vector<WaveData>) dataSet;
+		Vector<WaveData> dataFiltered = new Vector<WaveData>();
+		for (Enumeration<WaveData> e = dataset.elements(); e.hasMoreElements();){
+			WaveData data = e.nextElement();
 			if (data.getWaveDirection() < this.minDegree || data.getWaveDirection() > this.maxDegree){
 				//do nothing
 			}
