@@ -8,6 +8,7 @@ Maxi
 
 -estrategia: solo ww3 y observacion
 -agregar en las observaciones las demas playas, pero eso hay que verlo mas adelante
+-testear como andan los filtros ahora que los estandarize  tanto para las boyas como para ww3
 
 Esteban
 -------
