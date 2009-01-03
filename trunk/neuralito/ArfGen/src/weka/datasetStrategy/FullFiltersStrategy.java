@@ -46,13 +46,13 @@ public class FullFiltersStrategy implements GenerationStrategy {
 		 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
 		filters.add(new MaxWaveHeightFilter());
-		filters.add(new DataWaveDirectionFilter(new Double(200),new Double(350)));
+		filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		
 		filters.removeAllElements();
 		
-		filters.add(new WW3DirectionFilter(new Double(200),new Double(350)));
+		filters.add(new WW3DirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
 		filters.add(new WW3CouplingFilter(buoyDataSet, 12, true));
 		compuestFilter = new AndFilter(filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
