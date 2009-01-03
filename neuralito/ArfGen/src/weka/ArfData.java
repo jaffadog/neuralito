@@ -57,6 +57,7 @@ public class ArfData {
 		String buoyString = this.buoyData != null ? this.buoyData.toString() + " || " : ""; 
 		String ww3String = this.ww3Data != null ? this.ww3Data.toString() + " || " : "";
 		String obsString = this.obsData != null ? this.obsData.toString() : "";
+		
 		return buoyString + ww3String + obsString;
 	}
 
