@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
 
+import util.WaveData;
 import ww3.WaveWatchData;
 
 import buoy.BuoyData;
@@ -26,15 +27,15 @@ public class WW3CouplingFilter extends Filter {
 	}
 
 	@Override
-	public Vector<?> executeFilter(Vector<?> WW3DataSet) {
-		Collection<WaveWatchData> wwDatas = new Vector<WaveWatchData>();
+	public Vector<WaveData> executeFilter(Vector<?> WW3DataSet) {
+		Vector<WaveData> wwDatas = new Vector<WaveData>();
 		for (Iterator iterator = buoyData.iterator(); iterator.hasNext();) {
 			BuoyData buoy = (BuoyData) iterator.next();
 			WaveWatchData wwData = getMoreRecentWaveWAtchOfBuoy(buoy, WW3DataSet);
 			if (wwData != null)
 				wwDatas.add(wwData);
 		}
-		return (Vector<?>) wwDatas;
+		return wwDatas;
 	}
 
 	private WaveWatchData getMoreRecentWaveWAtchOfBuoy(BuoyData buoy, Vector<?> WW3DataSet) {

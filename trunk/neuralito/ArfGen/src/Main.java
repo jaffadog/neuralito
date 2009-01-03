@@ -9,7 +9,7 @@ import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
 import weka.datasetStrategy.GenerationStrategy;
-import weka.datasetStrategy.NoWW3Strategy;
+import weka.datasetStrategy.NoDirectionStrategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -25,7 +25,7 @@ public class Main {
 		Vector<WaveWatchData> ww3DataSet;
 		Vector<ObsData> obsDataSet;
 	// Set data files for load
-		String[] buoyFiles = new String[]{".//files//b106-2002.txt", ".//files//b106-2003.txt"};
+		String[] buoyFiles = new String[]{".//files//b106-2002.txt"};
 		String[] obsFiles = new String[]{".//files//oahu2002.dat", ".//files//oahu2003.dat"};		
 		
 	//	Load buoy data Ww3 Vobs
@@ -45,7 +45,7 @@ public class Main {
 //		Util.printCollection("Visual Observations",obsDataSet);
 		
 	//Choose generation Strategy
-		GenerationStrategy generationStrategy = new NoWW3Strategy();
+		GenerationStrategy generationStrategy = new NoDirectionStrategy();
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
@@ -62,7 +62,7 @@ public class Main {
 		System.out.println("**************************************************************");
 		System.out.println("*************Weka DataSet After Applying Filters**************");
 		System.out.println("**************************************************************");
-		//Util.printWekaInstances(wekaDataSet);
+		Util.printWekaInstances(wekaDataSet);
 		//Generate Weka arff File
 		creator.generateFile(dataSet.getName(), wekaDataSet);
 	}
