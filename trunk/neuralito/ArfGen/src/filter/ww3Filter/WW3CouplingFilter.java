@@ -70,6 +70,9 @@ public class WW3CouplingFilter extends Filter {
 	private WaveWatchData checkHoursDifference(WaveWatchData wwData, BuoyData buoy){
 		long maxHourDiffMillisec = this.maxHoursDifference * 3600000; 
 		
+		if (wwData == null)
+			return null;
+		
 		if (this.sameDayRestrict && !buoy.equalsDate(wwData.getDate()))
 			return null;
 		

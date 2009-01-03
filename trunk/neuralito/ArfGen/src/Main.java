@@ -25,7 +25,7 @@ public class Main {
 		Vector<WaveWatchData> ww3DataSet;
 		Vector<ObsData> obsDataSet;
 	// Set data files for load
-		String[] buoyFiles = new String[]{".//files//b106-2002.txt"};
+		String[] buoyFiles = new String[]{".//files//b106-2002.txt", ".//files//b106-2003.txt"};
 		String[] obsFiles = new String[]{".//files//oahu2002.dat", ".//files//oahu2003.dat"};		
 		
 	//	Load buoy data Ww3 Vobs
