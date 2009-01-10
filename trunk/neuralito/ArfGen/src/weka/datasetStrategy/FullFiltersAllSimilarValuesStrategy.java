@@ -89,7 +89,8 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 		compuestFilter = new AndFilter(filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
-		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet));
+		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
+		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet), strategyAttributes, "visualObservation");
 	}
 	
 	private Vector<ArfData> mergeData(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet){

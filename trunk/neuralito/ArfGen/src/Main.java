@@ -58,7 +58,7 @@ public class Main {
 	
 	//Generate Weka Data Set
 		InstancesCreator creator = new InstancesCreator();
-		Instances wekaDataSet = creator.generateTrainningData(dataSet.getName(), dataSet.getInstances());
+		Instances wekaDataSet = creator.generateTrainningData(dataSet);
 		System.out.println("**************************************************************");
 		System.out.println("*************Weka DataSet After Applying Filters**************");
 		System.out.println("**************************************************************");
