@@ -6,7 +6,7 @@ TODO LIST
 Maxi
 ----
 
--estrategia: solo ww3 y observacion
+-estrategia: en etapa de olas y no olas
 -agregar en las observaciones las demas playas, pero eso hay que verlo mas adelante
 -testear como andan los filtros ahora que los estandarize  tanto para las boyas como para ww3
 
@@ -19,6 +19,3 @@ General
 -------
 
 -armar carta de solicitud de tesis
--Hay que arreglar la clase InstancesCreator, porque se caga cuando una strategia no tiene siete atributos,
-	ya que eso esta como hardcodeado, hay que hacerlo mas dinamico. Cuando meti la estrategia de solo boya 
-	y observacion, o la de solo ww3 y observacion (ambas tienen 4 atributos) ahi exploto ya que esppera 7

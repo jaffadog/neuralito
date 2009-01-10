@@ -89,8 +89,12 @@ public final class Util {
 		Enumeration en = instances.enumerateInstances();
 		while (en.hasMoreElements()) {
 			Instance instance = (Instance) en.nextElement();
-			
-			System.out.println("B.WH:" + Util.getDecimalFormatter().format(instance.value(0))+ "||B.WP:" + Util.getDecimalFormatter().format(instance.value(1)) + "||B.WD:" + Util.getDecimalFormatter().format(instance.value(2)) + "||WW3.WH:" + Util.getDecimalFormatter().format(instance.value(3)) + "||WW3.WP:" + Util.getDecimalFormatter().format(instance.value(4))+ "||WW3.WD:" + Util.getDecimalFormatter().format(instance.value(5)) + "||VO.WH:" + Util.getDecimalFormatter().format( instance.value(6) ) );
+			String instanceString = "";
+			for (int i = 0; i < instance.numAttributes(); i++){
+				instanceString += instance.attribute(i).name() + ":" + Util.getDecimalFormatter().format(instance.value(i)) + "  ";
+			}
+			System.out.println(instanceString);
+			//System.out.println("B.WH:" + Util.getDecimalFormatter().format(instance.value(0))+ "||B.WP:" + Util.getDecimalFormatter().format(instance.value(1)) + "||B.WD:" + Util.getDecimalFormatter().format(instance.value(2)) + "||WW3.WH:" + Util.getDecimalFormatter().format(instance.value(3)) + "||WW3.WP:" + Util.getDecimalFormatter().format(instance.value(4))+ "||WW3.WD:" + Util.getDecimalFormatter().format(instance.value(5)) + "||VO.WH:" + Util.getDecimalFormatter().format( instance.value(6) ) );
 		}
 		
 		

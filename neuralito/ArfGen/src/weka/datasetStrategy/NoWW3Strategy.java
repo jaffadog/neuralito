@@ -53,8 +53,9 @@ public class NoWW3Strategy implements GenerationStrategy {
 		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
-				
-		return new DataSet( name, mergeData(buoyDataSet, obsDataSet));
+		
+		String[] strategyAttributes = {"buoyHeight", "buoyPeriod", "buoyDirection", "visualObservation"};
+		return new DataSet( name, mergeData(buoyDataSet, obsDataSet), strategyAttributes, "visualObservation");
 	}
 	
 	private Vector<ArfData> mergeData(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet){

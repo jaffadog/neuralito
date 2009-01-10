@@ -8,11 +8,13 @@ import weka.ArfManager;
 import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
+import weka.datasetStrategy.FullFiltersAllSimilarValuesStrategy;
 import weka.datasetStrategy.FullFiltersSimilarValuesStrategy;
 import weka.datasetStrategy.FullFiltersStrategy;
 import weka.datasetStrategy.GenerationStrategy;
 import weka.datasetStrategy.NoBuoyStrategy;
 import weka.datasetStrategy.NoDirectionStrategy;
+import weka.datasetStrategy.NoWW3Strategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -48,7 +50,9 @@ public class MainMaxi {
 //		Util.printCollection("Visual Observations",obsDataSet);
 		
 	//Choose generation Strategy
-		GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(0.7, 30, 2);
+		//GenerationStrategy generationStrategy = new FullFiltersStrategy();
+		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(0.7, 30, 2);
+		GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(0.7, 30, 2, 0.7);
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
@@ -60,14 +64,14 @@ public class MainMaxi {
 		Util.printCollection(dataSet.getInstances());
 	
 	//Generate Weka Data Set
-//		InstancesCreator creator = new InstancesCreator();
-//		Instances wekaDataSet = creator.generateTrainningData(dataSet.getName(), dataSet.getInstances());
-//		System.out.println("**************************************************************");
-//		System.out.println("*************Weka DataSet After Applying Filters**************");
-//		System.out.println("**************************************************************");
-//		//Util.printWekaInstances(wekaDataSet);
-//		//Generate Weka arff File
-//		creator.generateFile(dataSet.getName(), wekaDataSet);
+		InstancesCreator creator = new InstancesCreator();
+		Instances wekaDataSet = creator.generateTrainningData(dataSet);
+		System.out.println("**************************************************************");
+		System.out.println("*************Weka DataSet After Applying Filters**************");
+		System.out.println("**************************************************************");
+		Util.printWekaInstances(wekaDataSet);
+		//Generate Weka arff File
+		creator.generateFile(dataSet.getName(), wekaDataSet);
 	}
 	
 	

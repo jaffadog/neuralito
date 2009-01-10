@@ -59,7 +59,8 @@ public class NoDirectionStrategy implements GenerationStrategy {
 		Filter ww3coupling = new WW3CouplingFilter(buoyDataSet, 12, true);
 		ww3DataSet = (Vector<WaveWatchData>) ww3coupling.executeFilter(ww3DataSet);
 		
-		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet));
+		String[] strategyAttributes = {"buoyHeight", "buoyPeriod", "buoyDirection", "ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
+		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet), strategyAttributes, "visualObservation");
 	}
 	
 	private Vector<ArfData> mergeData(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet){

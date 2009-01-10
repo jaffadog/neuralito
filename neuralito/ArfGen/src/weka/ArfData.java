@@ -5,6 +5,7 @@ import java.util.Calendar;
 import Observations.ObsData;
 import buoy.BuoyData;
 
+import weka.core.Attribute;
 import ww3.WaveWatchData;
 
 public class ArfData {
@@ -60,5 +61,29 @@ public class ArfData {
 		
 		return buoyString + ww3String + obsString;
 	}
-
+	
+	public double getValue(String attribute){
+		if (attribute == "buoyHeight"){
+			return this.buoyData.getWaveHeight();
+		}
+		if (attribute == "buoyPeriod"){
+			return this.buoyData.getWavePeriod();
+		}
+		if (attribute == "buoyDirection"){
+			return this.buoyData.getWaveDirection();
+		}
+		if (attribute == "ww3Height"){
+			return this.ww3Data.getWaveHeight();
+		}
+		if (attribute == "ww3Period"){
+			return this.ww3Data.getWavePeriod();
+		}
+		if (attribute == "ww3Direction"){
+			return this.ww3Data.getWaveDirection();
+		}
+		if (attribute == "visualObservation"){
+			return this.obsData.getNShore();
+		}
+		return 0;
+	}
 }
