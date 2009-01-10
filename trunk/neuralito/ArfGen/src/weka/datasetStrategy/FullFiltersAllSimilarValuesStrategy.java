@@ -18,38 +18,42 @@ import filter.MaxWaveHeightFilter;
 import filter.WW3CouplingFilter;
 
 
-public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
+public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
 	private final double deltaHeight;
 	private final double deltaPeriod;
 	private final double deltaDirection;
+	private final double deltaObservation;
 	
-	public FullFiltersSimilarValuesStrategy() {
+	public FullFiltersAllSimilarValuesStrategy() {
 		this.initStrategy();
 		this.deltaHeight = 0;
 		this.deltaDirection = 0;
 		this.deltaPeriod = 0;
+		this.deltaObservation = 0;
 	}
 	
-	public FullFiltersSimilarValuesStrategy(double deltaHeight, double deltaDirection, double deltaPeriod) {
+	public FullFiltersAllSimilarValuesStrategy(double deltaHeight, double deltaDirection, double deltaPeriod, double deltaObservation) {
 		this.initStrategy();
 		this.deltaHeight = deltaHeight;
 		this.deltaDirection = deltaDirection;
 		this.deltaPeriod = deltaPeriod;
+		this.deltaObservation = deltaObservation;
 	}
 	
-	public FullFiltersSimilarValuesStrategy(String name, String description, double deltaHeight, double deltaDirection, double deltaPeriod) {
+	public FullFiltersAllSimilarValuesStrategy(String name, String description, double deltaHeight, double deltaDirection, double deltaPeriod, double deltaObservation) {
 		this.name = name;
 		this.description = description;
 		this.deltaHeight = deltaHeight;
 		this.deltaDirection = deltaDirection;
 		this.deltaPeriod = deltaPeriod;
+		this.deltaObservation = deltaObservation;
 	}
 
 	public void initStrategy(){
-		this.name = "FullFiltersSimilarValuesStrategy";
+		this.name = "FullFiltersAllSimilarValuesStrategy";
 		this.description = "Esta estrategia contiene los siguientes datos: \n\n" +
 		"Boyas: Periodo de ola, altura maxima por dia, tomando solo los valores en que hay luz solar, y tomando solo las olas con direccion especificada en Util.java \n" +
 		"WW3: Periodo de ola, altura de la ola a la misma hora de la medicion de la Boya escogida (aprox) y , y tomando solo las olas con direccion especificada en Util.java \n" +
@@ -110,7 +114,7 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 				}		
 			}
 			if (obsData != null && ww3Data != null){
-				if (this.similarValues(buoyData, ww3Data)){
+				if (this.similarValues(buoyData, ww3Data, obsData)){
 					ArfData arfData = new ArfData(buoyData, obsData, ww3Data);
 					arfData.setDate(buoyData.getDate());
 					arfDataSet.add(arfData);
@@ -121,11 +125,12 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 		return arfDataSet;
 	}
 
-	private boolean similarValues(BuoyData buoyData, WaveWatchData ww3Data){
+	private boolean similarValues(BuoyData buoyData, WaveWatchData ww3Data, ObsData obsData){
 		if (Math.abs(buoyData.getWaveDirection() - ww3Data.getWaveDirection()) < this.deltaDirection)
 			if (Math.abs(buoyData.getWaveHeight() - ww3Data.getWaveHeight()) < this.deltaHeight)
 				if (Math.abs(buoyData.getWavePeriod() - ww3Data.getWavePeriod()) < this.deltaPeriod)
-					return true;
+					if (Math.abs(obsData.getNShore() - ww3Data.getWaveHeight()) < this.deltaObservation)
+						return true;
 		return false;
 	}
 
