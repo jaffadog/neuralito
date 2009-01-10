@@ -52,8 +52,8 @@ public class FullFiltersStrategy implements GenerationStrategy {
 		Vector<Filter> filters = new Vector<Filter>();
 		 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
-		filters.add(new MaxWaveHeightFilter());
 		filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
+		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		
