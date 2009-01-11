@@ -10,25 +10,30 @@ import java.util.Vector;
 
 public class WWManager {
 
-	public Collection getWWData() {
-		// Read from disk using FileInputStream.
-		FileInputStream f_in;
-		try {
-			f_in = new FileInputStream(".//files//ww3//ww3_2002.data");
-			// Read object using ObjectInputStream.
-			ObjectInputStream obj_in;
-			obj_in = new ObjectInputStream(f_in);
-			// Read an object.
-			Object obj;
-			obj = obj_in.readObject();
-			Vector vec = (Vector) obj;
-			return vec;
-		} catch (Exception e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public Collection getWWData(String[] ww3Files) {
+		Vector wwData = new Vector();
+		for (int i = 0; i < ww3Files.length; i++){
+			String fileName = ww3Files[i];
+			// Read from disk using FileInputStream.
+			FileInputStream f_in;
+			try {
+				f_in = new FileInputStream(fileName);
+				// Read object using ObjectInputStream.
+				ObjectInputStream obj_in;
+				obj_in = new ObjectInputStream(f_in);
+				// Read an object.
+				Object obj;
+				obj = obj_in.readObject();
+				Vector vec = (Vector) obj;
+				wwData.addAll(vec);
+				//return vec;
+			} catch (Exception e) {
+	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		return null;
+		return wwData;
 	}
 
 	public static void loadDataFromGrib() {
