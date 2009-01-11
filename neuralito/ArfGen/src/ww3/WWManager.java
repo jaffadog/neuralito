@@ -14,7 +14,7 @@ public class WWManager {
 		// Read from disk using FileInputStream.
 		FileInputStream f_in;
 		try {
-			f_in = new FileInputStream("files/ww3_2002.data");
+			f_in = new FileInputStream(".//files//ww3//ww3_2002.data");
 			// Read object using ObjectInputStream.
 			ObjectInputStream obj_in;
 			obj_in = new ObjectInputStream(f_in);
@@ -53,7 +53,7 @@ public class WWManager {
 			// Use a FileOutputStream to send data to a file
 			// called myobject.data.
 
-			FileOutputStream f_out = new FileOutputStream("files/ww3_" + year + ".data");
+			FileOutputStream f_out = new FileOutputStream(".//files//ww3//ww3_" + year + ".data");
 
 			// Use an ObjectOutputStream to send object data to the
 			// FileOutputStream for writing to disk.
