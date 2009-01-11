@@ -61,8 +61,8 @@ public class InstancesCreator {
 		ArffSaver saver = new ArffSaver();
 		saver.setInstances(instancesDataSet);
 		try {
-			saver.setFile(new File("files/" + relationName + ".arff"));
-			saver.setDestination( new File("files/" + relationName + ".arff"));   // **not** necessary in 3.5.4 and later
+			saver.setFile(new File(".//files//arff//" + relationName + ".arff"));
+			saver.setDestination( new File(".//files//arff//" + relationName + ".arff"));   // **not** necessary in 3.5.4 and later
 			saver.writeBatch();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -74,8 +74,8 @@ public class InstancesCreator {
 		 ArffSaver saver = new ArffSaver();
 		 saver.setInstances(dataSet);
 		 try {
-			saver.setFile(new File("files/" + dataSet.relationName() + ".arff"));
-			saver.setDestination( new File("files/" + fileName + ".arff"));   // **not** necessary in 3.5.4 and later
+			saver.setFile(new File(".//files//arff//" + dataSet.relationName() + ".arff"));
+			saver.setDestination( new File(".//files//arff//" + fileName + ".arff"));   // **not** necessary in 3.5.4 and later
 			saver.writeBatch();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
