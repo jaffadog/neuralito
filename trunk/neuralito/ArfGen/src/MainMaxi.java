@@ -3,6 +3,9 @@
 import java.util.Hashtable;
 import java.util.Vector;
 
+import filter.Filter;
+import filter.MonthFilter;
+
 import util.Util;
 import weka.ArfManager;
 import weka.DataSet;
@@ -32,10 +35,11 @@ public class MainMaxi {
 	// Set data files for load
 		String[] buoyFiles = new String[]{".//files//buoys//b106-2002.txt", ".//files//buoys//b106-2003.txt"};
 		String[] obsFiles = new String[]{".//files//observations//oahu2002.dat", ".//files//observations//oahu2003.dat"};		
+		String[] ww3Files = new String[]{".//files//ww3//ww3_2002.data", ".//files//ww3//ww3_2003.data"};
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
-		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData();
+		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(ww3Files);
 		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
 		
 		Hashtable<String, Object> dataCollection = new Hashtable<String, Object>();
