@@ -14,7 +14,7 @@ public class WaveWatchTest {
 	public static void main(String[] args) {
 		System.out.println(" ");	
 		WWManager manager = new WWManager();
-		//manager.loadDataFromGrib();
+		manager.loadDataFromGrib();
 		System.out.println(manager.getWWData());
 		//print( manager.getWWData());
 		//System.out.println(" ");
