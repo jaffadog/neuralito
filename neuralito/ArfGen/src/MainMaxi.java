@@ -1,5 +1,6 @@
 
 
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -15,6 +16,7 @@ import weka.datasetStrategy.FullFiltersAllSimilarValuesStrategy;
 import weka.datasetStrategy.FullFiltersSimilarValuesStrategy;
 import weka.datasetStrategy.FullFiltersStrategy;
 import weka.datasetStrategy.GenerationStrategy;
+import weka.datasetStrategy.MonthPeriodStrategy;
 import weka.datasetStrategy.NoBuoyStrategy;
 import weka.datasetStrategy.NoDirectionStrategy;
 import weka.datasetStrategy.NoWW3Strategy;
@@ -56,8 +58,8 @@ public class MainMaxi {
 	//Choose generation Strategy
 		//GenerationStrategy generationStrategy = new FullFiltersStrategy();
 		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(0.7, 30, 2);
-		GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(0.7, 30, 2, 0.7);
-		
+		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(0.7, 30, 2, 0.7);
+		GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
 		arfManager.setGenerationStrategy(generationStrategy);
