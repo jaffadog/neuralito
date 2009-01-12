@@ -3,6 +3,9 @@ package weka;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Time;
 import java.util.Date;
 import java.util.Vector;
@@ -70,5 +73,32 @@ public class FileDataReader {
 		return lineValues;
 	}
 	
-	
+	public boolean writeFile(String fileName, String text){
+        FileWriter file = null;
+        PrintWriter pw = null;
+        try
+        {
+        	file = new FileWriter(fileName);
+            pw = new PrintWriter(file);
+            pw.println(text == null ? "" : text);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+           // Nuevamente aprovechamos el finally para 
+           // asegurarnos que se cierra el fichero.
+           if (null != file){
+				try {
+					file.close();
+					return true;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
+				}
+           }
+        }
+        return false;
+    }
+
 }

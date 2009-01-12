@@ -80,7 +80,7 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
-		return new DataSet( name, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
+		return new DataSet( this.name, this.description, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
 	}
 	
 	private Vector<ArfData> mergeData(Vector<WaveWatchData> ww3DataSet, Vector<ObsData> obsDataSet){
