@@ -10,11 +10,11 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.Vector;
 
-public class FileDataReader {
+public class FileDataIO {
 	
 	private Vector<Vector<String>> linesValues = null;
 	
-	public FileDataReader(){
+	public FileDataIO(){
 		this.linesValues = new Vector<Vector<String>>();
 	}
 	
