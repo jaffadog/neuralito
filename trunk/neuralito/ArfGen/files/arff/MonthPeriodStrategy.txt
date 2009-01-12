@@ -1,0 +1,6 @@
+Esta estrategia contiene los siguientes datos: 
+
+WW3: Periodo de ola, altura maxima por dia, direccion de la ola, tomando solo los valores en que hay luz solar 
+Observacion: Observacion visual que representa la altura maxima que alcanzaron las olas en ese dia 
+Mostrando solo las observaciones entre los meses pasados por parametro 
+

@@ -4,22 +4,36 @@ import java.util.Collection;
 import java.util.Vector;
 
 public class DataSet {
-	private String DataSetName;
+	private String dataSetName;
+	private String dataSetDescription;
 	private Collection instances;
 	private String[] attributes;
 	private String classAttribute;
 	
 	public DataSet(String name, Collection instances){
-		this.DataSetName = name;
+		this.dataSetName = name;
+		this.instances = instances;		
+	}
+	
+	public DataSet(String name, String description, Collection instances){
+		this.dataSetName = name;
 		this.instances = instances;
-		
+		this.dataSetDescription = description;	
 	}
 	
 	public DataSet(String name, Collection instances, String[] attributes, String classAttribute){
-		this.DataSetName = name;
+		this.dataSetName = name;
 		this.instances = instances;
 		this.attributes = attributes;
 		this.classAttribute = classAttribute;
+	}
+	
+	public DataSet(String name, String description, Collection instances, String[] attributes, String classAttribute){
+		this.dataSetName = name;
+		this.instances = instances;
+		this.attributes = attributes;
+		this.classAttribute = classAttribute;
+		this.dataSetDescription = description;
 	}
 		
 	public Collection getInstances() {
@@ -27,8 +41,12 @@ public class DataSet {
 	}
 
 	public String getName() {
+		return this.dataSetName;
+	}
+	
+	public String getDescription() {
 		// TODO Auto-generated method stub
-		return this.DataSetName;
+		return this.dataSetDescription;
 	}
 
 	public String[] getAttributes() {

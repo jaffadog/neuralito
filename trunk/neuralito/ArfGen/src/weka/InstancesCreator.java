@@ -68,9 +68,11 @@ public class InstancesCreator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 		
+		
+		FileDataReader fileWriter = new FileDataReader();
+		fileWriter.writeFile(".//files//arff//" + relationName + ".txt", dataSet.getDescription());
 	}
-	public void generateFile(String fileName, Instances dataSet){
+	public void generateFile(String fileName, String fileDescription, Instances dataSet){
 		 ArffSaver saver = new ArffSaver();
 		 saver.setInstances(dataSet);
 		 try {
@@ -81,7 +83,9 @@ public class InstancesCreator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 		
+		
+		FileDataReader fileWriter = new FileDataReader();
+		fileWriter.writeFile(".//files//arff//" + fileName + ".txt", fileDescription);
 	}
 	
 	
