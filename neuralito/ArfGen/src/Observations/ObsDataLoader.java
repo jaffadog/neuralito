@@ -6,16 +6,16 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import util.Util;
-import weka.FileDataReader;
+import weka.FileDataIO;
 
 
 
 public class ObsDataLoader {
 
-	private FileDataReader fileReader= null;
+	private FileDataIO fileReader= null;
 	
 	public ObsDataLoader(){
-		this.fileReader = new FileDataReader();
+		this.fileReader = new FileDataIO();
 	}
 	
 	public Vector<ObsData> loadObsData(String fileName){
@@ -37,7 +37,7 @@ public class ObsDataLoader {
 				Vector<String> lineValues = e.nextElement();
 				obsData.add(this.generateData(lineValues));
 			}
-			this.fileReader = new FileDataReader();
+			this.fileReader = new FileDataIO();
 		}
 		return obsData;
 	}

@@ -6,15 +6,15 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import util.Util;
-import weka.FileDataReader;
+import weka.FileDataIO;
 
 
 public class BuoyDataLoader {
 	
-	private FileDataReader fileReader= null;
+	private FileDataIO fileReader= null;
 	
 	public BuoyDataLoader(){
-		this.fileReader = new FileDataReader();
+		this.fileReader = new FileDataIO();
 	}
 	
 	public Vector<BuoyData> loadBuoyData(String fileName){
@@ -36,7 +36,7 @@ public class BuoyDataLoader {
 				Vector<String> lineValues = e.nextElement();
 				buoyData.add(this.generateData(lineValues));
 			}
-			this.fileReader = new FileDataReader();
+			this.fileReader = new FileDataIO();
 		}
 		return buoyData;
 	}

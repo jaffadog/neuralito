@@ -69,7 +69,7 @@ public class InstancesCreator {
 			e.printStackTrace();
 		}
 		
-		FileDataReader fileWriter = new FileDataReader();
+		FileDataIO fileWriter = new FileDataIO();
 		fileWriter.writeFile(".//files//arff//" + relationName + ".txt", dataSet.getDescription());
 	}
 	public void generateFile(String fileName, String fileDescription, Instances dataSet){
@@ -84,7 +84,7 @@ public class InstancesCreator {
 			e.printStackTrace();
 		}
 		
-		FileDataReader fileWriter = new FileDataReader();
+		FileDataIO fileWriter = new FileDataIO();
 		fileWriter.writeFile(".//files//arff//" + fileName + ".txt", fileDescription);
 	}
 	
