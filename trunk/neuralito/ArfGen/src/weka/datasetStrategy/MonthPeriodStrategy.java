@@ -27,10 +27,15 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 	
 	public MonthPeriodStrategy(int startMonth, int endMonth) {
 		this.name = "MonthPeriodStrategy";
-		this.description = "Esta estrategia contiene los siguientes datos: \n\n" +
-			"WW3: Periodo de ola, altura maxima por dia, direccion de la ola, tomando solo los valores en que hay luz solar \n" +
-			"Observacion: Observacion visual que representa la altura maxima que alcanzaron las olas en ese dia \n" + 
-			"Mostrando solo las observaciones entre los meses pasados por parametro \n";
+		this.description = 
+			"Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.\n" +
+			"Dado que del ww3 disponemos de datos cada tres horas y las observaciones son una por dia que representa \n" +
+			"la altura maxima que alcanzo una ola en el dia, las lecturas del ww3 se filtran dejando la   \n"+
+			"mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del \n"+
+			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas.\n" +
+			"Ademas en esta estrategia se debe setear un mes de inicio y un mes de fin de lectura, de esta manera \n" +
+			"se filtraran las lecturas que caigan dentro de esos meses permitiendo estudiar periodos de tiempo \n" +
+			"especificos(por ejemplo durante la temporada de olas grandes o de olas pequeñas.)\n";
 		this.startMonth = startMonth;
 		this.endMonth = endMonth;
 	}
