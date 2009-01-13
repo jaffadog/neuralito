@@ -54,10 +54,19 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 
 	public void initStrategy(){
 		this.name = "FullFiltersAllSimilarValuesStrategy";
-		this.description = "Esta estrategia contiene los siguientes datos: \n\n" +
-		"Boyas: Periodo de ola, altura maxima por dia, tomando solo los valores en que hay luz solar, y tomando solo las olas con direccion especificada en Util.java \n" +
-		"WW3: Periodo de ola, altura de la ola a la misma hora de la medicion de la Boya escogida (aprox) y , y tomando solo las olas con direccion especificada en Util.java \n" +
-		"Observacion: Observacion visual que representa la altura maxima que alcanzaron las olas en ese dia \n";
+		this.description = 
+			"Esta estrategia usa los datos del ww3 y las boyas y los combina con las observaciones visuales.\n" +
+			"Dado que de las boyas disponemos de datos cada una hora y las observaciones son una por dia que representa \n" +
+			"la altura maxima que alcanzo una ola en el dia, las lecturas de las boyas se filtran dejando la   \n"+
+			"mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del \n"+
+			"dia en que hay luz solar, las lecturas de las boyas durante la noche tambien fueron filtradas.\n" +
+			"Por otra parte una vez filtradas las lecturas de las boyas se ejecuta un coupling filter a las \n" +
+			"lecturas del ww3 dejando por cada lectura de la boya (una por dia) la lectura correspondiente que \n" +
+			"coincida en fecha y hora con la lectura de la boya (aproximadamente), si falta lectura del ww3 en una \n" +
+			"determinada fecha y hora de la boya, entonces la lectura de la boya se descarta. \n" +
+			"Ademas esta estrategia filtra todas las instancias en que las lecturas de la boya, del ww3 y la observacion no son \n" +
+			"similares (altura, periodo y direccion, en el caso de obs solo altura) asegurando que las instancias resultantes sean unicamente \n" +
+			"las mas consistentes. \n";
 	}
 	
 	public String getDescription() {
@@ -90,7 +99,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
-		return new DataSet( name, mergeData(buoyDataSet, obsDataSet, ww3DataSet), strategyAttributes, "visualObservation");
+		return new DataSet( name, description, mergeData(buoyDataSet, obsDataSet, ww3DataSet), strategyAttributes, "visualObservation");
 	}
 	
 	private Vector<ArfData> mergeData(Vector<BuoyData> buoyDataSet, Vector<ObsData> obsDataSet, Vector<WaveWatchData> ww3DataSet){

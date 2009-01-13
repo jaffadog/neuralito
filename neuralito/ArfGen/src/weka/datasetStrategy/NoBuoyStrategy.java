@@ -24,9 +24,12 @@ public class NoBuoyStrategy implements GenerationStrategy {
 	
 	public NoBuoyStrategy() {
 		this.name = "NoBuoyStrategy";
-		this.description = "Esta estrategia contiene los siguientes datos: \n\n" +
-			"WW3: Periodo de ola, altura maxima por dia, direccion de la ola, tomando solo los valores en que hay luz solar y la ola se dirige hacia la isla \n" +
-			"Observacion: Observacion visual que representa la altura maxima que alcanzaron las olas en ese dia \n";
+		this.description = 
+			"Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.\n" +
+			"Dado que del ww3 disponemos de datos cada tres horas y las observaciones son una por dia que representa \n" +
+			"la altura maxima que alcanzo una ola en el dia, las lecturas del ww3 se filtran dejando la   \n"+
+			"mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del \n"+
+			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas";
 	}
 	
 	public NoBuoyStrategy(String name, String description) {
@@ -50,13 +53,13 @@ public class NoBuoyStrategy implements GenerationStrategy {
 		Vector<Filter> filters = new Vector<Filter>();
 		 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
-		filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
+		//filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
 		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
-		return new DataSet( name, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
+		return new DataSet( name, description, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
 	}
 	
 	private Vector<ArfData> mergeData(Vector<WaveWatchData> ww3DataSet, Vector<ObsData> obsDataSet){
