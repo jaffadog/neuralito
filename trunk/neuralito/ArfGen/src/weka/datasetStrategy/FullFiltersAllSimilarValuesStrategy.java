@@ -85,15 +85,15 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 		
 		Vector<Filter> filters = new Vector<Filter>();
 		 
-		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.beginningHour, Util.beginningMinutes), new GregorianCalendar(0, 0, 0, Util.endHour, Util.endMinutes))); 
-		filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
+		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.BEGINNING_HOUR, Util.BEGINNING_MINUTE), new GregorianCalendar(0, 0, 0, Util.END_HOUR, Util.END_MINUTE))); 
+		filters.add(new DataWaveDirectionFilter(Util.MIN_DIRECTION_DEGREE, Util.MAX_DIRECTION_DEGREE));
 		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		
 		filters.removeAllElements();
 		
-		filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
+		filters.add(new DataWaveDirectionFilter(Util.MIN_DIRECTION_DEGREE, Util.MAX_DIRECTION_DEGREE));
 		filters.add(new WW3CouplingFilter(buoyDataSet, 12, true));
 		compuestFilter = new AndFilter(filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);

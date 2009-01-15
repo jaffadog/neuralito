@@ -45,7 +45,7 @@ public class BuoyDataLoader {
 		BuoyData data = new BuoyData();
 		
 		//date
-		Calendar date = new GregorianCalendar(Util.utcTimeZone);
+		Calendar date = new GregorianCalendar(Util.UTC_TIME_ZONE);
 		date.set(new Integer(lineValues.elementAt(0)), new Integer(lineValues.elementAt(1)) - 1, new Integer(lineValues.elementAt(2)), new Integer(lineValues.elementAt(3)), new Integer(lineValues.elementAt(4)));
 		//Calendar date = new GregorianCalendar(new Integer(lineValues.elementAt(0)), new Integer(lineValues.elementAt(1)) - 1, new Integer(lineValues.elementAt(2)), new Integer(lineValues.elementAt(3)), new Integer(lineValues.elementAt(4)));
 		data.setDate(date);
