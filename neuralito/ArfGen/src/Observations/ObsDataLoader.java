@@ -48,7 +48,7 @@ public class ObsDataLoader {
 		
 		//date
 		
-		Calendar date = new GregorianCalendar(Util.utcTimeZone);
+		Calendar date = new GregorianCalendar(Util.UTC_TIME_ZONE);
 		date.set(new Integer(lineValues.elementAt(0)), new Integer(lineValues.elementAt(1)) - 1, new Integer(lineValues.elementAt(2)));
 		data.setDate(date);
 		

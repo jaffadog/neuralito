@@ -16,13 +16,18 @@ import weka.core.Instances;
 
 
 public final class Util {
-	public final static  TimeZone utcTimeZone = new SimpleTimeZone(0,"UTC");
-	public static final double minDirectionDegree = 35.0;
-	public static final double maxDirectionDegree = 360.0;
-	public static final int beginningHour = 17; // 7 am +10 hours to reach UTC time
-	public static final int beginningMinutes = 30;
-	public static final int endHour = 6;//20 pm + 10 hours to reach utc time
-	public static final int endMinutes = 30;
+	public final static  TimeZone UTC_TIME_ZONE = new SimpleTimeZone(0,"UTC");
+	public static final double MIN_DIRECTION_DEGREE = 35.0;
+	public static final double MAX_DIRECTION_DEGREE = 360.0;
+	public static final int BEGINNING_HOUR = 17; // 7 am +10 hours to reach UTC time
+	public static final int BEGINNING_MINUTE = 30;
+	public static final int END_HOUR = 6;//20 pm + 10 hours to reach utc time
+	public static final int END_MINUTE = 30;
+	public static final double DELTA_HEIGHT = 0.7;
+	public static final double DELTA_PERIOD = 2;
+	public static final double DELTA_DIRECTION = 30;
+	public static final double DELTA_OBSERVATION = 0.7;
+	
 	
 	public static final int JANUARY = 1;
 	public static final int FEBRUARY = 2;
@@ -116,7 +121,7 @@ public final class Util {
 	public static DateFormat getDateFormatter(){
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat();
-		dateFormat.setTimeZone(Util.utcTimeZone);
+		dateFormat.setTimeZone(Util.UTC_TIME_ZONE);
 		dateFormat.applyPattern("dd.MM.yyyy HH:mm:ss z");
 		return dateFormat;
 	}
