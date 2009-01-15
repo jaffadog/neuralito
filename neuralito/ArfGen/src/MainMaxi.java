@@ -35,9 +35,9 @@ public class MainMaxi {
 		Vector<WaveWatchData> ww3DataSet;
 		Vector<ObsData> obsDataSet;
 	// Set data files for load
-		String[] buoyFiles = new String[]{".//files//buoys//b106-2002.txt", ".//files//buoys//b106-2003.txt"};
-		String[] obsFiles = new String[]{".//files//observations//oahu2002.dat", ".//files//observations//oahu2003.dat"};		
-		String[] ww3Files = new String[]{".//files//ww3//ww3_2002.data", ".//files//ww3//ww3_2003.data"};
+		String[] buoyFiles = new String[]{"b106-2002", "b106-2003"};
+		String[] obsFiles = new String[]{"2002", "2003"};		
+		String[] ww3Files = new String[]{"2002", "2003"};
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);

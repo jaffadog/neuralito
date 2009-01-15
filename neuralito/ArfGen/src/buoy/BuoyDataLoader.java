@@ -17,8 +17,8 @@ public class BuoyDataLoader {
 		this.fileReader = new FileDataIO();
 	}
 	
-	public Vector<BuoyData> loadBuoyData(String fileName){
-		Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
+	public Vector<BuoyData> loadBuoyData(String buoyAndyear){
+		Vector<Vector<String>> linesValues = this.fileReader.readFile(".//files//buoys//" + buoyAndyear + ".txt");
 		Vector<BuoyData> buoyData = new Vector<BuoyData>();
 		for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
 			Vector<String> lineValues = e.nextElement();
@@ -27,10 +27,10 @@ public class BuoyDataLoader {
 		return buoyData;
 	}
 	
-	public Vector<BuoyData> loadBuoyData(String[] fileNames){
+	public Vector<BuoyData> loadBuoyData(String[] buoyAndyears){
 		Vector<BuoyData> buoyData = new Vector<BuoyData>();
-		for (int f = 0; f < fileNames.length; f++){
-			String fileName = fileNames[f];
+		for (int f = 0; f < buoyAndyears.length; f++){
+			String fileName = ".//files//buoys//" + buoyAndyears[f] + ".txt";
 			Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
 			for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
 				Vector<String> lineValues = e.nextElement();

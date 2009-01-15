@@ -18,8 +18,8 @@ public class ObsDataLoader {
 		this.fileReader = new FileDataIO();
 	}
 	
-	public Vector<ObsData> loadObsData(String fileName){
-		Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
+	public Vector<ObsData> loadObsData(String year){
+		Vector<Vector<String>> linesValues = this.fileReader.readFile(".//files//observations//oahu" + year + ".dat");
 		Vector<ObsData> obsData = new Vector<ObsData>();
 		for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
 			Vector<String> lineValues = e.nextElement();
@@ -28,10 +28,10 @@ public class ObsDataLoader {
 		return obsData;
 	}
 	
-	public Vector<ObsData> loadObsData(String[] fileNames){
+	public Vector<ObsData> loadObsData(String[] years){
 		Vector<ObsData> obsData = new Vector<ObsData>();
-		for (int f = 0; f < fileNames.length; f++){
-			String fileName = fileNames[f];
+		for (int f = 0; f < years.length; f++){
+			String fileName = ".//files//observations//oahu" + years[f] + ".dat";
 			Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
 			for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
 				Vector<String> lineValues = e.nextElement();
