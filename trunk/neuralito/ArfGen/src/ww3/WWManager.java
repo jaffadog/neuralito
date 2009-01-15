@@ -10,10 +10,10 @@ import java.util.Vector;
 
 public class WWManager {
 
-	public Collection getWWData(String[] ww3Files) {
+	public Collection getWWData(String[] years) {
 		Vector wwData = new Vector();
-		for (int i = 0; i < ww3Files.length; i++){
-			String fileName = ww3Files[i];
+		for (int i = 0; i < years.length; i++){
+			String fileName = ".//files//ww3//ww3_" + years[i] + ".data" ;
 			// Read from disk using FileInputStream.
 			FileInputStream f_in;
 			try {
