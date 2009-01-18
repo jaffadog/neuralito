@@ -43,7 +43,7 @@ public class MaxWaveHeightFilter extends Filter {
 	}
 	
 	public String toString(){
-		return "MaxWaveHeightFilter\n\n";
+		return "\tMaxWaveHeightFilter\n";
 	}
 	
 }
