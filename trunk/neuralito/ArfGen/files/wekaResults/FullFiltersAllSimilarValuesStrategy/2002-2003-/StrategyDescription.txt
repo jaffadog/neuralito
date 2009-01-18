@@ -1,0 +1,41 @@
+FULLFILTERSALLSIMILARVALUESSTRATEGY
+
+	Esta estrategia usa los datos del ww3 y las boyas y los combina con las observaciones visuales.
+Dado que de las boyas disponemos de datos cada una hora y las observaciones son una por dia que representa 
+la altura maxima que alcanzo una ola en el dia, las lecturas de las boyas se filtran dejando la   
+mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del 
+dia en que hay luz solar, las lecturas de las boyas durante la noche tambien fueron filtradas.
+Por otra parte una vez filtradas las lecturas de las boyas se ejecuta un coupling filter a las 
+lecturas del ww3 dejando por cada lectura de la boya (una por dia) la lectura correspondiente que 
+coincida en fecha y hora con la lectura de la boya (aproximadamente), si falta lectura del ww3 en una 
+determinada fecha y hora de la boya, entonces la lectura de la boya se descarta. 
+Ademas esta estrategia filtra todas las instancias en que las lecturas de la boya, del ww3 y la observacion no son 
+similares (altura, periodo y direccion, en el caso de obs solo altura) asegurando que las instancias resultantes sean unicamente 
+las mas consistentes. 
+
+
+STRATEGY PARAMETERS: 
+	deltaPeriod -> 2.0
+	deltaObservation -> 0.7
+	deltaHeight -> 0.7
+	deltaDirection -> 30.0
+
+BUOY FILTERS: 
+	DataTimeFilter
+		Desde -> 17:30
+		Hasta -> 6:30
+	MaxWaveHeightFilter
+
+WW3 FILTERS: 
+
+	WW3CouplingFilter
+		MaxHoursDifference -> 12
+		SameDayRestrict -> true
+
+INSTANCE ATTRIBUTES:
+	ww3Height, ww3Period, ww3Direction, visualObservation, 
+
+CLASS ATTRIBUTE:
+	visualObservation
+
+
