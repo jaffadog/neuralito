@@ -82,6 +82,6 @@ public class WW3CouplingFilter extends Filter {
 	}
 	
 	public String toString(){
-		return "MaxWaveHeightFilter \n MaxHoursDifference: " + this.maxHoursDifference + "   SameDayRestrict: " + this.sameDayRestrict + "\n\n";
+		return "\tWW3CouplingFilter\n\t\tMaxHoursDifference -> " + this.maxHoursDifference + "\n\t\tSameDayRestrict -> " + this.sameDayRestrict + "\n";
 	}
 }
