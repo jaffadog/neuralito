@@ -8,7 +8,9 @@ import weka.ArfManager;
 import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
+import weka.datasetStrategy.FullFiltersStrategy;
 import weka.datasetStrategy.GenerationStrategy;
+import weka.datasetStrategy.NoBuoyStrategy;
 import weka.datasetStrategy.NoDirectionStrategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
@@ -46,7 +48,7 @@ public class Main {
 //		Util.printCollection("Visual Observations",obsDataSet);
 		
 	//Choose generation Strategy
-		GenerationStrategy generationStrategy = new NoDirectionStrategy();
+		GenerationStrategy generationStrategy = new NoBuoyStrategy();
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
