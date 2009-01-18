@@ -141,11 +141,16 @@ public final class Util {
 		return decimalFormat;
 	}
 	
-	public static void generateResultPackage(GenerationStrategy generationStrategy){
-		FileDataIO fileWriter = new FileDataIO();
+	public static void generateResultPackage(GenerationStrategy generationStrategy, String[] years){
+		String yearsDirectory = "";
+		for (int i = 0; i < years.length; i++)
+			yearsDirectory += years[i] + "-";
 		
 		File directory = new File(".//files//wekaResults//" + generationStrategy.getName());
 		directory.mkdir();
+		directory = new File(directory.getPath() + "//" + yearsDirectory);
+		directory.mkdir();
+		FileDataIO fileWriter = new FileDataIO();
 		fileWriter.writeFile(directory.getPath() + "//StrategyDescription.txt", generationStrategy.toString());
 	}
 }

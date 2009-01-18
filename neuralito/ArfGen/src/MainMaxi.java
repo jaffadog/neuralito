@@ -78,7 +78,7 @@ public class MainMaxi {
 		Util.printWekaInstances(wekaDataSet);
 		//Generate Weka arff File
 		creator.generateFile(dataSet.getName(), dataSet.getDescription(), wekaDataSet);
-		Util.generateResultPackage(generationStrategy);
+		Util.generateResultPackage(generationStrategy, obsFiles);
 	}
 	
 	
