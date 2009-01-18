@@ -26,6 +26,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 	private final double deltaPeriod;
 	private final double deltaDirection;
 	private final double deltaObservation;
+	private String strategyString;
 	
 	public FullFiltersAllSimilarValuesStrategy() {
 		this.initStrategy();
@@ -86,19 +87,21 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 		Vector<Filter> filters = new Vector<Filter>();
 		 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.BEGINNING_HOUR, Util.BEGINNING_MINUTE), new GregorianCalendar(0, 0, 0, Util.END_HOUR, Util.END_MINUTE))); 
-		filters.add(new DataWaveDirectionFilter(Util.MIN_DIRECTION_DEGREE, Util.MAX_DIRECTION_DEGREE));
+		//filters.add(new DataWaveDirectionFilter(Util.MIN_DIRECTION_DEGREE, Util.MAX_DIRECTION_DEGREE));
 		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		
-		filters.removeAllElements();
+		Vector<Filter> ww3filters = new Vector<Filter>();
 		
-		filters.add(new DataWaveDirectionFilter(Util.MIN_DIRECTION_DEGREE, Util.MAX_DIRECTION_DEGREE));
-		filters.add(new WW3CouplingFilter(buoyDataSet, 12, true));
-		compuestFilter = new AndFilter(filters);
+		//filters.add(new DataWaveDirectionFilter(Util.MIN_DIRECTION_DEGREE, Util.MAX_DIRECTION_DEGREE));
+		ww3filters.add(new WW3CouplingFilter(buoyDataSet, 12, true));
+		compuestFilter = new AndFilter(ww3filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
+		this.strategyString(filters, ww3filters, strategyAttributes, "visualObservation");
+		
 		return new DataSet( name, description, mergeData(buoyDataSet, obsDataSet, ww3DataSet), strategyAttributes, "visualObservation");
 	}
 	
@@ -143,5 +146,70 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 						return true;
 		return false;
 	}
-
+	
+//	public void fillStrategyInformation(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] arffAttributes, String classAttribute){
+//		Hashtable<String, String> strategyParameters = new Hashtable<String, String>();
+//		strategyParameters.put("deltaHeight", "" + this.deltaHeight);
+//		strategyParameters.put("deltaPeriod", "" + this.deltaPeriod);
+//		strategyParameters.put("deltaDirection", "" + this.deltaDirection);
+//		strategyParameters.put("deltaObservation", "" + this.deltaObservation);
+//		
+//		this.strategyInformation.setStrategyParameters(strategyParameters);
+//		this.strategyInformation.setName(this.name);
+//		this.strategyInformation.setDescription(this.description);
+//		this.strategyInformation.setBuoyFilters(buoyFilters);
+//		this.strategyInformation.setWw3Filters(ww3Filters);
+//		this.strategyInformation.setStrategyAttributes(arffAttributes);
+//		this.strategyInformation.setClassAttribute(classAttribute);
+//	}
+	
+	public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
+		
+		Hashtable<String, String> strategyParameters = new Hashtable<String, String>();
+		strategyParameters.put("deltaHeight", "" + this.deltaHeight);
+		strategyParameters.put("deltaPeriod", "" + this.deltaPeriod);
+		strategyParameters.put("deltaDirection", "" + this.deltaDirection);
+		strategyParameters.put("deltaObservation", "" + this.deltaObservation);
+		
+		String text = "";
+		text = this.name + "\n" + this.description + "\n\n";
+		
+		if (strategyParameters.size() > 0){
+			text += "STRATEGY PARAMETERS: \n\n";
+			for (Enumeration<String> e = strategyParameters.keys(); e.hasMoreElements();){
+				String key = e.nextElement();
+				text += key + " -> " + strategyParameters.get(key) + "\n";
+			}
+		}
+		
+		if (buoyFilters.size() > 0){
+			text += "BUOY FILTERS: \n\n";
+			for (Enumeration<Filter> e = buoyFilters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+		}
+		
+		if (ww3Filters.size() > 0){
+			text += "WW3 FILTERS: \n\n";
+			for (Enumeration<Filter> e = ww3Filters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+		}
+		
+		if (strategyAttributes.length > 0){
+			text += "INSTANCE ATTRIBUTES: \n\n";
+			for (int i = 0; i < strategyAttributes.length; i++)
+				text += strategyAttributes[i] + ", ";
+			text += "\nCLASS ATTRIBUTE: " + classAttribute + "\n\n";
+		}
+			
+		this.strategyString = text;
+		
+	}
+	
+	public String toString(){
+		return this.strategyString;
+	}
 }

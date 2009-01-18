@@ -1,5 +1,6 @@
 package util;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -9,9 +10,11 @@ import java.util.Iterator;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
+import weka.FileDataIO;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.datasetStrategy.GenerationStrategy;
 
 
 
@@ -125,15 +128,25 @@ public final class Util {
 		dateFormat.applyPattern("dd.MM.yyyy HH:mm:ss z");
 		return dateFormat;
 	}
+	
 	public static DecimalFormat getDecimalFormatter(){
 		DecimalFormat decimalFormat = new DecimalFormat();
 		decimalFormat.applyPattern("000.00");
 		return decimalFormat;
 	}
+	
 	public static DecimalFormat getDecimalFormatter(String pattern){
 		DecimalFormat decimalFormat = new DecimalFormat();
 		decimalFormat.applyPattern(pattern);
 		return decimalFormat;
+	}
+	
+	public static void generateResultPackage(GenerationStrategy generationStrategy){
+		FileDataIO fileWriter = new FileDataIO();
+		
+		File directory = new File(".//files//wekaResults//" + generationStrategy.getName());
+		directory.mkdir();
+		fileWriter.writeFile(directory.getPath() + "//StrategyDescription.txt", generationStrategy.toString());
 	}
 }
 

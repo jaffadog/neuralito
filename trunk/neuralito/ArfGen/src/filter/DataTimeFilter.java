@@ -91,4 +91,11 @@ public class DataTimeFilter extends Filter {
 			return true;
 	}
 	*/
+	
+	public String toString(){
+		String text = "";
+		text = "DataTimeFilter \n Desde: " + this.minTime.get(Calendar.HOUR_OF_DAY) + ":" + this.minTime.get(Calendar.MINUTE) + "   Hasta: " +
+				this.maxTime.get(Calendar.HOUR_OF_DAY) + ":" + this.maxTime.get(Calendar.MINUTE) + "\n\n";
+		return text;
+	}
 }

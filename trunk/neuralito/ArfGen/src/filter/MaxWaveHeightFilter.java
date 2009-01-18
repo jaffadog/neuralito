@@ -42,4 +42,8 @@ public class MaxWaveHeightFilter extends Filter {
 			return currentMaxHeight;
 	}
 	
+	public String toString(){
+		return "MaxWaveHeightFilter\n\n";
+	}
+	
 }
