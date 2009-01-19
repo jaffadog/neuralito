@@ -77,8 +77,8 @@ public class MainMaxi {
 		System.out.println("**************************************************************");
 		Util.printWekaInstances(wekaDataSet);
 		//Generate Weka arff File
-		creator.generateFile(dataSet.getName(), dataSet.getDescription(), wekaDataSet);
-		Util.generateResultPackage(generationStrategy, obsFiles);
+		Util.generateResultPackage(generationStrategy, obsFiles, wekaDataSet);
+		//creator.generateFile(dataSet.getName(), wekaDataSet);
 	}
 	
 	

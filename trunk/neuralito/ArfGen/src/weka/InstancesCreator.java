@@ -72,20 +72,17 @@ public class InstancesCreator {
 		FileDataIO fileWriter = new FileDataIO();
 		fileWriter.writeFile(".//files//arff//" + relationName + ".txt", dataSet.getDescription());
 	}
-	public void generateFile(String fileName, String fileDescription, Instances dataSet){
+	public void generateFile(String fileName, Instances dataSet){
 		 ArffSaver saver = new ArffSaver();
 		 saver.setInstances(dataSet);
 		 try {
-			saver.setFile(new File(".//files//arff//" + dataSet.relationName() + ".arff"));
-			saver.setDestination( new File(".//files//arff//" + fileName + ".arff"));   // **not** necessary in 3.5.4 and later
+			saver.setFile(new File(fileName));
+			saver.setDestination( new File(fileName));   // **not** necessary in 3.5.4 and later
 			saver.writeBatch();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		FileDataIO fileWriter = new FileDataIO();
-		fileWriter.writeFile(".//files//arff//" + fileName + ".txt", fileDescription);
 	}
 	
 	
