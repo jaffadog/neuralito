@@ -58,9 +58,9 @@ public class MainMaxi {
 	//Choose generation Strategy
 		//GenerationStrategy generationStrategy = new FullFiltersStrategy();
 		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD);
-		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
+		GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
 		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
-		GenerationStrategy generationStrategy = new NoBuoyStrategy();
+		//GenerationStrategy generationStrategy = new NoBuoyStrategy();
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
