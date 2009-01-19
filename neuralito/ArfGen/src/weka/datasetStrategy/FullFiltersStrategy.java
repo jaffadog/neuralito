@@ -99,6 +99,8 @@ public class FullFiltersStrategy implements GenerationStrategy {
 		return arfDataSet;
 	}
 
-	
+	public String toString(){
+		return "Metodo toString() de la estrategia no implementado aún";
+	}
 
 }

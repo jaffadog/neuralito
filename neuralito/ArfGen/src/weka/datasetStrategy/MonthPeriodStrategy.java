@@ -35,7 +35,7 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas.\n" +
 			"Ademas en esta estrategia se debe setear un mes de inicio y un mes de fin de lectura, de esta manera \n" +
 			"se filtraran las lecturas que caigan dentro de esos meses permitiendo estudiar periodos de tiempo \n" +
-			"especificos(por ejemplo durante la temporada de olas grandes o de olas pequeñas.)\n";
+			"especificos(por ejemplo durante la temporada de olas grandes o de olas pequeï¿½as.)\n";
 		this.startMonth = startMonth;
 		this.endMonth = endMonth;
 	}
@@ -110,5 +110,8 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 		
 		return arfDataSet;
 	}
-
+	
+	public String toString(){
+		return "Metodo toString() de la estrategia no implementado aÃºn";
+	}
 }
