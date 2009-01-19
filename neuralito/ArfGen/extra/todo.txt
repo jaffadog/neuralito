@@ -6,9 +6,9 @@ TODO LIST
 Maxi
 ----
 
--estrategia: en etapa de olas y no olas
+
 -agregar en las observaciones las demas playas, pero eso hay que verlo mas adelante
--testear como andan los filtros ahora que los estandarize  tanto para las boyas como para ww3
+-armar algunas pruebas, documentarlas y tratar de mejorarlas
 
 Esteban
 -------
