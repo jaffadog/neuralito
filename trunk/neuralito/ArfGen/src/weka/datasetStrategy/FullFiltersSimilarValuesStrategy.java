@@ -139,5 +139,8 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 					return true;
 		return false;
 	}
-
+	
+	public String toString(){
+		return "Metodo toString() de la estrategia no implementado aún";
+	}
 }

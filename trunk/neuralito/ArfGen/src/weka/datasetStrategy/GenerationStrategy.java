@@ -15,4 +15,5 @@ public interface GenerationStrategy {
 	public String getName();
 	
 	public String getDescription();
+	
 }
