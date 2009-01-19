@@ -82,15 +82,6 @@ public class DataTimeFilter extends Filter {
 		}
 		return 0;
 	}
-	/*
-	private boolean InRange(Calendar date) {
-
-		if ((date.get(Calendar.HOUR_OF_DAY) > 6) && (date.get(Calendar.HOUR_OF_DAY) < 17))
-			return false;
-		else
-			return true;
-	}
-	*/
 	
 	public String toString(){
 		String text = "";

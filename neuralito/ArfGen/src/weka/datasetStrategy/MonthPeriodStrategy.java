@@ -24,6 +24,7 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 	private String description;
 	private int startMonth;
 	private int endMonth;
+	private String strategyString;
 	
 	public MonthPeriodStrategy(int startMonth, int endMonth) {
 		this.name = "MonthPeriodStrategy";
@@ -85,6 +86,8 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
+		this.strategyString(new Vector<Filter>(), filters, strategyAttributes, "visualObservation");
+		
 		return new DataSet( this.name, this.description, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
 	}
 	
@@ -111,7 +114,46 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 		return arfDataSet;
 	}
 	
+public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
+		
+		String text = "";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
+		
+		text += "STRATEGY PARAMETERS:\n";
+		text += "\tstartMonth -> " + this.startMonth + "\n";
+		text += "\tendMonth -> " + this.endMonth + "\n";
+		text += "\n";
+		
+		if (buoyFilters.size() > 0){
+			text += "BUOY FILTERS:\n";
+			for (Enumeration<Filter> e = buoyFilters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+			text +="\n";
+		}
+		
+		if (ww3Filters.size() > 0){
+			text += "WW3 FILTERS:\n";
+			for (Enumeration<Filter> e = ww3Filters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+			text +="\n";
+		}
+		
+		if (strategyAttributes.length > 0){
+			text += "INSTANCE ATTRIBUTES:\n\t";
+			for (int i = 0; i < strategyAttributes.length; i++)
+				text += strategyAttributes[i] + ", ";
+			text += "\n\nCLASS ATTRIBUTE:\n\t" + classAttribute + "\n\n";
+		}
+			
+		this.strategyString = text;
+		
+	}
+	
 	public String toString(){
-		return "Metodo toString() de la estrategia no implementado aún";
+		return this.strategyString;
 	}
 }
