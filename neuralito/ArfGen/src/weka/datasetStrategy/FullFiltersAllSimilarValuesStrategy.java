@@ -149,26 +149,18 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 	
 	public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
 		
-		Hashtable<String, String> strategyParameters = new Hashtable<String, String>();
-		strategyParameters.put("deltaHeight", "" + this.deltaHeight);
-		strategyParameters.put("deltaPeriod", "" + this.deltaPeriod);
-		strategyParameters.put("deltaDirection", "" + this.deltaDirection);
-		strategyParameters.put("deltaObservation", "" + this.deltaObservation);
-		
 		String text = "";
 		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
 		
-		if (strategyParameters.size() > 0){
-			text += "STRATEGY PARAMETERS: \n";
-			for (Enumeration<String> e = strategyParameters.keys(); e.hasMoreElements();){
-				String key = e.nextElement();
-				text += "\t" + key + " -> " + strategyParameters.get(key) + "\n";
-			}
-			text += "\n";
-		}
+		text += "STRATEGY PARAMETERS:\n";
+		text += "\tdeltaHeight -> " + this.deltaHeight + "\n";
+		text += "\tdeltaPeriod -> " + this.deltaPeriod + "\n";
+		text += "\tdeltaDirection -> " + this.deltaDirection + "\n";
+		text += "\tdeltaObservation -> " + this.deltaObservation + "\n";
+		text += "\n";
 		
 		if (buoyFilters.size() > 0){
-			text += "BUOY FILTERS: \n";
+			text += "BUOY FILTERS:\n";
 			for (Enumeration<Filter> e = buoyFilters.elements(); e.hasMoreElements();){
 				Filter filter = e.nextElement();
 				text += filter.toString();
@@ -177,7 +169,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 		}
 		
 		if (ww3Filters.size() > 0){
-			text += "WW3 FILTERS: \n\n";
+			text += "WW3 FILTERS:\n";
 			for (Enumeration<Filter> e = ww3Filters.elements(); e.hasMoreElements();){
 				Filter filter = e.nextElement();
 				text += filter.toString();
