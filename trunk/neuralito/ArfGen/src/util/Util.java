@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.SimpleTimeZone;
@@ -143,23 +144,27 @@ public final class Util {
 	}
 	
 	public static void generateResultPackage(GenerationStrategy generationStrategy, String[] years, Instances wekaDataSet){
-
+		
+		
 		String yearsDirectory = "";
 		for (int i = 0; i < years.length; i++)
 			yearsDirectory += years[i] + "-";
 		
 		File directory = new File(".//files//wekaResults//" + generationStrategy.getName());
 		directory.mkdir();
-		directory = new File(directory.getPath() + "//" + yearsDirectory + "v0");
+		
+		directory = new File(directory.getPath() + "//" + yearsDirectory + "//v0");
 		int i = 1;
 		while (directory.exists()){
-			directory = new File(directory.getParent() + "//" + yearsDirectory + "v" + i);
+			directory = new File(directory.getParent() + "//v" + i);
 			i++;
 		}
 		directory.mkdir();
+		
 		//Save arff file
 		InstancesCreator creator = new InstancesCreator();
 		creator.generateFile(directory.getPath() + "//" + generationStrategy.getName() + ".arff", wekaDataSet);
+		
 		//Save strategy description
 		FileDataIO fileWriter = new FileDataIO();
 		fileWriter.writeFile(directory.getPath() + "//StrategyDescription.txt", generationStrategy.toString());
