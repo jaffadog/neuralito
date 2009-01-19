@@ -38,5 +38,10 @@ public class MonthFilter extends Filter {
 		
 		return dataFiltered;
 	}
-
+	
+	public String toString(){
+		String text = "";
+		text = "\tMonthFilter\n\t\tDesde -> " + this.minMonth + "\n\t\tHasta -> " + this.maxMonth + "\n";
+		return text;
+	}
 }

@@ -21,6 +21,7 @@ public class NoBuoyStrategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
+	private String strategyString;
 	
 	public NoBuoyStrategy() {
 		this.name = "NoBuoyStrategy";
@@ -59,6 +60,8 @@ public class NoBuoyStrategy implements GenerationStrategy {
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
+		this.strategyString(filters, strategyAttributes, "visualObservation");
+		
 		return new DataSet( name, description, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
 	}
 	
@@ -85,7 +88,32 @@ public class NoBuoyStrategy implements GenerationStrategy {
 		return arfDataSet;
 	}
 	
+public void strategyString(Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
+		
+		String text = "";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
+		
+		if (ww3Filters.size() > 0){
+			text += "WW3 FILTERS:\n";
+			for (Enumeration<Filter> e = ww3Filters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+			text +="\n";
+		}
+		
+		if (strategyAttributes.length > 0){
+			text += "INSTANCE ATTRIBUTES:\n\t";
+			for (int i = 0; i < strategyAttributes.length; i++)
+				text += strategyAttributes[i] + ", ";
+			text += "\n\nCLASS ATTRIBUTE:\n\t" + classAttribute + "\n\n";
+		}
+			
+		this.strategyString = text;
+		
+	}
+	
 	public String toString(){
-		return "Metodo toString() de la estrategia no implementado aún";
+		return this.strategyString;
 	}
 }

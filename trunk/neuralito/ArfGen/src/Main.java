@@ -1,25 +1,17 @@
 
 
-import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import filter.Filter;
-import filter.MonthFilter;
 
 import util.Util;
 import weka.ArfManager;
 import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
-import weka.datasetStrategy.FullFiltersAllSimilarValuesStrategy;
-import weka.datasetStrategy.FullFiltersSimilarValuesStrategy;
 import weka.datasetStrategy.FullFiltersStrategy;
 import weka.datasetStrategy.GenerationStrategy;
-import weka.datasetStrategy.MonthPeriodStrategy;
 import weka.datasetStrategy.NoBuoyStrategy;
 import weka.datasetStrategy.NoDirectionStrategy;
-import weka.datasetStrategy.NoWW3Strategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -27,7 +19,7 @@ import Observations.ObsDataLoader;
 import buoy.BuoyData;
 import buoy.BuoyDataLoader;
 
-public class MainMaxi {
+public class Main {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
@@ -56,10 +48,6 @@ public class MainMaxi {
 //		Util.printCollection("Visual Observations",obsDataSet);
 		
 	//Choose generation Strategy
-		//GenerationStrategy generationStrategy = new FullFiltersStrategy();
-		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD);
-		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
-		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
 		GenerationStrategy generationStrategy = new NoBuoyStrategy();
 		
 	//Generate general DataSet	
@@ -80,7 +68,7 @@ public class MainMaxi {
 		Util.printWekaInstances(wekaDataSet);
 		//Generate Weka arff File
 		Util.generateResultPackage(generationStrategy, obsFiles, wekaDataSet);
-		//creator.generateFile(dataSet.getName(), wekaDataSet);
+		//creator.generateFile(dataSet.getName(), dataSet.getDescription(), wekaDataSet);
 	}
 	
 	

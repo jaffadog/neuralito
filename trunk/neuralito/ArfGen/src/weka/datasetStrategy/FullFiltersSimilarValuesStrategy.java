@@ -26,6 +26,7 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 	private final double deltaHeight;
 	private final double deltaPeriod;
 	private final double deltaDirection;
+	private String strategyString;
 	
 	public FullFiltersSimilarValuesStrategy() {
 		this.initStrategy();
@@ -88,14 +89,16 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 		Filter compuestFilter = new AndFilter(filters);
 		buoyDataSet = (Vector<BuoyData>) compuestFilter.executeFilter(buoyDataSet);
 		
-		filters.removeAllElements();
+		Vector<Filter> ww3filters = new Vector<Filter>();
 		
 		//filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
-		filters.add(new WW3CouplingFilter(buoyDataSet, 12, true));
-		compuestFilter = new AndFilter(filters);
+		ww3filters.add(new WW3CouplingFilter(buoyDataSet, 12, true));
+		compuestFilter = new AndFilter(ww3filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
+		this.strategyString(filters, ww3filters, strategyAttributes, "visualObservation");
+		
 		return new DataSet( name, description, mergeData(buoyDataSet, obsDataSet, ww3DataSet), strategyAttributes, "visualObservation");
 	}
 	
@@ -140,7 +143,47 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 		return false;
 	}
 	
+public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
+		
+		String text = "";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
+		
+		text += "STRATEGY PARAMETERS:\n";
+		text += "\tdeltaHeight -> " + this.deltaHeight + "\n";
+		text += "\tdeltaPeriod -> " + this.deltaPeriod + "\n";
+		text += "\tdeltaDirection -> " + this.deltaDirection + "\n";
+		text += "\n";
+		
+		if (buoyFilters.size() > 0){
+			text += "BUOY FILTERS:\n";
+			for (Enumeration<Filter> e = buoyFilters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+			text +="\n";
+		}
+		
+		if (ww3Filters.size() > 0){
+			text += "WW3 FILTERS:\n";
+			for (Enumeration<Filter> e = ww3Filters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+			text +="\n";
+		}
+		
+		if (strategyAttributes.length > 0){
+			text += "INSTANCE ATTRIBUTES:\n\t";
+			for (int i = 0; i < strategyAttributes.length; i++)
+				text += strategyAttributes[i] + ", ";
+			text += "\n\nCLASS ATTRIBUTE:\n\t" + classAttribute + "\n\n";
+		}
+			
+		this.strategyString = text;
+		
+	}
+	
 	public String toString(){
-		return "Metodo toString() de la estrategia no implementado aún";
+		return this.strategyString;
 	}
 }
