@@ -1,25 +1,15 @@
 
 
-import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import filter.Filter;
-import filter.MonthFilter;
 
 import util.Util;
 import weka.ArfManager;
 import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
-import weka.datasetStrategy.FullFiltersAllSimilarValuesStrategy;
-import weka.datasetStrategy.FullFiltersSimilarValuesStrategy;
-import weka.datasetStrategy.FullFiltersStrategy;
 import weka.datasetStrategy.GenerationStrategy;
-import weka.datasetStrategy.MonthPeriodStrategy;
 import weka.datasetStrategy.NoBuoyStrategy;
-import weka.datasetStrategy.NoDirectionStrategy;
-import weka.datasetStrategy.NoWW3Strategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -36,13 +26,13 @@ public class MainMaxi {
 		Vector<ObsData> obsDataSet;
 	// Set data files for load
 		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};
-		String[] obsFiles = new String[]{"2001", "2002", "2003", "2004"};		
-		String[] years = new String[]{"2002"};
+		//String[] obsFiles = new String[]{"2001", "2002", "2003", "2004"};		
+		String[] years = new String[]{"2002"}; //the same for oobservations and ww3
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
 		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(years,21.00,-157.5);
-		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
+		obsDataSet  = new ObsDataLoader().loadObsData(years);
 		
 		Hashtable<String, Object> dataCollection = new Hashtable<String, Object>();
 		dataCollection.put("buoyData", buoyDataSet);
@@ -79,7 +69,7 @@ public class MainMaxi {
 		System.out.println("**************************************************************");
 		Util.printWekaInstances(wekaDataSet);
 		//Generate Weka arff File
-		Util.generateResultPackage(generationStrategy, obsFiles, wekaDataSet);
+		Util.generateResultPackage(generationStrategy, years, wekaDataSet);
 		//creator.generateFile(dataSet.getName(), wekaDataSet);
 	}
 	
