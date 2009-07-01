@@ -53,7 +53,14 @@ public class ObsDataLoader {
 		data.setDate(date);
 		
 		//North Shore height
-		data.setNShore(new Double((String)lineValues.elementAt(3)));
+		data.setWaveHeight("nshore", new Double((String)lineValues.elementAt(3)));
+		
+		
+		//Ala Moana height
+		data.setWaveHeight("almo", new Double((String)lineValues.elementAt(5)));
+		
+		//Diamond head height
+		data.setWaveHeight("dh", new Double((String)lineValues.elementAt(6)));
 		
 		return data;
 	}

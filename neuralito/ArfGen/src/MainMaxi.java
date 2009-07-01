@@ -35,13 +35,13 @@ public class MainMaxi {
 		Vector<WaveWatchData> ww3DataSet;
 		Vector<ObsData> obsDataSet;
 	// Set data files for load
-		String[] buoyFiles = new String[]{"b106-2002", "b106-2003"};
-		String[] obsFiles = new String[]{"2002", "2003"};		
-		String[] ww3Files = new String[]{"2002", "2003"};
+		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};
+		String[] obsFiles = new String[]{"2001", "2002", "2003", "2004"};		
+		String[] years = new String[]{"2002"};
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
-		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(ww3Files);
+		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(years,21.00,-157.5);
 		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
 		
 		Hashtable<String, Object> dataCollection = new Hashtable<String, Object>();
@@ -58,9 +58,9 @@ public class MainMaxi {
 	//Choose generation Strategy
 		//GenerationStrategy generationStrategy = new FullFiltersStrategy();
 		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD);
-		GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
+		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
 		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
-		//GenerationStrategy generationStrategy = new NoBuoyStrategy();
+		GenerationStrategy generationStrategy = new NoBuoyStrategy("dh");
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();

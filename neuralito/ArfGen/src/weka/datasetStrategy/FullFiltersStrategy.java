@@ -22,6 +22,8 @@ public class FullFiltersStrategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
+	private String beach;
+	
 	public String getDescription() {
 		return description;
 	}
@@ -38,9 +40,15 @@ public class FullFiltersStrategy implements GenerationStrategy {
 		"Observacion: Observacion visual que representa la altura maxima que alcanzaron las olas en ese dia \n";
 }
 	
-	public FullFiltersStrategy(String name, String description) {
+	public FullFiltersStrategy(String beach, String name, String description) {
 		this.name = name;
 		this.description = description;
+		this.beach = beach;
+	}
+	
+	public FullFiltersStrategy(String beach) {
+		this();
+		this.beach = beach;
 	}
 
 	@Override
@@ -90,7 +98,7 @@ public class FullFiltersStrategy implements GenerationStrategy {
 				}		
 			}
 			if (obsData != null && ww3Data != null){
-				ArfData arfData = new ArfData(buoyData, obsData, ww3Data);
+				ArfData arfData = new ArfData(this.beach, buoyData, obsData, ww3Data);
 				arfData.setDate(buoyData.getDate());
 				arfDataSet.add(arfData);
 			}

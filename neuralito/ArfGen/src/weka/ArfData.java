@@ -2,11 +2,9 @@ package weka;
 
 import java.util.Calendar;
 
+import ww3.WaveWatchData;
 import Observations.ObsData;
 import buoy.BuoyData;
-
-import weka.core.Attribute;
-import ww3.WaveWatchData;
 
 public class ArfData {
 	
@@ -14,11 +12,13 @@ public class ArfData {
 	private BuoyData buoyData = null;
 	private ObsData obsData = null;
 	private WaveWatchData ww3Data = null;
+	private String beach = null;
 	
-	public ArfData(BuoyData buoyData, ObsData obsData, WaveWatchData ww3Data){
+	public ArfData(String beach, BuoyData buoyData, ObsData obsData, WaveWatchData ww3Data){
 		this.buoyData = buoyData;
 		this.obsData = obsData;
 		this.ww3Data = ww3Data;
+		this.beach = beach;
 	}
 
 	public BuoyData getBuoyData() {
@@ -57,7 +57,7 @@ public class ArfData {
 		
 		String buoyString = this.buoyData != null ? this.buoyData.toString() + " || " : ""; 
 		String ww3String = this.ww3Data != null ? this.ww3Data.toString() + " || " : "";
-		String obsString = this.obsData != null ? this.obsData.toString() : "";
+		String obsString = this.obsData != null ? this.obsData.print(this.beach) : "";
 		
 		return buoyString + ww3String + obsString;
 	}
@@ -82,7 +82,7 @@ public class ArfData {
 			return this.ww3Data.getWaveDirection();
 		}
 		if (attribute == "visualObservation"){
-			return this.obsData.getNShore();
+			return this.obsData.getWaveHeight(this.beach);
 		}
 		return 0;
 	}

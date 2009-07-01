@@ -33,7 +33,7 @@ public class Main {
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
-		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(ww3Files);
+		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(ww3Files,21.00,-157.5);
 		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
 		
 		Hashtable<String, Object> dataCollection = new Hashtable<String, Object>();

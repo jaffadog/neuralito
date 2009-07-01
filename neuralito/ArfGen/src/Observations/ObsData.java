@@ -1,16 +1,56 @@
 package Observations;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Hashtable;
 
 import util.Util;
 
 public class ObsData {
 	
 	private Calendar date = null;
-	private Double nShore = null;//Wave height
+	Hashtable<String, Double> observations = new Hashtable<String, Double>();
 	
+	/**
+	 * Convert the given shore wave height into  through to crest scale meters (TCS). 
+	 * @param wave height observed from shore in hawaiian scale feet (HSF)
+	 */
+	private Double HSFtoTCS(Double value){
+		return value * 0.3048 * 2; //*0.30 is to convert foot to meter, and *2 is to convert from Hawaiaan Scale Feet to Through To Crest Scale Feet.
+	}
+	
+//	public Hashtable<String, Double> getObservations() {
+//		return observations;
+//	}
+//
+//	public void setObservations(Hashtable<String, Double> observations) {
+//		this.observations = observations;
+//	}
+	
+	public Double getWaveHeight(String beach){
+		return this.observations.get(beach);
+	}
+	
+	public void setWaveHeight(String beach, Double waveHeight){
+		this.observations.put(beach,  this.HSFtoTCS(waveHeight));
+	}
+
+	/*
+	public Double getAlmo() {
+		return this.observations.get("almo");
+	}
+
+	public void setAlmo(Double waveHeight) {
+		this.observations.put("almo", this.HSFtoTCS(waveHeight));
+	}
+
+	public Double getDh() {
+		return this.observations.get("dh");
+	}
+
+	public void setDh(Double waveHeight) {
+		this.observations.put("dh", this.HSFtoTCS(waveHeight));
+	}
+	*/
 	public Calendar getDate() {
 		return date;
 	}
@@ -18,20 +58,21 @@ public class ObsData {
 	public void setDate(Calendar date) {
 		this.date = date;
 	}
+	
 	/**
 	 * Return the visual observation of wave height. Observation are made from Sunset beach when surf is < 15 (HSF) and from Waimea when surf >15(HSF). 
 	 * @return Wave height in  through to crest scale meters.
 	 */
-	public Double getNShore() {
-		return nShore;
-	}
+	
+//	public Double getNShore() {
+//		return this.observations.get("nshore");
+//	}
 	/**
-	 * Convert the given shore wave height into  through to crest scale meters. 
-	 * @param shore wave height observed from shore in hawaiian scale feet
+	 * @param waveHeight wave height observed from shore in hawaiian scale feet
 	 */
-	public void setNShore(Double shore) {
-		nShore = shore * 0.3048 * 2; //*0.30 is to convert foot to meter, and *2 is to convert from Hawaiaan Scale Feet to Through To Crest Scale Feet.
-	}
+//	public void setNShore(Double waveHeight) {
+//		this.observations.put("nshore", this.HSFtoTCS(waveHeight));
+//	}
 	
 	public boolean equalsDate(Calendar date){
 		if (this.date.get(Calendar.YEAR) == date.get(Calendar.YEAR))
@@ -50,9 +91,9 @@ public class ObsData {
 							return true;
 		return false;
 	}
-	public String toString(){
+	public String print(String beach){
 		String date =  Util.getDateFormatter().format(this.date.getTime()) ;
-		String string  ="V.Obs: "+ date + " WH: "+ Util.getDecimalFormatter().format(this.nShore );
+		String string  ="V.Obs: "+ date + " WH: "+ Util.getDecimalFormatter().format(this.observations.get(beach) );
 		return string;
 		
 	}

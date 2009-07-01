@@ -9,10 +9,8 @@ import weka.ArfData;
 import weka.DataSet;
 import ww3.WaveWatchData;
 import Observations.ObsData;
-import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
-import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 
@@ -22,6 +20,7 @@ public class NoBuoyStrategy implements GenerationStrategy {
 	private String name;
 	private String description;
 	private String strategyString;
+	private String beach = null;
 	
 	public NoBuoyStrategy() {
 		this.name = "NoBuoyStrategy";
@@ -33,9 +32,15 @@ public class NoBuoyStrategy implements GenerationStrategy {
 			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas";
 	}
 	
-	public NoBuoyStrategy(String name, String description) {
+	public NoBuoyStrategy(String name, String description, String beach) {
 		this.name = name;
 		this.description = description;
+		this.beach = beach;
+	}
+	
+	public NoBuoyStrategy(String beach) {
+		this();
+		this.beach = beach;
 	}
 	
 	public String getDescription() {
@@ -79,7 +84,7 @@ public class NoBuoyStrategy implements GenerationStrategy {
 			}
 			
 			if (obsData != null){
-				ArfData arfData = new ArfData(null, obsData, ww3Data);
+				ArfData arfData = new ArfData(this.beach, null, obsData, ww3Data);
 				arfData.setDate(ww3Data.getDate());
 				arfDataSet.add(arfData);
 			}
@@ -88,10 +93,10 @@ public class NoBuoyStrategy implements GenerationStrategy {
 		return arfDataSet;
 	}
 	
-public void strategyString(Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
+	public void strategyString(Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
 		
 		String text = "";
-		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n" + "Beach: " + this.beach + "\n\n";
 		
 		if (ww3Filters.size() > 0){
 			text += "WW3 FILTERS:\n";
