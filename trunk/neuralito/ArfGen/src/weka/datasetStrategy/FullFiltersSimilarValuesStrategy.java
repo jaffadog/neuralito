@@ -27,6 +27,7 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 	private final double deltaPeriod;
 	private final double deltaDirection;
 	private String strategyString;
+	private String beach;
 	
 	public FullFiltersSimilarValuesStrategy() {
 		this.initStrategy();
@@ -35,19 +36,21 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 		this.deltaPeriod = 0;
 	}
 	
-	public FullFiltersSimilarValuesStrategy(double deltaHeight, double deltaDirection, double deltaPeriod) {
+	public FullFiltersSimilarValuesStrategy(String beach, double deltaHeight, double deltaDirection, double deltaPeriod) {
 		this.initStrategy();
 		this.deltaHeight = deltaHeight;
 		this.deltaDirection = deltaDirection;
 		this.deltaPeriod = deltaPeriod;
+		this.beach = beach;
 	}
 	
-	public FullFiltersSimilarValuesStrategy(String name, String description, double deltaHeight, double deltaDirection, double deltaPeriod) {
+	public FullFiltersSimilarValuesStrategy(String beach, String name, String description, double deltaHeight, double deltaDirection, double deltaPeriod) {
 		this.name = name;
 		this.description = description;
 		this.deltaHeight = deltaHeight;
 		this.deltaDirection = deltaDirection;
 		this.deltaPeriod = deltaPeriod;
+		this.beach = beach;
 	}
 
 	public void initStrategy(){
@@ -125,7 +128,7 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 			}
 			if (obsData != null && ww3Data != null){
 				if (this.similarValues(buoyData, ww3Data)){
-					ArfData arfData = new ArfData(buoyData, obsData, ww3Data);
+					ArfData arfData = new ArfData(this.beach, buoyData, obsData, ww3Data);
 					arfData.setDate(buoyData.getDate());
 					arfDataSet.add(arfData);
 				}
@@ -146,7 +149,7 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
 		
 		String text = "";
-		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n" + "Beach: " + this.beach + "\n\n";
 		
 		text += "STRATEGY PARAMETERS:\n";
 		text += "\tdeltaHeight -> " + this.deltaHeight + "\n";

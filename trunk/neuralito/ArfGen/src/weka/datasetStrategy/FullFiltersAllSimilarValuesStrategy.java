@@ -27,6 +27,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 	private final double deltaDirection;
 	private final double deltaObservation;
 	private String strategyString;
+	private String beach;
 	
 	public FullFiltersAllSimilarValuesStrategy() {
 		this.initStrategy();
@@ -36,21 +37,23 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 		this.deltaObservation = 0;
 	}
 	
-	public FullFiltersAllSimilarValuesStrategy(double deltaHeight, double deltaDirection, double deltaPeriod, double deltaObservation) {
+	public FullFiltersAllSimilarValuesStrategy(String beach, double deltaHeight, double deltaDirection, double deltaPeriod, double deltaObservation) {
 		this.initStrategy();
 		this.deltaHeight = deltaHeight;
 		this.deltaDirection = deltaDirection;
 		this.deltaPeriod = deltaPeriod;
 		this.deltaObservation = deltaObservation;
+		this.beach = beach;
 	}
 	
-	public FullFiltersAllSimilarValuesStrategy(String name, String description, double deltaHeight, double deltaDirection, double deltaPeriod, double deltaObservation) {
+	public FullFiltersAllSimilarValuesStrategy(String beach, String name, String description, double deltaHeight, double deltaDirection, double deltaPeriod, double deltaObservation) {
 		this.name = name;
 		this.description = description;
 		this.deltaHeight = deltaHeight;
 		this.deltaDirection = deltaDirection;
 		this.deltaPeriod = deltaPeriod;
 		this.deltaObservation = deltaObservation;
+		this.beach = beach;
 	}
 
 	public void initStrategy(){
@@ -128,7 +131,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 			}
 			if (obsData != null && ww3Data != null){
 				if (this.similarValues(buoyData, ww3Data, obsData)){
-					ArfData arfData = new ArfData(buoyData, obsData, ww3Data);
+					ArfData arfData = new ArfData(this.beach, buoyData, obsData, ww3Data);
 					arfData.setDate(buoyData.getDate());
 					arfDataSet.add(arfData);
 				}
@@ -142,7 +145,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 		if (Math.abs(buoyData.getWaveDirection() - ww3Data.getWaveDirection()) < this.deltaDirection)
 			if (Math.abs(buoyData.getWaveHeight() - ww3Data.getWaveHeight()) < this.deltaHeight)
 				if (Math.abs(buoyData.getWavePeriod() - ww3Data.getWavePeriod()) < this.deltaPeriod)
-					if (Math.abs(obsData.getNShore() - ww3Data.getWaveHeight()) < this.deltaObservation)
+					if (Math.abs(obsData.getWaveHeight(this.beach) - ww3Data.getWaveHeight()) < this.deltaObservation)
 						return true;
 		return false;
 	}
@@ -150,7 +153,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 	public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
 		
 		String text = "";
-		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n"  + "Beach: " + this.beach + "\n\n";
 		
 		text += "STRATEGY PARAMETERS:\n";
 		text += "\tdeltaHeight -> " + this.deltaHeight + "\n";

@@ -25,8 +25,9 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 	private int startMonth;
 	private int endMonth;
 	private String strategyString;
+	private String beach;
 	
-	public MonthPeriodStrategy(int startMonth, int endMonth) {
+	public MonthPeriodStrategy(String beach, int startMonth, int endMonth) {
 		this.name = "MonthPeriodStrategy";
 		this.description = 
 			"Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.\n" +
@@ -39,13 +40,15 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 			"especificos(por ejemplo durante la temporada de olas grandes o de olas peque�as.)\n";
 		this.startMonth = startMonth;
 		this.endMonth = endMonth;
+		this.beach = beach;
 	}
 	
-	public MonthPeriodStrategy(String name, String description, int startMonth, int endMonth) {
+	public MonthPeriodStrategy(String beach, String name, String description, int startMonth, int endMonth) {
 		this.name = name;
 		this.description = description;
 		this.startMonth = startMonth;
 		this.endMonth = endMonth;
+		this.beach = beach;
 	}
 	
 	public String getDescription() {
@@ -105,7 +108,7 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 			}
 			
 			if (obsData != null){
-				ArfData arfData = new ArfData(null, obsData, ww3Data);
+				ArfData arfData = new ArfData(this.beach, null, obsData, ww3Data);
 				arfData.setDate(ww3Data.getDate());
 				arfDataSet.add(arfData);
 			}
@@ -117,7 +120,7 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
 		
 		String text = "";
-		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n"  + "Beach: " + this.beach + "\n\n";
 		
 		text += "STRATEGY PARAMETERS:\n";
 		text += "\tstartMonth -> " + this.startMonth + "\n";

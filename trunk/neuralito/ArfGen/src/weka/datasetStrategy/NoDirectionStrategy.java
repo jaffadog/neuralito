@@ -21,6 +21,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
+	private String beach;
 	
 	public NoDirectionStrategy() {
 		this.name = "NoDirectionStrategy";
@@ -30,9 +31,15 @@ public class NoDirectionStrategy implements GenerationStrategy {
 			"Observacion: Observacion visual que representa la altura maxima que alcanzaron las olas en ese dia \n";
 	}
 	
-	public NoDirectionStrategy(String name, String description) {
+	public NoDirectionStrategy(String beach, String name, String description) {
 		this.name = name;
 		this.description = description;
+		this.beach = beach;
+	}
+	
+	public NoDirectionStrategy(String beach) {
+		this();
+		this.beach = beach;
 	}
 	
 	public String getDescription() {
@@ -85,7 +92,7 @@ public class NoDirectionStrategy implements GenerationStrategy {
 				}		
 			}
 			if (obsData != null && ww3Data != null){
-				ArfData arfData = new ArfData(buoyData, obsData, ww3Data);
+				ArfData arfData = new ArfData(this.beach, buoyData, obsData, ww3Data);
 				arfData.setDate(buoyData.getDate());
 				arfDataSet.add(arfData);
 			}

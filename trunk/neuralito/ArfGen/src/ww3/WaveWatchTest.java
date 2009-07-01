@@ -14,13 +14,11 @@ public class WaveWatchTest {
 	public static void main(String[] args) {
 		System.out.println(" ");	
 		WWManager manager = new WWManager();
-		manager.loadDataFromGrib();
-		String[] ww3Files = new String[]{".//files//ww3//ww3_2002.data", ".//files//ww3//ww3_2003.data"};
-		System.out.println(manager.getWWData(ww3Files));
-		//print( manager.getWWData());
-		//System.out.println(" ");
-	}
+		String[] years = new String[]{"2001", "2002", "2003", "2004"};
+		manager.loadDataFromGrib(years,21.00,-157.5);
+		print(manager.getWWData(years,21.00,-157.5));
 
+	}
 	private static void print(Collection waveData) {
 		for (Iterator iterator = waveData.iterator(); iterator.hasNext();) {
 			WaveWatchData data = (WaveWatchData) iterator.next();
@@ -31,8 +29,5 @@ public class WaveWatchTest {
 		
 	}
 
-
-
-	
 
 }

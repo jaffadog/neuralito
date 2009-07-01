@@ -20,6 +20,7 @@ public class NoWW3Strategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
+	private String beach;
 	
 	public NoWW3Strategy() {
 		this.name = "NoWW3Strategy";
@@ -31,9 +32,15 @@ public class NoWW3Strategy implements GenerationStrategy {
 			"dia en que hay luz solar, las boyas lecturas de las boyas durante la noche tambien fueron filtradas";
 	}
 	
-	public NoWW3Strategy(String name, String description) {
+	public NoWW3Strategy(String beach, String name, String description) {
 		this.name = name;
 		this.description = description;
+		this.beach = beach;
+	}
+	
+	public NoWW3Strategy(String beach) {
+		this();
+		this.beach = beach;
 	}
 	
 	public String getDescription() {
@@ -75,7 +82,7 @@ public class NoWW3Strategy implements GenerationStrategy {
 			}
 			
 			if (obsData != null){
-				ArfData arfData = new ArfData(buoyData, obsData, null);
+				ArfData arfData = new ArfData(this.beach, buoyData, obsData, null);
 				arfData.setDate(buoyData.getDate());
 				arfDataSet.add(arfData);
 			}

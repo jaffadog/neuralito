@@ -50,10 +50,20 @@ public final class Util {
 	public static void printCollection(Collection col){
 		
 		int i = 0;
+		String pattern = "0";
+		if (col.size()>10000){
+			pattern = "00000";
+		}
+		else
+			if (col.size()>1000)
+			 pattern = "0000";
+			 else
+				 if ( col.size()>100 )
+				 pattern = "000";
 		for (Iterator iterator = col.iterator(); iterator.hasNext();) {
 			
 			Object object = (Object) iterator.next();
-			System.out.println(i + " :" + object);
+			System.out.println(Util.getDecimalFormatter(pattern).format(i)+" :" + object);
 			i++;
 		}
 				
