@@ -1,1 +1,0 @@
-Teniengo google earth instalado y haciendo doble clik en el archivo KMZ se cargan los lugares exportados.
