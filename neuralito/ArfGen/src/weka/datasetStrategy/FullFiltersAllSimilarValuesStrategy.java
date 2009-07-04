@@ -12,7 +12,6 @@ import Observations.ObsData;
 import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
-import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 import filter.WW3CouplingFilter;
@@ -71,6 +70,10 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 			"Ademas esta estrategia filtra todas las instancias en que las lecturas de la boya, del ww3 y la observacion no son \n" +
 			"similares (altura, periodo y direccion, en el caso de obs solo altura) asegurando que las instancias resultantes sean unicamente \n" +
 			"las mas consistentes. \n";
+	}
+	
+	public String getBeach() {
+		return beach;
 	}
 	
 	public String getDescription() {

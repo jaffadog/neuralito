@@ -50,6 +50,10 @@ public class NoDirectionStrategy implements GenerationStrategy {
 		return name;
 	}
 	
+	public String getBeach() {
+		return beach;
+	}
+	
 	@Override
 	public DataSet generateTrainningData(Hashtable<String, Object> dataCollection) {
 		Vector<BuoyData> buoyDataSet = (Vector<BuoyData>) dataCollection.get("buoyData");

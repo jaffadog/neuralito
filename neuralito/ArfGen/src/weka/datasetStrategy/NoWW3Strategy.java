@@ -11,7 +11,6 @@ import Observations.ObsData;
 import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
-import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 
@@ -50,7 +49,11 @@ public class NoWW3Strategy implements GenerationStrategy {
 	public String getName() {
 		return name;
 	}
-
+	
+	public String getBeach() {
+		return beach;
+	}
+	
 	@Override
 	public DataSet generateTrainningData(Hashtable<String, Object> dataCollection) {
 		Vector<BuoyData> buoyDataSet = (Vector<BuoyData>) dataCollection.get("buoyData");
