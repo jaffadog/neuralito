@@ -1,0 +1,23 @@
+NOBUOYSTRATEGY
+
+	Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.
+Dado que del ww3 disponemos de datos cada tres horas y las observaciones son una por dia que representa 
+la altura maxima que alcanzo una ola en el dia, las lecturas del ww3 se filtran dejando la   
+mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del 
+dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas
+
+Beach: wshore
+
+WW3 FILTERS:
+	DataTimeFilter
+		Desde -> 17:30
+		Hasta -> 6:30
+	MaxWaveHeightFilter
+
+INSTANCE ATTRIBUTES:
+	ww3Height, ww3Period, ww3Direction, visualObservation, 
+
+CLASS ATTRIBUTE:
+	visualObservation
+
+
