@@ -1,0 +1,34 @@
+MONTHPERIODSTRATEGY
+
+	Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.
+Dado que del ww3 disponemos de datos cada tres horas y las observaciones son una por dia que representa 
+la altura maxima que alcanzo una ola en el dia, las lecturas del ww3 se filtran dejando la   
+mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del 
+dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas.
+Ademas en esta estrategia se debe setear un mes de inicio y un mes de fin de lectura, de esta manera 
+se filtraran las lecturas que caigan dentro de esos meses permitiendo estudiar periodos de tiempo 
+especificos(por ejemplo durante la temporada de olas grandes o de olas peque�as.)
+
+
+Beach: nshore
+
+STRATEGY PARAMETERS:
+	startMonth -> 3
+	endMonth -> 9
+
+WW3 FILTERS:
+	MonthFilter
+		Desde -> 3
+		Hasta -> 9
+	DataTimeFilter
+		Desde -> 17:30
+		Hasta -> 6:30
+	MaxWaveHeightFilter
+
+INSTANCE ATTRIBUTES:
+	ww3Height, ww3Period, ww3Direction, visualObservation, 
+
+CLASS ATTRIBUTE:
+	visualObservation
+
+
