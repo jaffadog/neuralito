@@ -1,0 +1,257 @@
+V1.0.0  2004 Aug 18  First release
+
+V1.0.2  2004 Aug 31  Remove debug code
+
+V1.0.4  2004 Dec 23  Add second parameter for output..
+                     .. parameter must be -SAVE
+                     .. images saved as GRIBimage-0.jpg GRIBimage-1.jpg etc.
+                     .. can also have -SAVE:<folder-name>
+                     .. images are saved in the same folder as the data
+                     .. or in the <folder-name> if specified
+                     Recognise Visibility data type
+                     Support Windows XP themes
+
+V1.0.6  2005 Mar 17  Support newer sea-ice data classifications
+                     Support Solar Surface irradiance data type
+                     Support Downward Longwave Irradiance data type
+                     Support Northern & Southern Hemisphere projections
+                     Support OSI-SAF LML SSI SST & DLI files
+                     Support OSI-SAF MAP DLI and SSI files
+                     Support OSI-SAF NAR SST files
+                     Display descriptions of sea-ice Type and Edge data
+                     Add choice of boundary colour      
+
+V1.3.0  2005 May 31  Update for newer model-ID OSI-SAF NAR SST files
+                     Add extra zoom option
+                     Synchronise version number with SeaIce Viewer
+
+V2.0.0  2005 Nov 07  Limited GRIB2 support for EUMETCast MPEF files ..
+                     .. files named like: 200507071145-clm.grb+
+                     .. wildcard support for latest data
+                     .. e.g. C:\MSG-1\Images\MPEF\*-cth.grb+
+                     .. CLAI, CLM and CTH data supported
+                     .. all three displayed if data available
+                     .. 2:1 zoom supported
+                     .. add CTH scale to the image
+                     Support EUMETCast CRM data
+                     Support EUMETSAT SAF group: LMLSSI & LMLDLI
+                     Support DPDS group: SnnUM100, SnnVM100, SnnHM100 & SnnTM100
+                     .. show winds in knots for this group
+                     .. this group defined by entry in: GRIBviewerGroups.ini
+                     Make GRIBviewerGroups.ini a generally available function ..
+                     .. also works with .GZ compressed files
+                     Add File, SaveAs... function
+                     Provide choice of JPEG (default) or PNG output
+                     Support more parameters in command-line mode ..
+                     .. third: -MIN runs the program minimised
+                     .. fourth: -ZOOM forces the zoom to be set active
+                     .. fifth: -BOUND:<none|dark|light> sets boundary colour
+                     Allow parameter substitution in output file name ..
+                     .. %YYYY %YY %MM %DD %HH %NN replaced by year, month etc.
+                     .. note that in a .bat or .cmd file you may need %%YYYY etc.
+                     .. to make parameter 2 just a directory, add a trailing "\"
+                     .. a valid folder must be specified
+                     .. e.g. C:\Data\grib-%yyyy-%mm-%dd
+                     .. file type will be either .PNG or .JPG, no need to add
+                     Drop priority during CPU-intensive processing
+                     Support more GRIB-1 data types ..
+                     .. minimum temperature
+                     .. convective precipitation
+                     .. large-scale precipitation
+                     .. convective snow
+                     .. large-scale snow
+                     .. wave swell magnitude and direction
+                     .. wind waves height and period
+                     .. swell waves height and period
+                     Choice of wind vector display size
+                     Choice of data interpolation method
+
+V2.0.2  2005 Nov 10  Add read-out of data value at station location ..
+                     .. use File, Setup menu to define station location
+                     .. right-click status bar to show data value
+                     .. location is temporarily marked on current display
+                     Revise DPDS SSTTA098 label to just "Temperature"
+
+V2.0.4  2005 Dec 31  Support EUMETSAT multi-sensor precipitation estimate ..
+                     .. readout assumes 1 kg m-2 s-1 is equal to 1 mm s-1
+                     .. data from: http://oiswww.eumetsat.int/~idds/html/grib.html
+                     .. satellite longitude displayed in tab header
+                     Add [NameEnding] section to GRIBviwerGroups.ini file
+                     Allow combining of TAR files through GRIBviewerGroups.ini
+                     Require GRIBviewerGroups.ini for combining CLM, CLAI & CTH
+                     Display correct caption for UV data
+                     Shorten tab name for wind data
+                     Include level name in wind data
+                     Match vector wind display with level where possible
+                     Some speed optimisations, so please check function carefully
+
+V2.0.6  2006 Mar 03  Add gridline display option
+                     Add support for more DWDSAT data
+                     Support multiple data sets in GRIB-1 files
+                     Add forecast times to tab names (limited)
+                     Refine Winds display (to match level and time range)
+                     Allow control of wind tab visibility
+                     Enhanced File Analysis presentation
+                     Automatic reload on zoom change
+
+V2.0.8  2006 May 01  Internal changes only
+
+Release V2.1.0.105
+V2.1.0  2006 Oct 05  Add support for ECMWF Essential GTS data ..
+                     Add support for EUMETSAT Fire data ..
+                     .. program saves list of all pixels to file
+                     .. use File, Save fire pixel list menu
+                     .. data source: ftp://ftp.eumetsat.int/pub/OPS/out/simon/FIRE/
+                     Support NOAA Wavewatch III data ..
+                     .. see http://polar.ncep.noaa.gov/waves/products.html
+                     .. may break longitude mapping for some existing products?
+                     Replace "the Earth's surface" with "surface" - OK?
+                     Add wind barbs option
+                     Support GRIB-1 relative vorticity and divergence
+                     Support some GRIB-2 meteorological data ..
+                     .. e.g. Z__C_RJTD_20060718210000_MSM_GPV_Rjp_L-pall_FH00-15_grib2.bin.grib
+                     .. may need to rename .bin to .bin.grib
+                     Be more tolerant with multiple-data-set files ..
+                     .. but this may result in issues reading non-grb data
+                     Accept ARPA-FVG-Udine-Italy data
+                     Trap errors from incomplete GRIB files
+                     Set ERRORLEVEL = 1 if no files processed in batch mode
+                     Reduce load times for CRM data
+                     Revise sample GRIBviewerGroups.ini for MPE now from Met-8
+                     Add more examples to GRIBviewerGroups.ini
+
+Release V2.1.2.107
+V2.1.2  2006 Dec 01  Revise palette for MPE data, and display a scale
+
+Release V2.1.4.147
+V2.1.4  2007 Jun 19  Add TIFF as an output format ..
+                     .. note that MPE values are saved as greyscale
+                     .. 0..85 mm/hr scaled to brightness levels 0..255
+                     .. FIR and CLM are saved as index values (0..3)
+                     Add -NOZOOM parameter option for batch mode
+                     Add batch option to select just saving certain images ..
+                     .. example:  -SELECT:0,2,3  (don't save image 1)
+                     Add text fire output when in batch mode ..
+                     .. file name is typically: M2_20071051145.txt
+                     .. directory will be the same as the other data
+                     .. M2 stands for MSG (as opposed to MODIS or Metop)
+                     .. lat, lon, bt, dx, dy, date, time, video
+                     .. bt: brightness temperature - always 321
+                     .. dx, dy: region extent - not used
+                     .. video: 1 - possible fire, 2 - probable fire
+                     .. decimal separator always "." independent of region settings
+                     Add ASCII as output format ..
+                     .. limited in accuracy to 8-bits (0.5% at best)
+                     Only for ASCII output, and only from the command-line ..
+                     .. support region control
+                     .. accept -LEFT, -TOP, -WIDTH and -HEIGHT parameters
+                     .. example: -left:1650 -top:1300 -width:150 -height:200
+                     .. supports: MPE, Fire, DIV, CTH, CTHQ, CLAI, CLM
+                     .. please check this output carefully - as yet unproven!
+                     Add support for EUMETSAT DIV data
+                     Provide fix for 57E EUMETSAT data
+                     Add Windows Vista support
+                     Update for tides data ..
+                     .. support new data types
+                     .. add control over current magnitude & direction display
+                     .. add overlay display of current vector
+                     .. zoomed option is not available
+                     Extended Scale display facilities ..
+                     .. more data types
+                     .. more scale locations
+                     .. still being developed
+                     Add Timestamp display facilities ..
+                     .. can specify location
+                     .. still being developed
+                     Add choice of unsorted or sorted by time
+                     Add Shift-mouse-move to show (X, Y) co-ordinates
+                     Add simple animation for time-set data ..
+                     .. right-click the displayed image
+                     .. choice of three speeds
+                     .. Escape key or right-click will stop an animation
+                     .. File, Save animation as... menu item added
+                     .. add AVI as well as animated GIF option
+                     .. AVI files will be a lot bigger
+                     .. AVI animations wait 1.5s at end, and don't loop
+                     ** WARNING ** internal changes may affect the display
+                     ** please report any issues!
+                     Support operation on 800 x 600 displays
+                     Support Fire data in GRIBViewerGroups.ini lists
+
+Release V2.1.6.174
+V2.1.6  2007 Dec 22  EUMETSAT FIRE and MPE data enhancements ..
+                     .. add timestamp display
+                     .. improved PNG output with dark boundary or grid lines
+                     Batch mode ..
+                     .. ASCII output if -TEXT: used rather than -SAVE:
+                     .. note that ASCII output always has a .DAT file extension
+                     .. if -RANGE specified, save data-ranges.txt file
+                     Add limited support for NOAA snow files ..
+                     .. file names like: NPR.SNWS.SP.D07217.S1200.grb
+                     .. or: NPR.SNWS.SP.D07217.S1200
+                     .. age displayed in days, up to 254 maximum
+                     .. depth displayed in inches up to 125 inches maximum
+                     .. please report any issues
+                     Add support for some NOAAPORT files ..
+                     .. 2007092015_awc_zia.grb done (but why multiple data sets?)
+                     .. 2007092015_awc_zwa/d.grb - wrong projection?
+                     .. 2007092015_awc_ywa/b/c/d.grb - wrong projection?
+                     Add limited support for GRIB1 Lambert Conformal projection ..
+                     .. many unknown data types in those files
+                     Accept files ending in -TAR (as well as .TAR)
+                     Add RH and PV data to those providng a scale bar
+                     Extend scale bar to include bi-polar ranges
+                     Improved timestamp display
+                     Correct failure to draw grid over full geostationary zoomed region
+                     Allow for reading grouped data with zero groups
+                     Note that EUMETSAT CRM "Parameter Number" values have changed
+                     Improved display of DWDSAT UV data ..
+                     .. decode and display time of maximum UV radiation
+                     .. add knowledge of special DWDSAT LME projection
+                     .. add colouring and zoom to data display
+
+Release V2.1.8.179
+V2.1.8  2008 Jun 22  Allow replacement of %YYYY as year etc. in the output path
+
+Release V2.2.0.188  
+V2.2.0  2008 Nov 08  Support more NOAA NCEP GFS GRIB data types ..
+                     .. precipitation rate - units: kg/m^2/s, shown as mm/hour
+                     .. total cloud cover percent
+                     EUMETCast FIR data ..
+                     .. add satellite longitude to description
+                     EUMETCast MPE data ..
+                     .. correct "mm/hr" missing from the colour scale
+                     .. make colours fixed for each MPE value
+                     .. add satellite longitude to description
+                     EUMETCast DIV data ..
+                     .. make colours fixed to EUMETSAT suggestions
+                     .. below -120 black
+                     .. -120..-20 shades of red
+                     .. -20..+20 colourless
+                     .. +20..+120 shades of blue
+                     .. above +120 blue
+
+Release V2.2.2.192
+V2.2.2  2009 Jan 10  Display scale for temperature data
+                     Add slower animation speed
+                     Add option for emboldened timestamp
+                     Accept timestamps from accumulated data (e.g. rain) ..
+                     .. note that these will be timestamped at the start,
+                     .. not the end of the period, although the data is
+                     .. considered valid for the end of the period.
+                     Add ability to animate data with fewer than max slots ..
+                     .. note that the animation code has altered
+                     .. so please be careful
+
+Release V2.2.4.195
+V2.2.4  2009 Apr 19  Support changed EUMETSAT MPE/Met-07 format
+                     Support new OSI-SAF SST data files (NAR & GLB)
+
+
+CONTACTING THE AUTHOR
+
+Web site:  www.satsignal.eu
+E-mail:    davidtaylor@writeme.com
+Software self-help: http://groups.yahoo.com/group/SatSignal/
+
+2009 Apr 19

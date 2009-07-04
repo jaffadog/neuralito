@@ -1,0 +1,27 @@
+File names: oahuyyyy.dat, where yyyy = year
+
+Surf Heights given in Hawaii Scale Feet.  Trough-to-Crest heights
+are double the Hawaii Scale Feet heights within the 10-20%
+margin of error.
+
+format layout, columns as:
+
+yyyy mm dd nshor wshor almo dh  winw  wspd wdir nsd ssd
+2000  1  1    8    4    1    2    3    2   17   15  999
+2000  1  2    5    2    1    2    2    2   17   15  999
+2000  1  3    4    2    1    2    2    2   17   15  999
+
+nshor (North Shore, Oahu, mostly Sunset until > 15', then Waimea)
+wshor (Makaha)
+almo (South Shore, Oahu, Ala Moana Bowls)
+dh (Diamond Head)
+winw (Windward Oahu (east side) index)
+wspd (wind speed in beaufort for open waters)
+wdir (wind direction, coded 1=N 2=NNE 3=NE, etc ... 16=NNW
+      17:light and variable)
+nsd (north shore wave direction as above)
+ssd (south shore direction) note for swell directions,  18:mixed
+     usually only the dominant direction is given, ignoring mixed
+     conditions, which happen commonly
+
+missing data flag for all fields: 999

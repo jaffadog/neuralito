@@ -1,0 +1,19 @@
+MD5 cryptographic checksums created: Mon Jul 29 11:28:58 2002
+On host: windward.nodc.noaa.gov (hostid: 5a0a1feb)
+For directory: /nodc/archive/arc0001/0000165/01-version
+Signed by: archivist as archivist
+MD5 (/nodc/archive/arc0001/0000165/01-version/NODC-Readme.txt) = fe0c8b03353aa26c701d08cdeb1c2d6e regular text -rw-rw-r-- 1 archivist archivist 1769 Apr 4 10:45:45 2001
+MD5 (/nodc/archive/arc0001/0000165/01-version/about) = d41d8cd98f00b204e9800998ecf8427e irregular directory drwxrwxr-x 2 archivist archivist 80 Jul 29 11:28:58 2002
+MD5 (/nodc/archive/arc0001/0000165/01-version/about/journal.txt) = 65c4aba3d8c7cc236fa55159da46b9d1 regular text -rw-rw-r-- 1 archivist archivist 354 Jul 29 11:28:58 2002
+MD5 (/nodc/archive/arc0001/0000165/01-version/data) = d41d8cd98f00b204e9800998ecf8427e irregular directory drwxrwxr-x 3 archivist archivist 72 Jul 29 11:28:58 2002
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data) = d41d8cd98f00b204e9800998ecf8427e irregular directory dr-xr-xr-x 4 archivist archivist 160 Jun 8 11:08:12 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/0000165.txt) = 2a0fc008495c0010f5a50bea4890af86 regular text -r--r--r-- 1 archivist archivist 1428 Jun 8 11:05:40 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/data) = d41d8cd98f00b204e9800998ecf8427e irregular directory dr-xr-xr-x 2 archivist archivist 176 Jun 8 08:24:17 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/data/COLES_11.WK3) = caca074331460a1f7825214f9bafb788 regular binary -r--r--r-- 1 archivist archivist 57623 Jun 1 17:13:54 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/data/COLES_11.prn) = b874e8b0e5243898b2b44007ca393795 regular text -r--r--r-- 1 archivist archivist 36033 Jun 1 20:33:59 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/data/NSH_DATA.WK3) = 1d72f11b89fca64f64c44790d437170d regular binary -r--r--r-- 1 archivist archivist 92863 Jun 1 17:46:35 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/data/NSH_DATA.prn) = 195184de3d1abdfacdb350ce63b117d4 regular text -r--r--r-- 1 archivist archivist 56458 Jun 1 20:33:59 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/nodcmeta) = d41d8cd98f00b204e9800998ecf8427e irregular directory dr-xr-xr-x 2 archivist archivist 112 Jun 8 08:24:17 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/nodcmeta/nsoahu_pcc.inv) = 77af8c957f2095229630b364b4e00715 regular text -r--r--r-- 1 archivist archivist 82 Jun 1 20:06:11 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/nodcmeta/nsoahu_pcc.meta) = d4b1293c161e211149764e740d1b4916 regular text -r--r--r-- 1 archivist archivist 4761 Jun 1 20:32:51 2000
+MD5 (/nodc/archive/arc0001/0000165/01-version/data/0-data/nsoahu_pcc.tar) = b55b5e53ce99bb8031a083069220e5b4 regular binary -r--r--r-- 1 archivist archivist 255488 Jun 8 08:24:04 2000

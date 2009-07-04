@@ -1,0 +1,17 @@
+MD5 cryptographic checksums created: Mon Jul 29 12:54:32 2002
+On host: windward.nodc.noaa.gov (hostid: 5a0a1feb)
+For directory: /nodc/archive/arc0001/0000274/01-version
+Signed by: archivist as archivist
+MD5 (/nodc/archive/arc0001/0000274/01-version/NODC-Readme.txt) = fe0c8b03353aa26c701d08cdeb1c2d6e regular text -rw-rw-r-- 1 archivist archivist 1769 Apr 4 10:45:45 2001
+MD5 (/nodc/archive/arc0001/0000274/01-version/about) = d41d8cd98f00b204e9800998ecf8427e irregular directory drwxrwxr-x 2 archivist archivist 80 Jul 29 12:54:31 2002
+MD5 (/nodc/archive/arc0001/0000274/01-version/about/journal.txt) = acc691b2f1126080e459cf6e2f325bf7 regular text -rw-rw-r-- 1 archivist archivist 354 Jul 29 12:54:31 2002
+MD5 (/nodc/archive/arc0001/0000274/01-version/data) = d41d8cd98f00b204e9800998ecf8427e irregular directory drwxrwxr-x 3 archivist archivist 72 Jul 29 12:54:31 2002
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data) = d41d8cd98f00b204e9800998ecf8427e irregular directory dr-xr-xr-x 4 archivist archivist 160 Sep 21 09:55:06 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/0000274.txt) = 365ce7cac343dff1633f5c3c0cd07c7a regular text -r--r--r-- 1 archivist archivist 307 Sep 21 09:54:09 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/data) = d41d8cd98f00b204e9800998ecf8427e irregular directory dr-xr-xr-x 2 archivist archivist 112 Sep 21 09:39:49 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/data/S_SHORE.WK3) = f800d05dc311de31d5bc333bb657f0b7 regular binary -r--r--r-- 1 archivist archivist 111914 Sep 6 23:02:22 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/data/S_SHORE.prn) = 7e339ea82d8419d944f74e7654330390 regular text -r--r--r-- 1 archivist archivist 44115 Sep 6 23:02:22 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/nodcmeta) = d41d8cd98f00b204e9800998ecf8427e irregular directory dr-xr-xr-x 2 archivist archivist 112 Sep 21 09:39:49 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/nodcmeta/ssoahu_pcc.inv) = 7eae9182eeccf1457044afa59a22fe31 regular text -r--r--r-- 1 archivist archivist 82 Sep 7 00:05:02 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/nodcmeta/ssoahu_pcc.meta) = ef143eb96b4190112258d0dbae8e2c5c regular text -r--r--r-- 1 archivist archivist 4264 Sep 20 21:12:07 2000
+MD5 (/nodc/archive/arc0001/0000274/01-version/data/0-data/ssoahu_pcc.tar) = 98bc2249764f45ca9b02b48377c1678d regular binary -r--r--r-- 1 archivist archivist 166400 Sep 21 09:39:28 2000

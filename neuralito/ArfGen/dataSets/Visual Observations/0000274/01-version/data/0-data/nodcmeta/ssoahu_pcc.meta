@@ -1,0 +1,143 @@
+#TEMPORARY ACCESSION NUMBER:
+
+
+#ACCESSION NUMBER:
+
+
+#CONTRIBUTOR:
+Mr. Larry Goddard
+
+#CONTRIBUTOR INSTITUTION:
+none 
+
+#ORIGINATOR:
+Mr. Larry Goddard
+
+#ORIGINATOR INSTITUTION:
+same
+
+#TITLE: 
+Surf Observations from the South Shore of Oahu, Hawaii 1972-1987
+
+#PROJECT:
+These data were tabulated through the personal interest
+of Mr. Larry Goddard, an engineer with an interest in surfing
+and statistics.
+
+#ABSTRACT:
+Surf observations from the south shore, Oahu, were made on a daily
+basis by Mr. Larry Goddard or several of his competent surfer
+friends.  Observations typically were made from either the Ala
+Moana area or the Nanatorium/Kapiolani Park area.  On days
+he could not make it to the south shore, west side spots
+Maili Point or Makaha with direct south exposure were used.
+Although there is uncertainty of rough 20% for any given
+observations, this set of data captures the general trends and
+episodic events.
+
+#PURPOSE:
+The observations were gathered into a dataset with the intention
+of applying statistics to better understand the mean patterns
+and trends and to document episodic events.
+
+#LOCATION EXTREMES:
+SOUTHERNMOST LATITUDE:  21.26
+SOUTHERNMOST LATITUDE HEMISPHERE: N
+NORTHERNMOST LATITUDE:  21.42
+NORTHERNMOST LATITUDE HEMISPHERE: N
+WESTERNMOST LONGITUDE: 158.18
+WESTERNMOST LONGITUDE HEMISPHERE: W 
+EASTERNMOST LONGITUDE: 157.83
+EASTERNMOST LONGITUDE HEMISPHERE: W  
+
+#LOCATION KEYWORDS: Honolulu, Oahu, Hawaii, North Pacific Ocean
+
+#SAMPLING STATIONS: Publics (Nanatorium), Ala Moana, Maili, Makaha
+
+Observation location was chosen to represent the
+section along the coast with the largest surf, which
+various from spot to spot depending on swell direction, tide,
+and wave size.
+
+#BEGIN AND END DATES: 
+01 March 1972 -  20 November 1987
+
+#SAMPLING PERIODS:
+daily
+
+#PARAMETERS: 
+height of breaking surf in feet
+
+#METHODOLOGY:
+
+Line of site method was applied for judging the
+height of the shoreward-facing wave front at the
+moment of maximum cresting above the sea level.
+The observer notes the height of his eyes above
+the sea level relative to the height of the crest.
+On many occassions, the lifeguard towers were used
+to climb to a height equal to the breaking waves
+in a horizontal sense.  In other cases, the size
+of the wave was estimated by comparing a surfer
+to the breaking swell.  At Ala Moana, a pole in
+the channel could be used to judge the wave size.
+The pole was knocked out by Hurricane Iwa in
+1982.
+
+Uncertainty is typically 20% of the wave height.  
+In addition, this method does not include the 
+contribution to wave height from the wave trough, 
+which is below sea level and usually many yards 
+ahead of the steep wave face.  Thus, roughly 5% 
+of the height is underestimated due to lack of 
+information of the trough height.
+
+Note, the heights in this database are using the
+"Goddard" scale.  To find the equivalent height
+as used by the lifeguards, multiply the Goddard
+height by 2/3 (or divide by 1.5); ie. 6' (Goddard)
+is equivalent to 4' (lifeguard).  The public in
+Hawaii is familiar with the lifeguard's size
+scheme, which grossly underestimates by roughly
+half the true oceanographic defination of wave height.
+
+The recorded values in this dataset represent the highest 
+observations of a given day.  Thus, if the surf was 8' 
+in the morning and 3' in the evening, the value of 8' 
+would be recorded.  The observations also represent the 
+largest of the groups of waves which arrive.  This would 
+be similar to the highest 1/10 wave heights (that is, 
+take the higest 10% of the waves, add them up, and 
+divide by the number of these waves).
+
+#INSTRUMENT TYPES:
+none
+
+#REFERENCES: 
+none
+
+#SUBMITTING MEDIUM:
+FTP
+
+#FILE FORMATS: 
+
+Database provided as LOTUS 1-2-3 (*.WK3) with redundant
+ASCII dumps (*.prn).
+
+File: s_shore (.WK3 and .prn)
+
+Format self descriptive, date and height.
+
+#DATASET SIZE:
+155K
+
+#NUMBER OF DATA UNITS:
+1 general location (south shore, Oahu)
+
+#MISCELLANEOUS:
+A similar dataset was made available for
+the north shore of Oahu.  Note the north
+shore database uses the "lifeguard" size
+scheme, while the south shore database
+uses the "Goddard" scheme.
+
