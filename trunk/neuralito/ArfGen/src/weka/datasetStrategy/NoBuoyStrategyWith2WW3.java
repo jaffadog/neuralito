@@ -119,5 +119,10 @@ public void strategyString(Vector<Filter> ww3Filters, String[] strategyAttribute
 		
 		return arfDataSet;
 	}
+	@Override
+	public String getBeach() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
