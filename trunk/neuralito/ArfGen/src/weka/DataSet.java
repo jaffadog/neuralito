@@ -6,7 +6,7 @@ import java.util.Vector;
 public class DataSet {
 	private String dataSetName;
 	private String dataSetDescription;
-	private Collection instances;
+	private Collection<ArfData> instances;
 	private String[] attributes;
 	private String classAttribute;
 	
@@ -36,7 +36,7 @@ public class DataSet {
 		this.dataSetDescription = description;
 	}
 		
-	public Collection getInstances() {
+	public Collection<ArfData> getInstances() {
 		return instances;
 	}
 

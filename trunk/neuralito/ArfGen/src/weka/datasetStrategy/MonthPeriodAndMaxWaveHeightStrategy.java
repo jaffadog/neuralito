@@ -1,5 +1,4 @@
 package weka.datasetStrategy;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -10,42 +9,51 @@ import weka.ArfData;
 import weka.DataSet;
 import ww3.WaveWatchData;
 import Observations.ObsData;
+import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
+import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
+import filter.MonthFilter;
+import filter.WaveHeightFilter;
 
 
-public class NoBuoyStrategy implements GenerationStrategy {
+public class MonthPeriodAndMaxWaveHeightStrategy implements GenerationStrategy {
 
 	private String name;
 	private String description;
+	private int startMonth;
+	private int endMonth;
 	private String strategyString;
-	private String beach = null;
-
-	public NoBuoyStrategy() {
-		this.name = "NoBuoyStrategy";
+	private String beach;
+	private double maxHeight;
+	
+	public MonthPeriodAndMaxWaveHeightStrategy(String beach, int startMonth, int endMonth, double theMaxHeight) {
+		this.name = "MonthPeriodAndMaxWaveStrategy." +" Months " + startMonth + "-" + endMonth + "MaxHeight " + theMaxHeight ;
 		this.description = 
 			"Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.\n" +
 			"Dado que del ww3 disponemos de datos cada tres horas y las observaciones son una por dia que representa \n" +
 			"la altura maxima que alcanzo una ola en el dia, las lecturas del ww3 se filtran dejando la   \n"+
 			"mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del \n"+
-			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas";
+			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas.\n" +
+			"Ademas en esta estrategia se debe setear un mes de inicio y un mes de fin de lectura, de esta manera \n" +
+			"se filtraran las lecturas que caigan dentro de esos meses permitiendo estudiar periodos de tiempo \n" +
+			"especificos(por ejemplo durante la temporada de olas grandes o de olas peque�as.)\n"+
+			"Ademas se filtran todas las observaciones mayores a un determinado tamanio de ola.";
+		this.startMonth = startMonth;
+		this.endMonth = endMonth;
+		this.beach = beach;
+		this.maxHeight = theMaxHeight;
 	}
 	
-	public NoBuoyStrategy(String[]years,String name, String description, String beach) {
-		this.name = "No Buoy Strategy. Beach "+ beach+". Years "+ Arrays.toString(years) ;
+	public MonthPeriodAndMaxWaveHeightStrategy(String beach, String name, String description, int startMonth, int endMonth, double theMaxHeight) {
+		this.name = name;
 		this.description = description;
+		this.startMonth = startMonth;
+		this.endMonth = endMonth;
 		this.beach = beach;
-	}
-	
-	public NoBuoyStrategy(String beach) {
-		this();
-		this.beach = beach;
-	}
-	
-	public String getBeach() {
-		return beach;
+		this.maxHeight= theMaxHeight;
 	}
 	
 	public String getDescription() {
@@ -55,6 +63,22 @@ public class NoBuoyStrategy implements GenerationStrategy {
 	public String getName() {
 		return name;
 	}
+	
+	public int getStartMonth() {
+		return startMonth;
+	}
+
+	public void setStartMonth(int startMonth) {
+		this.startMonth = startMonth;
+	}
+
+	public int getEndMonth() {
+		return endMonth;
+	}
+
+	public void setEndMonth(int endMonth) {
+		this.endMonth = endMonth;
+	}
 
 	@Override
 	public DataSet generateTrainningData(Hashtable<String, Object> dataCollection) {
@@ -63,16 +87,16 @@ public class NoBuoyStrategy implements GenerationStrategy {
 		
 		Vector<Filter> filters = new Vector<Filter>();
 		 
+		filters.add(new MonthFilter(this.startMonth, this.endMonth));
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.BEGINNING_HOUR, Util.BEGINNING_MINUTE), new GregorianCalendar(0, 0, 0, Util.END_HOUR, Util.END_MINUTE))); 
-		//filters.add(new DataWaveDirectionFilter(Util.minDirectionDegree, Util.maxDirectionDegree));
-		filters.add(new MaxWaveHeightFilter());
 		Filter compuestFilter = new AndFilter(filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
+		obsDataSet = (Vector<ObsData>) new WaveHeightFilter(this.maxHeight, this.beach).executeFilter(obsDataSet);
 		
 		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
-		this.strategyString(filters, strategyAttributes, "visualObservation");
+		this.strategyString(new Vector<Filter>(), filters, strategyAttributes, "visualObservation");
 		
-		return new DataSet( name, description, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
+		return new DataSet( this.name, this.description, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
 	}
 	
 	private Vector<ArfData> mergeData(Vector<WaveWatchData> ww3DataSet, Vector<ObsData> obsDataSet){
@@ -98,10 +122,24 @@ public class NoBuoyStrategy implements GenerationStrategy {
 		return arfDataSet;
 	}
 	
-	public void strategyString(Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
+public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
 		
 		String text = "";
-		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n" + "Beach: " + this.beach + "\n\n";
+		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n"  + "Beach: " + this.beach + "\n\n";
+		
+		text += "STRATEGY PARAMETERS:\n";
+		text += "\tstartMonth -> " + this.startMonth + "\n";
+		text += "\tendMonth -> " + this.endMonth + "\n";
+		text += "\n";
+		
+		if (buoyFilters.size() > 0){
+			text += "BUOY FILTERS:\n";
+			for (Enumeration<Filter> e = buoyFilters.elements(); e.hasMoreElements();){
+				Filter filter = e.nextElement();
+				text += filter.toString();
+			}
+			text +="\n";
+		}
 		
 		if (ww3Filters.size() > 0){
 			text += "WW3 FILTERS:\n";

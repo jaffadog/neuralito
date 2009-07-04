@@ -2,8 +2,6 @@ package filter;
 
 import java.util.Vector;
 
-import buoy.BuoyData;
-
 
 public abstract class CompuestFilter extends Filter{
 	protected Vector<Filter> filters = null;
