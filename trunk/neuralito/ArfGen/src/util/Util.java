@@ -5,7 +5,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.SimpleTimeZone;
@@ -21,18 +20,26 @@ import weka.datasetStrategy.GenerationStrategy;
 
 
 public final class Util {
+	
 	public final static  TimeZone UTC_TIME_ZONE = new SimpleTimeZone(0,"UTC");
+	
 	public static final double MIN_DIRECTION_DEGREE = 35.0;
 	public static final double MAX_DIRECTION_DEGREE = 360.0;
+	
 	public static final int BEGINNING_HOUR = 17; // 7 am +10 hours to reach UTC time
 	public static final int BEGINNING_MINUTE = 30;
 	public static final int END_HOUR = 6;//20 pm + 10 hours to reach utc time
 	public static final int END_MINUTE = 30;
+	
 	public static final double DELTA_HEIGHT = 0.7;
 	public static final double DELTA_PERIOD = 2;
 	public static final double DELTA_DIRECTION = 30;
 	public static final double DELTA_OBSERVATION = 0.7;
 	
+	public static final double NORTH = 22.00;
+	public static final double SOUTH = 21.00;
+	public static final double EAST = -157.50;
+	public static final double WEST = -158.75;
 	
 	public static final int JANUARY = 1;
 	public static final int FEBRUARY = 2;
@@ -160,7 +167,7 @@ public final class Util {
 		for (int i = 0; i < years.length; i++)
 			yearsDirectory += years[i] + "-";
 		
-		File directory = new File(".//files//wekaResults//" + generationStrategy.getName());
+		File directory = new File(".//files//wekaResults//" + generationStrategy.getName() + "//" + generationStrategy.getBeach());
 		directory.mkdir();
 		
 		directory = new File(directory.getPath() + "//" + yearsDirectory + "//v0");

@@ -9,10 +9,8 @@ import weka.ArfData;
 import weka.DataSet;
 import ww3.WaveWatchData;
 import Observations.ObsData;
-import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
-import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 import filter.MonthFilter;
@@ -49,6 +47,10 @@ public class MonthPeriodStrategy implements GenerationStrategy {
 		this.startMonth = startMonth;
 		this.endMonth = endMonth;
 		this.beach = beach;
+	}
+	
+	public String getBeach() {
+		return beach;
 	}
 	
 	public String getDescription() {

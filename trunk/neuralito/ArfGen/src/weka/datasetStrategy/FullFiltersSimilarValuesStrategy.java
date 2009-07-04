@@ -1,5 +1,4 @@
 package weka.datasetStrategy;
-import java.lang.reflect.Array;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -13,7 +12,6 @@ import Observations.ObsData;
 import buoy.BuoyData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
-import filter.DataWaveDirectionFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 import filter.WW3CouplingFilter;
@@ -68,6 +66,10 @@ public class FullFiltersSimilarValuesStrategy implements GenerationStrategy {
 			"Ademas esta estrategia filtra todas las instancias en que las lecturas de la boya y del ww3 no son \n" +
 			"similares (altura, periodo y direccion) asegurando que las instancias resultantes sean unicamente \n" +
 			"las mas consistentes. \n";
+	}
+	
+	public String getBeach() {
+		return beach;
 	}
 	
 	public String getDescription() {

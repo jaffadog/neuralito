@@ -32,6 +32,10 @@ public class FullFiltersStrategy implements GenerationStrategy {
 		return name;
 	}
 	
+	public String getBeach() {
+		return beach;
+	}
+	
 	public FullFiltersStrategy() {
 		this.name = "FullFiltersStrategy";
 		this.description = "Esta estrategia contiene los siguientes datos: \n\n" +

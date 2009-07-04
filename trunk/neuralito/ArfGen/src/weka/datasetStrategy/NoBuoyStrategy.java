@@ -21,7 +21,7 @@ public class NoBuoyStrategy implements GenerationStrategy {
 	private String description;
 	private String strategyString;
 	private String beach = null;
-	
+
 	public NoBuoyStrategy() {
 		this.name = "NoBuoyStrategy";
 		this.description = 
@@ -41,6 +41,10 @@ public class NoBuoyStrategy implements GenerationStrategy {
 	public NoBuoyStrategy(String beach) {
 		this();
 		this.beach = beach;
+	}
+	
+	public String getBeach() {
+		return beach;
 	}
 	
 	public String getDescription() {
