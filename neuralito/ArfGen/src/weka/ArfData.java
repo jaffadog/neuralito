@@ -13,12 +13,21 @@ public class ArfData {
 	private ObsData obsData = null;
 	private WaveWatchData ww3Data = null;
 	private String beach = null;
+	private WaveWatchData ww3Data2;
 	
 	public ArfData(String beach, BuoyData buoyData, ObsData obsData, WaveWatchData ww3Data){
 		this.buoyData = buoyData;
 		this.obsData = obsData;
 		this.ww3Data = ww3Data;
 		this.beach = beach;
+	
+	}
+	public ArfData(String beach, BuoyData buoyData, ObsData obsData, WaveWatchData ww3Data,WaveWatchData ww3Data2){
+		this.buoyData = buoyData;
+		this.obsData = obsData;
+		this.ww3Data = ww3Data;
+		this.beach = beach;
+		this.ww3Data2 = ww3Data2;
 	}
 
 	public BuoyData getBuoyData() {
@@ -80,6 +89,15 @@ public class ArfData {
 		}
 		if (attribute == "ww3Direction"){
 			return this.ww3Data.getWaveDirection();
+		}
+		if (attribute == "ww3Height2"){
+			return this.ww3Data2.getWaveHeight();
+		}
+		if (attribute == "ww3Period2"){
+			return this.ww3Data2.getWavePeriod();
+		}
+		if (attribute == "ww3Direction2"){
+			return this.ww3Data2.getWaveDirection();
 		}
 		if (attribute == "visualObservation"){
 			return this.obsData.getWaveHeight(this.beach);

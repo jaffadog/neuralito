@@ -1,29 +1,27 @@
 package weka.datasetStrategy;
-import java.util.Arrays;
+
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import util.Util;
-import weka.ArfData;
-import weka.DataSet;
-import ww3.WaveWatchData;
 import Observations.ObsData;
 import filter.AndFilter;
 import filter.DataTimeFilter;
 import filter.Filter;
 import filter.MaxWaveHeightFilter;
 
+import util.Util;
+import weka.ArfData;
+import weka.DataSet;
+import ww3.WaveWatchData;
 
-public class NoBuoyStrategy implements GenerationStrategy {
-
+public class NoBuoyStrategyWith2WW3 implements GenerationStrategy {
+	private String strategyString;
+	private String beach;
 	private String name;
 	private String description;
-	private String strategyString;
-	private String beach = null;
-
-	public NoBuoyStrategy() {
+	public NoBuoyStrategyWith2WW3() {
 		this.name = "NoBuoyStrategy";
 		this.description = 
 			"Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.\n" +
@@ -32,35 +30,16 @@ public class NoBuoyStrategy implements GenerationStrategy {
 			"mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del \n"+
 			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas";
 	}
-	
-	public NoBuoyStrategy(String[]years,String name, String description, String beach) {
-		this.name = "No Buoy Strategy. Beach "+ beach+". Years "+ Arrays.toString(years) ;
-		this.description = description;
-		this.beach = beach;
-	}
-	
-	public NoBuoyStrategy(String beach) {
+	public NoBuoyStrategyWith2WW3(String beach) {
 		this();
 		this.beach = beach;
 	}
-	
-	public String getBeach() {
-		return beach;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
 	@Override
-	public DataSet generateTrainningData(Hashtable<String, Object> dataCollection) {
+	public DataSet generateTrainningData(
+			Hashtable<String, Object> dataCollection) {
 		Vector<WaveWatchData> ww3DataSet = (Vector<WaveWatchData>) dataCollection.get("ww3Data");
 		Vector<ObsData> obsDataSet = (Vector<ObsData>) dataCollection.get("obsData");
-		
+		Vector<WaveWatchData> ww32 =  (Vector<WaveWatchData>) dataCollection.get("ww3Data2");
 		Vector<Filter> filters = new Vector<Filter>();
 		 
 		filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, Util.BEGINNING_HOUR, Util.BEGINNING_MINUTE), new GregorianCalendar(0, 0, 0, Util.END_HOUR, Util.END_MINUTE))); 
@@ -69,36 +48,27 @@ public class NoBuoyStrategy implements GenerationStrategy {
 		Filter compuestFilter = new AndFilter(filters);
 		ww3DataSet = (Vector<WaveWatchData>) compuestFilter.executeFilter(ww3DataSet);
 		
-		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction", "visualObservation"};
+		
+		String[] strategyAttributes = {"ww3Height", "ww3Period", "ww3Direction","ww3Height2", "ww3Period2", "ww3Direction2", "visualObservation"};
 		this.strategyString(filters, strategyAttributes, "visualObservation");
 		
-		return new DataSet( name, description, mergeData(ww3DataSet, obsDataSet), strategyAttributes, "visualObservation");
-	}
-	
-	private Vector<ArfData> mergeData(Vector<WaveWatchData> ww3DataSet, Vector<ObsData> obsDataSet){
-		Vector<ArfData> arfDataSet = new Vector<ArfData>();
-		for (Enumeration<WaveWatchData> e = ww3DataSet.elements(); e.hasMoreElements();){
-			WaveWatchData ww3Data = e.nextElement();
-			ObsData obsData = null;
-			for (Enumeration<ObsData> f = obsDataSet.elements(); f.hasMoreElements();){
-				ObsData fObsData = f.nextElement();
-				if (fObsData.equalsDate(ww3Data.getDate())){
-					obsData = fObsData;
-					break;
-				}		
-			}
-			
-			if (obsData != null){
-				ArfData arfData = new ArfData(this.beach, null, obsData, ww3Data);
-				arfData.setDate(ww3Data.getDate());
-				arfDataSet.add(arfData);
-			}
-		}
 		
-		return arfDataSet;
+		return new DataSet( name, description, mergeData(ww3DataSet,ww32, obsDataSet), strategyAttributes, "visualObservation");
+	}
+
+	@Override
+	public String getDescription() {
+		
+		return "Same as no buoy strtegy but using two ww3 grid points";
+	}
+
+	@Override
+	public String getName() {
+		
+		return "NoBuoyStrategyWith2WW3";
 	}
 	
-	public void strategyString(Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
+public void strategyString(Vector<Filter> ww3Filters, String[] strategyAttributes, String classAttribute){
 		
 		String text = "";
 		text = this.name.toUpperCase() + "\n\n\t" + this.description + "\n\n" + "Beach: " + this.beach + "\n\n";
@@ -126,4 +96,28 @@ public class NoBuoyStrategy implements GenerationStrategy {
 	public String toString(){
 		return this.strategyString;
 	}
+	
+	private Vector<ArfData> mergeData(Vector<WaveWatchData> ww3DataSet, Vector<WaveWatchData> ww32, Vector<ObsData> obsDataSet){
+		Vector<ArfData> arfDataSet = new Vector<ArfData>();
+		for (Enumeration<WaveWatchData> e = ww3DataSet.elements(); e.hasMoreElements();){
+			WaveWatchData ww3Data = e.nextElement();
+			ObsData obsData = null;
+			for (Enumeration<ObsData> f = obsDataSet.elements(); f.hasMoreElements();){
+				ObsData fObsData = f.nextElement();
+				if (fObsData.equalsDate(ww3Data.getDate())){
+					obsData = fObsData;
+					break;
+				}		
+			}
+			
+			if (obsData != null){
+				ArfData arfData = new ArfData(this.beach, null, obsData, ww3Data,(WaveWatchData)ww32.elementAt(ww3DataSet.indexOf(ww3Data)));
+				arfData.setDate(ww3Data.getDate());
+				arfDataSet.add(arfData);
+			}
+		}
+		
+		return arfDataSet;
+	}
+
 }

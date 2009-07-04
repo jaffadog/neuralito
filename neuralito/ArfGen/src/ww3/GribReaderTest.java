@@ -3,10 +3,6 @@ package ww3;
 import java.security.InvalidParameterException;
 import java.util.Collection;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
-
 public class GribReaderTest {
 
 /**

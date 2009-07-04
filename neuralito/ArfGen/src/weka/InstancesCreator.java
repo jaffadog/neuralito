@@ -16,7 +16,7 @@ public class InstancesCreator {
 	public Instances generateTrainningData(DataSet dataSet){
 		
 		Instances instancesDataSet = initDataSet(dataSet);
-		Collection data = dataSet.getInstances();
+		Collection<ArfData> data = dataSet.getInstances();
 		for (Iterator it = data.iterator();it.hasNext();) {
 			ArfData arf =(ArfData) it.next();
 			Instance instance = this.makeInstance(instancesDataSet, arf);

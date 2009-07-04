@@ -1,5 +1,6 @@
 
 
+import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -9,7 +10,7 @@ import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
 import weka.datasetStrategy.GenerationStrategy;
-import weka.datasetStrategy.NoBuoyStrategy;
+import weka.datasetStrategy.MonthPeriodAndMaxWaveHeightStrategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -23,20 +24,26 @@ public class MainMaxi {
 	public static void main(String[] args) {
 		Vector<BuoyData> buoyDataSet;
 		Vector<WaveWatchData> ww3DataSet;
+		Vector<WaveWatchData> ww3DataSet2;
 		Vector<ObsData> obsDataSet;
 	// Set data files for load
-		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};		
-		String[] years = new String[]{"2002"}; //the same for oobservations and ww3
+
+		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};
+		String[] obsFiles = new String[]{"2002","2003"};		
+		String[] years = new String[]{"2002","2003"};
+
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
-		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(years,Util.SOUTH ,Util.EAST);
-		obsDataSet  = new ObsDataLoader().loadObsData(years);
+		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(years,21.00,-157.5);
+		//ww3DataSet2  = (Vector<WaveWatchData>) new WWManager().getWWData(years,21.00,-158.75);
+		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
 		
 		Hashtable<String, Object> dataCollection = new Hashtable<String, Object>();
 		dataCollection.put("buoyData", buoyDataSet);
 		dataCollection.put("obsData", obsDataSet);
 		dataCollection.put("ww3Data", ww3DataSet);
+		//dataCollection.put("ww3Data2", ww3DataSet2);
 //		System.out.println("**************************************************************");
 //		System.out.println("***********************Before Applying Filters****************");
 //		System.out.println("**************************************************************");
@@ -49,7 +56,9 @@ public class MainMaxi {
 		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD);
 		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
 		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
-		GenerationStrategy generationStrategy = new NoBuoyStrategy("nshore");
+
+		GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0);
+
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
