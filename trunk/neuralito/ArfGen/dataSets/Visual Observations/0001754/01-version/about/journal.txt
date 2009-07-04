@@ -1,0 +1,25 @@
+*****************************************************************
+2004-10-15 10:43:45 -0400: Journal for accession number: 0001754
+Created on:                    2004-10-15 10:43:45 -0400
+By:                            Francis Mitchell,SSMC3 4637,7133272 113
+
+Source:
+
+
+   These data were transmitted to NODC via ftp
+   by Patrick caldwell, NODC Liaison at the
+   University of Hawaii.
+
+Action(s):
+
+  The data as found in subdirectory "data/1-data" are
+  those data from subdirectory "data/0-data" which 
+  have been "untarred".
+
+20071030:
+A new file was added to data/1-data/ called
+'data_file_format_description.txt'. This file contains an excerpt from
+the FGDC description in data/1-data/meta/fgdc/surf_obs_fgdc.txt that
+defines the column headings and units of measure used in the .dat files
+found in 1-data/data/.
+

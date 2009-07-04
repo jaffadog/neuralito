@@ -1,0 +1,316 @@
+        GRIB Viewer - program to visualise GRB format data
+
+
+PURPOSE
+
+To visualise data in GRIB files obtained from the DWDSAT service, the Norway & 
+Denmark Ocean and Sea-Ice Satellite Application Facility (OSI-SAF), the Meteo-
+France OSI-SAF, and selected UK Meteorological Office DPDS files.  For a fuller 
+description, please see the program's Web page at:
+
+  www.satsignal.eu/software/grib-viewer.htm
+
+
+PC REQUIREMENTS
+
+This software is intended for use on a 500MHz or better PC, with at least 256MB 
+of memory.  Windows 95, 98, 98 SE and ME are not supported, and whilst the 
+program may work, correct operation is not guaranteed.
+
+
+REGISTRATION
+
+A licence code is required to operate this software.  When you first run this 
+software, it will work in full-function mode for a limited period of time, and 
+cease working after that.  This limited period is designed for you to evaluate 
+whether the software meets your needs or not.  If you want to carry on using 
+the software after the evaluation period, you must buy a licence for the 
+software.  You can purchase the licence from this Web site:
+
+  www.satsignal.eu/software/reg-grib-viewer.html
+
+Be sure to send me the Hardware Fingerprint key for your system.  You can get 
+this by pressing the Enter Key button on the Reminder dialog which appears when 
+you start the program.  When ordering, in Step 2 place this Hardware 
+Fingerprint code in the Comments box provided.  Without the Hardware 
+Fingerprint, I will be unable to issue you with a licence key.
+
+Please note that the old licence codes will not work on this new version of the 
+software, nor will the new licence keys work on the GRIB Viewer version 1.
+
+
+VERSION UPGRADE
+
+Version 2.0 of the GRIB Viewer marks a major advance in that data in the GRIB 
+Edition 2 format is supported.  At the moment, this support is limited to the 
+data sent over EUMETCast derived from Meteosat-8, and the Cloud Top Height 
+(CTH), Cloud Analysis Image (CLAI), Cloud Mask (CLM), and Clear Sky Reflectance 
+Map (CRM) data formats are accepted by the program.
+
+- if you registered the GRIB Viewer after 2005 July 1, please contact me with 
+your Hardware Fingerprint for a new licence key.
+
+- if you registered the GRIB Viewer before July 2005 and wish to use the new 
+facilities, you can upgrade to the new version here:
+
+  www.satsignal.eu/software/reg-grib-viewer-upgrade.html
+
+- if you do not wish to view the new GRIB Edition 2 products, you can continue 
+to use your existing GRIB Viewer version 1, but please be aware that version 1 
+will not be updated or have bugs fixed.
+
+
+INSTALLATION AND USAGE
+
+Extract the file GRIBViewer.exe and libtiff.dll to a sutiable location on your 
+PC and run the program by double-clicking the file.  You can also create a 
+shortcut on your desktop or in the start menu if you wish.  No further setup 
+should be required.
+
+If you get a message about missing DLLs, please download the runtime Library
+Bundle from my Web site: www.satsignal.eu/software/runtime.html
+
+For the display of country boundaries, a suitable data file is required:
+  www.satsignal.eu/software/countries.zip
+
+Unzip the Countries.dat file from the archive to the GRIBViewer.exe folder.
+
+
+SUPPORTED DATA FILES
+
+1 - GRB files from the DWDSAT service in TAR combined format, e.g.
+
+  grb01-gme_euraaa_hptuw_030_000300-0406301200-rus3--EDZW.tar
+  grb01-lm_uvi_024047_000-0407010000-rus3--EDZW.tar
+
+Geographical mapping of the UV data is not supported.
+
+2 - GRIB data from the Meteo-France OSI-SAF broadcast over EUMETCast, e.g.
+
+  S-OSI_-FRA_-MULT-LMLDLI_FIELD-200502081430Z.grb.gz
+  S-OSI_-FRA_-MULT-LMLSSI_FIELD-200502081430Z.grb.gz
+  S-OSI_-FRA_-MULT-LMLSST_FIELD-200502080400Z.grb.gz
+  S-OSI_-FRA_-MULT-MAPDLI_FIELD-200502081200Z.grb.gz
+  S-OSI_-FRA_-MULT-MAPSSI_FIELD-200502081200Z.grb.gz
+  S-OSI_-FRA_-NOAA-NARSST<area>_F-200502081200Z.grb.gz
+    where <area> = ACOR, CANA, GASC, MNOR, MOCC, MORI, NORV  
+
+3 - Norway and Denmark OSI-SAF sea-ice products including:
+
+  Sea-ice edge, type and concentration, in 10 km resolution polar 
+  stereographic grid covering the Atlantic part of the Arctic broadcast 
+  over EUMETCast (S-OSI_-NOR) 
+  Pre-production Northern hemisphere sea-ice over FTP (ICE_CONC_NH) 
+  Pre-production Southern hemisphere sea-ice over FTP (ICE_CONC_SH) 
+
+4 - Selected UK Met Office DPDS data
+
+5 - GRIB2 data from the EUMETCast service, e.g.
+
+  200703281145-clai.grb
+  200703281145-clm.grb
+  200703281145-crm.grb
+  200703281145-cth.grb
+  200703281145-div.grb
+  200703281145-fir.grb
+  200703281145-mpe.grb
+
+6 - EUMETSAT MPE (Multi-sensor Precipitation Estimate) data from:
+
+  http://oiswww.eumetsat.int/~idds/html/grib.html
+
+7 - GRIB files produced in connection with the MaxSea service.
+
+  http://comfr.maxsea.fr
+
+
+Other GRIB files may be supported as the program is developed.  Registered users 
+may submit requests by e-mail.
+
+
+MULTIPLE DATA FILES
+
+The file GRIBviewerGroups.ini is used to define groups of files that you want to 
+open at the same time, as they contain related data which you would like to 
+display simultaneously.  There are two sections in the file, a section called 
+[FullName] which contains the names of files starting with the letters given, 
+and a section called [NameEnding] which contains files which end in the same 
+letters.  For example: in the section [FullName] (which would, more correctly, 
+be called, NameStarting!), there is an entry:
+
+  8=ICE_CONC,ICE_EDGE,ICE_TYPE
+
+This means that opening a filename starting with the letters ICE_CONC would make 
+the program try and look for files of the same time, but starting with ICE_EDGE 
+and ICE_TYPE.  So if you opened the file:
+
+  ice_conc_nh_200606091200.grb
+
+the program would also open:
+
+  ice_edge_nh_200606091200.grb
+  ice_type_nh_200606091200.grb
+
+if they were present on your system.  (These are sea-ice data downloaded by FTP 
+from the OSI-SAF).  Similarly, in the [NameEnding] section, there is an entry:
+
+  1=CLM.grb,CLAI.grb,CTH.grb
+
+so opening the file:
+
+  200608101445-clm.grb
+
+would also make the program look for and open:
+
+  200608101445-clai.grb
+  200608101445-cth.grb
+
+The entries in each section must be numbered sequentially - if there was an 8= 
+and a 10=, the program wouldn't see the 10=, because it would look for the 9=, 
+not find it, and stop searching.
+
+
+INTERACTIVE OPERATION
+
+- if you want to know the data values at your home station location, you can use 
+the File, Setup (File, Setup station location) to define the latitude and 
+longitude of your station.  Then you can right-click the status bar to move the 
+cursor to that location and hence display the values there.
+
+
+COMMAND-LINE OPERATION
+
+The registered version of the program can take one to five parameters:
+
+- parameter 1 is the name of the GRIB file to display
+
+- parameter 2 can be either -SAVE, -SAVE:<folder-name> or -SAVE:<filespec>
+- parameter 2 can be either -TEXT, -TEXT:<folder-name> or -TEXT:<filespec>
+
+The remaining parameters can be in any order:
+
+  -MIN   to run minimised
+
+  -ZOOM    to force the zoom on
+  -NOZOOM  to force the zoom off
+
+  -BOUND:<none|dark|light>   to set boundary colour
+
+  -SELECT:0,2,3   to save just tabs 0, 2 and 3
+
+  -LEFT  define a region for ASCII output
+  -TOP
+  -WIDTH
+  -HEIGHT
+
+Images are saved as GRIBimage-0.jpg GRIBimage-1.jpg etc.  Images will be saved 
+either in the same folder as the source data file or in the folder specified 
+with the -SAVE:<folder> parameter.
+
+Notes:
+
+For the EUMETCast data, parameter 1 can be a wildcard, e.g.
+
+  C:\MSG-1\Images\MPEF\*-cth.grb
+
+For parameter 2:
+  -SAVE uses default file names in the same folder as the source data
+  -SAVE:<folder> uses default file names in the specified folder
+    .. to make parameter 2 just a directory, be sure to add a trailing "\"
+    .. a valid folder must be specified
+  -SAVE:<filespec> 
+    requires a full file spec (e.g. C:\DATA\my-result)
+    allows date/time parameter substitution in output file name ..
+    .. %YYYY %YY %MM %DD %HH %NN replaced by year, month etc.
+    .. note that in a .bat or .cmd file you may need %%YYYY etc.
+    .. example file spec: C:\Data\grib-%yyyy-%mm-%dd
+    .. file type will be either .PNG or .JPG, no need to add
+
+If parameter 2 is "-TEXT" rather than "-SAVE", the ASCII output format which is 
+supported for only a limited number of data types is used.  The output file will 
+have a .DAT file extension, regardless of what is specified.
+
+If -SAVE is specified, the program will close after saving any images which have 
+been created.  If no images were created (perhaps becuase of errors in the 
+source data), the ERRORLEVEL environment variable will be set to 1.
+
+If parameter 3 to 5 is omitted, it must be replaced by a dummy value, i.e.
+
+  GRIBviewer <filename> -SAVE:D:\temp\  -MIN xx -BOUND:NONE
+
+where parameter 4 is given the unrecognised value "xx"
+
+Sample command using ASCII output and the region parameters:
+
+    GribViewer.exe 200611091745-cth.grb -text:C:\Test\ -Left:1050 -top:120 -width:300 -height:180
+
+
+NOTES
+
+The program has been developed on Windows XP, and should run on Windows 2000 
+and Vista.  It should also run on earlier versions of Windows but this is not 
+supported.
+
+
+RECENT RELEASE INFORMATION
+
+Release V2.2.4.195
+V2.2.4  2009 Apr 19  Support changed EUMETSAT MPE/Met-07 format
+                     Support new OSI-SAF SST data files (NAR & GLB)
+
+Older release information is in GRIBviewer-history.txt
+
+
+LIMITATIONS
+
+The user of the program is responsible for ensuring the accuracy of any data 
+produced by the program.
+
+
+WARRANTY
+
+This program is provided "as is" and without any warranty as to merchantability 
+or fitness for a particular purpose or any other warranties either expressed or 
+implied.  The author will not be liable for data loss, damages, loss of profits 
+or any other kind of loss while using or misusing this software.
+
+This software may not be used in safety-critical or life-critical systems.
+
+
+PROGRAM STATUS AND DISTRIBUTION
+
+This program is copyrighted software from David J Taylor, Edinburgh and is 
+provided "as is".
+
+There is a self-help mailing list at:
+
+  http://tech.groups.yahoo.com/group/SatSignal/
+
+where other users of the software may be contacted.  I value any comments or 
+suggestions for improvements you may have.  This program may only be distributed 
+with the specific authority of the author.  If you want direct technical 
+support, you must register the program at:
+
+  www.satsignal.eu/software/reg-grib-viewer.html
+
+
+COMMERCIAL USE
+
+Use by any commercial organisation, or any individual for commercial purposes 
+requires the purchase of a commercial licence from David Taylor, Edinburgh.
+
+
+ACKNOWLEDGEMENTS
+
+Many thanks to those who have provided data and helped beta test the program.
+
+Created using the destructor.de LibTar library.
+
+
+CONTACTING THE AUTHOR
+
+Web site:  www.satsignal.eu
+E-mail:    davidtaylor@writeme.com
+Software self-help: http://groups.yahoo.com/group/SatSignal/
+
+2009 Apr 19

@@ -1,0 +1,147 @@
+#TEMPORARY ACCESSION NUMBER:
+
+
+#ACCESSION NUMBER:
+
+
+#CONTRIBUTOR:
+Mr. Larry Goddard
+Mr. Peter Cole
+
+#CONTRIBUTOR INSTITUTION:
+none 
+
+#ORIGINATOR:
+Data from 1968-1987 from several avid surfers.
+Data from 1987 onward from City and County of Honolulu
+Lifeguards as provided to the National Weather Service.
+
+#ORIGINATOR INSTITUTION:
+same
+
+#TITLE: 
+Surf Observations from the North Shore of Oahu, Hawaii 1968 - 1998
+
+#PROJECT:
+These data were tabulated through the personal interest
+of Mr. Larry Goddard, an engineer with an interest in surfing
+and statistics.
+
+#ABSTRACT:
+Surf observations from the North Shore, Oahu, Oahu are made on a daily
+basis by City and County of Honolulu lifeguards as well as local
+surfers.  Although there is uncertainty of rough 20% for any given
+observations, this set of data captures the general trends and
+episodic events.
+
+#PURPOSE:
+The observations were gathered into a dataset with the intention
+of applying statistics to better understand the mean patterns
+and trends and to document episodic events.
+
+#LOCATION EXTREMES:
+SOUTHERNMOST LATITUDE:  21.65
+SOUTHERNMOST LATITUDE HEMISPHERE: N
+NORTHERNMOST LATITUDE:  21.70
+NORTHERNMOST LATITUDE HEMISPHERE: N
+WESTERNMOST LONGITUDE: 158.20
+WESTERNMOST LONGITUDE HEMISPHERE: W 
+EASTERNMOST LONGITUDE: 158.00
+EASTERNMOST LONGITUDE HEMISPHERE: W  
+
+#LOCATION KEYWORDS: Oahu, Hawaii, North Pacific Ocean
+
+#SAMPLING STATIONS: Laniakea Beach, Waimea Bay, Sunset Beach
+
+Observation location was chosen to represent the
+section along the coast with the largest surf, which
+various from spot to spot depending on swell direction
+and wave size.
+
+Laniakea : swells from north through northeast and heights under 15'
+Sunset Beach: swells from west through north and heights under 15'
+Waimea Bay: all swell directions with surf 15'+
+
+#BEGIN AND END DATES: 
+August 1968 - July 1998
+
+#SAMPLING PERIODS:
+daily
+
+#PARAMETERS: 
+height of breaking surf in feet
+
+#METHODOLOGY:
+For the period 1968-8/1987, the primary observers were
+Larry Goddard, Bernie Baker (well-known surf photographer),
+Randy Rarick (professional surfer (1970s) and Director of the
+Association of Professional Surfers (1980-90s), Peter Cole, 
+a mathmatician and competative swimmer, and Lt. Albert Benson.  
+All these individuals lived on the North Shore of Oahu 
+during this period and are very avid surfers.
+
+For the Period 9/1987 - 7/1998, the primary observers were
+the City and County of Hawaii lifeguards, who make several
+observations per day and provide them to the National Weather
+Service.  Mr. Peter Cole made adjustments to some observations
+based on his own observations and judgement.  Larry
+Goddard estimates that the lifeguards underestimate
+the heights by about 15%; eg., the lifeguards would
+call an actual 6' wave as 5'; 12' one as 10', etc. 
+
+The site of the observations is noted above (#SAMPLING STATIONS). 
+
+It has been common practice by surfers and lifeguards to
+grossly underestimate the height of the breaking waves.
+For a 6' tall surfer riding a wave as high as his head,
+the surf is recorded as 3'.  There is no good explanation
+for the original of this observing system, but it has been
+consistent throughout this dataset. Thus, double the height
+of each recorded value to get the more realistic trough to
+crest height of a breaking wave at the moment of its 
+maximum size.
+
+Due to the uncertainties of observing waves, an error
+of +/- 20% of the given observation can be expected.
+Thus, a value recorded as 10' could have been
+somewhere between 8' and 12'; a value recorded as 25'
+could actually be somewhere from 20' to 30'.  And
+as mentioned above, remember to double the given
+observatin for the true trough to crest height during
+the time of the most extreme shoaling and refracting,
+which drops the trough and raises the crest.
+
+The recorded values in this dataset represent the highest 
+observations of a given day.  Thus, if the surf was 8' in the 
+morning and 3' in the evening, the value of 8' would be recorded.  
+The observations also represent the largest of the groups 
+of waves which arrive.  This would be similar to the highest 1/10
+wave heights (that is, take the higest 10% of the waves,
+add them up, and divide by the number of these waves).
+
+#INSTRUMENT TYPES:
+none
+
+#REFERENCES: 
+none
+
+#SUBMITTING MEDIUM:
+FTP
+
+#FILE FORMATS: 
+
+Database provided as LOTUS 1-2-3 (*.WK3) with redundant
+ASCII dumps (*.prn).
+
+File: NSH_DATA (.WK3 and .prn): 1968-1987
+      COLES_11 (.WK3 and .prn): 1987-1998
+
+Format self descriptive, date and height.
+
+#DATASET SIZE:
+242K
+
+#NUMBER OF DATA UNITS:
+1 general location (North Shore, Oahu)
+
+#MISCELLANEOUS:
