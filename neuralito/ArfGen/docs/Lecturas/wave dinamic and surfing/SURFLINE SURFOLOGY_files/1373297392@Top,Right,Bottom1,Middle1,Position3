@@ -1,0 +1,31 @@
+function OAS_RICH(position) {
+if (position == 'Top') {
+document.write ('<IFRAME FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=728 HEIGHT=90 SRC="http://ad.adserverplus.com/st?ad_type=iframe&ad_size=728x90&section=564015"></IFRAME>\n');
+document.write ('<a href="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/surfology/metforecast1/L26/329298676/Top/Surfline/oridian_sl_ro_all/26574634/76765a6a2b556f5a4c74634144646731?free,,women" target="_blank">\n');
+document.write ('<img src="http://oascentral.surfline.com/RealMedia/ads/adstream_lx.ads/www.surfline.com/surfology/metforecast1/L26/329298676/x07/Surfline/oridian_sl_ro_all/26574634/76765a6a2b556f5a4c74634144646731?free,,women" border=0></a>');
+}
+if (position == 'Right') {
+document.write ('<script type="text/javascript"><!--\n');
+document.write ('	e9 = new Object();\n');
+document.write ('    e9.size = "160x600";\n');
+document.write ('//--></script>\n');
+document.write ('<script type="text/javascript" src="http://tags.expo9.exponential.com/tags/Surflinecom/ROS/tags.js"></script>\n');
+document.write ('<a href="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/surfology/metforecast1/L16/1618224573/Right/Surfline/tribalfusion_ros_right/26503576/76765a6a2b556f5a4c74634144646731?free,,women" target="_blank">\n');
+document.write ('<img src="http://oascentral.surfline.com/RealMedia/ads/adstream_lx.ads/www.surfline.com/surfology/metforecast1/L16/1618224573/x08/Surfline/tribalfusion_ros_right/26503576/76765a6a2b556f5a4c74634144646731?free,,women" border=0></a>');
+}
+if (position == 'Bottom1') {
+document.write ('<A HREF="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/surfology/metforecast1/1773702411/Bottom1/default/empty.gif/76765a6a2b556f5a4c74634144646731?x" target="_top"><IMG SRC="http://imagec15.247realmedia.com/RealMedia/ads/Creatives/default/empty.gif"  WIDTH=1 HEIGHT=1 ALT="" BORDER=0 BORDER="0"></A>');
+}
+if (position == 'Middle1') {
+document.write ('<!-- BEGIN STANDARD TAG - 300 x 250 - Surfline.com: Run-of-site - DO NOT MODIFY -->\n');
+document.write ('\n');
+document.write ('<IFRAME FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=300 HEIGHT=250 SRC="http://adserving.cpxinteractive.com/st?ad_type=iframe&ad_size=300x250&section=621006&pop_nofreqcap=1"></IFRAME>\n');
+document.write ('\n');
+document.write ('<!-- END TAG -->\n');
+document.write ('<a href="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/surfology/metforecast1/L39/545468269/Middle1/Surfline/CPX_ros_middle1/26590231/76765a6a2b556f5a4c74634144646731?free,,women" target="_blank">\n');
+document.write ('<img src="http://oascentral.surfline.com/RealMedia/ads/adstream_lx.ads/www.surfline.com/surfology/metforecast1/L39/545468269/x09/Surfline/CPX_ros_middle1/26590231/76765a6a2b556f5a4c74634144646731?free,,women" border=0></a>');
+}
+if (position == 'Position3') {
+document.write ('<A HREF="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/surfology/metforecast1/1609061053/Position3/default/empty.gif/76765a6a2b556f5a4c74634144646731?x" target="_top"><IMG SRC="http://imagec15.247realmedia.com/RealMedia/ads/Creatives/default/empty.gif"  WIDTH=1 HEIGHT=1 ALT="" BORDER=0 BORDER="0"></A>');
+}
+}

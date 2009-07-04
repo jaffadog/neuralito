@@ -1,0 +1,134 @@
+	html, body, pre
+		{
+    		padding: 0px 0px 5px 5px;
+			margin:  0px 0px 5px 5px;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 12px;
+			background-color:#FFF;
+			color:#808080;
+			background:#FFF;
+			height:100%;
+		}
+
+		image
+		{
+			border: 0;
+		}
+        a:link { color: #0066ff;}
+
+        h1 { font-size: 22px; margin-top: 0; margin-bottom: 0; white-space: nowrap; }
+        h2 { font-size: 18px; margin-top: 0; margin-bottom: 0; white-space: nowrap; }
+        h3 { font-size: 13px; margin-top: 0; color: red;}
+        h4 { font-size: 13px; }
+	
+        .welcome { font-size: 18px; color: black; margin-top: 0; margin-bottom: 0; white-space: nowrap; }
+
+		ul#about,ul#about li{list-style-type:none;margin:0;padding:0}
+
+		ul#about{width: 900px;margin:0px auto 0;text-align:left}
+
+		ul#about li 
+		{ 
+			width: 900px; 
+    		padding: 10px 10px 10px 10px;
+			margin:	 5px 5px 5px 5px;
+			background: #FC0;
+		}
+
+       #about img.floatLeft
+        {
+            float: left;
+            margin: 4px 4px 4px 4px;
+            padding: 0px 0px 0px 0px;
+            clear: both;
+        }
+
+		#banner
+		{ 
+    		padding: 5px 5px 5px 5px;
+			margin:8px 8px 8px 0px;
+            border: 1px solid #333;
+			width: 720px;
+		}
+
+		#page
+		{ 
+    		padding: 0px 0px 5px 20px;
+			margin:8px 8px 0 0;
+			width: 900px;
+		}
+
+		#article
+		{ 
+    		padding: 5px 5px 5px 5px;
+			margin:  0px 0px 8px 0px;
+          	font-family: 'Trebuchet MS', 'Lucida Grande',
+            Verdana, Lucida, Geneva, Helvetica;
+            font-size: 12px;
+            background-color: #F0F0E7;
+			width: 720px;
+            border: 1px solid #333;
+			
+		}
+
+		.title1
+		{ 
+    		padding: 0px 0px 5px 0px;
+			margin:  0px 0px 0px 0px;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 13px;
+			font-weight: bold;
+			//color: #bdb76b;
+		}
+
+		.date
+		{ 
+    		padding: 5px 0px 5px 20px;
+			margin:8px 8px 0 0;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 10px;
+			font-weight: normal;
+			font-style: italic;
+			color: red;
+		}
+
+
+        #navcontainer
+        {
+                margin: 0px 0px 30px 0px;
+        }
+
+        #navcontainer ul
+        {
+                margin: 0px 0px 0px 0px;
+                padding-left: 0;
+                border-bottom: 1px solid #333;
+                background-color: #2175bc;
+                color: #333;
+                float: left;
+                width: 100%;
+                font-family: 'Trebuchet MS', 'Lucida Grande',
+                Verdana, Lucida, Geneva, Helvetica,
+                Arial, sans-serif;
+        }
+
+        #navcontainer ul li { display: inline; }
+
+        #navcontainer ul li a
+        {
+                padding: 0.2em 1em;
+                background-color: #2175bc;
+                color: #fff;
+                text-decoration: none;
+                float: left;
+                border-right: 1px solid #fff;
+        }
+
+        #navcontainer ul li a:hover
+        {
+                background-color: #369;
+                color: #fff;
+                background-color: #2586d7;
+                color: #fff;
+        }
+

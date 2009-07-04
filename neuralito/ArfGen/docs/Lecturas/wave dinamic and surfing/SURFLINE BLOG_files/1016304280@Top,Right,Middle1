@@ -1,0 +1,93 @@
+function OAS_RICH(position) {
+if (position == 'Top') {
+document.write ('\n');
+document.write ('<SCRIPT type="text/javascript"> \n');
+document.write ('var TFSMFlash_PRETAG="";\n');
+document.write ('var TFSMFlash_POSTTAG=""; \n');
+document.write ('var TFSMFlash_VERSION="9"; \n');
+document.write ('var TFSMFlash_WMODE="window"; \n');
+document.write ('var TFSMFlash_OASCLICK="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/forecast/forecastblog/L25/1736043849/Top/Surfline/quiksilver_ro_forecast/728x90_quiksilver_freddy_june09.html/76765a6a2b556f5a4c74634144646731?http%3A%2F%2Fgo.quiksilver.com%2Fgo-moments%2F%3Fcid%3Dfbnslfcfpgo728";\n');
+document.write ('var TFSMFlash_SWFCLICKVARIABLE="?clickTAG="+TFSMFlash_OASCLICK ; \n');
+document.write ('var TFSMFlash_SWFFILE="http://imagec15.247realmedia.com/RealMedia/ads/Creatives/Surfline/quiksilver_ro_forecast/728x90_quiksilver_freddy_june09.swf/1245433084"+TFSMFlash_SWFCLICKVARIABLE; \n');
+document.write ('var TFSMFlash_FSCOMMAND=""; \n');
+document.write ('var TFSMFlash_IMAGEALTERNATE=""; \n');
+document.write ('var TFSMFlash_OASALTTEXT=""; \n');
+document.write ('var TFSMFlash_OASTARGET="_blank"; \n');
+document.write ('var TFSMFlash_OASPROTOCOL="http://"; \n');
+document.write ('var TFSMFlash_OASDIM="WIDTH=');
+document.write ("'");
+document.write ('728');
+document.write ("'");
+document.write (' HEIGHT=');
+document.write ("'");
+document.write ('90');
+document.write ("'");
+document.write ('"; \n');
+document.write ('var TFSMFlash_OASADID="OAS_RMF_Top_FLASH"; \n');
+document.write ('document.write(');
+document.write ("'");
+document.write ('<scr');
+document.write ("'");
+document.write ('+');
+document.write ("'");
+document.write ('ipt src="http://imagec15.247realmedia.com/RealMedia/ads/Creatives/Surfline/quiksilver_ro_forecast/TFSMFlashWrapper204.js/1245433084"></scr');
+document.write ("'");
+document.write ('+');
+document.write ("'");
+document.write ('ipt>');
+document.write ("'");
+document.write ('); \n');
+document.write ('</SCRIPT>\n');
+document.write ('\n');
+document.write ('\n');
+document.write ('\n');
+}
+if (position == 'Right') {
+document.write ('<IFRAME FRAMEBORDER=0 MARGINWIDTH=0 MARGINHEIGHT=0 SCROLLING=NO WIDTH=160 HEIGHT=600 SRC="http://ad.adserverplus.com/st?ad_type=iframe&ad_size=160x600&section=564015"></IFRAME>\n');
+document.write ('<a href="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/forecast/forecastblog/L25/1633398942/Right/Surfline/oridian_sl_ro_all/26574654/76765a6a2b556f5a4c74634144646731?free,,women" target="_blank">\n');
+document.write ('<img src="http://oascentral.surfline.com/RealMedia/ads/adstream_lx.ads/www.surfline.com/forecast/forecastblog/L25/1633398942/x09/Surfline/oridian_sl_ro_all/26574654/76765a6a2b556f5a4c74634144646731?free,,women" border=0></a>\n');
+}
+if (position == 'Middle1') {
+document.write ('\n');
+document.write ('<SCRIPT type="text/javascript"> \n');
+document.write ('var TFSMFlash_PRETAG="";\n');
+document.write ('var TFSMFlash_POSTTAG=""; \n');
+document.write ('var TFSMFlash_VERSION="9"; \n');
+document.write ('var TFSMFlash_WMODE="window"; \n');
+document.write ('var TFSMFlash_OASCLICK="http://oascentral.surfline.com/RealMedia/ads/click_lx.ads/www.surfline.com/forecast/forecastblog/L25/702026268/Middle1/Surfline/quiksilver_ro_forecast/300x250_quiksilver_clay_go_june09.html/76765a6a2b556f5a4c74634144646731?http%3A%2F%2Fgo.quiksilver.com%2Fgo-moments%2F%23%2Fclay-go-moments%2F%3Fcid%3Dfbnslfccmgo300";\n');
+document.write ('var TFSMFlash_SWFCLICKVARIABLE="?clickTAG="+TFSMFlash_OASCLICK ; \n');
+document.write ('var TFSMFlash_SWFFILE="http://imagec15.247realmedia.com/RealMedia/ads/Creatives/Surfline/quiksilver_ro_forecast/300x250_quiksilver_clay_go_june09.swf/1245433327"+TFSMFlash_SWFCLICKVARIABLE; \n');
+document.write ('var TFSMFlash_FSCOMMAND=""; \n');
+document.write ('var TFSMFlash_IMAGEALTERNATE=""; \n');
+document.write ('var TFSMFlash_OASALTTEXT=""; \n');
+document.write ('var TFSMFlash_OASTARGET="_blank"; \n');
+document.write ('var TFSMFlash_OASPROTOCOL="http://"; \n');
+document.write ('var TFSMFlash_OASDIM="WIDTH=');
+document.write ("'");
+document.write ('300');
+document.write ("'");
+document.write (' HEIGHT=');
+document.write ("'");
+document.write ('250');
+document.write ("'");
+document.write ('"; \n');
+document.write ('var TFSMFlash_OASADID="OAS_RMF_Middle1_FLASH"; \n');
+document.write ('document.write(');
+document.write ("'");
+document.write ('<scr');
+document.write ("'");
+document.write ('+');
+document.write ("'");
+document.write ('ipt src="http://imagec15.247realmedia.com/RealMedia/ads/Creatives/Surfline/quiksilver_ro_forecast/TFSMFlashWrapper204.js/1245433327"></scr');
+document.write ("'");
+document.write ('+');
+document.write ("'");
+document.write ('ipt>');
+document.write ("'");
+document.write ('); \n');
+document.write ('</SCRIPT>\n');
+document.write ('\n');
+document.write ('\n');
+document.write ('\n');
+}
+}
