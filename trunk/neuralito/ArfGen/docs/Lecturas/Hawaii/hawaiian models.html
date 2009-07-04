@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="hawaiian%20models_files/main.css">
+</head><body>
+
+
+		
+	<div id="banner">
+		<h1>University of Hawaii Ocean and Resources Engineering</h1>
+ 
+    <div id="newtop">
+        <h2>Ocean Forecast Data and Visualization Tools <span class="welcome">Model Page</span></h2>
+	</div> 
+
+	</div>
+ 
+
+        <h3>Model Boundaries</h3>
+
+		<p id="article">
+Here we have the Northeast and Southwest model boundaries for each
+domain. Latitude is given in degrees North and Longitude in degrees
+West. <img src="hawaiian%20models_files/model-aerial.jpg" width="718" height="539">
+
+                </p>
+
+        <h3>Global WW3 Model</h3>
+
+		<p id="article">
+Through a collaborative effort with NOAA/NCEP, and NWS Honolulu, we
+have implemented a global scale WW3 model. The global model is
+initialized 4 times daily: 0000, 0600, 1200, and 1800 Greenwich Mean
+Time (GMT), and is forced with NOAA/NCEPs global forecast system (GFS)
+winds. This model is designed to capture the large scale ocean waves,
+provide spectral boundary conditions for the Hawaii regional WW3 model,
+and most importantly, a 180 hour (7.5 days) forecast. </p>
+
+        <h3>Hawaii WW3 Model (Regional Scale)</h3>
+
+		<p id="article">
+The Global WW3 model provides boundary conditions for Hawaii WW3. The
+primary purpose of the regional model is to capture the Island effects
+such as island shadowing, refraction, and accurate modeling of local
+wind waves. Hawaii WW3 is forced with winds from UH Meteorology
+department operational 7.5 day mesoscale model which has a more
+suitable spatial resolution than the global scale wind field. Similar
+to Global WW3, Hawaii WW3 is run 4 times daily directly after Global
+WW3 and also provides a 180 hour forecast. Hawaii WW3 is used to
+further nest into nearshore island scale models. </p>
+
+        <h3>Kauai, Oahu, Maui County, and the Big Island SWAN Models (Island Scale)</h3>
+
+		<p id="article">
+In order to capture the shallow water effects and the nearshore coastal
+dynamics such as refracting, shoaling, and smaller scale shadowing, a
+high resolution SWAN model is utilized to provide a 180 hour forecast.
+These models are run directly after Hawaii WW3 has completed. Please
+note that this nested model setup is in the testing and validation
+phase. While considerable effort has been made to implement all model
+components in a thorough, correct, and accurate manner, numerous
+sources of error are possible. As such, please use this data with the
+caution appropriate for any ocean related activity </p>
+
+
+<br>
+</body></html>
