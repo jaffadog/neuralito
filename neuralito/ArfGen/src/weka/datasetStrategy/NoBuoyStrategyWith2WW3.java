@@ -1,5 +1,6 @@
 package weka.datasetStrategy;
 
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -21,6 +22,7 @@ public class NoBuoyStrategyWith2WW3 implements GenerationStrategy {
 	private String beach;
 	private String name;
 	private String description;
+	private String shortDescription;
 	public NoBuoyStrategyWith2WW3() {
 		this.name = "NoBuoyStrategy";
 		this.description = 
@@ -29,10 +31,15 @@ public class NoBuoyStrategyWith2WW3 implements GenerationStrategy {
 			"la altura maxima que alcanzo una ola en el dia, las lecturas del ww3 se filtran dejando la   \n"+
 			"mayor ola captada, adicionalmente dado que las observaciones fueron tomadas durante las horas del \n"+
 			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas";
+		
 	}
-	public NoBuoyStrategyWith2WW3(String beach) {
+	public String getShortDescription() {
+		return shortDescription;
+	}
+	public NoBuoyStrategyWith2WW3(String beach,String[]years,int ww3Y1,int ww3X1,int ww3Y2,int ww3X2) {
 		this();
 		this.beach = beach;
+		this.shortDescription = "strategy[nobuoy2WW3].beach[" + beach + "].years " + Arrays.toString(years) + ".months[1-12].height[unrestriced].ww3.1[" + ww3Y1 + "," + ww3X1+"]"+"ww3.2[" + ww3Y2 + "," + ww3X2+"]" ;
 	}
 	@Override
 	public DataSet generateTrainningData(

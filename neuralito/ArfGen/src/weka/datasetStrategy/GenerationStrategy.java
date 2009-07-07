@@ -14,4 +14,6 @@ public interface GenerationStrategy {
 	
 	public String getBeach();
 	
+	public String getShortDescription();
+	
 }

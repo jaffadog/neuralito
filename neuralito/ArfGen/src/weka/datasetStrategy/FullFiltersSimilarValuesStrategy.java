@@ -191,4 +191,10 @@ public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters
 	public String toString(){
 		return this.strategyString;
 	}
+
+	@Override
+	public String getShortDescription() {
+		// TODO Auto-generated method stub
+		return "Short description should be entered";
+	}
 }

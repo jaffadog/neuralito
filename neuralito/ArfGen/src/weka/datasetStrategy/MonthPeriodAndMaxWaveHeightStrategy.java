@@ -1,4 +1,5 @@
 package weka.datasetStrategy;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -27,10 +28,12 @@ public class MonthPeriodAndMaxWaveHeightStrategy implements GenerationStrategy {
 	private int endMonth;
 	private String strategyString;
 	private String beach;
+	private String shortDescription;
 	private double maxHeight;
 	
-	public MonthPeriodAndMaxWaveHeightStrategy(String beach, int startMonth, int endMonth, double theMaxHeight) {
-		this.name = "MonthPeriodAndMaxWaveStrategy." +" Months " + startMonth + "-" + endMonth + "MaxHeight " + theMaxHeight ;
+	public MonthPeriodAndMaxWaveHeightStrategy(String beach, int startMonth, int endMonth, double theMaxHeight, Double ww3Y, Double ww3X, String[] years) {
+		this.name="MonthPeriodAndMaxWaveHeightStrategy";
+		this.shortDescription = "strategy[season-height].beach["+beach+"].years "+ Arrays.toString(years) + ".months[" +startMonth+ "-"+endMonth+"].height[0-"+theMaxHeight+"].ww3["+ ww3Y+"," + ww3X+"]" ;
 		this.description = 
 			"Esta estrategia usa los datos del ww3 y los combina con las observaciones visuales.\n" +
 			"Dado que del ww3 disponemos de datos cada tres horas y las observaciones son una por dia que representa \n" +
@@ -167,7 +170,9 @@ public void strategyString(Vector<Filter> buoyFilters, Vector<Filter> ww3Filters
 
 	@Override
 	public String getBeach() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.beach;
+	}
+	public String getShortDescription() {
+		return shortDescription;
 	}
 }

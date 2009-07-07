@@ -180,7 +180,7 @@ public final class Util {
 		
 		//Save arff file
 		InstancesCreator creator = new InstancesCreator();
-		creator.generateFile(directory.getPath() + "//" + generationStrategy.getName() + ".arff", wekaDataSet);
+		creator.generateFile(directory.getPath() + "//" + generationStrategy.getShortDescription() + ".arff", wekaDataSet);
 		
 		//Save strategy description
 		FileDataIO fileWriter = new FileDataIO();

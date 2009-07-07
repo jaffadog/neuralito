@@ -108,4 +108,10 @@ public class NoDirectionStrategy implements GenerationStrategy {
 	public String toString(){
 		return "Metodo toString() de la estrategia no implementado aún";
 	}
+
+	@Override
+	public String getShortDescription() {
+		// TODO Auto-generated method stub
+		return "complete short description please";
+	}
 }
