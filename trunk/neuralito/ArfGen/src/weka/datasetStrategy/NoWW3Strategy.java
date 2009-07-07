@@ -97,4 +97,9 @@ public class NoWW3Strategy implements GenerationStrategy {
 	public String toString(){
 		return "Metodo toString() de la estrategia no implementado aún";
 	}
+
+	@Override
+	public String getShortDescription() {
+		return "complete short description please";
+	}
 }

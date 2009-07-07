@@ -115,4 +115,10 @@ public class FullFiltersStrategy implements GenerationStrategy {
 		return "Metodo toString() de la estrategia no implementado aún";
 	}
 
+	@Override
+	public String getShortDescription() {
+		// TODO Auto-generated method stub
+		return "short description should be entered";
+	}
+
 }

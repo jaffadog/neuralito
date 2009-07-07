@@ -31,11 +31,12 @@ public class MainMaxi {
 		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};
 		String[] obsFiles = new String[]{"2002","2003"};		
 		String[] years = new String[]{"2002","2003"};
-
+		Double ww3Y = Util.NORTH;
+		Double ww3X = Util.WEST;
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
-		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(years,21.00,-157.5);
+		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(years,ww3Y,ww3X);
 		//ww3DataSet2  = (Vector<WaveWatchData>) new WWManager().getWWData(years,21.00,-158.75);
 		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
 		
@@ -57,7 +58,7 @@ public class MainMaxi {
 		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
 		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
 
-		GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0);
+		GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0,ww3Y,ww3X,years);
 
 		
 	//Generate general DataSet	

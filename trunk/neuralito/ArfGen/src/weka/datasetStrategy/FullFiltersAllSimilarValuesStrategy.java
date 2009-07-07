@@ -27,6 +27,7 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 	private final double deltaObservation;
 	private String strategyString;
 	private String beach;
+	private String shortDescription = "ShortDescription should be entered." ;
 	
 	public FullFiltersAllSimilarValuesStrategy() {
 		this.initStrategy();
@@ -196,5 +197,10 @@ public class FullFiltersAllSimilarValuesStrategy implements GenerationStrategy {
 	
 	public String toString(){
 		return this.strategyString;
+	}
+
+	@Override
+	public String getShortDescription() {
+		return this.shortDescription ;
 	}
 }
