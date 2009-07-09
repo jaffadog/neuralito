@@ -34,16 +34,10 @@ public class NoBuoyStrategy implements GenerationStrategy {
 			"dia en que hay luz solar, las lecturas del ww3 durante la noche tambien fueron filtradas";
 	}
 	
-	public NoBuoyStrategy(String[]years,String name, String description, String beach,int ww3Y, int ww3X) {
-		this.name = "No Buoy Strategy. Beach "+ beach+". Years "+ Arrays.toString(years) ;
-		this.description = description;
-		this.beach = beach;
-		this.shortDescription = "strategy[nobuoy].beach[" + beach + "].years " + Arrays.toString(years) + ".months[1-12].height[unrestriced].ww3[" + ww3Y + "," + ww3X+"]" ;
-	}
-	
-	public NoBuoyStrategy(String beach) {
+	public NoBuoyStrategy(String[]years, String beach, Double ww3Y, Double ww3X) {
 		this();
 		this.beach = beach;
+		this.shortDescription = "strategy[nobuoy].beach[" + beach + "].years " + Arrays.toString(years) + ".months[1-12].height[unrestriced].ww3[" + ww3Y + "," + ww3X+"]" ;
 	}
 	
 	public String getBeach() {
