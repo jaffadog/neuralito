@@ -1,6 +1,5 @@
 
 
-import java.util.GregorianCalendar;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -10,7 +9,7 @@ import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
 import weka.datasetStrategy.GenerationStrategy;
-import weka.datasetStrategy.MonthPeriodAndMaxWaveHeightStrategy;
+import weka.datasetStrategy.NoBuoyStrategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -30,7 +29,7 @@ public class MainMaxi {
 
 		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};
 		String[] obsFiles = new String[]{"2002","2003"};		
-		String[] years = new String[]{"2002","2003"};
+		String[] years = new String[]{"2002"};
 		Double ww3Y = Util.NORTH;
 		Double ww3X = Util.EAST;
 		
@@ -57,8 +56,8 @@ public class MainMaxi {
 		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD);
 		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
 		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
-
-		GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0,ww3Y,ww3X,years);
+		GenerationStrategy generationStrategy = new NoBuoyStrategy(years, "windward", ww3Y, ww3X);
+		//GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0,ww3Y,ww3X,years);
 
 		
 	//Generate general DataSet	
