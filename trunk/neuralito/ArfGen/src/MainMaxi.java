@@ -32,7 +32,7 @@ public class MainMaxi {
 		String[] obsFiles = new String[]{"2002","2003"};		
 		String[] years = new String[]{"2002","2003"};
 		Double ww3Y = Util.NORTH;
-		Double ww3X = Util.WEST;
+		Double ww3X = Util.EAST;
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
