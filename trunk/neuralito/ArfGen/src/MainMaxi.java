@@ -30,8 +30,8 @@ public class MainMaxi {
 		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};
 		String[] obsFiles = new String[]{"2002","2003"};		
 		String[] years = new String[]{"2002"};
-		Double ww3Y = Util.NORTH;
-		Double ww3X = Util.EAST;
+		Double ww3Y = Util.SOUTH;
+		Double ww3X = Util.WEST;
 		
 	//	Load buoy data Ww3 Vobs
 		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
@@ -56,7 +56,7 @@ public class MainMaxi {
 		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD);
 		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
 		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
-		GenerationStrategy generationStrategy = new NoBuoyStrategy(years, "windward", ww3Y, ww3X);
+		GenerationStrategy generationStrategy = new NoBuoyStrategy(years, "wshore", ww3Y, ww3X);
 		//GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0,ww3Y,ww3X,years);
 
 		
