@@ -1,7 +1,11 @@
 package weka;
 
 import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
+import util.Util;
+import util.WaveData;
 import ww3.WaveWatchData;
 import Observations.ObsData;
 import buoy.BuoyData;
@@ -13,7 +17,17 @@ public class ArfData {
 	private ObsData obsData = null;
 	private WaveWatchData ww3Data = null;
 	private String beach = null;
-	private WaveWatchData ww3Data2;
+	private WaveWatchData ww3Data2 = null;
+	
+	private Hashtable<String, Double> data = null;
+	
+	public Hashtable<String, Double> getData() {
+		return data;
+	}
+	
+	public void setData(Hashtable<String, Double> data) {
+		this.data = data;
+	}
 	
 	public ArfData(String beach, BuoyData buoyData, ObsData obsData, WaveWatchData ww3Data){
 		this.buoyData = buoyData;
@@ -28,6 +42,11 @@ public class ArfData {
 		this.ww3Data = ww3Data;
 		this.beach = beach;
 		this.ww3Data2 = ww3Data2;
+	}
+	
+	public ArfData(String beach, Hashtable<String, Double> data){
+		this.data = data;
+		this.beach = beach;
 	}
 
 	public BuoyData getBuoyData() {
@@ -63,45 +82,16 @@ public class ArfData {
 	}
 	
 	public String toString(){
+		String result = "Date: " + Util.getDateFormatter().format(this.date.getTime()) + " ";
+		for (Enumeration<String> e = this.data.keys(); e.hasMoreElements();){
+			String key = e.nextElement();
+			result += key + ": " + Util.getDecimalFormatter().format(this.data.get(key)) + " "; 
+		}
 		
-		String buoyString = this.buoyData != null ? this.buoyData.toString() + " || " : ""; 
-		String ww3String = this.ww3Data != null ? this.ww3Data.toString() + " || " : "";
-		String obsString = this.obsData != null ? this.obsData.print(this.beach) : "";
-		
-		return buoyString + ww3String + obsString;
+		return result;
 	}
 	
 	public double getValue(String attribute){
-		if (attribute == "buoyHeight"){
-			return this.buoyData.getWaveHeight();
-		}
-		if (attribute == "buoyPeriod"){
-			return this.buoyData.getWavePeriod();
-		}
-		if (attribute == "buoyDirection"){
-			return this.buoyData.getWaveDirection();
-		}
-		if (attribute == "ww3Height"){
-			return this.ww3Data.getWaveHeight();
-		}
-		if (attribute == "ww3Period"){
-			return this.ww3Data.getWavePeriod();
-		}
-		if (attribute == "ww3Direction"){
-			return this.ww3Data.getWaveDirection();
-		}
-		if (attribute == "ww3Height2"){
-			return this.ww3Data2.getWaveHeight();
-		}
-		if (attribute == "ww3Period2"){
-			return this.ww3Data2.getWavePeriod();
-		}
-		if (attribute == "ww3Direction2"){
-			return this.ww3Data2.getWaveDirection();
-		}
-		if (attribute == "visualObservation"){
-			return this.obsData.getWaveHeight(this.beach);
-		}
-		return 0;
+		return this.data.get(attribute);
 	}
 }
