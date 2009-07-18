@@ -8,8 +8,11 @@ import weka.ArfManager;
 import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
+import weka.datasetStrategy.FullFiltersStrategy;
 import weka.datasetStrategy.GenerationStrategy;
 import weka.datasetStrategy.NoBuoyStrategy;
+import weka.datasetStrategy.NoBuoyStrategyWith2WW3;
+import weka.datasetStrategy.WW3Last2DaysStrategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
@@ -27,20 +30,20 @@ public class MainMaxi {
 		Vector<ObsData> obsDataSet;
 	// Set data files for load
 
-		String[] buoyFiles = new String[]{"b106-2001", "b106-2002", "b106-2003", "b106-2004"};
+		String[] buoyFiles = new String[]{"b106-2002"};
 		String[] obsFiles = new String[]{"2002","2003"};		
 		String[] years = new String[]{"2002"};
 		Double ww3Y = Util.SOUTH;
-		Double ww3X = Util.WEST;
+		Double ww3X = Util.EAST;
 		
 	//	Load buoy data Ww3 Vobs
-		buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
+		//buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
 		ww3DataSet  = (Vector<WaveWatchData>) new WWManager().getWWData(years,ww3Y,ww3X);
 		//ww3DataSet2  = (Vector<WaveWatchData>) new WWManager().getWWData(years,21.00,-158.75);
 		obsDataSet  = new ObsDataLoader().loadObsData(obsFiles);
 		
 		Hashtable<String, Object> dataCollection = new Hashtable<String, Object>();
-		dataCollection.put("buoyData", buoyDataSet);
+		//dataCollection.put("buoyData", buoyDataSet);
 		dataCollection.put("obsData", obsDataSet);
 		dataCollection.put("ww3Data", ww3DataSet);
 		//dataCollection.put("ww3Data2", ww3DataSet2);
@@ -52,13 +55,15 @@ public class MainMaxi {
 //		Util.printCollection("Visual Observations",obsDataSet);
 		
 	//Choose generation Strategy
-		//GenerationStrategy generationStrategy = new FullFiltersStrategy();
+		//GenerationStrategy generationStrategy = new FullFiltersStrategy("wshore");
 		//GenerationStrategy generationStrategy = new FullFiltersSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD);
 		//GenerationStrategy generationStrategy = new FullFiltersAllSimilarValuesStrategy(Util.DELTA_HEIGHT, Util.DELTA_DIRECTION, Util.DELTA_PERIOD, Util.DELTA_OBSERVATION);
 		//GenerationStrategy generationStrategy = new MonthPeriodStrategy(Util.OCTOBER, Util.APRIL);
-		GenerationStrategy generationStrategy = new NoBuoyStrategy(years, "wshore", ww3Y, ww3X);
+		
 		//GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0,ww3Y,ww3X,years);
-
+		//GenerationStrategy generationStrategy = new NoBuoyStrategy(years, "almo", ww3Y, ww3X);
+		//GenerationStrategy generationStrategy = new NoBuoyStrategyWith2WW3("wshore", years , ww3Y, ww3X, 21.00, -158.75);
+		GenerationStrategy generationStrategy = new WW3Last2DaysStrategy("almo", years, ww3Y, ww3X);
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();

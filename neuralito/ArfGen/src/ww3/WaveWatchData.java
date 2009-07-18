@@ -1,8 +1,6 @@
 package ww3;
 import java.util.Calendar;
 
-import buoy.BuoyData;
-
 import util.Util;
 import util.WaveData;
 
