@@ -8,17 +8,13 @@ import weka.ArfManager;
 import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
-import weka.datasetStrategy.FullFiltersStrategy;
 import weka.datasetStrategy.GenerationStrategy;
-import weka.datasetStrategy.NoBuoyStrategy;
-import weka.datasetStrategy.NoBuoyStrategyWith2WW3;
-import weka.datasetStrategy.WW3Last2DaysStrategy;
+import weka.datasetStrategy.WW3Last7DaysAvgStrategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
 import Observations.ObsData;
 import Observations.ObsDataLoader;
 import buoy.BuoyData;
-import buoy.BuoyDataLoader;
 
 public class MainMaxi {
 
@@ -31,10 +27,10 @@ public class MainMaxi {
 	// Set data files for load
 
 		String[] buoyFiles = new String[]{"b106-2002"};
-		String[] obsFiles = new String[]{"2002","2003"};		
-		String[] years = new String[]{"2002"};
-		Double ww3Y = Util.SOUTH;
-		Double ww3X = Util.EAST;
+		String[] obsFiles = new String[]{"2001", "2002","2003","2004"};		
+		String[] years = new String[]{"2002", "2003", "2004"};
+		Double ww3Y = Util.NORTH;
+		Double ww3X = Util.WEST;
 		
 	//	Load buoy data Ww3 Vobs
 		//buoyDataSet = new BuoyDataLoader().loadBuoyData(buoyFiles);
@@ -63,7 +59,7 @@ public class MainMaxi {
 		//GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0,ww3Y,ww3X,years);
 		//GenerationStrategy generationStrategy = new NoBuoyStrategy(years, "almo", ww3Y, ww3X);
 		//GenerationStrategy generationStrategy = new NoBuoyStrategyWith2WW3("wshore", years , ww3Y, ww3X, 21.00, -158.75);
-		GenerationStrategy generationStrategy = new WW3Last2DaysStrategy("almo", years, ww3Y, ww3X);
+		GenerationStrategy generationStrategy = new WW3Last7DaysAvgStrategy("nshore", years, ww3Y, ww3X);
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
