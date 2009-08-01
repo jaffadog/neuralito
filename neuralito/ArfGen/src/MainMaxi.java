@@ -9,6 +9,8 @@ import weka.DataSet;
 import weka.InstancesCreator;
 import weka.core.Instances;
 import weka.datasetStrategy.GenerationStrategy;
+import weka.datasetStrategy.WW3Last3DaysAvgStrategy;
+import weka.datasetStrategy.WW3Last3DaysStrategy;
 import weka.datasetStrategy.WW3Last7DaysAvgStrategy;
 import ww3.WWManager;
 import ww3.WaveWatchData;
@@ -59,7 +61,7 @@ public class MainMaxi {
 		//GenerationStrategy generationStrategy = new MonthPeriodAndMaxWaveHeightStrategy("nshore",GregorianCalendar.OCTOBER,GregorianCalendar.MARCH,7.0,ww3Y,ww3X,years);
 		//GenerationStrategy generationStrategy = new NoBuoyStrategy(years, "almo", ww3Y, ww3X);
 		//GenerationStrategy generationStrategy = new NoBuoyStrategyWith2WW3("wshore", years , ww3Y, ww3X, 21.00, -158.75);
-		GenerationStrategy generationStrategy = new WW3Last7DaysAvgStrategy("nshore", years, ww3Y, ww3X);
+		GenerationStrategy generationStrategy = new WW3Last3DaysStrategy("nshore", years, ww3Y, ww3X);
 		
 	//Generate general DataSet	
 		ArfManager arfManager = new ArfManager();
