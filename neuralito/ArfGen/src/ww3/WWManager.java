@@ -54,7 +54,8 @@ public class WWManager {
 					GribReader reader = new GribReader(
 							"files/WW3.gribs/nww3.hs."+ years[j] + day + ".grb",
 							"files/WW3.gribs/nww3.tp."+ years[j]  + day + ".grb",
-							"files/WW3.gribs/nww3.dp."+ years[j]  + day + ".grb");
+							"files/WW3.gribs/nww3.dp."+ years[j]  + day + ".grb",
+							"files/WW3.gribs/nww3.wind."+ years[j]  + day + ".grb");
 					waveData.addAll(reader.getWaveWatchData(latitude, longitude));
 					
 				}
