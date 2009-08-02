@@ -15,7 +15,7 @@ public class GribReaderTest {
 	@Test
 public void readDataFromGribCorrectly(){
 	String testFile = "files/testFiles/testGrib.grb";
-	GribReader gribReader = new GribReader(testFile,testFile,testFile);
+	GribReader gribReader = new GribReader(testFile,testFile,testFile,testFile);
 	double latitude = 22; 
 	double longitude =-158.75;
 	Collection<WaveWatchData> lecture =  gribReader.getWaveWatchData(latitude, longitude);
@@ -28,7 +28,7 @@ public void readDataFromGribCorrectly(){
 	@Test
 	public void readDataFromGribCorrectly2(){
 		String testFile = "files/testFiles/testGrib.grb";
-		GribReader gribReader = new GribReader(testFile,testFile,testFile);
+		GribReader gribReader = new GribReader(testFile,testFile,testFile,testFile);
 		double latitude = 21;//Y 
 		double longitude =-157.5;//X
 		Collection<WaveWatchData> lecture =  gribReader.getWaveWatchData(latitude, longitude);
@@ -44,7 +44,7 @@ public void readDataFromGribCorrectly(){
 	@Test(expected=InvalidParameterException.class)
 	public void readInexistentLatLong(){
 		String testFile = "files/testFiles/testGrib.grb";
-		GribReader gribReader = new GribReader(testFile,testFile,testFile);
+		GribReader gribReader = new GribReader(testFile,testFile,testFile,testFile);
 		double latitude = 22.3; 
 		double longitude =-158.75;
 		Collection<WaveWatchData> lecture =  gribReader.getWaveWatchData(latitude, longitude);

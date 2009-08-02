@@ -19,13 +19,25 @@ public class GribReader {
 	private GribFile gribHeight;
 	private GribFile gribPeriod;
 	private GribFile gribDirection;
-	private Logger logger = Logger.getLogger(this.getClass()); 
-	public GribReader(String heightsFile, String periodFile, String directionFile){
+	private Logger logger = Logger.getLogger(this.getClass());
+	private GribFile gribWind; 
+	public GribReader(String heightsFile, String periodFile, String directionFile, String windFile){
 		try {
 			gribHeight = new GribFile(heightsFile);
 			gribPeriod = new GribFile(periodFile);
 			gribDirection = new GribFile(directionFile);
-			logger.info("Records Count:"+ gribDirection.getRecordCount()+"(Direction)"+"//"+ gribHeight.getRecordCount()+"(Height)"+"//"+gribPeriod.getRecordCount()+"(Period)");
+			gribWind = new GribFile(windFile);
+			logger.info("Records Count:"+ gribDirection.getRecordCount()+"(Direction)"+"//"+ gribHeight.getRecordCount()+"(Height)"+"//"+gribPeriod.getRecordCount()+"(Period)"+"//"+gribWind.getRecordCount()+"(Wind)");
+			//validate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public GribReader( String windFile){
+		try {
+			gribWind = new GribFile(windFile);
+			logger.info("Records Count:"+ gribDirection.getRecordCount()+"(Direction)"+"//"+ gribHeight.getRecordCount()+"(Height)"+"//"+gribPeriod.getRecordCount()+"(Period)"+"(Height)"+"//"+gribWind.getRecordCount()+"(Wind)");
 			//validate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,7 +66,46 @@ public class GribReader {
 				data.setDirection(gribDirection.getRecord(i).getValue(longIndex,latIndex ));
 				data.setHeight(gribHeight.getRecord(i).getValue(longIndex,latIndex ));
 				data.setPeriod(gribPeriod.getRecord(i).getValue(longIndex,latIndex  ));
+				double windU = gribWind.getRecord(2*i-1).getValue(longIndex, latIndex);
+				double windV = gribWind.getRecord(2*i).getValue(longIndex, latIndex);
+//			
+//				logger.info("Index U: " + gribWind.getRecord(2*i-1).getDescription() +" " + windU);
+//				logger.info("Index V: " + gribWind.getRecord(2*i).getDescription() +" " + windV);
+////				logger.info(gribWind.getRecord(2*i-1).getTime());
+////				logger.info(gribWind.getRecord(2*i).getTime());
+				data.setWind(windU,windV);				
 				dataSet.add(data);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return dataSet;
+	}
+
+	
+	/**
+	 * Reads the grib file and obtain the wavewatch data.
+	 * @param latitude The latitude to extract the grib data
+	 * @param longitude The longitud to extract the grib data
+	 * @return Collection of WaveWatchData at the given latitud longitud. 
+	 */
+	public Collection<WaveWatchData> getWindData(double latitude, double longitude){
+				
+		Collection dataSet = new Vector();
+//		int latIndex = 161;
+//		int longIndex = 56;
+		Integer latIndex = this.findIndexForLatitude(latitude);
+		Integer longIndex = this.findIndexForLongitud(longitude);
+		for(int i = 1;i< gribHeight.getRecordCount();i++ ){
+			WaveWatchData data = new WaveWatchData();
+			data.setLatitude(latitude);
+			data.setLongitude(longitude);		
+			try {
+//				data.setTime(gribHeight.getRecord(i).getTime());
+//				data.setDirection(gribDirection.getRecord(i).getValue(longIndex,latIndex ));
+//				data.setHeight(gribHeight.getRecord(i).getValue(longIndex,latIndex ));
+//				data.setPeriod(gribPeriod.getRecord(i).getValue(longIndex,latIndex  ));
+//				dataSet.add(data);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
