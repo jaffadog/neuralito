@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+
+<project>
+  <groupId>zabada</groupId>
+  <version>0.1</version>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>hibernate-annotations-example</artifactId>
+  <packaging>jar</packaging>
+  <name>Spring Recipes - Hibernate Annotations Example</name>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate</artifactId>
+      <version>3.2.3.ga</version>
+      <exclusions>
+         <exclusion>
+           <groupId>ant</groupId>
+           <artifactId>ant</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>odmg</groupId>
+           <artifactId>odmg</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>c3p0</groupId>
+           <artifactId>c3p0</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>proxool</groupId>
+           <artifactId>proxool</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>opensymphony</groupId>
+           <artifactId>oscache</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>swarmcache</groupId>
+           <artifactId>swarmcache</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>jboss</groupId>
+           <artifactId>jboss-cache</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>javax.security</groupId>
+           <artifactId>jacc</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>javax.transaction</groupId>
+           <artifactId>jta</artifactId>
+         </exclusion>
+       </exclusions>
+
+      </dependency>
+     <dependency>
+       <groupId>geronimo-spec</groupId>
+       <artifactId>geronimo-spec-jta</artifactId>
+       <version>1.0-M1</version>
+     </dependency>
+
+   
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-annotations</artifactId>
+      <version>3.2.1.ga</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring</artifactId>
+      <version>2.0.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+	<defaultGoal>install</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+          <archive>
+            <addMavenDescriptor>false</addMavenDescriptor>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project> 		
