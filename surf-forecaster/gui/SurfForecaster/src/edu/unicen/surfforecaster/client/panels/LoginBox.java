@@ -2,6 +2,8 @@ package edu.unicen.surfforecaster.client.panels;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -14,7 +16,9 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.client.SurfForecasterConstants;
+import edu.unicen.surfforecaster.client.User;
 
 public class LoginBox extends DialogBox{
 	
@@ -83,8 +87,27 @@ public class LoginBox extends DialogBox{
 		ingresarPushButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				label_loginMessage.setVisible(false);
-				hide();
-				//Blog.get().processLogin(loginUserName.getText(),loginPassword.getText());
+				if (loginUserName.getText().trim().equals("") || loginPassword.getText().trim().equals("")){
+					label_loginMessage.setVisible(true);
+				}
+				else{
+					ForecastCommonServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<User>(){
+						public void onSuccess(User result) {
+							if (result == null)
+								label_loginMessage.setVisible(true);
+							else{
+								hide();
+								
+							}
+						}
+							
+						public void onFailure(Throwable caught) {
+							
+						}
+					});
+				}
+				
+				
 			}
 		});
 
@@ -100,13 +123,14 @@ public class LoginBox extends DialogBox{
 		
 	}
 	
-	public void loginFailedMsgVisible(){
-		label_loginMessage.setVisible(true);
+	public void loginFailedMsgState(boolean state){
+		label_loginMessage.setVisible(state);
 	}
 	
 	// Define closeDialog using JSNI
 	private native void redefineClose(LoginBox loginBox) /*-{
 		$wnd['closeDialog'] = function () {
+			loginBox.@edu.unicen.surfforecaster.client.panels.LoginBox::loginFailedMsgState(Z)(false);
 			loginBox.@edu.unicen.surfforecaster.client.panels.LoginBox::hide()();
 		}
 	}-*/;

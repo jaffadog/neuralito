@@ -46,6 +46,7 @@ public class UserStatePanel extends Composite {
 			public void onClick(ClickEvent event) {
 				//Window.alert(((Boolean)loginPanel.isShowing()).toString());
 				if (loginPanel.isShowing()){
+					loginPanel.loginFailedMsgState(false);
 					loginPanel.hide();
 					
 				}
