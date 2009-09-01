@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+
 @RemoteServiceRelativePath("ForecastCommonServices")
 public interface ForecastCommonServices extends RemoteService {
 	/**
@@ -20,4 +21,5 @@ public interface ForecastCommonServices extends RemoteService {
 	}
 	
 	String testService();
+	User login(String userName, String password);
 }
