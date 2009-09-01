@@ -1,0 +1,12 @@
+/** Add css rules here for your application. */
+
+
+/** Loading image */
+div#loadingDiv{
+	margin: 100px 390px;
+}
+
+div#closeLoginBoxDiv{
+	width: 270px;
+	text-align:right;
+}
