@@ -20,12 +20,11 @@ public class ForecastCommonServicesImpl extends RemoteServiceServlet implements 
 			User user = new User();
 			HttpServletRequest request = this.getThreadLocalRequest();
 			HttpSession session = request.getSession();
-			session.setMaxInactiveInterval(60); //60s
-			session.setAttribute("gwtForecaster-Username", user.getUserName());
-			session.setAttribute("gwtForecaster-UserType", user.getType());
+			session.setMaxInactiveInterval(60); //60seg
+			session.setAttribute("gwtForecast-UserName", user.getUserName());
+			session.setAttribute("gwtForecast-UserType", user.getType());
 			return user;
-		}
-		else{
+		} else{
 			return null;
 		}
 	}
@@ -34,9 +33,24 @@ public class ForecastCommonServicesImpl extends RemoteServiceServlet implements 
 		HttpServletRequest request = this.getThreadLocalRequest();
 		HttpSession session = request.getSession();
 		
-		SessionData sessionData = new SessionData();
-		sessionData.setUserName((String)session.getAttribute("gwtForecaster-Username"));
-		sessionData.setUserType(new Integer((String)session.getAttribute("gwtForecaster-UserType")));
-		return sessionData;
+		if ((String)session.getAttribute("gwtForecast-UserName") == null || ((String)session.getAttribute("gwtForecast-UserName")).equals("")) {
+			System.out.println("the session is null or empty, this is the result after request for username: " + (String)session.getAttribute("gwtForecast-UserName"));
+			return null;
+		} else {
+			
+			SessionData sessionData = new SessionData();
+			sessionData.setUserName(session.getAttribute("gwtForecast-UserName").toString());
+			sessionData.setUserType(new Integer(session.getAttribute("gwtForecast-UserType").toString()));
+			return sessionData;
+		}
+		
+	}
+	
+	public void closeSession() {
+		HttpServletRequest request = this.getThreadLocalRequest();
+		HttpSession session = request.getSession();
+		
+		session.removeAttribute("gwtForecast-UserName");
+		session.removeAttribute("gwtForecast-UserType");
 	}
 }

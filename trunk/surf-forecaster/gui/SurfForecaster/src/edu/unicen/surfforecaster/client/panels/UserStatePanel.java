@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -13,23 +14,38 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
+import edu.unicen.surfforecaster.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.client.GWTUtils;
+import edu.unicen.surfforecaster.client.SessionData;
 import edu.unicen.surfforecaster.client.SurfForecasterConstants;
 
 
 public class UserStatePanel extends Composite {
 	
 	private SurfForecasterConstants localeConstants = null;
-	LoginBox loginPanel = null;
+	private LoginBox loginPanel = null;
 	
-	public UserStatePanel() {}
+	//LoggedIn username label
+	private Label lblUserName = null;
+	//Link to LoginBox
+	private Hyperlink lnkLogin = null;
+	//Link to sign out
+	private Hyperlink lnkSignOut = null;
+	//Root items structure
+	private HorizontalPanel horizontalPanel = null;
+	
+	public UserStatePanel() {
+		/**
+		 * should never enter here
+		 */
+	}
 	
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public UserStatePanel(SurfForecasterConstants localeConstants) {
 		
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setSpacing(2);
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		horizontalPanel.setWidth(GWTUtils.APLICATION_WIDTH);
@@ -43,8 +59,8 @@ public class UserStatePanel extends Composite {
 		loginPanel.hide();
 		
 		
-		
-		final Hyperlink lnkLogin = new Hyperlink(localeConstants.signIn(), "signIn");
+		//Link to LoginBox
+		lnkLogin = new Hyperlink(localeConstants.signIn(), "signIn");
 		lnkLogin.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				//Window.alert(((Boolean)loginPanel.isShowing()).toString());
@@ -58,7 +74,6 @@ public class UserStatePanel extends Composite {
 				}
 			}
 		});
-		horizontalPanel.add(lnkLogin);
 		
 		final Label lblSeparator = new Label("|");
 		horizontalPanel.add(lblSeparator);
@@ -99,11 +114,45 @@ public class UserStatePanel extends Composite {
 		Hyperlink lnkHelp = new Hyperlink(localeConstants.help(), "");
 		horizontalPanel.add(lnkHelp);
 		
-		final Label lblSeparator3 = new Label("|");
-		horizontalPanel.add(lblSeparator3);
-		
-		Hyperlink lnkSignOut = new Hyperlink(localeConstants.signOut(), "");
-		horizontalPanel.add(lnkSignOut);
+		lnkSignOut = new Hyperlink(localeConstants.signOut(), "");
+		lnkSignOut.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				ForecastCommonServices.Util.getInstance().closeSession(new AsyncCallback<?>(){
+					
+					public void onSuccess(Object result){
+						Window.open(GWTUtils.getHostPageLocation(true, true), "_self", "");
+					}
+					
+					public void onFailure(Throwable caught) {
+						
+					}
+				});
+			}
+		});
+		//Check if exist any opened session
+		this.getSessionData();
+	}
+	
+	private void getSessionData(){
+		ForecastCommonServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
+			public void onSuccess(SessionData result) {
+				if (result == null)
+					horizontalPanel.insert(lnkLogin, 1);
+				else{
+					lblUserName = new Label(result.getUserName());
+					horizontalPanel.insert(lblUserName, 1);
+					
+					final Label lblSeparator3 = new Label("|");
+					horizontalPanel.add(lblSeparator3);
+					
+					horizontalPanel.add(lnkSignOut);
+				}
+			}
+
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
 	}
 
 }
