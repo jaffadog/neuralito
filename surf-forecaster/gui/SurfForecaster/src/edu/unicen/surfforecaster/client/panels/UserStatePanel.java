@@ -30,16 +30,19 @@ public class UserStatePanel extends Composite {
 	public UserStatePanel(SurfForecasterConstants localeConstants) {
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setSpacing(2);
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		horizontalPanel.setWidth(GWTUtils.APLICATION_WIDTH);
 		initWidget(horizontalPanel);
 		
 		Label emptyLabel = new Label("");
 		horizontalPanel.add(emptyLabel);
-		emptyLabel.setWidth("700");
+		emptyLabel.setWidth("600");
 	
 		loginPanel = new LoginBox(localeConstants);
 		loginPanel.hide();
+		
+		
 		
 		final Hyperlink lnkLogin = new Hyperlink(localeConstants.signIn(), "signIn");
 		lnkLogin.addClickHandler(new ClickHandler() {
@@ -56,11 +59,13 @@ public class UserStatePanel extends Composite {
 			}
 		});
 		horizontalPanel.add(lnkLogin);
-	
-		Label lblLanguage = new Label(" | " + localeConstants.language() + ": ");
+		
+		final Label lblSeparator = new Label("|");
+		horizontalPanel.add(lblSeparator);
+		
+		Label lblLanguage = new Label(localeConstants.language() + ": ");
 		lblLanguage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		horizontalPanel.add(lblLanguage);
-		//lblLanguage.setWidth("120");
 	
 		// Add the option to change the locale
 	    final ListBox localeBox = new ListBox();
@@ -81,13 +86,24 @@ public class UserStatePanel extends Composite {
 	    localeBox.addChangeHandler(new ChangeHandler() {
 	      public void onChange(ChangeEvent event) {
 	        String localeName = localeBox.getValue(localeBox.getSelectedIndex());
-	        Window.open(GWTUtils.getHostPageLocation() + "?locale=" + localeName, "_self",
+	        Window.open(GWTUtils.getHostPageLocation(true, true) + "?locale=" + localeName, "_self",
 	            "");
 	      }
 
 	    }); 
 	    horizontalPanel.add(localeBox);
-	
+	    
+	    final Label lblSeparator2 = new Label("|");
+		horizontalPanel.add(lblSeparator2);
+		
+		Hyperlink lnkHelp = new Hyperlink(localeConstants.help(), "");
+		horizontalPanel.add(lnkHelp);
+		
+		final Label lblSeparator3 = new Label("|");
+		horizontalPanel.add(lblSeparator3);
+		
+		Hyperlink lnkSignOut = new Hyperlink(localeConstants.signOut(), "");
+		horizontalPanel.add(lnkSignOut);
 	}
 
 }

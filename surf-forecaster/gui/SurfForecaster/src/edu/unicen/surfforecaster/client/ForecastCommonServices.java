@@ -22,4 +22,5 @@ public interface ForecastCommonServices extends RemoteService {
 	
 	String testService();
 	User login(String userName, String password);
+	SessionData getSessionData();
 }
