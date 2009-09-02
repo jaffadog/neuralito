@@ -1,10 +1,11 @@
 package edu.unicen.surfforecaster.client;
 
-import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.*;
-import com.google.gwt.core.client.*;
+import java.util.HashMap;
 
-import java.util.*;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * GWTUtils is a set of helper classes to make it easier to work with GWT
@@ -38,19 +39,23 @@ public final class GWTUtils {
 	 * 
 	 * @return the location of the page
 	 */
-	public static native String getHostPageLocation() /*-{
+	public static native String getHostPageLocation(boolean pullOffHash, boolean pullOffQueryString) /*-{
 	    var s = $doc.location.href;
-	
-	    // Pull off any hash.
-	    var i = s.indexOf('#');
-	    if (i != -1)
-	      s = s.substring(0, i);
-	
-	    // Pull off any query string.
-	    i = s.indexOf('?');
-	    if (i != -1)
-	      s = s.substring(0, i);
-	
+		
+	    if (pullOffHash){
+		    // Pull off any hash.
+		    var i = s.indexOf('#');
+		    if (i != -1)
+		      s = s.substring(0, i);
+		}
+		
+		if (pullOffQueryString){
+		    // Pull off any query string.
+		    i = s.indexOf('?');
+		    if (i != -1)
+		      s = s.substring(0, i);
+		}
+		
 	    // Ensure a final slash if non-empty.
 	    return s;
   	}-*/;

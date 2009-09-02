@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.client.GWTUtils;
 import edu.unicen.surfforecaster.client.SurfForecasterConstants;
 import edu.unicen.surfforecaster.client.User;
 
@@ -96,8 +97,7 @@ public class LoginBox extends DialogBox{
 							if (result == null)
 								label_loginMessage.setVisible(true);
 							else{
-								hide();
-								
+								Window.open(GWTUtils.getHostPageLocation(true, true), "_self", "");
 							}
 						}
 							

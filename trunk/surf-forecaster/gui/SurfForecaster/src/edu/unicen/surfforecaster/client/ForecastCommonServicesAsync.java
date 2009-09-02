@@ -10,4 +10,5 @@ public interface ForecastCommonServicesAsync {
   
 	void testService(AsyncCallback<String> callback);
 	void login(String userName, String password, AsyncCallback<User> callback);
+	void getSessionData(AsyncCallback<SessionData> callback);
 }
