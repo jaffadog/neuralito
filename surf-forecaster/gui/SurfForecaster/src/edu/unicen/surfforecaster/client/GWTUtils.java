@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 public final class GWTUtils {
 	
 	public final static String APLICATION_WIDTH = "1000";
+	public final static String PUSHBUTTON_HEIGHT = "20";
 	
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	// native js helpers

@@ -10,9 +10,11 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -24,6 +26,10 @@ import edu.unicen.surfforecaster.client.User;
 public class LoginBox extends DialogBox{
 	
 	private final Label label_loginMessage;
+	private SimplePanel loadingPanel = null;
+	private HorizontalPanel horizontalPanel = null;
+	private final String crossIconHTML = "<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\"><strong>X</strong></a></div>";
+	private SurfForecasterConstants localeConstants = null;
 	
 	public LoginBox() {
 		label_loginMessage = null;
@@ -36,10 +42,19 @@ public class LoginBox extends DialogBox{
 		
 		super(false, false);
 		setAnimationEnabled(true);
-		this.setHTML("<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\"><strong>X</strong></a></div>");
+		this.setHTML(this.crossIconHTML);
 		this.redefineClose(this);
+		this.localeConstants = localeConstants;
 		
-		final HorizontalPanel horizontalPanel = new HorizontalPanel();
+		
+		//Loading panel
+		loadingPanel = new SimplePanel();
+		loadingPanel.setStylePrimaryName("gwt-loadingPanelLoginBox"); //to center the loading icon
+		Image loadingImage = new Image("images/blue-circle-loader.gif");
+		loadingPanel.setWidget(loadingImage);
+		
+		//Form panel
+		horizontalPanel = new HorizontalPanel();
 		this.setWidget(horizontalPanel);
 		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		horizontalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -57,11 +72,11 @@ public class LoginBox extends DialogBox{
 		verticalPanel.add(flexTable);
 		flexTable.setCellPadding(4);
 
-		final Label usuarioLabel = new Label(localeConstants.userName() + ": ");
-		flexTable.setWidget(0, 0, usuarioLabel);
+		final Label userLabel = new Label(localeConstants.userName() + ": ");
+		flexTable.setWidget(0, 0, userLabel);
 
-		final Label contrasenaLabel = new Label(localeConstants.password() + ": ");
-		flexTable.setWidget(1, 0, contrasenaLabel);
+		final Label passLabel = new Label(localeConstants.password() + ": ");
+		flexTable.setWidget(1, 0, passLabel);
 
 		final TextBox loginUserName = new TextBox();
 		flexTable.setWidget(0, 1, loginUserName);
@@ -84,19 +99,22 @@ public class LoginBox extends DialogBox{
 		final PushButton ingresarPushButton = new PushButton(localeConstants.signIn(), localeConstants.signIn());
 		horizontalPanel_1.add(ingresarPushButton);
 		horizontalPanel_1.setCellHorizontalAlignment(ingresarPushButton, HasHorizontalAlignment.ALIGN_CENTER);
-		ingresarPushButton.setHeight("20px");
+		ingresarPushButton.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
 		ingresarPushButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				label_loginMessage.setVisible(false);
+				showLoadingPanel();
 				if (loginUserName.getText().trim().equals("") || loginPassword.getText().trim().equals("")){
 					label_loginMessage.setVisible(true);
+					showFormPanel();
 				}
 				else{
 					ForecastCommonServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<User>(){
 						public void onSuccess(User result) {
-							if (result == null)
+							if (result == null) {
 								label_loginMessage.setVisible(true);
-							else{
+								showFormPanel();
+							} else {
 								Window.open(GWTUtils.getHostPageLocation(true, true), "_self", "");
 							}
 						}
@@ -121,6 +139,16 @@ public class LoginBox extends DialogBox{
 		});
 		
 		
+	}
+	
+	private void showLoadingPanel() {
+		this.setHTML("<strong>" + this.localeConstants.waitPlease() + "...</strong>");
+		this.setWidget(loadingPanel);
+	}
+	
+	private void showFormPanel() {
+		this.setHTML(this.crossIconHTML);
+		this.setWidget(horizontalPanel);
 	}
 	
 	public void loginFailedMsgState(boolean state){
