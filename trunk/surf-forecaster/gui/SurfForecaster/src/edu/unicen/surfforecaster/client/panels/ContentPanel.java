@@ -1,29 +1,40 @@
 package edu.unicen.surfforecaster.client.panels;
 
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import edu.unicen.surfforecaster.client.GWTUtils;
 import edu.unicen.surfforecaster.client.SurfForecasterConstants;
 
-public class ContentPanel extends Composite {
+public class ContentPanel extends SimplePanel {
 	
+	private SurfForecasterConstants localeConstants = null;
+	private static ContentPanel instance = null;
+	
+	
+	public static ContentPanel getInstance(SurfForecasterConstants localeConstants) {
+        if (instance == null) {
+            instance = new ContentPanel(localeConstants);
+        }
+        return instance;
+    }
+		
 	public ContentPanel(){}
 	
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public ContentPanel(SurfForecasterConstants localeConstants) {
-		VerticalPanel contentVPanel = new VerticalPanel();
-		contentVPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		contentVPanel.setWidth(GWTUtils.APLICATION_WIDTH);
-		initWidget(contentVPanel);
-		{
-			LocalizationPanel localizationPanel = new LocalizationPanel(localeConstants);
-			contentVPanel.add(localizationPanel);
-		}
-		
+		this.localeConstants = localeConstants;
+		this.showMainVerticalPanel();
+	}
+	
+	public void showRegisterUserPanel(){
+		RegisterUserPanel registerUserPanel = new RegisterUserPanel(this.localeConstants);	
+		setWidget(registerUserPanel);
+	}
+	
+	public void showMainVerticalPanel(){
+		MainVerticalPanel mainVerticalPanel = new MainVerticalPanel(this.localeConstants);
+		setWidget(mainVerticalPanel);
 	}
 
 }
