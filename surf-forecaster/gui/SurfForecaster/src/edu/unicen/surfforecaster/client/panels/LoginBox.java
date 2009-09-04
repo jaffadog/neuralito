@@ -38,7 +38,7 @@ public class LoginBox extends DialogBox{
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public LoginBox(SurfForecasterConstants localeConstants) {
+	public LoginBox(final SurfForecasterConstants localeConstants) {
 		
 		super(false, false);
 		setAnimationEnabled(true);
@@ -135,7 +135,8 @@ public class LoginBox extends DialogBox{
 		horizontalPanel_1.setCellVerticalAlignment(registerLink, HasVerticalAlignment.ALIGN_MIDDLE);
 		registerLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				//new RegisterUI();
+				ContentPanel.getInstance(localeConstants).showRegisterUserPanel();
+				hide();
 			}
 		});
 		

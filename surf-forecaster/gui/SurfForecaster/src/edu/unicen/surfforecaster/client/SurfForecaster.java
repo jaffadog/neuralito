@@ -38,8 +38,7 @@ public class SurfForecaster implements EntryPoint {
 		LogoPanel logoPanel = new LogoPanel();
 		rootVPanel.add(logoPanel);
 		
-		ContentPanel contentPanel = new ContentPanel(localeConstants);
-		rootVPanel.add(contentPanel);
+		rootVPanel.add(ContentPanel.getInstance(localeConstants));
 		
 		// finally, remove the splash screen/loading msg
 		GWTUtils.removeElementFromDOM("loadingDiv");
