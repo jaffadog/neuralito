@@ -121,9 +121,9 @@ public class UserStatePanel extends Composite {
 		lnkSignOut = new Hyperlink(localeConstants.signOut(), "");
 		lnkSignOut.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ForecastCommonServices.Util.getInstance().closeSession(new AsyncCallback<?>(){
+				ForecastCommonServices.Util.getInstance().closeSession(new AsyncCallback<Void>(){
 					
-					public void onSuccess(Object result){
+					public void onSuccess(Void result){
 						Window.open(GWTUtils.getHostPageLocation(true, true), "_self", "");
 					}
 					
