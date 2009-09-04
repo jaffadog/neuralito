@@ -12,8 +12,14 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public final class GWTUtils {
 	
+	//WIDGETS SETTINGS
 	public final static String APLICATION_WIDTH = "1000";
 	public final static String PUSHBUTTON_HEIGHT = "20";
+	
+	//PATH
+	public final static String IMAGE_LOGO = "images/logo2.PNG";
+	public final static String IMAGE_BLUE_BAR_LOADER = "images/blue-bar-loader.gif";
+	public final static String IMAGE_BLUE_CIRCLE_LOADER = "images/blue-circle-loader.gif";
 	
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	// native js helpers
