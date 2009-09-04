@@ -28,7 +28,7 @@ public class LoginBox extends DialogBox{
 	private final Label label_loginMessage;
 	private SimplePanel loadingPanel = null;
 	private HorizontalPanel horizontalPanel = null;
-	private final String crossIconHTML = "<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\"><strong>X</strong></a></div>";
+	private final String crossIconHTML = "<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\">X</a></div>";
 	private SurfForecasterConstants localeConstants = null;
 	
 	public LoginBox() {
@@ -45,12 +45,13 @@ public class LoginBox extends DialogBox{
 		this.setHTML(this.crossIconHTML);
 		this.redefineClose(this);
 		this.localeConstants = localeConstants;
+		this.addStyleName("gwt-LoginBox-Title");
 		
 		
 		//Loading panel
 		loadingPanel = new SimplePanel();
 		loadingPanel.setStylePrimaryName("gwt-loadingPanelLoginBox"); //to center the loading icon
-		Image loadingImage = new Image("images/blue-circle-loader.gif");
+		Image loadingImage = new Image(GWTUtils.IMAGE_BLUE_CIRCLE_LOADER);
 		loadingPanel.setWidget(loadingImage);
 		
 		//Form panel
@@ -64,7 +65,7 @@ public class LoginBox extends DialogBox{
 		
 		label_loginMessage = new Label(localeConstants.invalidUserPass());
 		verticalPanel.add(label_loginMessage);
-		label_loginMessage.setStylePrimaryName("gwt-Label-error");
+		label_loginMessage.addStyleName("gwt-Label-error");
 		label_loginMessage.setVisible(false);
 		label_loginMessage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
@@ -142,7 +143,7 @@ public class LoginBox extends DialogBox{
 	}
 	
 	private void showLoadingPanel() {
-		this.setHTML("<strong>" + this.localeConstants.waitPlease() + "...</strong>");
+		this.setHTML(this.localeConstants.waitPlease() + "...");
 		this.setWidget(loadingPanel);
 	}
 	

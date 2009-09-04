@@ -14,7 +14,7 @@ public class LogoPanel extends Composite {
 		simplePanel.setWidth(GWTUtils.APLICATION_WIDTH);
 		initWidget(simplePanel);
 		
-		Image image = new Image("images/logo2.PNG");
+		Image image = new Image(GWTUtils.IMAGE_LOGO);
 		simplePanel.setWidget(image);
 		
 	}

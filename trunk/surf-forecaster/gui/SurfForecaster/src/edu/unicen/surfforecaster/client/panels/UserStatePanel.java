@@ -55,14 +55,14 @@ public class UserStatePanel extends Composite {
 		
 		Label emptyLabel = new Label("");
 		horizontalPanel.add(emptyLabel);
-		emptyLabel.setWidth("500");
+		emptyLabel.setWidth("600");
 	
 		loginPanel = new LoginBox(localeConstants);
 		loginPanel.hide();
 		
 		
 		//Link to LoginBox
-		lnkLogin = new Hyperlink(localeConstants.signIn(), "signIn");
+		lnkLogin = new Hyperlink(localeConstants.signIn(), "");
 		lnkLogin.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				//Window.alert(((Boolean)loginPanel.isShowing()).toString());
@@ -144,6 +144,7 @@ public class UserStatePanel extends Composite {
 					horizontalPanel.insert(lnkLogin, 1);
 				else{
 					lblUserName = new Label(result.getUserName());
+					lblUserName.addStyleName("gwt-Label-Username");
 					horizontalPanel.insert(lblUserName, 1);
 					
 					final Label lblSeparator3 = new Label("|");
