@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.client.GWTUtils;
 import edu.unicen.surfforecaster.client.SurfForecasterConstants;
 
 public class LocalizationPanel extends Composite{
@@ -79,7 +80,7 @@ public class LocalizationPanel extends Composite{
 					}
 					{
 						PushButton ForecastButton = new PushButton(localeConstants.forecast());
-						ForecastButton.setSize("90", "20");
+						ForecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
 						localizationForm.setWidget(2, 0, ForecastButton);
 					}
 					localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);

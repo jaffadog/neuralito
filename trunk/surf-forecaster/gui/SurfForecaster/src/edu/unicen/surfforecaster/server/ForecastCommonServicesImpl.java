@@ -16,17 +16,25 @@ public class ForecastCommonServicesImpl extends RemoteServiceServlet implements 
 	}
 	
 	public User login(String userName, String password){
-		if (userName.equals("admin") && password.equals("admin")){
-			User user = new User();
-			HttpServletRequest request = this.getThreadLocalRequest();
-			HttpSession session = request.getSession();
-			session.setMaxInactiveInterval(60); //60seg
-			session.setAttribute("gwtForecast-UserName", user.getUserName());
-			session.setAttribute("gwtForecast-UserType", user.getType());
-			return user;
-		} else{
-			return null;
+		try {
+			Thread.sleep(2500);
+			if (userName.equals("admin") && password.equals("admin")){
+				User user = new User();
+				HttpServletRequest request = this.getThreadLocalRequest();
+				HttpSession session = request.getSession();
+				session.setMaxInactiveInterval(60); //60seg
+				session.setAttribute("gwtForecast-UserName", user.getUserName());
+				session.setAttribute("gwtForecast-UserType", user.getType());
+				return user;
+			} else{
+				return null;
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return null;
+		
 	}
 	
 	public SessionData getSessionData() {

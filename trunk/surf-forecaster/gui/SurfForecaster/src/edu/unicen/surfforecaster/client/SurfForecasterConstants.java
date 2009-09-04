@@ -18,6 +18,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Cerrar sesi\u00F3n")
 	String signOut();
 	
+	@DefaultStringValue("Configuraci\u00F3n")
+	String settings();
+	
 	//LoginBox
 	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a")
 	String invalidUserPass();
@@ -30,6 +33,9 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Registrarse")
 	String register();
+	
+	@DefaultStringValue("Espere por favor")
+	String waitPlease();
 	
 	//LocalizationPanel
 	@DefaultStringValue("Seleccione una ola")

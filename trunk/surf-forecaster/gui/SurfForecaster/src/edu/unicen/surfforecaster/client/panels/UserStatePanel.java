@@ -31,6 +31,8 @@ public class UserStatePanel extends Composite {
 	private Hyperlink lnkLogin = null;
 	//Link to sign out
 	private Hyperlink lnkSignOut = null;
+	//Link to settings
+	private Hyperlink lnkSettings = null;
 	//Root items structure
 	private HorizontalPanel horizontalPanel = null;
 	
@@ -53,7 +55,7 @@ public class UserStatePanel extends Composite {
 		
 		Label emptyLabel = new Label("");
 		horizontalPanel.add(emptyLabel);
-		emptyLabel.setWidth("600");
+		emptyLabel.setWidth("500");
 	
 		loginPanel = new LoginBox(localeConstants);
 		loginPanel.hide();
@@ -111,8 +113,10 @@ public class UserStatePanel extends Composite {
 	    final Label lblSeparator2 = new Label("|");
 		horizontalPanel.add(lblSeparator2);
 		
-		Hyperlink lnkHelp = new Hyperlink(localeConstants.help(), "");
+		Hyperlink lnkHelp = new Hyperlink(localeConstants.help(), "help");
 		horizontalPanel.add(lnkHelp);
+		
+		lnkSettings = new Hyperlink(localeConstants.settings(), "settings");
 		
 		lnkSignOut = new Hyperlink(localeConstants.signOut(), "");
 		lnkSignOut.addClickHandler(new ClickHandler() {
@@ -144,6 +148,11 @@ public class UserStatePanel extends Composite {
 					
 					final Label lblSeparator3 = new Label("|");
 					horizontalPanel.add(lblSeparator3);
+					
+					horizontalPanel.add(lnkSettings);
+					
+					final Label lblSeparator4 = new Label("|");
+					horizontalPanel.add(lblSeparator4);
 					
 					horizontalPanel.add(lnkSignOut);
 				}
