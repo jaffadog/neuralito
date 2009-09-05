@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -10,8 +10,9 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import edu.unicen.surfforecaster.client.GWTUtils;
-import edu.unicen.surfforecaster.client.SurfForecasterConstants;
+import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
+
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 

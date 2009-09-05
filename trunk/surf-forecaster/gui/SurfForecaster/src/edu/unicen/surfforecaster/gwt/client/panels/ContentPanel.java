@@ -1,8 +1,8 @@
-package edu.unicen.surfforecaster.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import edu.unicen.surfforecaster.client.SurfForecasterConstants;
+import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 
 public class ContentPanel extends SimplePanel {
 	

@@ -1,10 +1,10 @@
-package edu.unicen.surfforecaster.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import edu.unicen.surfforecaster.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 
 public class LogoPanel extends Composite {
 

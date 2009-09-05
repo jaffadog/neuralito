@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -18,10 +18,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import edu.unicen.surfforecaster.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.client.GWTUtils;
-import edu.unicen.surfforecaster.client.SurfForecasterConstants;
-import edu.unicen.surfforecaster.client.User;
+import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
+import edu.unicen.surfforecaster.gwt.client.User;
 
 public class LoginBox extends DialogBox{
 	
@@ -162,8 +162,8 @@ public class LoginBox extends DialogBox{
 	// Define closeDialog using JSNI
 	private native void redefineClose(LoginBox loginBox) /*-{
 		$wnd['closeDialog'] = function () {
-			loginBox.@edu.unicen.surfforecaster.client.panels.LoginBox::loginFailedMsgState(Z)(false);
-			loginBox.@edu.unicen.surfforecaster.client.panels.LoginBox::hide()();
+			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::loginFailedMsgState(Z)(false);
+			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::hide()();
 		}
 	}-*/;
 
