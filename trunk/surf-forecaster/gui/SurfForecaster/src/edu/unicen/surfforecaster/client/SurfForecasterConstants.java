@@ -8,6 +8,21 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Iniciar sesi\u00F3n")
 	String signIn();
 	
+	@DefaultStringValue("Volver")
+	String goBack();
+	
+	@DefaultStringValue("Usuario")
+	String userName();
+	
+	@DefaultStringValue("Contrase\u00F1a")
+	String password();
+	
+	@DefaultStringValue("Registrarse")
+	String register();
+	
+	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
+	String starFields();
+	
 	//UserStatePanel
 	@DefaultStringValue("Idioma")
 	String language();
@@ -24,15 +39,6 @@ public interface SurfForecasterConstants extends Constants {
 	//LoginBox
 	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a")
 	String invalidUserPass();
-	
-	@DefaultStringValue("Usuario")
-	String userName();
-	
-	@DefaultStringValue("Contrase\u00F1a")
-	String password();
-	
-	@DefaultStringValue("Registrarse")
-	String register();
 	
 	@DefaultStringValue("Espere por favor")
 	String waitPlease();
@@ -55,4 +61,21 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Pron\u00F3stico")
 	String forecast();
+	
+	//RegisterNewUserPanel
+	@DefaultStringValue("Registrarse como nuevo usuario")
+	String registerSectionTitle();
+	
+	@DefaultStringValue("Nombre")
+	String name();
+	
+	@DefaultStringValue("Apellido")
+	String lastName();
+	
+	@DefaultStringValue("Correo electr\u00F3nico")
+	String email();
+	
+	@DefaultStringValue("Administrador")
+	String administrator();
+	
 }

@@ -133,6 +133,8 @@ public class LoginBox extends DialogBox{
 		final Hyperlink registerLink = new Hyperlink(localeConstants.register(), "registerNewUser");
 		horizontalPanel_1.add(registerLink);
 		horizontalPanel_1.setCellVerticalAlignment(registerLink, HasVerticalAlignment.ALIGN_MIDDLE);
+		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		registerLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				ContentPanel.getInstance(localeConstants).showRegisterUserPanel();

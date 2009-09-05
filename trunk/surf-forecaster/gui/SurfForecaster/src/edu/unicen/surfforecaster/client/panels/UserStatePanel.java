@@ -33,6 +33,8 @@ public class UserStatePanel extends Composite {
 	private Hyperlink lnkSignOut = null;
 	//Link to settings
 	private Hyperlink lnkSettings = null;
+	//Link to register
+	private Hyperlink lnkRegister = null;
 	//Root items structure
 	private HorizontalPanel horizontalPanel = null;
 	
@@ -45,7 +47,7 @@ public class UserStatePanel extends Composite {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public UserStatePanel(SurfForecasterConstants localeConstants) {
+	public UserStatePanel(final SurfForecasterConstants localeConstants) {
 		
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setSpacing(2);
@@ -118,6 +120,14 @@ public class UserStatePanel extends Composite {
 		
 		lnkSettings = new Hyperlink(localeConstants.settings(), "settings");
 		
+		lnkRegister = new Hyperlink(localeConstants.register() + "!!!", "registerNewUser");
+		lnkRegister.addStyleName("gwt-HyperLink-register");
+		lnkRegister.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				ContentPanel.getInstance(localeConstants).showRegisterUserPanel();
+			}
+		});
+		
 		lnkSignOut = new Hyperlink(localeConstants.signOut(), "");
 		lnkSignOut.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -140,9 +150,14 @@ public class UserStatePanel extends Composite {
 	private void getSessionData(){
 		ForecastCommonServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
 			public void onSuccess(SessionData result) {
-				if (result == null)
+				if (result == null) {
 					horizontalPanel.insert(lnkLogin, 1);
-				else{
+				
+					final Label lblSeparator3 = new Label("|");
+					horizontalPanel.add(lblSeparator3);
+					
+					horizontalPanel.add(lnkRegister);
+				} else {
 					lblUserName = new Label(result.getUserName());
 					lblUserName.addStyleName("gwt-Label-Username");
 					horizontalPanel.insert(lblUserName, 1);
