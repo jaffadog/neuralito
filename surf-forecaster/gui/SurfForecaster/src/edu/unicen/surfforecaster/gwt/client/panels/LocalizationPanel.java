@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import edu.unicen.surfforecaster.client.GWTUtils;
-import edu.unicen.surfforecaster.client.SurfForecasterConstants;
+import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 
 public class LocalizationPanel extends Composite{
 	

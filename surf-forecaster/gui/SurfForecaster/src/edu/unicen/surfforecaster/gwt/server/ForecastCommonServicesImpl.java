@@ -1,11 +1,11 @@
-package edu.unicen.surfforecaster.server;
+package edu.unicen.surfforecaster.gwt.server;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import edu.unicen.surfforecaster.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.client.SessionData;
-import edu.unicen.surfforecaster.client.User;
+import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.SessionData;
+import edu.unicen.surfforecaster.gwt.client.User;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

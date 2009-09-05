@@ -16,7 +16,7 @@
   
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='edu.unicen.surfforecaster.client.SurfForecaster'/>
+  <entry-point class='edu.unicen.surfforecaster.gwt.client.SurfForecaster'/>
   
   <!-- English Locale                                      -->
   <extend-property name="locale" values="en"/>

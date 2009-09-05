@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -14,10 +14,10 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
-import edu.unicen.surfforecaster.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.client.GWTUtils;
-import edu.unicen.surfforecaster.client.SessionData;
-import edu.unicen.surfforecaster.client.SurfForecasterConstants;
+import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.SessionData;
+import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 
 
 public class UserStatePanel extends Composite {

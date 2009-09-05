@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 

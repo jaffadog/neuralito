@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.client;
+package edu.unicen.surfforecaster.gwt.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
