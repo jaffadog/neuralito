@@ -9,6 +9,11 @@
     font-size:9pt;
 }
 
+.gwt-Label-SectionTitle{
+    font-weight:bold;
+    font-size:11pt;
+    margin-bottom:20px;
+}
 
 /** Loading image main screen */
 div#loadingDiv{
@@ -54,4 +59,14 @@ div#closeLoginBoxDiv a{
 /** Label username */
 .gwt-Label-Username{
     font-weight:bold;
+}
+
+/** Link register */
+.gwt-HyperLink-register{
+    font-weight:bold;
+}
+
+/** Label Register User description */
+.gwt-Label-RegisterSectionDescription{
+    text-align:justify;
 }
