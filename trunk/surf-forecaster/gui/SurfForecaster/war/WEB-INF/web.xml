@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
   	<servlet-name>ForecastCommonServices</servlet-name>
-  	<servlet-class>edu.unicen.surfforecaster.server.ForecastCommonServicesImpl</servlet-class>
+  	<servlet-class>edu.unicen.surfforecaster.gwt.server.ForecastCommonServicesImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
