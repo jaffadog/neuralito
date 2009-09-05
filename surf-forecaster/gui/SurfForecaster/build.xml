@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Test" default="deploy" basedir=".">
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="E:\MAXI\workspace\SurfForecaster\lib" />
+  <property name="gwt.sdk" location="F:\Workspace\Tesis\SurfForecaster\lib" />
   <property name="war.name" value="SurfForecaster.war"/>
-  <property name="tomcat.webapps" location="E:\MAXI\apache-tomcat-6.0.20\webapps" />
+  <property name="tomcat.webapps" location="F:\tomcat-6.0.16\webapps" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
@@ -41,7 +41,7 @@
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
-      <arg value="edu.unicen.surfforecaster.SurfForecaster"/>
+      <arg value="edu.unicen.surfforecaster.gwt.SurfForecaster"/>
     </java>
   </target>
 
@@ -55,7 +55,7 @@
       <arg value="-startupUrl"/>
       <arg value="Test2.html"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
-      <arg value="edu.unicen.surfforecaster.SurfForecaster"/>
+      <arg value="edu.unicen.surfforecaster.gwt.SurfForecaster"/>
     </java>
   </target>
 
