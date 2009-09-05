@@ -9,12 +9,15 @@ public class SessionData implements IsSerializable {
 	public String getUserName() {
 		return userName;
 	}
+	
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
 	public Integer getUserType() {
 		return userType;
 	}
+	
 	public void setUserType(Integer userType) {
 		this.userType = userType;
 	}

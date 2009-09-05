@@ -21,6 +21,10 @@ public class MainVerticalPanel extends VerticalPanel {
 			LocalizationPanel localizationPanel = new LocalizationPanel(localeConstants);
 			this.add(localizationPanel);
 		}
+		{
+			ForecastTabPanel forecastTabPanel = new ForecastTabPanel();
+			this.add(forecastTabPanel);
+		}
 		
 	}
 }
