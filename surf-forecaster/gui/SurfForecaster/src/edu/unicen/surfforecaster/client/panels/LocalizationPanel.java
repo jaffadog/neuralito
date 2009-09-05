@@ -79,9 +79,9 @@ public class LocalizationPanel extends Composite{
 						beachBox.setWidth("200");
 					}
 					{
-						PushButton ForecastButton = new PushButton(localeConstants.forecast());
-						ForecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
-						localizationForm.setWidget(2, 0, ForecastButton);
+						PushButton forecastButton = new PushButton(localeConstants.forecast());
+						forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
+						localizationForm.setWidget(2, 0, forecastButton);
 					}
 					localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);
 					localizationForm.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);		
