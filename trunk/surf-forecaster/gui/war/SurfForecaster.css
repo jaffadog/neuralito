@@ -71,12 +71,17 @@ div#closeLoginBoxDiv a{
     text-align:justify;
 }
 
+/** RootPanel */
+.gwt-RootPanel{
+    background-color:#A2ACA1;
+}
+
 /** RootVPanel */
 .gwt-RootVPanel{
     background-color:#FFF;
+    padding: 0 10px 0 10px;
 }
 
-/** Body */
 body{
-    background-color:#000;
+    text-align:center;
 }

@@ -8,6 +8,7 @@ public class ContentPanel extends SimplePanel {
 	
 	private SurfForecasterConstants localeConstants = null;
 	private static ContentPanel instance = null;
+	private final String PANEL_HEIGHT = "800";
 	
 	
 	public static ContentPanel getInstance(SurfForecasterConstants localeConstants) {
@@ -25,6 +26,7 @@ public class ContentPanel extends SimplePanel {
 	public ContentPanel(SurfForecasterConstants localeConstants) {
 		this.localeConstants = localeConstants;
 		this.showMainVerticalPanel();
+		this.setHeight(PANEL_HEIGHT);
 	}
 	
 	public void showRegisterUserPanel(){

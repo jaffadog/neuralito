@@ -4,7 +4,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.services.dto.HelloDTO;
@@ -28,20 +31,31 @@ public class SurfForecaster implements EntryPoint {
 	public void onModuleLoad() {
 		this.testService();
 		RootPanel rootPanel = RootPanel.get();
-		rootPanel.setWidth(GWTUtils.APLICATION_WIDTH);
-
-		VerticalPanel rootVPanel = new VerticalPanel();
+		rootPanel.addStyleName("gwt-RootPanel");
 		
+		VerticalPanel rootVPanel = new VerticalPanel();
+		rootVPanel.setWidth(GWTUtils.APLICATION_WIDTH);
+		
+		//rootVPanel.setHeight("100%");
 		rootVPanel.addStyleName("gwt-RootVPanel");
-		rootPanel.add(rootVPanel);
+		
 		
 		UserStatePanel userStatePanel = new UserStatePanel(localeConstants);
+		
 		rootVPanel.add(userStatePanel);
 		
 		LogoPanel logoPanel = new LogoPanel();
+		
 		rootVPanel.add(logoPanel);
 		
-		rootVPanel.add(ContentPanel.getInstance(localeConstants));
+		ContentPanel contentPanel = ContentPanel.getInstance(localeConstants);
+		rootVPanel.add(contentPanel);
+		
+		rootVPanel.setCellVerticalAlignment(userStatePanel, HasVerticalAlignment.ALIGN_TOP);
+		rootVPanel.setCellVerticalAlignment(logoPanel, HasVerticalAlignment.ALIGN_TOP);
+		rootVPanel.setCellVerticalAlignment(contentPanel, HasVerticalAlignment.ALIGN_TOP);
+		
+		rootPanel.add(rootVPanel);
 		
 		// finally, remove the splash screen/loading msg
 		GWTUtils.removeElementFromDOM("loadingDiv");
