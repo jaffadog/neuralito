@@ -23,7 +23,8 @@
 <!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Track</value>-->
 <!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Record</value>-->
 <!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Artist</value>-->
-		<value>edu.unicen.neuralito.domain.entity.SurfSpot</value>
+		<value>edu.unicen.surfforecaster.server.domain.entity.SurfSpot</value>
+		<value>edu.unicen.surfforecaster.server.domain.entity.SurfSpotRegion</value>
       </list>
     </property>
   </bean>
@@ -31,12 +32,12 @@
   <bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor" autowire="byName" /><!--sessionFactory will get autowired-->
 
 <!--  <bean id="musicDaoTarget" class="com.zabada.springrecipes.hibernatejpa.dao.MusicDAOHibernateImpl" autowire="byName" />sessionFactory will get autowired-->
-<bean id="surfSpotDaoTarget" class="edu.unicen.neuralito.domain.dao.SurfSpotDAOHibernateImpl" autowire="byName" /><!--sessionFactory will get autowired-->
+<bean id="surfSpotDaoTarget" class="edu.unicen.surfforecaster.server.dao.SurfSpotDAOHibernateImpl" autowire="byName" /><!--sessionFactory will get autowired-->
 
 
   <bean id="surfSpotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="proxyInterfaces">
-      <value>edu.unicen.neuralito.domain.dao.SurfSpotDAO</value>
+      <value>edu.unicen.surfforecaster.server.dao.SurfSpotDAO</value>
     </property>
     <property name="interceptorNames">
       <list>
