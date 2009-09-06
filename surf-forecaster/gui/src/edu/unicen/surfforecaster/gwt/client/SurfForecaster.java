@@ -4,7 +4,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -27,31 +26,24 @@ public class SurfForecaster implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		this.testService();
+		GWTUtils.LOCALE_CONSTANTS = localeConstants;
+		GWTUtils.LOCALE_MESSAGES = localeMessages;
+		//this.testService();
 		RootPanel rootPanel = RootPanel.get();
 		rootPanel.addStyleName("gwt-RootPanel");
 		
 		VerticalPanel rootVPanel = new VerticalPanel();
 		rootVPanel.setWidth(GWTUtils.APLICATION_WIDTH);
-		
-		//rootVPanel.setHeight("100%");
 		rootVPanel.addStyleName("gwt-RootVPanel");
 		
-		
-		UserStatePanel userStatePanel = new UserStatePanel(localeConstants);
-		
+		UserStatePanel userStatePanel = new UserStatePanel();
 		rootVPanel.add(userStatePanel);
 		
 		LogoPanel logoPanel = new LogoPanel();
-		
 		rootVPanel.add(logoPanel);
 		
-		ContentPanel contentPanel = ContentPanel.getInstance(localeConstants);
+		ContentPanel contentPanel = ContentPanel.getInstance();
 		rootVPanel.add(contentPanel);
-		
-		rootVPanel.setCellVerticalAlignment(userStatePanel, HasVerticalAlignment.ALIGN_TOP);
-		rootVPanel.setCellVerticalAlignment(logoPanel, HasVerticalAlignment.ALIGN_TOP);
-		rootVPanel.setCellVerticalAlignment(contentPanel, HasVerticalAlignment.ALIGN_TOP);
 		
 		rootPanel.add(rootVPanel);
 		

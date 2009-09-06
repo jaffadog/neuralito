@@ -1,5 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -11,26 +13,17 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
-import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
-
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
 
 public class RegisterUserPanel extends VerticalPanel {
 	
 	private Label errorlabel = null;
 	
-	public RegisterUserPanel(){}
-	
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public RegisterUserPanel(final SurfForecasterConstants localeConstants) {
+	public RegisterUserPanel() {
 		setSpacing(10);
 		this.setWidth(GWTUtils.APLICATION_WIDTH);
 		
 		final FlexTable flexTable = new FlexTable();
-		Label lblTitle = new Label(localeConstants.registerSectionTitle());
+		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.registerSectionTitle());
 		lblTitle.addStyleName("gwt-Label-SectionTitle");
 		this.add(lblTitle);
 		
@@ -46,29 +39,29 @@ public class RegisterUserPanel extends VerticalPanel {
 		flexTable.setCellSpacing(5);
 		flexTable.setSize("450", "300");
 
-		errorlabel = new Label(localeConstants.starFields());
+		errorlabel = new Label(GWTUtils.LOCALE_CONSTANTS.starFields());
 		errorlabel.setStylePrimaryName("gwt-Label-error");
 		flexTable.setWidget(0, 0, errorlabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getFlexCellFormatter().setColSpan(0, 0, 3);
 		flexTable.getCellFormatter().setVisible(0, 0, false);
 
-		final Label namelabel = new Label("* " + localeConstants.name() + ":");
+		final Label namelabel = new Label("* " + GWTUtils.LOCALE_CONSTANTS.name() + ":");
 		flexTable.setWidget(1, 0, namelabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
-		final Label lnameLabel = new Label("* " + localeConstants.lastName() + ":");
+		final Label lnameLabel = new Label("* " + GWTUtils.LOCALE_CONSTANTS.lastName() + ":");
 		flexTable.setWidget(2, 0, lnameLabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		final Label emailLabel = new Label("* " + localeConstants.email() + ":");
+		final Label emailLabel = new Label("* " + GWTUtils.LOCALE_CONSTANTS.email() + ":");
 		flexTable.setWidget(3, 0, emailLabel);
 
-		final Label userLabel = new Label("* " + localeConstants.userName() + ":");
+		final Label userLabel = new Label("* " + GWTUtils.LOCALE_CONSTANTS.userName() + ":");
 		flexTable.setWidget(4, 0, userLabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
-		final Label passLabel = new Label("* " + localeConstants.password() + ":");
+		final Label passLabel = new Label("* " + GWTUtils.LOCALE_CONSTANTS.password() + ":");
 		flexTable.setWidget(5, 0, passLabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -92,7 +85,7 @@ public class RegisterUserPanel extends VerticalPanel {
 		flexTable.setWidget(5, 2, passTxt);
 		passTxt.setWidth("300px");
 		
-		final Label adminLabel = new Label(localeConstants.administrator() + ":");
+		final Label adminLabel = new Label(GWTUtils.LOCALE_CONSTANTS.administrator() + ":");
 		flexTable.setWidget(6, 0, adminLabel);
 		adminLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 
@@ -155,12 +148,12 @@ public class RegisterUserPanel extends VerticalPanel {
 //			}
 //		});
 		registerBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		registerBtn.setText(localeConstants.register());
+		registerBtn.setText(GWTUtils.LOCALE_CONSTANTS.register());
 
 		final PushButton cancelBtn = new PushButton();
 		cancelBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ContentPanel.getInstance(localeConstants).showMainVerticalPanel();
+				ContentPanel.getInstance().showMainVerticalPanel();
 			}
 		});
 		btnsPanel.add(cancelBtn);
@@ -170,7 +163,7 @@ public class RegisterUserPanel extends VerticalPanel {
 //			}
 //		});
 		cancelBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		cancelBtn.setText(localeConstants.goBack());
+		cancelBtn.setText(GWTUtils.LOCALE_CONSTANTS.goBack());
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 	}
 		

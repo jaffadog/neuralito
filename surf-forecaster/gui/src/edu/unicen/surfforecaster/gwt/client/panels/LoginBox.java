@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
-import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 import edu.unicen.surfforecaster.gwt.client.User;
 
 public class LoginBox extends DialogBox{
@@ -29,22 +28,13 @@ public class LoginBox extends DialogBox{
 	private SimplePanel loadingPanel = null;
 	private HorizontalPanel horizontalPanel = null;
 	private final String crossIconHTML = "<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\">X</a></div>";
-	private SurfForecasterConstants localeConstants = null;
 	
 	public LoginBox() {
-		label_loginMessage = null;
-	}
-	
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public LoginBox(final SurfForecasterConstants localeConstants) {
 		
 		super(false, false);
 		setAnimationEnabled(true);
 		this.setHTML(this.crossIconHTML);
 		this.redefineClose(this);
-		this.localeConstants = localeConstants;
 		this.addStyleName("gwt-LoginBox-Title");
 		
 		
@@ -63,7 +53,7 @@ public class LoginBox extends DialogBox{
 		final VerticalPanel verticalPanel = new VerticalPanel();
 		horizontalPanel.add(verticalPanel);
 		
-		label_loginMessage = new Label(localeConstants.invalidUserPass());
+		label_loginMessage = new Label(GWTUtils.LOCALE_CONSTANTS.invalidUserPass());
 		verticalPanel.add(label_loginMessage);
 		label_loginMessage.addStyleName("gwt-Label-error");
 		label_loginMessage.setVisible(false);
@@ -73,10 +63,10 @@ public class LoginBox extends DialogBox{
 		verticalPanel.add(flexTable);
 		flexTable.setCellPadding(4);
 
-		final Label userLabel = new Label(localeConstants.userName() + ": ");
+		final Label userLabel = new Label(GWTUtils.LOCALE_CONSTANTS.userName() + ": ");
 		flexTable.setWidget(0, 0, userLabel);
 
-		final Label passLabel = new Label(localeConstants.password() + ": ");
+		final Label passLabel = new Label(GWTUtils.LOCALE_CONSTANTS.password() + ": ");
 		flexTable.setWidget(1, 0, passLabel);
 
 		final TextBox loginUserName = new TextBox();
@@ -97,7 +87,7 @@ public class LoginBox extends DialogBox{
 		flexTable.setWidget(2, 0, horizontalPanel_1);
 		horizontalPanel_1.setSpacing(5);
 		
-		final PushButton ingresarPushButton = new PushButton(localeConstants.signIn(), localeConstants.signIn());
+		final PushButton ingresarPushButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.signIn(), GWTUtils.LOCALE_CONSTANTS.signIn());
 		horizontalPanel_1.add(ingresarPushButton);
 		horizontalPanel_1.setCellHorizontalAlignment(ingresarPushButton, HasHorizontalAlignment.ALIGN_CENTER);
 		ingresarPushButton.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
@@ -130,14 +120,14 @@ public class LoginBox extends DialogBox{
 			}
 		});
 
-		final Hyperlink registerLink = new Hyperlink(localeConstants.register(), "registerNewUser");
+		final Hyperlink registerLink = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.register(), "registerNewUser");
 		horizontalPanel_1.add(registerLink);
 		horizontalPanel_1.setCellVerticalAlignment(registerLink, HasVerticalAlignment.ALIGN_MIDDLE);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		registerLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ContentPanel.getInstance(localeConstants).showRegisterUserPanel();
+				ContentPanel.getInstance().showRegisterUserPanel();
 				hide();
 			}
 		});
@@ -146,7 +136,7 @@ public class LoginBox extends DialogBox{
 	}
 	
 	private void showLoadingPanel() {
-		this.setHTML(this.localeConstants.waitPlease() + "...");
+		this.setHTML(GWTUtils.LOCALE_CONSTANTS.waitPlease() + "...");
 		this.setWidget(loadingPanel);
 	}
 	

@@ -23,6 +23,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
 	String starFields();
 	
+	@DefaultStringValue("Pron\u00F3stico")
+	String forecast();
+	
 	//UserStatePanel
 	@DefaultStringValue("Idioma")
 	String language();
@@ -45,7 +48,7 @@ public interface SurfForecasterConstants extends Constants {
 	
 	//LocalizationPanel
 	@DefaultStringValue("Seleccione una ola")
-	String selectWave();
+	String selectSpot();
 	
 	@DefaultStringValue("Area")
 	String area();
@@ -54,13 +57,10 @@ public interface SurfForecasterConstants extends Constants {
 	String country();
 	
 	@DefaultStringValue("Ola")
-	String wave();
+	String spot();
 	
 	@DefaultStringValue("Zona")
 	String zone();
-	
-	@DefaultStringValue("Pron\u00F3stico")
-	String forecast();
 	
 	//RegisterNewUserPanel
 	@DefaultStringValue("Registrarse como nuevo usuario")
@@ -77,5 +77,15 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Administrador")
 	String administrator();
+	
+	//ForecastTabPanel
+	@DefaultStringValue("Descripci\u00F3n de ola")
+	String spotDescription();
+	
+	@DefaultStringValue("Comparar olas")
+	String spotComparator();
+	
+	@DefaultStringValue("Nueva ola")
+	String newSpot();
 	
 }
