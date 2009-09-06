@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Test" default="deploy" basedir=".">
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="F:\Workspace\Tesis\SurfForecaster\lib" />
+  <property name="gwt.sdk" location="C:\Users\esteban\workspace\surf-forecasterdefinitivo\gui\lib" />
   <property name="war.name" value="SurfForecaster.war"/>
-  <property name="tomcat.webapps" location="F:\tomcat-6.0.16\webapps" />
+  <property name="tomcat.webapps" location="C:\Program Files\Apache Software Foundation\Tomcat 6.0" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>

@@ -3,13 +3,18 @@ package edu.unicen.surfforecaster.gwt.server;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import edu.unicen.surfforecaster.common.services.MyServiceI;
+import edu.unicen.surfforecaster.common.services.dto.HelloDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.SessionData;
 import edu.unicen.surfforecaster.gwt.client.User;
+import edu.unicen.surfforecaster.gwt.server.util.SpringGWTServlet;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-public class ForecastCommonServicesImpl extends RemoteServiceServlet implements ForecastCommonServices {
+public class ForecastCommonServicesImpl extends SpringGWTServlet implements ForecastCommonServices {
+
+	private MyServiceI service;
 
 	public String testService(){
 		return "This is a service test";
@@ -82,4 +87,21 @@ public class ForecastCommonServicesImpl extends RemoteServiceServlet implements 
 		session.removeAttribute("gwtForecast-UserName");
 		session.removeAttribute("gwtForecast-UserType");
 	}
+	/**
+	 * @param service the service to set
+	 */
+	public void setService(MyServiceI service) {
+		this.service = service;
+	}
+
+	/**
+	 * @return the service
+	 */
+	public MyServiceI getService() {
+		return service;
+	}
+	public HelloDTO test2(){
+		return service.sayHello();
+	};
+
 }

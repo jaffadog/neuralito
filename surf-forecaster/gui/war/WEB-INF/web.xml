@@ -5,10 +5,18 @@
 
 <web-app>
   
+   <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
   <!-- Servlets -->
   <servlet>
   	<servlet-name>ForecastCommonServices</servlet-name>
-  	<servlet-class>edu.unicen.surfforecaster.gwt.server.ForecastCommonServicesImpl</servlet-class>
+  	<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>

@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.common.services.dto.HelloDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.ContentPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.LogoPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.UserStatePanel;
@@ -25,7 +26,7 @@ public class SurfForecaster implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		//this.testService();
+		this.testService();
 		RootPanel rootPanel = RootPanel.get();
 		rootPanel.setWidth(GWTUtils.APLICATION_WIDTH);
 
@@ -47,9 +48,9 @@ public class SurfForecaster implements EntryPoint {
 	}
 	  
 	private void testService(){
-		ForecastCommonServices.Util.getInstance().testService(new AsyncCallback<String>(){
-			public void onSuccess(String result) {
-				Window.alert(result);
+		ForecastCommonServices.Util.getInstance().test2(new AsyncCallback<HelloDTO>(){
+			public void onSuccess(HelloDTO result) {
+				Window.alert(result.toString());
 			}
 				
 			public void onFailure(Throwable caught) {
