@@ -17,12 +17,10 @@ import com.google.gwt.user.client.ui.ListBox;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.SessionData;
-import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 
 
 public class UserStatePanel extends Composite {
-	
-	private SurfForecasterConstants localeConstants = null;
+
 	private LoginBox loginPanel = null;
 	
 	//LoggedIn username label
@@ -39,15 +37,6 @@ public class UserStatePanel extends Composite {
 	private HorizontalPanel horizontalPanel = null;
 	
 	public UserStatePanel() {
-		/**
-		 * should never enter here
-		 */
-	}
-	
-	/**
-	 * @wbp.parser.constructor
-	 */
-	public UserStatePanel(final SurfForecasterConstants localeConstants) {
 		
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setSpacing(2);
@@ -59,12 +48,12 @@ public class UserStatePanel extends Composite {
 		horizontalPanel.add(emptyLabel);
 		emptyLabel.setWidth("600");
 	
-		loginPanel = new LoginBox(localeConstants);
+		loginPanel = new LoginBox();
 		loginPanel.hide();
 		
 		
 		//Link to LoginBox
-		lnkLogin = new Hyperlink(localeConstants.signIn(), "");
+		lnkLogin = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.signIn(), "");
 		lnkLogin.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				//Window.alert(((Boolean)loginPanel.isShowing()).toString());
@@ -82,7 +71,7 @@ public class UserStatePanel extends Composite {
 		final Label lblSeparator = new Label("|");
 		horizontalPanel.add(lblSeparator);
 		
-		Label lblLanguage = new Label(localeConstants.language() + ": ");
+		Label lblLanguage = new Label(GWTUtils.LOCALE_CONSTANTS.language() + ": ");
 		lblLanguage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		horizontalPanel.add(lblLanguage);
 	
@@ -115,20 +104,20 @@ public class UserStatePanel extends Composite {
 	    final Label lblSeparator2 = new Label("|");
 		horizontalPanel.add(lblSeparator2);
 		
-		Hyperlink lnkHelp = new Hyperlink(localeConstants.help(), "help");
+		Hyperlink lnkHelp = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.help(), "help");
 		horizontalPanel.add(lnkHelp);
 		
-		lnkSettings = new Hyperlink(localeConstants.settings(), "settings");
+		lnkSettings = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.settings(), "settings");
 		
-		lnkRegister = new Hyperlink(localeConstants.register() + "!!!", "registerNewUser");
+		lnkRegister = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.register() + "!!!", "registerNewUser");
 		lnkRegister.addStyleName("gwt-HyperLink-register");
 		lnkRegister.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ContentPanel.getInstance(localeConstants).showRegisterUserPanel();
+				ContentPanel.getInstance().showRegisterUserPanel();
 			}
 		});
 		
-		lnkSignOut = new Hyperlink(localeConstants.signOut(), "");
+		lnkSignOut = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.signOut(), "");
 		lnkSignOut.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				ForecastCommonServices.Util.getInstance().closeSession(new AsyncCallback<Void>(){
