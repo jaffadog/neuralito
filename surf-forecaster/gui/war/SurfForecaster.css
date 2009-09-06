@@ -1,0 +1,82 @@
+/** Add css rules here for your application. */
+
+/** Common styles */
+.gwt-Label {
+    cursor:default;
+}
+.gwt-Label, .gwt-HyperLink, .gwt-PushButton, .gwt-ListBox{
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    font-size:9pt;
+}
+
+.gwt-Label-SectionTitle{
+    font-weight:bold;
+    font-size:11pt;
+    margin-bottom:20px;
+}
+
+/** Loading image main screen */
+div#loadingDiv{
+    margin: 100px 390px;
+}
+
+div div#loadingTxtDiv {
+        text-align:center;
+        width:220px;
+        font-family: 'Trebuchet MS', Helvetica, sans-serif;
+        font-size:9pt;
+}
+
+/** Login box */
+.gwt-DialogBox .Caption {
+     font-family: 'Trebuchet MS', Helvetica, sans-serif;
+     font-size:9pt;
+     font-weight:bold;
+}
+
+/** Cross button login box */
+div#closeLoginBoxDiv{
+	width: 250px;
+	text-align:right;
+}
+
+div#closeLoginBoxDiv a{
+	font-weight:bold;
+        font-size:12pt;
+        cursor:pointer;
+}
+
+/** Loading image panel login box */
+.gwt-loadingPanelLoginBox {
+	margin: 20px 70px 20px 70px
+}
+
+/** Label error */
+.gwt-Label-error {
+    color: #FF0000;
+}
+
+/** Label username */
+.gwt-Label-Username{
+    font-weight:bold;
+}
+
+/** Link register */
+.gwt-HyperLink-register{
+    font-weight:bold;
+}
+
+/** Label Register User description */
+.gwt-Label-RegisterSectionDescription{
+    text-align:justify;
+}
+
+/** RootVPanel */
+.gwt-RootVPanel{
+    background-color:#FFF;
+}
+
+/** Body */
+body{
+    background-color:#000;
+}
