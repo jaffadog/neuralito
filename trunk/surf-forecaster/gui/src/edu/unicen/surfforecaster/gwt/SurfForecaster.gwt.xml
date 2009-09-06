@@ -18,6 +18,7 @@
   <!-- Specify the app entry point class.                         -->
   <entry-point class='edu.unicen.surfforecaster.gwt.client.SurfForecaster'/>
   
+  <inherits name='edu.unicen.surfforecaster.common.services.GWTShineCommon' />
   <!-- English Locale                                      -->
   <extend-property name="locale" values="en"/>
   <!-- Spanish Locale                                      -->

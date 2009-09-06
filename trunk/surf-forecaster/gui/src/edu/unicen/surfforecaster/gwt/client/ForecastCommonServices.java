@@ -4,6 +4,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import edu.unicen.surfforecaster.common.services.dto.HelloDTO;
+
 
 @RemoteServiceRelativePath("ForecastCommonServices")
 public interface ForecastCommonServices extends RemoteService {
@@ -24,4 +26,5 @@ public interface ForecastCommonServices extends RemoteService {
 	User login(String userName, String password);
 	SessionData getSessionData();
 	void closeSession();
+	public HelloDTO test2();
 }
