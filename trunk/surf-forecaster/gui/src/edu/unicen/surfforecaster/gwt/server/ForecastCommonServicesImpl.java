@@ -10,8 +10,6 @@ import edu.unicen.surfforecaster.gwt.client.SessionData;
 import edu.unicen.surfforecaster.gwt.client.User;
 import edu.unicen.surfforecaster.gwt.server.util.SpringGWTServlet;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-
 public class ForecastCommonServicesImpl extends SpringGWTServlet implements ForecastCommonServices {
 
 	private MyServiceI service;
