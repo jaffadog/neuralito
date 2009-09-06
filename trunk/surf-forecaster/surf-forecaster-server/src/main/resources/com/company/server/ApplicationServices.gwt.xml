@@ -1,0 +1,11 @@
+<module>
+	<inherits name='com.google.gwt.user.User' />
+      
+      <!-- our services -->
+	<servlet path="/testService" class="com.company.server.TestServiceImpl" />
+	  
+	<servlet path='/sampleRemoteService' class='com.company.server.SampleRemoteServiceImpl' />
+	
+	<servlet path='/securityService' class='com.company.server.security.SecurityServiceInMemoryImpl' />
+	
+</module>
