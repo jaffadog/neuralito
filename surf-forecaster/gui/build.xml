@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Test" default="deploy" basedir=".">
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="C:\Users\esteban\workspace\surf-forecasterdefinitivo\gui\lib" />
+
+  <property name="gwt.sdk" location="F:\Workspace\Tesis\gui\lib" />
   <property name="war.name" value="SurfForecaster.war"/>
-  <property name="tomcat.webapps" location="C:\Program Files\Apache Software Foundation\Tomcat 6.0" />
+  <property name="tomcat.webapps" location="F:\tomcat-6.0.16\webapps" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
@@ -16,7 +17,23 @@
   <target name="libs" description="Copy libs to WEB-INF/lib">
     <mkdir dir="war/WEB-INF/lib" />
     <copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-servlet.jar" />
-    <!-- Add any additional server libs that need to be copied -->
+  	<!-- Add any additional server libs that need to be copied -->
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/activation-1.1.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/avalon-framework-4.1.3.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/commons-logging-1.1.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/jms-1.1.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/jmxri-1.2.1.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/jmxtools-1.2.1.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/junit-4.4.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/log4j-1.2.15.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/logkit-1.0.1.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/mail-1.4.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/spring-2.0.4.jar" />
+	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/surf-forecaster-common-1.0-SNAPSHOT.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/surf-forecaster-server-1.0-SNAPSHOT.jar" />
+  	
+  		 
+    
   </target>
 
   <target name="javac" depends="libs" description="Compile java source">
