@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -113,7 +114,7 @@ public class UserStatePanel extends Composite {
 		lnkRegister.addStyleName("gwt-HyperLink-register");
 		lnkRegister.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ContentPanel.getInstance().showRegisterUserPanel();
+				//The link history token calls History.newItem that calls the history change event to reload the view
 			}
 		});
 		

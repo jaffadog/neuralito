@@ -1,6 +1,9 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 
 public class ContentPanel extends SimplePanel {
 	
@@ -24,17 +27,28 @@ public class ContentPanel extends SimplePanel {
 	}
 	
 	public void showRegisterUserPanel(){
-		registerUserPanel = new RegisterUserPanel();	
+		if (registerUserPanel == null)
+			registerUserPanel = new RegisterUserPanel();
+
+		if (!GWTUtils.VALID_HISTORY_TOKENS.contains("registerNewUser"))
+			GWTUtils.VALID_HISTORY_TOKENS.add("registerNewUser");
+
 		setWidget(registerUserPanel);
 	}
 	
 	public void showMainVerticalPanel(){
-		mainVerticalPanel = new MainVerticalPanel();
+		if (mainVerticalPanel == null)
+			mainVerticalPanel = new MainVerticalPanel();
 		setWidget(mainVerticalPanel);
 	}
 	
 	public void setPanelState(String historyToken){
-		this.mainVerticalPanel.setPanelState(historyToken);
+		if (historyToken.equals("registerNewUser"))
+			this.showRegisterUserPanel();
+		else if (historyToken.lastIndexOf("Tab") != -1) {
+			this.mainVerticalPanel.setPanelState(historyToken);
+			this.showMainVerticalPanel();
+		}	
 	}
 
 }

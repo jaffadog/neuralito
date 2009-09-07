@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client;
 
 import java.util.HashMap;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
@@ -24,6 +25,9 @@ public final class GWTUtils {
 	//Translators
 	public static SurfForecasterConstants LOCALE_CONSTANTS;
 	public static SurfForecasterMessages LOCALE_MESSAGES;
+	
+	//Valid history tokens
+	public static Vector<String> VALID_HISTORY_TOKENS = new Vector<String>();
 	
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	// native js helpers

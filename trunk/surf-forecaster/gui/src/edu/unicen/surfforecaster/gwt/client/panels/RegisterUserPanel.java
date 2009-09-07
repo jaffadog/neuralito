@@ -2,6 +2,7 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -153,7 +154,8 @@ public class RegisterUserPanel extends VerticalPanel {
 		final PushButton cancelBtn = new PushButton();
 		cancelBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ContentPanel.getInstance().showMainVerticalPanel();
+				History.newItem("forecastTab");
+				//The previos statement call the history change event to reload the view
 			}
 		});
 		btnsPanel.add(cancelBtn);
