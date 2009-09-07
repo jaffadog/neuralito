@@ -2,6 +2,9 @@ package edu.unicen.surfforecaster.gwt.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -21,7 +24,8 @@ public class SurfForecaster implements EntryPoint {
 	private SurfForecasterConstants localeConstants = GWT.create(SurfForecasterConstants.class);
 	//Create an instance of SurfForecasterMessages interface
 	private SurfForecasterMessages localeMessages = GWT.create(SurfForecasterMessages.class);
-	
+	//history old token
+	private String oldToken = null;
 	/**
 	 * This is the entry point method.
 	 */
@@ -49,6 +53,26 @@ public class SurfForecaster implements EntryPoint {
 		
 		// finally, remove the splash screen/loading msg
 		GWTUtils.removeElementFromDOM("loadingDiv");
+		
+		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
+		      public void onValueChange(ValueChangeEvent<String> event) {
+		    	// If they are the same, no need to do anything
+	    	    if (oldToken != null && event.getValue().equals(oldToken)) 
+	    	    	return;
+
+	    	    oldToken = event.getValue();
+	    	    ContentPanel.getInstance().setPanelState(event.getValue());
+		      }
+		};
+		History.addValueChangeHandler(historyHandler);
+		
+		if (History.getToken().length() > 0) {
+		      History.fireCurrentHistoryState();
+	    } else {
+	      // Use the first token available
+	    	ContentPanel.getInstance().setPanelState("");
+	    }
+
 	}
 	  
 	private void testService(){

@@ -44,10 +44,19 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		
 		addSelectionHandler(new SelectionHandler<Integer>() {
 			public void onSelection(SelectionEvent<Integer> event) {
-				History.newItem("" + event.getSelectedItem());
+				History.newItem(historyTokens.get(event.getSelectedItem()));
 			}
 		});
 		
 	}
+	
+	public void setPanelState(String historyToken){
+		int index = historyTokens.indexOf(historyToken); 
+		if (index < 0 || index >= this.getTabBar().getTabCount())
+			index = 0;
+		selectTab(index);
+	}
+	
+	
 
 }

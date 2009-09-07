@@ -7,6 +7,9 @@ public class ContentPanel extends SimplePanel {
 	private static ContentPanel instance = null;
 	private final String PANEL_HEIGHT = "800";
 	
+	RegisterUserPanel registerUserPanel = null;
+	MainVerticalPanel mainVerticalPanel = null;
+	
 	
 	public static ContentPanel getInstance() {
         if (instance == null) {
@@ -21,13 +24,17 @@ public class ContentPanel extends SimplePanel {
 	}
 	
 	public void showRegisterUserPanel(){
-		RegisterUserPanel registerUserPanel = new RegisterUserPanel();	
+		registerUserPanel = new RegisterUserPanel();	
 		setWidget(registerUserPanel);
 	}
 	
 	public void showMainVerticalPanel(){
-		MainVerticalPanel mainVerticalPanel = new MainVerticalPanel();
+		mainVerticalPanel = new MainVerticalPanel();
 		setWidget(mainVerticalPanel);
+	}
+	
+	public void setPanelState(String historyToken){
+		this.mainVerticalPanel.setPanelState(historyToken);
 	}
 
 }

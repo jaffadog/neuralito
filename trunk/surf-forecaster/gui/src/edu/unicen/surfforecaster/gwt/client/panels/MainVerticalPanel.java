@@ -7,6 +7,8 @@ import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 
 public class MainVerticalPanel extends VerticalPanel {
 	
+	private ForecastTabPanel forecastTabPanel = null;
+	
 	public MainVerticalPanel() {
 		
 		this.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -16,9 +18,13 @@ public class MainVerticalPanel extends VerticalPanel {
 			this.add(localizationPanel);
 		}
 		{
-			ForecastTabPanel forecastTabPanel = new ForecastTabPanel();
+			forecastTabPanel = new ForecastTabPanel();
 			this.add(forecastTabPanel);
 		}
 		
+	}
+	
+	public void setPanelState(String historyToken){
+		this.forecastTabPanel.setPanelState(historyToken);
 	}
 }
