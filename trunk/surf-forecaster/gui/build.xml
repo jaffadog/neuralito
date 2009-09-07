@@ -31,9 +31,14 @@
   	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/spring-2.0.4.jar" />
 	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/surf-forecaster-common-1.0-SNAPSHOT.jar" />
   	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/surf-forecaster-server-1.0-SNAPSHOT.jar" />
-  	
-  		 
-    
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/hibernate-3.2.3.ga.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/dom4j-1.6.1.jar" />
+	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/hibernate-annotations-3.2.1.ga.jar" />
+	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/geronimo-spec-jta-1.0-M1.jar" />
+	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/persistence-api-1.0.jar" />
+	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/hsqldb-1.8.0.7.jar" />
+	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/cglib-2.1_3.jar" />
+	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/asm-1.5.3.jar" />
   </target>
 
   <target name="javac" depends="libs" description="Compile java source">
