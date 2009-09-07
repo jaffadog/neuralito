@@ -95,8 +95,7 @@ public class UserStatePanel extends Composite {
 	    localeBox.addChangeHandler(new ChangeHandler() {
 	      public void onChange(ChangeEvent event) {
 	        String localeName = localeBox.getValue(localeBox.getSelectedIndex());
-	        Window.open(GWTUtils.getHostPageLocation(true, true) + "?locale=" + localeName, "_self",
-	            "");
+	        Window.open(GWTUtils.hostPageForLocale("?locale=" + localeName), "_self", "");
 	      }
 
 	    }); 

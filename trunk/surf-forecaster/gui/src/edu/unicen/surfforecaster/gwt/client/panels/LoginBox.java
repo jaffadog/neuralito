@@ -127,7 +127,6 @@ public class LoginBox extends DialogBox{
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		registerLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ContentPanel.getInstance().showRegisterUserPanel();
 				hide();
 			}
 		});

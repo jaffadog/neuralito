@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -57,23 +58,69 @@ public final class GWTUtils {
 	public static native String getHostPageLocation(boolean pullOffHash, boolean pullOffQueryString) /*-{
 	    var s = $doc.location.href;
 		
-	    if (pullOffHash){
-		    // Pull off any hash.
-		    var i = s.indexOf('#');
-		    if (i != -1)
-		      s = s.substring(0, i);
-		}
-		
-		if (pullOffQueryString){
-		    // Pull off any query string.
-		    i = s.indexOf('?');
-		    if (i != -1)
-		      s = s.substring(0, i);
-		}
+	    
+	    
+	    var i = s.indexOf('#');
+	    var i2 = s.indexOf('?');
+	    var s1 = '';
+	    var s2 = '';
+	    if (i != -1 && i2 != -1) {
+	    	if (i > i2) {
+	    		if (pullOffQueryString){
+	    			s1 = s.substring(0, i2);
+	    			s2 = s.substring(i);
+	    			s = s1.concat(s2);
+	    			i = s.indexOf('#');
+	    		}
+	    		if (pullOffHash){
+	    			s = s.substring(0,i);
+	    		}
+	    	} else {
+	    		if (pullOffQueryString){
+	    			s = s.substring(0,i2);
+	    		}
+	    		if (pullOffHash){
+	    			s1 = s.substring(0, i);
+	    			s2 = s.substring(i2);
+	    			s = s1.concat(s2);
+	    			i2 = s.indexOf('?');
+	    		}
+	    		if (!pullOffHash && !pullOffQueryString){
+	    			s1 = s.substring(0, i);
+	    			s2 = s.substring(i2);
+	    			var s3 = s.substring(i,i2);
+	    			s = s1.concat(s2,s3);
+	    			
+	    		}
+	    		
+	    	}
+	    } else if (i != -1){
+	    	if (pullOffHash)
+	    		s = s.substring(0, i);
+	    } else if (i2 != -1) {
+	    	if (pullOffQueryString)
+	    		s = s.substring(0, i2);
+	    }
+		    
 		
 	    // Ensure a final slash if non-empty.
+	    //alert(s);
+	    //window.location.href = s;
+	    //$wnd.open(s, "_self", "");
 	    return s;
   	}-*/;
+	
+	public static String hostPageForLocale(String locale) {
+		String s = getHostPageLocation(false,true);
+		int i = s.indexOf("#");
+		if ( i != -1) {
+			String s1 = s.substring(0,i);
+			String s2 = s.substring(i);
+			return s1 + locale + s2;
+		} 
+		return s + locale;
+		
+	}
 	
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	// DOM and RootPanel helpers
