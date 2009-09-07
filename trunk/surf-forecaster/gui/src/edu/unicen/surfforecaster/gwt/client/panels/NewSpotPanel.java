@@ -2,9 +2,9 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class WaveDescriptionPanel extends VerticalPanel {
+public class NewSpotPanel extends VerticalPanel {
 
-	public WaveDescriptionPanel() {
+	public NewSpotPanel() {
 		// TODO Auto-generated constructor stub
 	}
 
