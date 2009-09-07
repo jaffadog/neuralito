@@ -59,7 +59,6 @@ public class SurfForecaster implements EntryPoint {
 		    	// If they are the same, no need to do anything
 	    	    if (oldToken != null && event.getValue().equals(oldToken)) 
 	    	    	return;
-
 	    	    oldToken = event.getValue();
 	    	    ContentPanel.getInstance().setPanelState(event.getValue());
 		      }
@@ -70,7 +69,7 @@ public class SurfForecaster implements EntryPoint {
 		      History.fireCurrentHistoryState();
 	    } else {
 	      // Use the first token available
-	    	ContentPanel.getInstance().setPanelState("");
+	    	ContentPanel.getInstance().setPanelState("forecastTab");
 	    }
 
 	}
