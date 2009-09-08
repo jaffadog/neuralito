@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
@@ -71,10 +72,12 @@ public class UserStatePanel extends Composite {
 		final Label lblSeparator = new Label("|");
 		horizontalPanel.add(lblSeparator);
 		
-		Label lblLanguage = new Label(GWTUtils.LOCALE_CONSTANTS.language() + ": ");
+		/*Label lblLanguage = new Label(GWTUtils.LOCALE_CONSTANTS.language() + ": ");
 		lblLanguage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		horizontalPanel.add(lblLanguage);
-	
+		horizontalPanel.add(lblLanguage);*/
+		final Image flag = new Image();
+		flag.setSize("20", "20");
+		horizontalPanel.add(flag);
 		// Add the option to change the locale
 	    final ListBox localeBox = new ListBox();
 	    String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
@@ -85,9 +88,11 @@ public class UserStatePanel extends Composite {
 	    for (String localeName : localeNames) {
 	      if (!localeName.equals("default")) {
 	        String nativeName = LocaleInfo.getLocaleNativeDisplayName(localeName);
+	        nativeName = nativeName.substring(0, 1).toUpperCase() + nativeName.substring(1);
 	        localeBox.addItem(nativeName, localeName);
 	        if (localeName.equals(currentLocale)) {
 	          localeBox.setSelectedIndex(localeBox.getItemCount() - 1);
+	          flag.setUrl("images/" + localeName + "-flag.gif");
 	        }
 	      }
 	    }

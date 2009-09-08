@@ -60,13 +60,17 @@ public class SurfForecaster implements EntryPoint {
 	    	    if (oldToken != null && event.getValue().equals(oldToken)) 
 	    	    	return;
 	    	    oldToken = event.getValue();
+	    	    
 	    	    ContentPanel.getInstance().setPanelState(event.getValue());
 		      }
 		};
 		History.addValueChangeHandler(historyHandler);
 		
 		if (History.getToken().length() > 0) {
-		      History.fireCurrentHistoryState();
+		    if (GWTUtils.VALID_HISTORY_TOKENS.contains(History.getToken()))  
+		    	History.fireCurrentHistoryState();
+		    else
+		    	ContentPanel.getInstance().setPanelState(GWTUtils.DEFAULT_HISTORY_TOKEN);
 	    } else {
 	      // Use the first token available
 	    	ContentPanel.getInstance().setPanelState(GWTUtils.DEFAULT_HISTORY_TOKEN);
