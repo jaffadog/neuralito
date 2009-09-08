@@ -1,6 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
