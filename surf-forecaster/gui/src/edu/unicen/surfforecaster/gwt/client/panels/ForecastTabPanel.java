@@ -5,9 +5,13 @@ import java.util.Vector;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
+import com.google.gwt.user.client.ui.Label;
 
+import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.SessionData;
 
 public class ForecastTabPanel extends DecoratedTabPanel {
 	
@@ -38,13 +42,6 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 			if (!GWTUtils.VALID_HISTORY_TOKENS.contains("comparatorTab"))
 				GWTUtils.VALID_HISTORY_TOKENS.add("comparatorTab");
 		}
-		{
-			NewSpotPanel newWavePanel = new NewSpotPanel();
-			this.add(newWavePanel, GWTUtils.LOCALE_CONSTANTS.newSpot());
-			this.historyTokens.add("newSpotTab");
-			if (!GWTUtils.VALID_HISTORY_TOKENS.contains("newSpotTab"))
-				GWTUtils.VALID_HISTORY_TOKENS.add("newSpotTab");
-		}
 		
 		setAnimationEnabled(true);
 		setWidth(GWTUtils.APLICATION_WIDTH);
@@ -56,6 +53,26 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 			}
 		});
 		
+		//Check if exist any opened session
+		this.getSessionData();
+	}
+	
+	private void getSessionData(){
+		ForecastCommonServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
+			public void onSuccess(SessionData result) {
+				if (result != null) {
+					NewSpotPanel newWavePanel = new NewSpotPanel();
+					add(newWavePanel, GWTUtils.LOCALE_CONSTANTS.newSpot());
+					historyTokens.add("newSpotTab");
+					if (!GWTUtils.VALID_HISTORY_TOKENS.contains("newSpotTab"))
+						GWTUtils.VALID_HISTORY_TOKENS.add("newSpotTab");
+				}
+			}
+
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
 	}
 	
 	public void setPanelState(String historyToken){
