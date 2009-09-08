@@ -106,7 +106,7 @@ public class LoginBox extends DialogBox{
 								label_loginMessage.setVisible(true);
 								showFormPanel();
 							} else {
-								Window.open(GWTUtils.getHostPageLocation(true, true), "_self", "");
+								Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
 							}
 						}
 							

@@ -57,7 +57,6 @@ public class UserStatePanel extends Composite {
 		lnkLogin = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.signIn(), "");
 		lnkLogin.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				//Window.alert(((Boolean)loginPanel.isShowing()).toString());
 				if (loginPanel.isShowing()){
 					loginPanel.loginFailedMsgState(false);
 					loginPanel.hide();
@@ -123,7 +122,7 @@ public class UserStatePanel extends Composite {
 				ForecastCommonServices.Util.getInstance().closeSession(new AsyncCallback<Void>(){
 					
 					public void onSuccess(Void result){
-						Window.open(GWTUtils.getHostPageLocation(true, true), "_self", "");
+						Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
 					}
 					
 					public void onFailure(Throwable caught) {
