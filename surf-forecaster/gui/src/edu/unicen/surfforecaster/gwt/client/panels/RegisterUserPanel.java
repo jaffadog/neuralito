@@ -154,7 +154,7 @@ public class RegisterUserPanel extends VerticalPanel {
 		final PushButton cancelBtn = new PushButton();
 		cancelBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				History.newItem("forecastTab");
+				History.newItem(GWTUtils.DEFAULT_HISTORY_TOKEN);
 				//The previos statement call the history change event to reload the view
 			}
 		});

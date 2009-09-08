@@ -69,7 +69,7 @@ public class SurfForecaster implements EntryPoint {
 		      History.fireCurrentHistoryState();
 	    } else {
 	      // Use the first token available
-	    	ContentPanel.getInstance().setPanelState("forecastTab");
+	    	ContentPanel.getInstance().setPanelState(GWTUtils.DEFAULT_HISTORY_TOKEN);
 	    }
 
 	}

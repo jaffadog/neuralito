@@ -29,6 +29,8 @@ public final class GWTUtils {
 	
 	//Valid history tokens
 	public static Vector<String> VALID_HISTORY_TOKENS = new Vector<String>();
+	public final static String DEFAULT_HISTORY_TOKEN = "forecastTab";
+	
 	
 	//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 	// native js helpers
@@ -52,70 +54,66 @@ public final class GWTUtils {
 	
 	/**
 	 * Get the URL of the page, without an hash of query string.
-	 * 
-	 * @return the location of the page
+	 * @param Boolean pullOffHash, indicates if cut or not the #reference or the url
+	 * @param Boolean pullOffQueryString, indicates if cut or not the get parameters of the url
+	 * @return String the location of the page
 	 */
 	public static native String getHostPageLocation(boolean pullOffHash, boolean pullOffQueryString) /*-{
 	    var s = $doc.location.href;
 		
-	    
-	    
-	    var i = s.indexOf('#');
-	    var i2 = s.indexOf('?');
+	    var hashIndex = s.indexOf('#');
+	    var queryIndex = s.indexOf('?');
 	    var s1 = '';
 	    var s2 = '';
-	    if (i != -1 && i2 != -1) {
-	    	if (i > i2) {
+	    if (hashIndex != -1 && queryIndex != -1) {
+	    	if (hashIndex > queryIndex) {
 	    		if (pullOffQueryString){
-	    			s1 = s.substring(0, i2);
-	    			s2 = s.substring(i);
+	    			s1 = s.substring(0, queryIndex);
+	    			s2 = s.substring(hashIndex);
 	    			s = s1.concat(s2);
-	    			i = s.indexOf('#');
+	    			hashIndex = s.indexOf('#');
 	    		}
 	    		if (pullOffHash){
-	    			s = s.substring(0,i);
+	    			s = s.substring(0, hashIndex);
 	    		}
 	    	} else {
 	    		if (pullOffQueryString){
-	    			s = s.substring(0,i2);
+	    			s = s.substring(0,queryIndex);
 	    		}
 	    		if (pullOffHash){
-	    			s1 = s.substring(0, i);
-	    			s2 = s.substring(i2);
+	    			s1 = s.substring(0, hashIndex);
+	    			s2 = s.substring(queryIndex);
 	    			s = s1.concat(s2);
-	    			i2 = s.indexOf('?');
+	    			queryIndex = s.indexOf('?');
 	    		}
 	    		if (!pullOffHash && !pullOffQueryString){
-	    			s1 = s.substring(0, i);
-	    			s2 = s.substring(i2);
-	    			var s3 = s.substring(i,i2);
+	    			s1 = s.substring(0, hashIndex);
+	    			s2 = s.substring(queryIndex);
+	    			var s3 = s.substring(hashIndex,queryIndex);
 	    			s = s1.concat(s2,s3);
 	    			
 	    		}
 	    		
 	    	}
-	    } else if (i != -1){
+	    } else if (hashIndex != -1){
 	    	if (pullOffHash)
-	    		s = s.substring(0, i);
-	    } else if (i2 != -1) {
+	    		s = s.substring(0, hashIndex);
+	    } else if (queryIndex != -1) {
 	    	if (pullOffQueryString)
-	    		s = s.substring(0, i2);
+	    		s = s.substring(0, queryIndex);
 	    }
 		    
-		
-	    // Ensure a final slash if non-empty.
 	    //alert(s);
-	    //window.location.href = s;
-	    //$wnd.open(s, "_self", "");
+	    
 	    return s;
   	}-*/;
 	
 	public static String hostPageForLocale(String locale) {
-		String s = getHostPageLocation(false,true);
-		int i = s.indexOf("#");
-		if ( i != -1) {
-			String s1 = s.substring(0,i);
-			String s2 = s.substring(i);
+		String s = getHostPageLocation(false, true);
+		int hashIndex = s.indexOf("#");
+		if ( hashIndex != -1) {
+			String s1 = s.substring(0,hashIndex);
+			String s2 = s.substring(hashIndex);
 			return s1 + locale + s2;
 		} 
 		return s + locale;
