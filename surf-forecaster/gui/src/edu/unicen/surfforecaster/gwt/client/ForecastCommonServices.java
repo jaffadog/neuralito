@@ -1,5 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -23,8 +25,22 @@ public interface ForecastCommonServices extends RemoteService {
 	}
 	
 	String testService();
+	
 	User login(String userName, String password);
+	
 	SessionData getSessionData();
+	
 	void closeSession();
+	
 	public HelloDTO test2();
+	
+	Vector<Area> getAreas();
+	
+	Vector<Country> getCountries(String area);
+	
+	Vector<Zone> getZones(String country);
+	
+	Vector<Spot> getSpots(String spot);
+	
+	Area getArea();
 }
