@@ -3,7 +3,6 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 import java.util.Iterator;
 import java.util.Vector;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -15,9 +14,14 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.gwt.client.Area;
+import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
-import edu.unicen.surfforecaster.gwt.client.User;
+import edu.unicen.surfforecaster.gwt.client.Spot;
+import edu.unicen.surfforecaster.gwt.client.Zone;
+
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
 
 public class LocalizationPanel extends Composite{
 	
@@ -51,6 +55,11 @@ public class LocalizationPanel extends Composite{
 					}
 					{
 						areaBox = new ListBox();
+						areaBox.addChangeHandler(new ChangeHandler() {
+							public void onChange(ChangeEvent event) {
+								setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
+							}
+						});
 						localizationForm.setWidget(0, 1, areaBox);
 						areaBox.setWidth("200");
 					}
@@ -61,6 +70,11 @@ public class LocalizationPanel extends Composite{
 					}
 					{
 						countryBox = new ListBox();
+						countryBox.addChangeHandler(new ChangeHandler() {
+							public void onChange(ChangeEvent event) {
+								setZoneListItems(countryBox.getValue(countryBox.getSelectedIndex()));
+							}
+						});
 						localizationForm.setWidget(0, 3, countryBox);
 						countryBox.setWidth("200");
 					}
@@ -71,6 +85,11 @@ public class LocalizationPanel extends Composite{
 					}
 					{
 						zoneBox = new ListBox();
+						zoneBox.addChangeHandler(new ChangeHandler() {
+							public void onChange(ChangeEvent event) {
+								setSpotListItems(zoneBox.getValue(zoneBox.getSelectedIndex()));
+							}
+						});
 						localizationForm.setWidget(1, 1, zoneBox);
 						zoneBox.setWidth("200");
 					}
@@ -81,6 +100,10 @@ public class LocalizationPanel extends Composite{
 					}
 					{
 						spotBox = new ListBox();
+						spotBox.addChangeHandler(new ChangeHandler() {
+							public void onChange(ChangeEvent event) {
+							}
+						});
 						localizationForm.setWidget(1, 3, spotBox);
 						spotBox.setWidth("200");
 					}
@@ -103,27 +126,75 @@ public class LocalizationPanel extends Composite{
 	}
 	
 	private void setAreaListItems(){
-//		ForecastCommonServices.Util.getInstance().getAreas(new AsyncCallback<Vector<Area>>(){
-//			public void onSuccess(Vector<Area> result) {
-//				if (result == null) {
-//				} else {
-//					Iterator<Area> i = result.iterator();
-//					while (i.hasNext()){
-//						Area area = i.next();
-//						areaBox.addItem(area.getName(), area.getId());
-//					}
-//				}
-//			}
-//				
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//		});
-		ForecastCommonServices.Util.getInstance().getArea(new AsyncCallback<Area>(){
-			public void onSuccess(Area result) {
+		ForecastCommonServices.Util.getInstance().getAreas(new AsyncCallback<Vector<Area>>(){
+			public void onSuccess(Vector<Area> result) {
 				if (result == null) {
 				} else {
-					System.out.println(result.getName());
+					Iterator<Area> i = result.iterator();
+					while (i.hasNext()){
+						Area area = i.next();
+						areaBox.addItem(area.getName(), area.getId());
+					}
+				}
+			}
+				
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
+	}
+	
+	private void setCountryListItems(String area){
+		countryBox.clear();
+		ForecastCommonServices.Util.getInstance().getCountries(area, new AsyncCallback<Vector<Country>>(){
+			public void onSuccess(Vector<Country> result) {
+				if (result == null) {
+				} else {
+					Iterator<Country> i = result.iterator();
+					while (i.hasNext()){
+						Country country = i.next();
+						countryBox.addItem(country.getName(), country.getId());
+					}
+				}
+			}
+				
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
+	}
+	
+	private void setZoneListItems(String country){
+		zoneBox.clear();
+		ForecastCommonServices.Util.getInstance().getZones(country, new AsyncCallback<Vector<Zone>>(){
+			public void onSuccess(Vector<Zone> result) {
+				if (result == null) {
+				} else {
+					Iterator<Zone> i = result.iterator();
+					while (i.hasNext()){
+						Zone zone = i.next();
+						zoneBox.addItem(zone.getName(), zone.getId());
+					}
+				}
+			}
+				
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
+	}
+	
+	private void setSpotListItems(String zone){
+		spotBox.clear();
+		ForecastCommonServices.Util.getInstance().getSpots(zone, new AsyncCallback<Vector<Spot>>(){
+			public void onSuccess(Vector<Spot> result) {
+				if (result == null) {
+				} else {
+					Iterator<Spot> i = result.iterator();
+					while (i.hasNext()){
+						Spot spot = i.next();
+						spotBox.addItem(spot.getName(), spot.getId());
+					}
 				}
 			}
 				
