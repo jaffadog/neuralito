@@ -1,6 +1,8 @@
 package edu.unicen.surfforecaster.gwt.server;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +58,7 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements Fore
 		return new Area("AN","America del norte");
 	}
 	
-	public Vector<Area> getAreas(){
+	public Map<String, Vector> getAreas(){
 		Area a1 = new Area("AN","America del norte");
 		Area a2 = new Area("AS","America del sur");
 		Area a3 = new Area("EU","Europa");
@@ -64,10 +66,16 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements Fore
 		
 		Vector<Area> result = new Vector<Area>();
 		result.add(a1);result.add(a2);result.add(a3);result.add(a4);
-		return result;
+		
+		Map<String, Vector> result3 = new HashMap<String, Vector>();
+		if (!result.isEmpty()) {
+			result3.put("areas", result);
+			result3.putAll(this.getCountries(result.elementAt(0).getId()));
+		}
+		return result3;
 	}
 	
-	public Vector<Country> getCountries(String area){
+	public Map<String, Vector> getCountries(String area){
 		Country a1 = new Country("AR","Argentina","AS");
 		Country a2 = new Country("VE","Venezuela", "AS");
 		Country a3 = new Country("HW","Hawaii", "AN");
@@ -84,10 +92,15 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements Fore
 				result2.add(c);
 		}
 		
-		return result2;
+		Map<String, Vector> result3 = new HashMap<String, Vector>();
+		if (!result2.isEmpty()) {
+			result3.put("countries", result2);
+			result3.putAll(this.getZones(result2.elementAt(0).getId()));
+		}
+		return result3;
 	}
 	
-	public Vector<Zone> getZones(String country){
+	public Map<String, Vector> getZones(String country){
 		Zone a1 = new Zone("1","Mar del Plata Centro", "AR");
 		Zone a2 = new Zone("2","OAHU North Shore", "HW");
 		Zone a3 = new Zone("3","OAHU South Shore", "HW");
@@ -98,6 +111,8 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements Fore
 		result.add(a1);result.add(a2);result.add(a3);result.add(a4);result.add(a5);
 
 		Vector<Zone> result2 = new Vector<Zone>();
+		
+		Map<String, Vector> result3 = new HashMap<String, Vector>();
 		Iterator<Zone> i = result.iterator();
 		while (i.hasNext()) {
 			Zone c = i.next();
@@ -105,12 +120,16 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements Fore
 				result2.add(c);
 		}
 		
-		return result2;
+		if (!result2.isEmpty()) {
+			result3.put("zones", result2);
+			result3.putAll(this.getSpots(result2.elementAt(0).getId()));
+		}
+		return result3;
 	}
 	
-	public Vector<Spot> getSpots(String zone){
+	public Map<String, Vector> getSpots(String zone){
 		Spot a1 = new Spot("1","Le pistole", "5");
-		Spot a2 = new Spot("2","Margarita", "1");
+		Spot a2 = new Spot("2","Popular", "1");
 		Spot a3 = new Spot("3","La paloma", "4");
 		Spot a4 = new Spot("4","Chapa", "4");
 		Spot a5 = new Spot("5","Pipeline", "2");
@@ -131,8 +150,11 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements Fore
 			if (c.getParent().equals(zone))
 				result2.add(c);
 		}
+		Map<String, Vector> result3 = new HashMap<String, Vector>();
+		if (!result2.isEmpty())
+			result3.put("spots", result2);
 		
-		return result2;
+		return result3;
 	}
 	
 	/**

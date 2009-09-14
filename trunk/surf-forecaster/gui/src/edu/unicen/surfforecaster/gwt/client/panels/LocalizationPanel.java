@@ -1,8 +1,11 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import java.util.Map;
 import java.util.Iterator;
 import java.util.Vector;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -19,9 +22,6 @@ import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.Spot;
 import edu.unicen.surfforecaster.gwt.client.Zone;
-
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ChangeEvent;
 
 public class LocalizationPanel extends Composite{
 	
@@ -126,14 +126,41 @@ public class LocalizationPanel extends Composite{
 	}
 	
 	private void setAreaListItems(){
-		ForecastCommonServices.Util.getInstance().getAreas(new AsyncCallback<Vector<Area>>(){
-			public void onSuccess(Vector<Area> result) {
+		ForecastCommonServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
+			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
 				} else {
-					Iterator<Area> i = result.iterator();
-					while (i.hasNext()){
-						Area area = i.next();
-						areaBox.addItem(area.getName(), area.getId());
+					Iterator i = null;
+					if (result.containsKey("areas")){
+						i = result.get("areas").iterator();
+						while (i.hasNext()){
+							Area area = (Area)i.next();
+							areaBox.addItem(area.getName(), area.getId());
+						}
+					}
+					
+					if (result.containsKey("countries")){
+						i = result.get("countries").iterator();
+						while (i.hasNext()){
+							Country country = (Country)i.next();
+							countryBox.addItem(country.getName(), country.getId());
+						}
+					}
+					
+					if (result.containsKey("zones")){
+						i = result.get("zones").iterator();
+						while (i.hasNext()){
+							Zone zone = (Zone)i.next();
+							zoneBox.addItem(zone.getName(), zone.getId());
+						}
+					}
+					
+					if (result.containsKey("spots")) {
+						i = result.get("spots").iterator();
+						while (i.hasNext()){
+							Spot spot = (Spot)i.next();
+							spotBox.addItem(spot.getName(), spot.getId());
+						}
 					}
 				}
 			}
@@ -146,15 +173,37 @@ public class LocalizationPanel extends Composite{
 	
 	private void setCountryListItems(String area){
 		countryBox.clear();
-		ForecastCommonServices.Util.getInstance().getCountries(area, new AsyncCallback<Vector<Country>>(){
-			public void onSuccess(Vector<Country> result) {
+		zoneBox.clear();
+		spotBox.clear();
+		ForecastCommonServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, Vector>>(){
+			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
 				} else {
-					Iterator<Country> i = result.iterator();
-					while (i.hasNext()){
-						Country country = i.next();
-						countryBox.addItem(country.getName(), country.getId());
+					Iterator i = null;
+					if (result.containsKey("countries")){
+						i = result.get("countries").iterator();
+						while (i.hasNext()){
+							Country country = (Country)i.next();
+							countryBox.addItem(country.getName(), country.getId());
+						}
 					}
+					
+					if (result.containsKey("zones")){
+						i = result.get("zones").iterator();
+						while (i.hasNext()){
+							Zone zone = (Zone)i.next();
+							zoneBox.addItem(zone.getName(), zone.getId());
+						}
+					}
+					
+					if (result.containsKey("spots")) {
+						i = result.get("spots").iterator();
+						while (i.hasNext()){
+							Spot spot = (Spot)i.next();
+							spotBox.addItem(spot.getName(), spot.getId());
+						}
+					}
+					
 				}
 			}
 				
@@ -166,14 +215,25 @@ public class LocalizationPanel extends Composite{
 	
 	private void setZoneListItems(String country){
 		zoneBox.clear();
-		ForecastCommonServices.Util.getInstance().getZones(country, new AsyncCallback<Vector<Zone>>(){
-			public void onSuccess(Vector<Zone> result) {
+		spotBox.clear();
+		ForecastCommonServices.Util.getInstance().getZones(country, new AsyncCallback<Map<String, Vector>>(){
+			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
 				} else {
-					Iterator<Zone> i = result.iterator();
-					while (i.hasNext()){
-						Zone zone = i.next();
-						zoneBox.addItem(zone.getName(), zone.getId());
+					Iterator i = null;
+					if (result.containsKey("zones")){
+						i = result.get("zones").iterator();
+						while (i.hasNext()){
+							Zone zone = (Zone)i.next();
+							zoneBox.addItem(zone.getName(), zone.getId());
+						}
+					}
+					if (result.containsKey("spots")) {
+						i = result.get("spots").iterator();
+						while (i.hasNext()){
+							Spot spot = (Spot)i.next();
+							spotBox.addItem(spot.getName(), spot.getId());
+						}
 					}
 				}
 			}
@@ -186,14 +246,16 @@ public class LocalizationPanel extends Composite{
 	
 	private void setSpotListItems(String zone){
 		spotBox.clear();
-		ForecastCommonServices.Util.getInstance().getSpots(zone, new AsyncCallback<Vector<Spot>>(){
-			public void onSuccess(Vector<Spot> result) {
+		ForecastCommonServices.Util.getInstance().getSpots(zone, new AsyncCallback<Map<String, Vector>>(){
+			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
 				} else {
-					Iterator<Spot> i = result.iterator();
-					while (i.hasNext()){
-						Spot spot = i.next();
-						spotBox.addItem(spot.getName(), spot.getId());
+					if (result.containsKey("spots")){
+						Iterator<Spot> i = result.get("spots").iterator();
+						while (i.hasNext()){
+							Spot spot = i.next();
+							spotBox.addItem(spot.getName(), spot.getId());
+						}
 					}
 				}
 			}
