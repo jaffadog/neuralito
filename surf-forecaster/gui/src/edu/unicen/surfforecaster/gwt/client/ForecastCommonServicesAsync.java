@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+import java.util.Map;
 import java.util.Vector;
 
 import edu.unicen.surfforecaster.common.services.dto.HelloDTO;
@@ -18,13 +19,13 @@ public interface ForecastCommonServicesAsync {
 	
 	public void test2(AsyncCallback<HelloDTO> callback);
 	
-	void getAreas(AsyncCallback<Vector<Area>> callback);
+	void getAreas(AsyncCallback<Map<String, Vector>> callback);
 	
-	void getCountries(String area, AsyncCallback<Vector<Country>> callback);
+	void getCountries(String area, AsyncCallback<Map<String, Vector>> callback);
 	
-	void getZones(String country, AsyncCallback<Vector<Zone>> callback);
+	void getZones(String country, AsyncCallback<Map<String, Vector>> callback);
 	
-	void getSpots(String zone, AsyncCallback<Vector<Spot>> callback);
+	void getSpots(String zone, AsyncCallback<Map<String, Vector>> callback);
 	
 	void getArea(AsyncCallback<Area> callback);
 }
