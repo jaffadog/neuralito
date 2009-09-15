@@ -1,7 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
-import java.util.Map;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -29,6 +29,7 @@ public class LocalizationPanel extends Composite{
 	private ListBox countryBox = null;
 	private ListBox zoneBox = null;
 	private ListBox spotBox = null;
+	private PushButton forecastButton = null;
 	
 	public LocalizationPanel() {
 		{
@@ -108,8 +109,9 @@ public class LocalizationPanel extends Composite{
 						spotBox.setWidth("200");
 					}
 					{
-						PushButton forecastButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
+						forecastButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
 						forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
+						forecastButton.setEnabled(false);
 						localizationForm.setWidget(2, 0, forecastButton);
 					}
 					localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);
@@ -163,6 +165,7 @@ public class LocalizationPanel extends Composite{
 						}
 					}
 				}
+				setForecastButtonState();
 			}
 				
 			public void onFailure(Throwable caught) {
@@ -175,6 +178,7 @@ public class LocalizationPanel extends Composite{
 		countryBox.clear();
 		zoneBox.clear();
 		spotBox.clear();
+		setForecastButtonState();
 		ForecastCommonServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, Vector>>(){
 			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
@@ -205,6 +209,7 @@ public class LocalizationPanel extends Composite{
 					}
 					
 				}
+				setForecastButtonState();
 			}
 				
 			public void onFailure(Throwable caught) {
@@ -216,6 +221,7 @@ public class LocalizationPanel extends Composite{
 	private void setZoneListItems(String country){
 		zoneBox.clear();
 		spotBox.clear();
+		setForecastButtonState();
 		ForecastCommonServices.Util.getInstance().getZones(country, new AsyncCallback<Map<String, Vector>>(){
 			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
@@ -236,6 +242,7 @@ public class LocalizationPanel extends Composite{
 						}
 					}
 				}
+				setForecastButtonState();
 			}
 				
 			public void onFailure(Throwable caught) {
@@ -246,6 +253,7 @@ public class LocalizationPanel extends Composite{
 	
 	private void setSpotListItems(String zone){
 		spotBox.clear();
+		setForecastButtonState();
 		ForecastCommonServices.Util.getInstance().getSpots(zone, new AsyncCallback<Map<String, Vector>>(){
 			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
@@ -258,11 +266,22 @@ public class LocalizationPanel extends Composite{
 						}
 					}
 				}
+				setForecastButtonState();
 			}
 				
 			public void onFailure(Throwable caught) {
 				
 			}
 		});
+	}
+	
+	/**
+	 * Set the forecast button enabled or disabled according if the spot listbox has a spot selected or not
+	 */
+	private void setForecastButtonState() {
+		if (this.spotBox.getItemCount() > 0 && new Integer(this.spotBox.getValue(this.spotBox.getSelectedIndex())) > 0 )
+			this.forecastButton.setEnabled(true);
+		else
+			this.forecastButton.setEnabled(false);
 	}
 }
