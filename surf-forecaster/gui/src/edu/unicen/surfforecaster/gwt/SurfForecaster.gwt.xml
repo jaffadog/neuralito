@@ -14,11 +14,17 @@
   <!-- I18N inherits                                      -->
   <inherits name="com.google.gwt.i18n.I18N"/>
   
+  <inherits name='edu.unicen.surfforecaster.common.services.GWTShineCommon' />
+  
+  <!-- Google Maps                                      -->
+  <inherits name="com.google.gwt.maps.GoogleMaps" />
+  <!-- If you want to deploy this application outside of localhost,
+       you must obtain a Google Maps API key                      -->
+  <script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;sensor=false" />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='edu.unicen.surfforecaster.gwt.client.SurfForecaster'/>
   
-  <inherits name='edu.unicen.surfforecaster.common.services.GWTShineCommon' />
   <!-- English Locale                                      -->
   <extend-property name="locale" values="en"/>
   <!-- Spanish Locale                                      -->
