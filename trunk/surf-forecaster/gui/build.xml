@@ -39,6 +39,7 @@
 	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/hsqldb-1.8.0.7.jar" />
 	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/cglib-2.1_3.jar" />
 	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/asm-1.5.3.jar" />
+  	<copy todir="war/WEB-INF/lib" file="${gwt.sdk}/gwt-maps.jar" />
   </target>
 
   <target name="javac" depends="libs" description="Compile java source">
