@@ -54,6 +54,7 @@ public class NewSpotPanel extends VerticalPanel {
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		ListBox areaBox = new ListBox();
+		areaBox.setWidth("200");
 		flexTable.setWidget(1, 2, areaBox);
 
 		final Label lblCountry = new Label(GWTUtils.LOCALE_CONSTANTS.country() + ":");
@@ -61,6 +62,7 @@ public class NewSpotPanel extends VerticalPanel {
 		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		ListBox countryBox = new ListBox();
+		countryBox.setWidth("200");
 		flexTable.setWidget(2, 2, countryBox);
 		
 		final Label lblZone = new Label("* " + GWTUtils.LOCALE_CONSTANTS.zone() + ":");
@@ -83,6 +85,7 @@ public class NewSpotPanel extends VerticalPanel {
 		spotTxt.setWidth("300px");
 		
 		ListBox timeZoneBox = new ListBox();
+		timeZoneBox.setWidth("200");
 		flexTable.setWidget(5, 2, timeZoneBox);
 		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
