@@ -36,7 +36,7 @@ public class LocalizationPanel extends Composite{
 			DisclosurePanel disclosurePanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.selectSpot(), true);
 			disclosurePanel.setAnimationEnabled(true);
 			initWidget(disclosurePanel);
-			disclosurePanel.setWidth("650");
+			disclosurePanel.setWidth("850");
 			{
 				VerticalPanel verticalPanel = new VerticalPanel();
 				disclosurePanel.setContent(verticalPanel);
@@ -62,7 +62,7 @@ public class LocalizationPanel extends Composite{
 							}
 						});
 						localizationForm.setWidget(0, 1, areaBox);
-						areaBox.setWidth("200");
+						areaBox.setWidth("300");
 					}
 					{
 						Label lblCountry = new Label(GWTUtils.LOCALE_CONSTANTS.country() + ": ");
@@ -77,7 +77,7 @@ public class LocalizationPanel extends Composite{
 							}
 						});
 						localizationForm.setWidget(0, 3, countryBox);
-						countryBox.setWidth("200");
+						countryBox.setWidth("300");
 					}
 					{
 						Label lblZone = new Label(GWTUtils.LOCALE_CONSTANTS.zone() + ": ");
@@ -92,7 +92,7 @@ public class LocalizationPanel extends Composite{
 							}
 						});
 						localizationForm.setWidget(1, 1, zoneBox);
-						zoneBox.setWidth("200");
+						zoneBox.setWidth("300");
 					}
 					{
 						Label lblSpot = new Label(GWTUtils.LOCALE_CONSTANTS.spot() + ": ");
@@ -106,7 +106,7 @@ public class LocalizationPanel extends Composite{
 							}
 						});
 						localizationForm.setWidget(1, 3, spotBox);
-						spotBox.setWidth("200");
+						spotBox.setWidth("300");
 					}
 					{
 						forecastButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
