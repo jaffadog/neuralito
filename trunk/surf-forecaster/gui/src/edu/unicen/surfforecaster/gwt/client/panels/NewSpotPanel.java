@@ -1,25 +1,41 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.Vector;
+import java.util.Map.Entry;
+
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.gwt.client.Area;
+import edu.unicen.surfforecaster.gwt.client.Country;
+import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.RadioButton;
+import edu.unicen.surfforecaster.gwt.client.Spot;
+import edu.unicen.surfforecaster.gwt.client.Zone;
 
 public class NewSpotPanel extends VerticalPanel {
 
 	private Label errorlabel = null;
+	private ListBox areaBox = null;
+	private ListBox countryBox = null;
+	private ListBox timeZoneBox = null;
 	
 	public NewSpotPanel() {
 		setSpacing(10);
@@ -53,16 +69,21 @@ public class NewSpotPanel extends VerticalPanel {
 		flexTable.setWidget(1, 0, lblArea);
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		ListBox areaBox = new ListBox();
-		areaBox.setWidth("200");
+		areaBox = new ListBox();
+		areaBox.setWidth("300");
+		areaBox.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
+			}
+		});
 		flexTable.setWidget(1, 2, areaBox);
 
 		final Label lblCountry = new Label(GWTUtils.LOCALE_CONSTANTS.country() + ":");
 		flexTable.setWidget(2, 0, lblCountry);
 		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		ListBox countryBox = new ListBox();
-		countryBox.setWidth("200");
+		countryBox = new ListBox();
+		countryBox.setWidth("300");
 		flexTable.setWidget(2, 2, countryBox);
 		
 		final Label lblZone = new Label("* " + GWTUtils.LOCALE_CONSTANTS.zone() + ":");
@@ -77,15 +98,17 @@ public class NewSpotPanel extends VerticalPanel {
 		flexTable.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		final TextBox zoneTxt = new TextBox();
+		zoneTxt.setMaxLength(50);
 		flexTable.setWidget(3, 2, zoneTxt);
-		zoneTxt.setWidth("300px");
+		zoneTxt.setWidth("300");
 
 		final TextBox spotTxt = new TextBox();
+		spotTxt.setMaxLength(50);
 		flexTable.setWidget(4, 2, spotTxt);
-		spotTxt.setWidth("300px");
+		spotTxt.setWidth("300");
 		
-		ListBox timeZoneBox = new ListBox();
-		timeZoneBox.setWidth("200");
+		timeZoneBox = new ListBox();
+		timeZoneBox.setWidth("300");
 		flexTable.setWidget(5, 2, timeZoneBox);
 		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
@@ -169,6 +192,76 @@ public class NewSpotPanel extends VerticalPanel {
 		cancelBtn.setText(GWTUtils.LOCALE_CONSTANTS.goBack());
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.getFlexCellFormatter().setColSpan(6, 0, 3);
+		
+		this.setAreaListItems();
+		this.setTimeZoneItems();
+	}
+	
+	private void setTimeZoneItems() {
+		HashMap<String, String> timeZones = GWTUtils.getTimeZones();
+		Set<Entry<String, String>> set = timeZones.entrySet();
+		Iterator<Entry<String, String>> i = set.iterator();
+		while (i.hasNext()) {
+			Entry<String, String> entry = i.next();
+			this.timeZoneBox.addItem(entry.getKey(), entry.getValue());
+		}
+		
+		
+	}
+	
+	private void setAreaListItems(){
+		ForecastCommonServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
+			public void onSuccess(Map<String, Vector> result) {
+				if (result == null) {
+				} else {
+					Iterator i = null;
+					if (result.containsKey("areas")){
+						i = result.get("areas").iterator();
+						while (i.hasNext()){
+							Area area = (Area)i.next();
+							areaBox.addItem(area.getName(), area.getId());
+						}
+					}
+					
+					if (result.containsKey("countries")){
+						i = result.get("countries").iterator();
+						while (i.hasNext()){
+							Country country = (Country)i.next();
+							countryBox.addItem(country.getName(), country.getId());
+						}
+					}
+					
+				}
+			}
+				
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
+	}
+	
+	private void setCountryListItems(String area){
+		countryBox.clear();
+		ForecastCommonServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, Vector>>(){
+			public void onSuccess(Map<String, Vector> result) {
+				if (result == null) {
+				} else {
+					Iterator i = null;
+					if (result.containsKey("countries")){
+						i = result.get("countries").iterator();
+						while (i.hasNext()){
+							Country country = (Country)i.next();
+							countryBox.addItem(country.getName(), country.getId());
+						}
+					}
+					
+				}
+			}
+				
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
 	}
 
 }
