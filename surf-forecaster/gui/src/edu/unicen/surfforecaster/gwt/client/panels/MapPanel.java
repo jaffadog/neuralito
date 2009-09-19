@@ -8,18 +8,34 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.Overlay;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.TextBox;
 
 public class MapPanel extends VerticalPanel {
 	
 	private MapWidget map;
+	private TextBox txtSpotLong = null;
+	private TextBox txtSpotLat = null;
+	private TextBox txtBuoyLong = null;
+	private TextBox txtBuoyLat = null;
 	
 	public MapPanel() {
+		Label lblMapDescription = new Label("Clickee en la imagen para ubicar geograficamente la ola que desea pronosticar, o ingrese" +
+				"manualmente las coordenadas en los campos a la derecha del mapa");
+		lblMapDescription.addStyleName("gwt-Label-RegisterSectionDescription");
+		this.add(lblMapDescription);
+		
+		HorizontalPanel mapHPanel = new HorizontalPanel();
+		this.add(mapHPanel);
+		
 		LatLng cawkerCity = LatLng.newInstance(39.509,-98.434);
 	    // Open a map centered on Cawker City, KS USA
 
 	    map = new MapWidget(cawkerCity, 2);
-	    map.setSize("800px", "600px");
+	    map.setSize("720", "540");
 	    
 	    // Add some controls for the zoom level
 	    //map.addControl(new LargeMapControl());
@@ -52,6 +68,8 @@ public class MapPanel extends VerticalPanel {
 			            info.setMaximizeEnabled(false);
 			            InfoWindowContent content = new InfoWindowContent("Boya seleccionada: <br> - Latitud: <b>" + marker.getLatLng().getLatitude() + "</b><br> - Longitud: <b>" + marker.getLatLng().getLongitude() + "</b>");
 			            info.open(marker, content);
+			            txtBuoyLong.setText(("" + marker.getLatLng().getLongitude()).substring(0, 10));
+			            txtBuoyLat.setText(("" + marker.getLatLng().getLatitude()).substring(0, 10));
 	        		}
 	        	}
 	        	
@@ -68,6 +86,10 @@ public class MapPanel extends VerticalPanel {
 	            //content.setMaxContent("Hello Maps - more content");
 	            //content.setMaxTitle("Hello Maps");
 	            info.open(marker, content);
+	            txtSpotLong.setText(("" + marker.getLatLng().getLongitude()).substring(0, 10));
+	            txtSpotLat.setText(("" + marker.getLatLng().getLatitude()).substring(0, 10));
+	            txtBuoyLong.setText("");
+	            txtBuoyLat.setText("");
 	            showWW3Buoys(sender, point);
 	          }
 	        }
@@ -88,7 +110,57 @@ public class MapPanel extends VerticalPanel {
 	      });
 	    // Add the map to the HTML host page
 	    //RootPanel.get("mapsTutorial").add(map);
-	    this.add(map);
+	    mapHPanel.add(map);
+	    
+	    FlexTable flexTable = new FlexTable();
+	    flexTable.setCellSpacing(5);
+	    mapHPanel.add(flexTable);
+	    
+	    Label lblSpot = new Label("Ola");
+	    flexTable.setWidget(0, 0, lblSpot);
+	    
+	    Label lblSpotLong = new Label("Longitud");
+	    flexTable.setWidget(1, 0, lblSpotLong);
+	    
+	    txtSpotLong = new TextBox();
+	    txtSpotLong.setEnabled(false);
+	    txtSpotLong.setMaxLength(10);
+	    flexTable.setWidget(2, 0, txtSpotLong);
+	    txtSpotLong.setWidth("100");
+	    
+	    Label lblSpotLat = new Label("Latitud");
+	    flexTable.setWidget(3, 0, lblSpotLat);
+	    
+	    txtSpotLat = new TextBox();
+	    txtSpotLat.setEnabled(false);
+	    txtSpotLat.setMaxLength(10);
+	    flexTable.setWidget(4, 0, txtSpotLat);
+	    txtSpotLat.setWidth("100");
+	    
+	    Label lblSpace = new Label("");
+	    lblSpace.setHeight("50");
+	    flexTable.setWidget(5, 0, lblSpace);
+	    
+	    Label lblBuoy = new Label("Boya");
+	    flexTable.setWidget(6, 0, lblBuoy);
+	    
+	    Label lblBuoyLong = new Label("Longitud");
+	    flexTable.setWidget(7, 0, lblBuoyLong);
+	    
+	    txtBuoyLong = new TextBox();
+	    txtBuoyLong.setEnabled(false);
+	    txtBuoyLong.setMaxLength(10);
+	    flexTable.setWidget(8, 0, txtBuoyLong);
+	    txtBuoyLong.setWidth("100");
+	    
+	    Label lblBuoyLat = new Label("Latitud");
+	    flexTable.setWidget(9, 0, lblBuoyLat);
+	    
+	    txtBuoyLat = new TextBox();
+	    txtBuoyLat.setEnabled(false);
+	    txtBuoyLat.setMaxLength(10);
+	    flexTable.setWidget(10, 0, txtBuoyLat);
+	    txtBuoyLat.setWidth("100");
 	}
 
 }

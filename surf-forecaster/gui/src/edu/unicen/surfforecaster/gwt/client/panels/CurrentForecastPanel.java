@@ -20,7 +20,7 @@ public class CurrentForecastPanel extends FlexTable {
 			setCellSpacing(50);	
 			setWidget(1, 0, this.createTableItem("Viento", "17 Km/h", "Este", "images/arrow.gif"));
 			setWidget(1, 1, this.createTableItem("Dir. de la ola", "", "Sudoeste", "images/arrow.gif"));
-			setWidget(2, 0, this.createTableItem("Altura de la ola", "2,3 Mts", "", "images/arrow.gif"));
+			setWidget(2, 0, this.createTableItem("Altura de la ola", "14 Mts", "", "images/waves/wave1.png"));
 			setWidget(2, 1, this.createTableItem("Período de ola", "9 Seg", "", "images/arrow.gif"));
 		}
 	}

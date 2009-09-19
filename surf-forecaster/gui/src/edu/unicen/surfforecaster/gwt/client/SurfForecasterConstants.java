@@ -101,4 +101,7 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Localizaci\u00F3n geogr\u00E1fica")
 	String geographicLocalization();
 	
+	@DefaultStringValue("Entrenar")
+	String train();
+	
 }
