@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -31,19 +32,19 @@ public final class GWTUtils {
 	public final static String DEFAULT_HISTORY_TOKEN = "forecastTab";
 	
 	//Timezones hash
-	private static HashMap<String, String> timeZones = null;
+	private static HashMap<String, Object> timeZones = null;
 	
 	
 	/**
 	 * 
 	 * @return a hashMap with the timezones values.
 	 */
-	public static HashMap<String, String> getTimeZones() {
+	public static HashMap<String, Object> getTimeZones() {
 		if (timeZones != null) {
 			return timeZones;
 		}
 		else {
-			timeZones = new HashMap<String, String>();
+			timeZones = new HashMap<String, Object>();
 			timeZones.put("[UTC-12] UTC-12", "-12");
 			timeZones.put("[UTC-11] Pacific/Apia, WST", "-11");
 			timeZones.put("[UTC-11] Pacific/Midway, SST", "-11");
@@ -560,7 +561,12 @@ public final class GWTUtils {
 			timeZones.put("[UTC+13] UTC+13", "+13");
 			timeZones.put("[UTC+14] Pacific/Kiritimati, LINT", "+14");
 			timeZones.put("[UTC+14] UTC+14", "+14");
-
+			
+			//Add an item with and array of keys ordered by key name
+			Object[] keys = timeZones.keySet().toArray();
+			Arrays.sort(keys);
+			timeZones.put("orderedKeys", keys);
+			
 			return timeZones;
 		}
 	}

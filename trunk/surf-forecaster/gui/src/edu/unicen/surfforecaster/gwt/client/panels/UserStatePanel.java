@@ -88,7 +88,7 @@ public class UserStatePanel extends Composite {
 	        localeBox.addItem(nativeName, localeName);
 	        if (localeName.equals(currentLocale)) {
 	          localeBox.setSelectedIndex(localeBox.getItemCount() - 1);
-	          flag.setUrl("images/" + localeName + "-flag.gif");
+	          flag.setUrl("images/flags/" + localeName + "-flag.png");
 	        }
 	      }
 	    }

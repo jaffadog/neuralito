@@ -60,8 +60,8 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		ForecastCommonServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
 			public void onSuccess(SessionData result) {
 				if (result != null) {
-					NewSpotPanel newWavePanel = new NewSpotPanel();
-					add(newWavePanel, GWTUtils.LOCALE_CONSTANTS.newSpot());
+					NewSpotPanel newSpotPanel = new NewSpotPanel();
+					add(newSpotPanel, GWTUtils.LOCALE_CONSTANTS.newSpot());					
 					historyTokens.add("newSpotTab");
 					if (!GWTUtils.VALID_HISTORY_TOKENS.contains("newSpotTab"))
 						GWTUtils.VALID_HISTORY_TOKENS.add("newSpotTab");
