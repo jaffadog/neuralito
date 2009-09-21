@@ -1,9 +1,10 @@
 package edu.unicen.surfforecaster.server.domain.entity;
 
 import java.io.Serializable;
-import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,12 +12,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
- * A surf spot. 
+ * A surf spot.
+ * 
  * @author esteban
- *
+ * 
  */
 @Entity
-public class SurfSpot implements Serializable{
+public class Spot implements Serializable {
 	/**
 	 * 
 	 */
@@ -31,96 +33,111 @@ public class SurfSpot implements Serializable{
 	private double latitude;
 	/**
 	 * Longitude of the surf spot. TODO: define in whic units latitude is given.
-	 */	 
+	 */
 	private double longitude;
 	/**
 	 * The region where this spot is located.
 	 */
 	@ManyToOne
-	private SurfSpotRegion region;
+	private Area region;
+
 	/**
-	 * The charactetistics of the spot. Could be information about crowd, sea bed, hazzards. 
+	 * Description of the spot.
 	 */
-//	private Map<String, Object> characteristics;
-//	/**
-//	 * The id for ORM pupose.
-//	 */
-	private Integer id;
-	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Description description;
+	/**
+	 * The id for ORM pupose.
+	 */
 	@Id
-	  @GeneratedValue(strategy=GenerationType.AUTO)
-	  public Integer getId()
-	  {
-	    return id;
-	  }
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+
+	public Integer getId() {
+		return id;
+	}
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
+
 	/**
 	 * @return the latitude
 	 */
 	public double getLatitude() {
 		return latitude;
 	}
+
 	/**
 	 * @return the longitude
 	 */
 	public double getLongitude() {
 		return longitude;
 	}
+
 	/**
 	 * @return the region
 	 */
-	public SurfSpotRegion getRegion() {
+	public Area getRegion() {
 		return region;
 	}
-//	/**
-//	 * @return the characteristics
-//	 */
-//	public Map<String, Object> getCharacteristics() {
-//		return characteristics;
-//	}
+
 	/**
-	 * @param id to set.
+	 * @param id
+	 *            to set.
 	 */
-	public void setId(Integer theId) {
-		this.id = theId;
+	public void setId(final Integer theId) {
+		id = theId;
 	}
+
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
+
 	/**
-	 * @param latitude the latitude to set
+	 * @param latitude
+	 *            the latitude to set
 	 */
-	public void setLatitude(double latitude) {
+	public void setLatitude(final double latitude) {
 		this.latitude = latitude;
 	}
+
 	/**
-	 * @param longitude the longitude to set
+	 * @param longitude
+	 *            the longitude to set
 	 */
-	public void setLongitude(double longitude) {
+	public void setLongitude(final double longitude) {
 		this.longitude = longitude;
 	}
+
 	/**
-	 * @param region the region to set
+	 * @param region
+	 *            the region to set
 	 */
-	public void setRegion(SurfSpotRegion region) {
+	public void setRegion(final Area region) {
 		this.region = region;
 	}
-//	/**
-//	 * @param characteristics the characteristics to set
-//	 */
-//	public void setCharacteristics(Map<String, Object> characteristics) {
-//		this.characteristics = characteristics;
-//	}
-//	
-	
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(final Description description) {
+		this.description = description;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public Description getDescription() {
+		return description;
+	}
 
 }

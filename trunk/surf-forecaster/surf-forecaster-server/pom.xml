@@ -44,7 +44,10 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
     </dependency>
-
+	<dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+    </dependency>
  
     <dependency>
       <groupId>commons-lang</groupId>
@@ -55,7 +58,6 @@
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
     </dependency>
-
 		
 	</dependencies>
 
