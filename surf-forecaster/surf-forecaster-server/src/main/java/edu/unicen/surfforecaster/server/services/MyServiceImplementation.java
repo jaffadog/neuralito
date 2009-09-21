@@ -2,15 +2,16 @@ package edu.unicen.surfforecaster.server.services;
 
 import edu.unicen.surfforecaster.common.services.MyServiceI;
 import edu.unicen.surfforecaster.common.services.dto.HelloDTO;
-import edu.unicen.surfforecaster.server.dao.SurfSpotDAO;
+import edu.unicen.surfforecaster.server.dao.SpotDAO;
+
 
 public class MyServiceImplementation implements MyServiceI {
 
-	private SurfSpotDAO surfSpotDAO;
-	public SurfSpotDAO getSurfSpotDAO() {
+	private SpotDAO surfSpotDAO;
+	public SpotDAO getSurfSpotDAO() {
 		return surfSpotDAO;
 	}
-	public void setSurfSpotDAO(SurfSpotDAO surfSpotDAO) {
+	public void setSurfSpotDAO(SpotDAO surfSpotDAO) {
 		this.surfSpotDAO = surfSpotDAO;
 	}
 	@Override

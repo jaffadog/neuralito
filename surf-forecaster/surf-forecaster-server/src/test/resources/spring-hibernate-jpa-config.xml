@@ -19,31 +19,35 @@
       </props>
     </property>
     <property name="annotatedClasses">
-      <list>
-<!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Track</value>-->
-<!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Record</value>-->
-<!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Artist</value>-->
-		<value>edu.unicen.surfforecaster.server.domain.entity.SurfSpot</value>
-		<value>edu.unicen.surfforecaster.server.domain.entity.SurfSpotRegion</value>
-      </list>
-    </property>
+     <list>
+       <value>edu.unicen.surfforecaster.server.domain.entity.Area</value>
+       <value>edu.unicen.surfforecaster.server.domain.entity.Country</value>
+       <value>edu.unicen.surfforecaster.server.domain.entity.Zone</value>
+       <value>edu.unicen.surfforecaster.server.domain.entity.Spot</value>
+       <value>edu.unicen.surfforecaster.server.domain.entity.StringAttribute</value>
+       <value>edu.unicen.surfforecaster.server.domain.entity.Comparation</value>
+       <value>edu.unicen.surfforecaster.server.domain.entity.User</value>
+       <value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
+       
+       
+     </list>
+   </property>
   </bean>
 
   <bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor" autowire="byName" /><!--sessionFactory will get autowired-->
 
 <!--  <bean id="musicDaoTarget" class="com.zabada.springrecipes.hibernatejpa.dao.MusicDAOHibernateImpl" autowire="byName" />sessionFactory will get autowired-->
-<bean id="surfSpotDaoTarget" class="edu.unicen.surfforecaster.server.dao.SurfSpotDAOHibernateImpl" autowire="byName" /><!--sessionFactory will get autowired-->
+<bean id="spotDaoTarget" class="edu.unicen.surfforecaster.server.dao.SpotDAOHibernateImpl" autowire="byName" /><!--sessionFactory will get autowired-->
 
 
-  <bean id="surfSpotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+  <bean id="spotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="proxyInterfaces">
-      <value>edu.unicen.surfforecaster.server.dao.SurfSpotDAO</value>
+      <value>edu.unicen.surfforecaster.server.dao.SpotDAO</value>
     </property>
     <property name="interceptorNames">
       <list>
         <value>hibernateInterceptor</value>
-<!--        <value>musicDaoTarget</value>-->
-<value>surfSpotDaoTarget</value>
+		<value>spotDaoTarget</value>
       </list>
     </property>
   </bean>
