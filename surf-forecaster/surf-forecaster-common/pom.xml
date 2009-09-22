@@ -22,4 +22,11 @@
 		</resources>
 
 	</build>
+	<dependencies>
+		<dependency>
+      		<groupId>commons-lang</groupId>
+      		<artifactId>commons-lang</artifactId>
+    	</dependency>
+    </dependencies>
+    
 </project>
