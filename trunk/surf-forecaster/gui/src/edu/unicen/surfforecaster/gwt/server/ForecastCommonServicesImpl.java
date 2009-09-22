@@ -39,7 +39,7 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements Fore
 			if (userName.equals("admin") && password.equals("admin")){
 				User user = new User();
 				HttpSession session = this.getSession();
-				session.setMaxInactiveInterval(120); //120seg
+				session.setMaxInactiveInterval(1200); //120seg
 				session.setAttribute("gwtForecast-UserName", user.getUserName());
 				session.setAttribute("gwtForecast-UserType", user.getType());
 				return user;

@@ -18,10 +18,11 @@ public final class GWTUtils {
 	public final static String APLICATION_WIDTH = "1000";
 	public final static String PUSHBUTTON_HEIGHT = "20";
 	
-	//PATH
+	//PATH TO IMAGES
 	public final static String IMAGE_LOGO = "images/logo2.PNG";
 	public final static String IMAGE_BLUE_BAR_LOADER = "images/blue-bar-loader.gif";
 	public final static String IMAGE_BLUE_CIRCLE_LOADER = "images/blue-circle-loader.gif";
+	public final static String IMAGE_ERROR_ICON = "images/Error.png";
 	
 	//Translators
 	public static SurfForecasterConstants LOCALE_CONSTANTS;
