@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,7 +27,6 @@ import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
-import com.google.gwt.user.client.ui.RadioButton;
 
 public class NewSpotDataPanel extends LazyPanel {
 
@@ -47,8 +47,14 @@ public class NewSpotDataPanel extends LazyPanel {
 		
 		Vector<String> errors = new Vector<String>();
 		errors.add("error 1"); errors.add("error 2"); errors.add("error 3");
-		ErrorPanel errorPanel = new ErrorPanel(errors);
+		MessagePanel errorPanel = new ErrorMsgPanel(errors);
 		container.add(errorPanel);
+		
+		Vector<String> message = new Vector<String>();
+		message.add("Los cambios se guardaron exitosamente");
+		MessagePanel successPanel = new SuccessMsgPanel(message);
+		container.add(successPanel);
+		
 		
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.newSpotSectionTitle());
 		lblTitle.addStyleName("gwt-Label-SectionTitle");

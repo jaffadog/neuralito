@@ -14,14 +14,18 @@ public class MainVerticalPanel extends VerticalPanel {
 		this.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		this.setWidth(GWTUtils.APLICATION_WIDTH);
 		{
-			LocalizationPanel localizationPanel = new LocalizationPanel();
-			this.add(localizationPanel);
+			this.add(LocalizationPanel.getInstance());
 		}
-		{
-			forecastTabPanel = new ForecastTabPanel();
-			this.add(forecastTabPanel);
-		}
+//		{
+//			forecastTabPanel = new ForecastTabPanel();
+//			this.add(forecastTabPanel);
+//		}
 		
+	}
+	
+	public void createForecastTabPanel() {
+		forecastTabPanel = new ForecastTabPanel();
+		this.add(forecastTabPanel);
 	}
 	
 	public void setPanelState(String historyToken){
