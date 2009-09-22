@@ -6,6 +6,9 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -120,6 +123,11 @@ public class LocalizationPanel extends Composite{
 						forecastButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
 						forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
 						forecastButton.setEnabled(false);
+						forecastButton.addClickHandler(new ClickHandler() {
+							public void onClick(ClickEvent event) {
+								((MainVerticalPanel)getParent()).createForecastTabPanel();
+							}
+						});
 						localizationForm.setWidget(2, 0, forecastButton);
 					}
 					localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);

@@ -24,6 +24,10 @@ public class MainVerticalPanel extends VerticalPanel {
 	}
 	
 	public void createForecastTabPanel() {
+		if (forecastTabPanel != null) {
+			this.remove(forecastTabPanel);
+			forecastTabPanel = null;
+		}
 		forecastTabPanel = new ForecastTabPanel();
 		this.add(forecastTabPanel);
 	}
