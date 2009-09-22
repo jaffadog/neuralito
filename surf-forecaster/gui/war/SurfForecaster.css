@@ -53,6 +53,13 @@ div div#loadingTxtDiv {
 /** Label error */
 .gwt-Label-error {
     color: #FF0000;
+    font-weight: bold;
+}
+
+/** Label error */
+.gwt-Label-success {
+    color: #088A08;
+    font-weight: bold;
 }
 
 /*****************************************************************************/
@@ -110,6 +117,15 @@ div#closeLoginBoxDiv a{
 /*****************************************************************************/
 
 .gwt-errorsPanel{
-    background-color:#FF9999;
-    border-color: #FF0000;
+    background-color:#F6CECE;
+    border: solid 2px #FF0000;
+}
+
+/*****************************************************************************/
+/*********************** SuccessPanel ***************************************/
+/*****************************************************************************/
+
+.gwt-successPanel{
+    background-color: #A9F5A9;
+    border: solid 2px #088A08;
 }
