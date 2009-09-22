@@ -15,31 +15,44 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import com.google.gwt.user.client.ui.RadioButton;
 
-public class NewSpotDataPanel extends VerticalPanel {
+public class NewSpotDataPanel extends LazyPanel {
 
 	private Label errorlabel = null;
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
 	private ListBox timeZoneBox = null;
 	
-	public NewSpotDataPanel() {
-		setSpacing(10);
-		this.setWidth(GWTUtils.APLICATION_WIDTH);
+	public NewSpotDataPanel() {}
+	
+	@Override
+	protected Widget createWidget() {
 		
-		final FlexTable flexTable = new FlexTable();
+		VerticalPanel container = new VerticalPanel();
+		
+		container.setSpacing(10);
+		container.setWidth(GWTUtils.APLICATION_WIDTH);
+		
+		Vector<String> errors = new Vector<String>();
+		errors.add("error 1"); errors.add("error 2"); errors.add("error 3");
+		ErrorPanel errorPanel = new ErrorPanel(errors);
+		container.add(errorPanel);
+		
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.newSpotSectionTitle());
 		lblTitle.addStyleName("gwt-Label-SectionTitle");
-		this.add(lblTitle);
+		container.add(lblTitle);
 		
 		Label lblNewSpotDescription = new Label("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's " +
 				"standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has " +
@@ -47,11 +60,11 @@ public class NewSpotDataPanel extends VerticalPanel {
 				"with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including " +
 				"versions of Lorem Ipsum.");
 		lblNewSpotDescription.addStyleName("gwt-Label-RegisterSectionDescription");
-		add(lblNewSpotDescription);
+		container.add(lblNewSpotDescription);
 		
-		this.add(flexTable);
+		final FlexTable flexTable = new FlexTable();
+		container.add(flexTable);
 		flexTable.setCellSpacing(5);
-		//flexTable.setSize("450", "300");
 
 		errorlabel = new Label(GWTUtils.LOCALE_CONSTANTS.starFields());
 		errorlabel.setStylePrimaryName("gwt-Label-error");
@@ -106,22 +119,32 @@ public class NewSpotDataPanel extends VerticalPanel {
 		timeZoneBox.setWidth("300");
 		flexTable.setWidget(5, 2, timeZoneBox);
 		
+		Label lblSpotVisibility = new Label(GWTUtils.LOCALE_CONSTANTS.spotVisibility() + ":");
+		flexTable.setWidget(6, 0, lblSpotVisibility);
+		
+		HorizontalPanel radioPanel = new HorizontalPanel();
+		radioPanel.setSpacing(5);
+		flexTable.setWidget(6, 2, radioPanel);
+		
+		RadioButton radioPrivateButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.private_());
+		radioPrivateButton.setValue(true);
+		radioPanel.add(radioPrivateButton);
+		
+		
+		RadioButton radioPublicButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.public_());
+		radioPanel.add(radioPublicButton);
+		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
-		flexTable.setWidget(6, 0, lblLocalization);
+		flexTable.setWidget(7, 0, lblLocalization);
 		
-		MapPanel mapPanel = new MapPanel();
-		flexTable.setWidget(7, 2, mapPanel);
-		
-//		if (user == null){
-//			flexTable.getCellFormatter().setVisible(5, 0, false);
-//			flexTable.getCellFormatter().setVisible(5, 2, false);
-//		}
+		//MapPanel mapPanel = new MapPanel();
+		//flexTable.setWidget(8, 2, mapPanel);
 
 		final HorizontalPanel btnsPanel = new HorizontalPanel();
-		flexTable.setWidget(8, 0, btnsPanel);
+		flexTable.setWidget(9, 0, btnsPanel);
 		btnsPanel.setSpacing(5);
-		flexTable.getCellFormatter().setHorizontalAlignment(8, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getFlexCellFormatter().setColSpan(8, 0, 3);
+		flexTable.getCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getFlexCellFormatter().setColSpan(9, 0, 3);
 
 		final PushButton saveBtn = new PushButton();
 		btnsPanel.add(saveBtn);
@@ -193,10 +216,12 @@ public class NewSpotDataPanel extends VerticalPanel {
 		btnsPanel.add(cancelBtn);
 
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-		flexTable.getFlexCellFormatter().setColSpan(6, 0, 3);
+		flexTable.getFlexCellFormatter().setColSpan(7, 0, 3);
 		
 		this.setAreaListItems();
 		this.setTimeZoneItems();
+		
+		return container;
 	}
 	
 	private void setTimeZoneItems() {
@@ -205,19 +230,6 @@ public class NewSpotDataPanel extends VerticalPanel {
 		
 		for (int i = 0; i < keys.length; i++) 
 			this.timeZoneBox.addItem((String)keys[i], (String)timeZones.get(keys[i]));
-		
-		
-		
-		
-//		Set<Entry<String, Object>> set = timeZones.entrySet();
-//		Iterator<Entry<String, Object>> i = set.iterator();
-//		
-//		while (i.hasNext()) {
-//			Entry<String, Object> entry = i.next();
-//			this.timeZoneBox.addItem(entry.getKey(), entry.getValue());
-//		}
-		
-		
 	}
 	
 	private void setAreaListItems(){

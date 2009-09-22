@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 public class NewSpotTrainPanel extends LazyPanel {
+	
 	public NewSpotTrainPanel() {
 	}
 

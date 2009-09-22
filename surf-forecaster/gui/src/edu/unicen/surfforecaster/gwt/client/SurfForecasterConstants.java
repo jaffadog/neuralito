@@ -104,4 +104,13 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Entrenar")
 	String train();
 	
+	@DefaultStringValue("P\u00FAblica")
+	String public_();
+	
+	@DefaultStringValue("Privada")
+	String private_();
+	
+	@DefaultStringValue("Visibilidad de ola")
+	String spotVisibility();
+	
 }
