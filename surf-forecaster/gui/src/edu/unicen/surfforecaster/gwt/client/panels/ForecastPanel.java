@@ -4,17 +4,23 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class ForecastPanel extends VerticalPanel {
+public class ForecastPanel extends LazyPanel {
 
 	public ForecastPanel() {
-		
+	}
+
+	@Override
+	protected Widget createWidget() {
+		VerticalPanel container = new VerticalPanel();
 		{
 			LocalizationPanel localizationPanel = LocalizationPanel.getInstance();
 			Label lblTitle = new Label(localizationPanel.getZoneBoxDisplayValue() + " > " + localizationPanel.getSpotBoxDisplayValue());
 			lblTitle.addStyleName("gwt-Label-SectionTitle");
-			add(lblTitle);
+			container.add(lblTitle);
 		}
 		{
 			CurrentForecastPanel current = new CurrentForecastPanel("Ahora");
@@ -28,9 +34,9 @@ public class ForecastPanel extends VerticalPanel {
 			flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 			flexTable.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
 			flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
-			
-			add(flexTable);
+			container.add(flexTable);
 		}
+		return container;
 	}
 
 }
