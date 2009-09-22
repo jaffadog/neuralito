@@ -25,11 +25,19 @@ import edu.unicen.surfforecaster.gwt.client.Zone;
 
 public class LocalizationPanel extends Composite{
 	
+	private static LocalizationPanel instance = null;
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
 	private ListBox zoneBox = null;
 	private ListBox spotBox = null;
 	private PushButton forecastButton = null;
+	
+	public static LocalizationPanel getInstance() {
+        if (instance == null) {
+            instance = new LocalizationPanel();
+        }
+        return instance;
+    }
 	
 	public LocalizationPanel() {
 		{
@@ -166,6 +174,9 @@ public class LocalizationPanel extends Composite{
 					}
 				}
 				setForecastButtonState();
+				//Show the forecastTabPanel after
+				if (spotBox.getItemCount() > 0 && new Integer(spotBox.getValue(spotBox.getSelectedIndex())) > 0 )
+					((MainVerticalPanel)getParent()).createForecastTabPanel();
 			}
 				
 			public void onFailure(Throwable caught) {
@@ -283,5 +294,13 @@ public class LocalizationPanel extends Composite{
 			this.forecastButton.setEnabled(true);
 		else
 			this.forecastButton.setEnabled(false);
+	}
+	
+	public String getZoneBoxDisplayValue(){
+		return this.zoneBox.getItemText(this.zoneBox.getSelectedIndex());
+	}
+	
+	public String getSpotBoxDisplayValue(){
+		return this.spotBox.getItemText(this.spotBox.getSelectedIndex());
 	}
 }
