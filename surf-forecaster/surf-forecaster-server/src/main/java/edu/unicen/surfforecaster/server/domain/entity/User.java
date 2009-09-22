@@ -40,7 +40,7 @@ public class User {
 	/**
 	 * the user surname.
 	 */
-	private String surname;
+	private String lastName;
 
 	/**
 	 * the user email.
@@ -80,13 +80,15 @@ public class User {
 		// For ORM purpose.
 	}
 
-	public User(final String name, final String surname, final String userName,
-			final String password, final String email, final String userType)
-			throws Exception {
+	public User(final String name, final String lastName,
+			final String userName, final String password, final String email,
+			final String userType) {
 		Validate.notEmpty(userName, "The user name should not be empty.");
 		Validate.notEmpty(password, "The user password should not be empty.");
 		Validate.notEmpty(password, "The email should not be empty.");
 		Validate.notEmpty(userType, "The user type should not be empty.");
+		setName(name);
+		setLastName(lastName);
 		setUserName(userName);
 		setPassword(password);
 		setEmail(email);
@@ -132,8 +134,8 @@ public class User {
 	/**
 	 * @return the surname
 	 */
-	public String getSurname() {
-		return surname;
+	public String getLastName() {
+		return lastName;
 	}
 
 	/**
@@ -189,20 +191,20 @@ public class User {
 	 *            the password to set
 	 * @throws Exception
 	 */
-	public void setPassword(final String password) throws Exception {
+	public void setPassword(final String password) {
 		Validate.notEmpty(password, "The password should not be empty");
 		if (getUserName() == password)
 			// TODO:Should throw exception
-			throw new Exception();
+			throw new IllegalArgumentException();
 		this.password = password;
 	}
 
 	/**
-	 * @param surname
+	 * @param lastName
 	 *            the surname to set
 	 */
-	public void setSurname(final String surname) {
-		this.surname = surname;
+	public void setLastName(final String lastName) {
+		this.lastName = lastName;
 	}
 
 	/**

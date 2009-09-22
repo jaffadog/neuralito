@@ -20,7 +20,7 @@ public class SurfSpotDAOHibernateImplTest {
 	@Before
 	public void setUp() throws Exception {
 		final ApplicationContext context = new ClassPathXmlApplicationContext(
-				"/spring-hibernate-jpa-config.xml");
+				"/dao.xml");
 		spotDAO = (SpotDAO) context.getBean("spotDAO");
 	}
 
