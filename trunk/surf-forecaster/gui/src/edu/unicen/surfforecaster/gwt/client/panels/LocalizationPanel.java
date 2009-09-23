@@ -8,7 +8,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -18,6 +17,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
@@ -26,21 +26,14 @@ import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.Spot;
 import edu.unicen.surfforecaster.gwt.client.Zone;
 
-public class LocalizationPanel extends Composite{
+public class LocalizationPanel extends Composite implements ISurfForecasterBasePanel {
 	
-	private static LocalizationPanel instance = null;
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
 	private ListBox zoneBox = null;
 	private ListBox spotBox = null;
 	private PushButton forecastButton = null;
-	
-	public static LocalizationPanel getInstance() {
-        if (instance == null) {
-            instance = new LocalizationPanel();
-        }
-        return instance;
-    }
+	private Widget baseParentPanel = null;
 	
 	public LocalizationPanel() {
 		{
@@ -125,7 +118,7 @@ public class LocalizationPanel extends Composite{
 						forecastButton.setEnabled(false);
 						forecastButton.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
-								((MainVerticalPanel)getParent()).createForecastTabPanel();
+								renderSpotInfo();
 							}
 						});
 						localizationForm.setWidget(2, 0, forecastButton);
@@ -184,13 +177,21 @@ public class LocalizationPanel extends Composite{
 				setForecastButtonState();
 				//Show the forecastTabPanel after
 				if (spotBox.getItemCount() > 0 && new Integer(spotBox.getValue(spotBox.getSelectedIndex())) > 0 )
-					((MainVerticalPanel)getParent()).createForecastTabPanel();
+					renderSpotInfo();
 			}
 				
 			public void onFailure(Throwable caught) {
 				
 			}
 		});
+	}
+	
+	private void renderSpotInfo() {
+		if (this.baseParentPanel instanceof SpotDescriptionPanel) {
+			((SpotDescriptionPanel)this.baseParentPanel).showSpotDescription();
+		} else if (this.baseParentPanel instanceof ForecastPanel) {
+			((ForecastPanel)this.baseParentPanel).showSpotForecast();	
+		}
 	}
 	
 	private void setCountryListItems(String area){
@@ -310,5 +311,13 @@ public class LocalizationPanel extends Composite{
 	
 	public String getSpotBoxDisplayValue(){
 		return this.spotBox.getItemText(this.spotBox.getSelectedIndex());
+	}
+
+	public Widget getBasePanel() {
+		return this.baseParentPanel;
+	}
+
+	public void setBasePanel(Widget basePanel) {
+		this.baseParentPanel = basePanel;
 	}
 }

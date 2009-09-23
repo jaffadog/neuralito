@@ -48,6 +48,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		
 		addSelectionHandler(new SelectionHandler<Integer>() {
 			public void onSelection(SelectionEvent<Integer> event) {
+				System.out.println("ForecastTabPanel->SelectionTabHandler:" + historyTokens.get(event.getSelectedItem()));
 				History.newItem(historyTokens.get(event.getSelectedItem()));
 			}
 		});
@@ -83,7 +84,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		if (historyTokens.get(index).equals("newSpotTab")) {
 			((NewSpotPanel)this.getWidget(index)).getNewSpotDataPanel().setVisible(true);
 		}
-		
+		System.out.println("ForecastTabPanel->select tab: " + historyToken);
 		selectTab(index);
 	}
 	

@@ -56,9 +56,13 @@ public class SurfForecaster implements EntryPoint {
 
 		final ValueChangeHandler<String> historyHandler = new ValueChangeHandler<String>() {
 			public void onValueChange(final ValueChangeEvent<String> event) {
+				
+				if (oldToken != null && event.getValue().equals(oldToken))
+					System.out.println("SurfForecaster->oldToken es igual a actual(Corta el change event de history):" + event.getValue());
 				// If they are the same, no need to do anything
 				if (oldToken != null && event.getValue().equals(oldToken))
 					return;
+				
 				oldToken = event.getValue();
 
 				ContentPanel.getInstance().setPanelState(event.getValue());
@@ -68,16 +72,18 @@ public class SurfForecaster implements EntryPoint {
 
 		if (History.getToken().length() > 0) {
 			if (GWTUtils.VALID_HISTORY_TOKENS.contains(History.getToken())) {
+				System.out.println("token-valido: " + History.getToken());
 				History.fireCurrentHistoryState();
 			} else {
 				ContentPanel.getInstance().setPanelState(
 						GWTUtils.DEFAULT_HISTORY_TOKEN);
 			}
-		} else {
-			// Use the first token available
-			ContentPanel.getInstance().setPanelState(
-					GWTUtils.DEFAULT_HISTORY_TOKEN);
-		}
+		} 
+//		else {
+//			// Use the first token available
+//			ContentPanel.getInstance().setPanelState(
+//					GWTUtils.DEFAULT_HISTORY_TOKEN);
+//		}
 
 	}
 
