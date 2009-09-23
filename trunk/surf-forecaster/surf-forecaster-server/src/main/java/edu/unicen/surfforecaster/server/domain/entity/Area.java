@@ -45,8 +45,8 @@ public class Area implements Serializable {
 	 * Map containing language/area-name values.
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@MapKey(name = "key")
-	private final Map<String, StringAttribute> names = new HashMap<String, StringAttribute>();
+	@MapKey(name = "language")
+	private final Map<String, I18nKeyValue> names = new HashMap<String, I18nKeyValue>();
 
 	/**
 	 * Constructor
@@ -108,9 +108,9 @@ public class Area implements Serializable {
 	 */
 	public String getName(final String language) {
 		Validate.notEmpty(language, "Language cannot be empty");
-		final StringAttribute value = names.get(language);
+		final I18nKeyValue value = names.get(language);
 		if (value != null)
-			return names.get(language).getName();
+			return names.get(language).getText();
 		else
 			return null;
 	}

@@ -40,7 +40,15 @@ public enum ErrorCode implements Serializable {
 	 * Login action was incorrect. Either username not exists, or password does
 	 * not correspond to user.
 	 */
-	INVALID_LOGIN(9);
+	INVALID_LOGIN(9),
+	/**
+	 * The user id is empty.
+	 */
+	USER_ID_NULL(10),
+	/**
+	 * The user id is not a valid one.
+	 */
+	USER_ID_INVALID(11);
 
 	private int code;
 

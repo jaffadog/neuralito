@@ -15,7 +15,7 @@ import org.apache.commons.lang.Validate;
  * 
  */
 @Entity
-public class StringAttribute {
+public class I18nKeyValue {
 	/**
 	 * The id.
 	 */
@@ -25,25 +25,25 @@ public class StringAttribute {
 	/**
 	 * The key.
 	 */
-	private String key;
+	private String language;
 	/**
 	 * The value.
 	 */
-	private String value;
+	private String text;
 
 	/**
 	 * Constructor
 	 */
-	public StringAttribute() {
+	public I18nKeyValue() {
 		// Orm purpose
 	}
 
 	/**
 	 * Constructor
 	 */
-	public StringAttribute(final String language, final String name) {
+	public I18nKeyValue(final String language, final String name) {
 		setLanguague(language);
-		setName(name);
+		setText(name);
 	}
 
 	/**
@@ -57,14 +57,14 @@ public class StringAttribute {
 	 * @return the languague
 	 */
 	public String getLanguague() {
-		return key;
+		return language;
 	}
 
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return value;
+	public String getText() {
+		return text;
 	}
 
 	/**
@@ -81,16 +81,16 @@ public class StringAttribute {
 	 */
 	public void setLanguague(final String language) {
 		Validate.notEmpty(language);
-		this.key = language;
+		this.language = language;
 	}
 
 	/**
-	 * @param name
+	 * @param text
 	 *            the name to set
 	 */
-	public void setName(final String name) {
-		Validate.notEmpty(name);
-		this.value = name;
+	public void setText(final String text) {
+		Validate.notEmpty(text);
+		this.text = text;
 	}
 
 }

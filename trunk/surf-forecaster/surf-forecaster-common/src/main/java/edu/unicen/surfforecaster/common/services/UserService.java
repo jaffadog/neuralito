@@ -49,4 +49,9 @@ public interface UserService {
 	public UserDTO loginUser(String userName, String password)
 			throws NeuralitoException;
 
+	/**
+	 * @param createdUserId
+	 */
+	public void removeUser(Integer createdUserId) throws NeuralitoException;
+
 }

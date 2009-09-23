@@ -39,8 +39,8 @@ public class Country {
 	 * the country name.
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@MapKey(name = "key")
-	private final Map<String, StringAttribute> names = new HashMap<String, StringAttribute>();
+	@MapKey(name = "language")
+	private final Map<String, I18nKeyValue> names = new HashMap<String, I18nKeyValue>();
 
 	/**
 	 * the zones this country contains.
@@ -52,7 +52,7 @@ public class Country {
 	 * Empty constructor.
 	 */
 	public Country() {
-		names.put("es", new StringAttribute("es", "argentina"));
+		names.put("es", new I18nKeyValue("es", "argentina"));
 		// ORM purpose.
 	}
 
@@ -97,9 +97,9 @@ public class Country {
 	 */
 	public String getName(final String language) {
 		Validate.notNull(language);
-		final StringAttribute value = names.get(language);
+		final I18nKeyValue value = names.get(language);
 		if (value != null)
-			return value.getName();
+			return value.getText();
 		else
 			return null;
 	}

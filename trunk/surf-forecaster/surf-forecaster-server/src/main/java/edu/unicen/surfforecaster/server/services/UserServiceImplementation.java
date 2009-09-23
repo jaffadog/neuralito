@@ -118,4 +118,28 @@ public class UserServiceImplementation implements UserService {
 		this.userDAO = userDAO;
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.UserService#removeUser(java.lang.Integer)
+	 */
+	@Override
+	public void removeUser(final Integer userId) throws NeuralitoException {
+		validate(userId);
+		userDAO.removeUser(userId);
+
+	}
+
+	/**
+	 * Validates user id.
+	 * 
+	 * @param userId
+	 * @throws NeuralitoException
+	 */
+	private void validate(final Integer userId) throws NeuralitoException {
+		if (userId == null)
+			throw new NeuralitoException(ErrorCode.USER_ID_NULL);
+		if (userId < 0)
+			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
+
+	}
+
 }
