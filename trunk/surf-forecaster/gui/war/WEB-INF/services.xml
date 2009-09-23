@@ -5,8 +5,8 @@
 
     <import resource="dao.xml"/>
 	
-    <bean id="myServiceBean" class="edu.unicen.surfforecaster.server.services.MyServiceImplementation">
-    <property name="surfSpotDAO" ref="surfSpotDAO"></property>        
+    <bean id="userService" class="edu.unicen.surfforecaster.server.services.UserServiceImplementation">
+    <property name="userDAO" ref="userDAO"></property>        
     </bean>
    
 

@@ -1,51 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-  <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-    <property name="hibernateProperties">
-      <props>
-        <prop key="hibernate.hbm2ddl.auto">create</prop>
-        <prop key="hibernate.connection.pool_size">1</prop>
-        <prop key="hibernate.show_sql">true</prop>
-        <prop key="hibernate.connection.autocommit">true</prop>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.connection.pool_size">1</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">true</prop>
 
-        <!--HSQL-->
-        <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-        <prop key="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</prop>
-        <prop key="hibernate.connection.url">jdbc:hsqldb:mem:z</prop>
-        <prop key="hibernate.connection.username">sa</prop>
-        <prop key="hibernate.connection.password"></prop>
+<!--				HSQL CONFIG-->
+<!--				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>-->
+<!--				<prop key="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</prop>-->
+<!--				<prop key="hibernate.connection.url">jdbc:hsqldb:mem:z</prop>-->
+<!--				<prop key="hibernate.connection.username">sa</prop>-->
+<!--				<prop key="hibernate.connection.password"></prop>-->
+<!--				MYSQL CONFIG-->
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+				<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/test</prop>
+				<prop key="hibernate.connection.username">root</prop>
+				<prop key="hibernate.connection.password">admin</prop>
+				
+<!--				-->
+<!--				## MySQL-->
+<!---->
+<!--hibernate.dialect net.sf.hibernate.dialect.MySQLDialect-->
+<!--hibernate.connection.driver_class org.gjt.mm.mysql.Driver-->
+<!--hibernate.connection.driver_class com.mysql.jdbc.Driver-->
+<!--hibernate.connection.url jdbc:mysql:///test-->
+<!--hibernate.connection.username cesar-->
+<!--hibernate.connection.password -->
 
-      </props>
-    </property>
-    <property name="annotatedClasses">
-      <list>
-<!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Track</value>-->
-<!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Record</value>-->
-<!--        <value>com.zabada.springrecipes.hibernatejpa.entity.Artist</value>-->
-		<value>edu.unicen.surfforecaster.server.domain.entity.SurfSpot</value>
-		<value>edu.unicen.surfforecaster.server.domain.entity.SurfSpotRegion</value>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor" autowire="byName" /><!--sessionFactory will get autowired-->
-
-<!--  <bean id="musicDaoTarget" class="com.zabada.springrecipes.hibernatejpa.dao.MusicDAOHibernateImpl" autowire="byName" />sessionFactory will get autowired-->
-<bean id="surfSpotDaoTarget" class="edu.unicen.surfforecaster.server.dao.SurfSpotDAOHibernateImpl" autowire="byName" /><!--sessionFactory will get autowired-->
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Area</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Country</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Zone</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Spot</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.I18nKeyValue</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Comparation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.User</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
 
 
-  <bean id="surfSpotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
-    <property name="proxyInterfaces">
-      <value>edu.unicen.surfforecaster.server.dao.SurfSpotDAO</value>
-    </property>
-    <property name="interceptorNames">
-      <list>
-        <value>hibernateInterceptor</value>
-<!--        <value>musicDaoTarget</value>-->
-<value>surfSpotDaoTarget</value>
-      </list>
-    </property>
-  </bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+
+
+	<bean id="spotDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.SpotDAOHibernateImpl"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+	<bean id="userDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.UserDAOHibernateImpl"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+
+
+	<bean id="spotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.SpotDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>spotDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="userDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.UserDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>userDaoTarget</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>
