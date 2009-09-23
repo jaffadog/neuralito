@@ -56,7 +56,7 @@ div div#loadingTxtDiv {
     font-weight: bold;
 }
 
-/** Label error */
+/** Label success */
 .gwt-Label-success {
     color: #088A08;
     font-weight: bold;
