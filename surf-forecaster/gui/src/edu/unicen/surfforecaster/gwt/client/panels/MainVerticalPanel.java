@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -14,25 +15,24 @@ public class MainVerticalPanel extends VerticalPanel {
 		this.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		this.setWidth(GWTUtils.APLICATION_WIDTH);
 		{
-			this.add(LocalizationPanel.getInstance());
+			forecastTabPanel = new ForecastTabPanel();
+			this.add(forecastTabPanel);
 		}
-//		{
-//			forecastTabPanel = new ForecastTabPanel();
-//			this.add(forecastTabPanel);
-//		}
 		
 	}
 	
-	public void createForecastTabPanel() {
-		if (forecastTabPanel != null) {
-			this.remove(forecastTabPanel);
-			forecastTabPanel = null;
-		}
-		forecastTabPanel = new ForecastTabPanel();
-		this.add(forecastTabPanel);
-	}
+//	public void createForecastTabPanel() {
+//		System.out.println("creando tab Panel...");
+//		if (forecastTabPanel != null) {
+//			this.remove(forecastTabPanel);
+//			forecastTabPanel = null;
+//		}
+//		forecastTabPanel = new ForecastTabPanel();
+//		this.add(forecastTabPanel);
+//	}
 	
 	public void setPanelState(String historyToken){
+		System.out.println("MainVerticalPanel->setPanelState: " + History.getToken());
 		this.forecastTabPanel.setPanelState(historyToken);
 	}
 }
