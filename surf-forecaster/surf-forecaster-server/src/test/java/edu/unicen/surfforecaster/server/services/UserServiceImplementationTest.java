@@ -5,14 +5,15 @@ package edu.unicen.surfforecaster.server.services;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ErrorCode;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
-import edu.unicen.surfforecaster.server.SpringContextAwareTest;
 
 /**
  * Integration tests for {@link UserServiceImplementation}.
@@ -20,31 +21,54 @@ import edu.unicen.surfforecaster.server.SpringContextAwareTest;
  * @author esteban
  * 
  */
-public class UserServiceImplementationTest extends SpringContextAwareTest {
+public class UserServiceImplementationTest {
 
-	private UserService userService;
+	private final UserService userService;
 
-	@Before
-	public void init() {
+	protected ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+			"/services.xml");
+
+	private Integer createdUserId;
+	final String name = "Jhon";
+	final String lastName = "Cook";
+	final String email = System.currentTimeMillis() + "jhon@cook.com";
+	final String username = System.currentTimeMillis() + "jhonCook89";
+	final String password = "jhonnieCook";
+	final String type = "admin";
+
+	public UserServiceImplementationTest() {
 		userService = (UserService) context.getBean("userService");
 	}
 
+	@Before
+	public void createTestUser() {
+		try {
+			createdUserId = userService.addUser(name, lastName, email,
+					username, password, type);
+		} catch (final NeuralitoException e) {
+			Assert
+					.fail("Could not create user for performing tests. Exception was:"
+							+ e);
+		}
+	}
+
+	@After
+	public void removeTestUser() {
+		try {
+			if (createdUserId != null) {
+				userService.removeUser(createdUserId);
+			}
+		} catch (final NeuralitoException e) {
+			Assert.fail("Could not remove test user. Exception was:" + e);
+		}
+	}
+
 	/**
-	 * Correct addition of new user and login.
+	 * Login with the test user.
 	 */
 	@Test
-	public void addAndLoginUser() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		final String email = "jhon@cook.com";
-		final String username = "jhonCook89";
-		final String password = "jhonnieCook";
-		final String type = "admin";
+	public void loginUser() {
 		try {
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
-			Assert.assertTrue("generated id should be greater than 0", id > 0);
-
 			final UserDTO user = userService.loginUser(username, password);
 
 			Assert.assertEquals(name, user.getName());
@@ -52,7 +76,7 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 			Assert.assertEquals(email, user.getEmail());
 			Assert.assertEquals(username, user.getUsername());
 			Assert.assertEquals(type, user.getType());
-			Assert.assertEquals(id, user.getId());
+			Assert.assertEquals(createdUserId, user.getId());
 
 		} catch (final NeuralitoException e) {
 			Assert.fail(e.getErrorCode().name());
@@ -64,19 +88,8 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 	 */
 	@Test
 	public void incorrectLoginBadPassword() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		final String email = "jhon@cook.com";
-		final String username = "jhonCook89";
-		final String password = "jhonnieCook";
-		final String type = "admin";
 		try {
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
-			Assert.assertTrue("generated id should be greater than 0", id > 0);
-
-			final UserDTO user = userService.loginUser(username,
-					"wrongPasswords");
+			userService.loginUser(username, "wrongPasswords");
 			Assert.fail("Login should have failed and thrown exception.");
 		} catch (final NeuralitoException e) {
 			Assert.assertTrue("Error Code different than expected. Expecting:"
@@ -91,20 +104,6 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 	 */
 	@Test
 	public void incorrectLoginBadUserName() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		final String email = "jhon@cook.com";
-		final String username = "jhonCook89";
-		final String password = "jhonnieCook";
-		final String type = "admin";
-		try {
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
-		} catch (final NeuralitoException e) {
-			Assert
-					.fail("User should ve been added with no problems. Instead error:"
-							+ e.getErrorCode().name() + " was found.");
-		}
 		try {
 			userService.loginUser("cualquierasdj987a", password);
 			Assert.fail("After bad login expecting error:"
@@ -123,12 +122,6 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 	 */
 	@Test
 	public void addAnAlreadyUsedUserName() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		final String email = "jhon@cook.com";
-		final String username = "jhonCook89";
-		final String password = "jhonnieCook";
-		final String type = "admin";
 
 		final String name2 = "Jhon2";
 		final String lastName2 = "Cook2";
@@ -136,15 +129,6 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 		final String username2 = username;
 		final String password2 = "jhonnieCook3";
 		final String type2 = "admin";
-		try {
-			// Add the first user.
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
-		} catch (final NeuralitoException e) {
-			Assert
-					.fail("User should ve been added with no problems. Instead error:"
-							+ e.getErrorCode().name() + " was found.");
-		}
 		try {
 			// Add a second user with the same username.This should throw
 			// exception.
@@ -165,27 +149,12 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 	 */
 	@Test
 	public void addAnAlreadyUsedEmail() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		final String email = "jhon@cook.com";
-		final String username = "jhonCook89";
-		final String password = "jhonnieCook";
-		final String type = "admin";
-
 		final String name2 = "Jhon2";
 		final String lastName2 = "Cook2";
 		final String email2 = email;
 		final String username2 = "whanchanken";
 		final String password2 = "jhonnieCook3";
 		final String type2 = "admin";
-		try {
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
-		} catch (final NeuralitoException e) {
-			Assert
-					.fail("User should ve been added with no problems. Instead error:"
-							+ e.getErrorCode().name() + " was found.");
-		}
 		try {
 			// Add a second user with the same username.This should throw
 			// exception.
@@ -206,27 +175,16 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 	 */
 	@Test
 	public void addUserWithEmptyUserName() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		final String email = "jhon@cook.com";
-		String username = "";
-		final String password = "jhonnieCook";
-		final String type = "admin";
+		final String name2 = "Jhon2";
+		final String lastName2 = "Cook2";
+		final String email2 = "email@asd.com";
+		final String username2 = "";
+		final String password2 = "jhonnieCook3";
+		final String type2 = "admin";
 		try {
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
-			Assert
-					.fail("User should not ve been added because username was empty");
-		} catch (final NeuralitoException e) {
-			Assert.assertTrue("Error Code different than expected. Expecting:"
-					+ ErrorCode.USERNAME_EMPTY.name() + "but was:"
-					+ e.getErrorCode().name(), e.getErrorCode().equals(
-					ErrorCode.USERNAME_EMPTY));
-		}
-		try {
-			username = null;
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
+
+			userService.addUser(name2, lastName2, email2, username2, password2,
+					type2);
 			Assert
 					.fail("User should not ve been added because username was empty");
 		} catch (final NeuralitoException e) {
@@ -242,15 +200,15 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 	 */
 	@Test
 	public void addUserWithEmptyPassword() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		final String email = "jhon@cook.com";
-		final String username = "asdasd";
-		String password = "";
-		final String type = "admin";
+		final String name2 = "Jhon2";
+		final String lastName2 = "Cook2";
+		final String email2 = "email@asd.com";
+		final String username2 = "whanchanken";
+		String password2 = "";
+		final String type2 = "admin";
 		try {
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
+			userService.addUser(name2, lastName2, email2, username2, password2,
+					type2);
 			Assert
 					.fail("User should not ve been added because password was empty");
 		} catch (final NeuralitoException e) {
@@ -260,9 +218,9 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 					ErrorCode.PASSWORD_EMPTY));
 		}
 		try {
-			password = null;
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
+			password2 = null;
+			userService.addUser(name2, lastName2, email2, username2, password2,
+					type2);
 			Assert
 					.fail("User should not ve been added because password was empty");
 		} catch (final NeuralitoException e) {
@@ -278,15 +236,15 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 	 */
 	@Test
 	public void addUserWithEmptyEmail() {
-		final String name = "Jhon";
-		final String lastName = "Cook";
-		String email = "";
-		final String username = "asdasd";
-		final String password = "asdasda";
-		final String type = "admin";
+		final String name2 = "Jhon2";
+		final String lastName2 = "Cook2";
+		String email2 = "";
+		final String username2 = "whanchanken";
+		final String password2 = "asdfasfas";
+		final String type2 = "admin";
 		try {
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
+			userService.addUser(name2, lastName2, email2, username2, password2,
+					type2);
 			Assert
 					.fail("User should not ve been added because email was empty");
 		} catch (final NeuralitoException e) {
@@ -296,9 +254,9 @@ public class UserServiceImplementationTest extends SpringContextAwareTest {
 					ErrorCode.EMAIL_EMPTY));
 		}
 		try {
-			email = null;
-			final Integer id = userService.addUser(name, lastName, email,
-					username, password, type);
+			email2 = null;
+			final Integer id = userService.addUser(name2, lastName2, email2,
+					username2, password2, type2);
 			Assert
 					.fail("User should not ve been added because email was empty");
 		} catch (final NeuralitoException e) {

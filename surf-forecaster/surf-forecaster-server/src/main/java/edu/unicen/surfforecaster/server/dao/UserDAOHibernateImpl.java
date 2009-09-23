@@ -67,4 +67,16 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements
 		return null;
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.UserDAO#removeUser(java.lang.Integer)
+	 */
+	@Override
+	public void removeUser(final Integer userId) {
+		final User user = (User) getHibernateTemplate()
+				.load(User.class, userId);
+		if (user != null) {
+			getHibernateTemplate().delete(user);
+		}
+	}
+
 }

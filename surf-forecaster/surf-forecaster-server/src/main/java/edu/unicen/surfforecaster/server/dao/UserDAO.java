@@ -35,4 +35,9 @@ public interface UserDAO {
 	 */
 	public User getUserByEmail(String email);
 
+	/**
+	 * @param userId
+	 */
+	public void removeUser(Integer userId);
+
 }
