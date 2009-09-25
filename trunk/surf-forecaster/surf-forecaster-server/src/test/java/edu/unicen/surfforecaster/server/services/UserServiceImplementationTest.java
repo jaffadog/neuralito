@@ -14,6 +14,7 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ErrorCode;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
+import edu.unicen.surfforecaster.common.services.dto.UserType;
 
 /**
  * Integration tests for {@link UserServiceImplementation}.
@@ -34,7 +35,7 @@ public class UserServiceImplementationTest {
 	final String email = System.currentTimeMillis() + "jhon@cook.com";
 	final String username = System.currentTimeMillis() + "jhonCook89";
 	final String password = "jhonnieCook";
-	final String type = "admin";
+	final UserType type = UserType.ADMINISTRATOR;
 
 	public UserServiceImplementationTest() {
 		userService = (UserService) context.getBean("userService");
@@ -128,7 +129,7 @@ public class UserServiceImplementationTest {
 		final String email2 = "jhon@cook.com3";
 		final String username2 = username;
 		final String password2 = "jhonnieCook3";
-		final String type2 = "admin";
+		final UserType type2 = UserType.ADMINISTRATOR;
 		try {
 			// Add a second user with the same username.This should throw
 			// exception.
@@ -154,7 +155,7 @@ public class UserServiceImplementationTest {
 		final String email2 = email;
 		final String username2 = "whanchanken";
 		final String password2 = "jhonnieCook3";
-		final String type2 = "admin";
+		final UserType type2 = UserType.ADMINISTRATOR;
 		try {
 			// Add a second user with the same username.This should throw
 			// exception.
@@ -180,7 +181,7 @@ public class UserServiceImplementationTest {
 		final String email2 = "email@asd.com";
 		final String username2 = "";
 		final String password2 = "jhonnieCook3";
-		final String type2 = "admin";
+		final UserType type2 = UserType.ADMINISTRATOR;
 		try {
 
 			userService.addUser(name2, lastName2, email2, username2, password2,
@@ -205,7 +206,7 @@ public class UserServiceImplementationTest {
 		final String email2 = "email@asd.com";
 		final String username2 = "whanchanken";
 		String password2 = "";
-		final String type2 = "admin";
+		final UserType type2 = UserType.ADMINISTRATOR;
 		try {
 			userService.addUser(name2, lastName2, email2, username2, password2,
 					type2);
@@ -241,7 +242,7 @@ public class UserServiceImplementationTest {
 		String email2 = "";
 		final String username2 = "whanchanken";
 		final String password2 = "asdfasfas";
-		final String type2 = "admin";
+		final UserType type2 = UserType.ADMINISTRATOR;
 		try {
 			userService.addUser(name2, lastName2, email2, username2, password2,
 					type2);

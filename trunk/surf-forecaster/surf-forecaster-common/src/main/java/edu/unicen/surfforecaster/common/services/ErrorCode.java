@@ -35,7 +35,7 @@ public enum ErrorCode implements Serializable {
 	/**
 	 * User type is empty.It is null or it has no value.
 	 */
-	USER_TYPE_EMPTY(8),
+	USER_TYPE_NULL(8),
 	/**
 	 * Login action was incorrect. Either username not exists, or password does
 	 * not correspond to user.

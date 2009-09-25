@@ -3,6 +3,7 @@
  */
 package edu.unicen.surfforecaster.common.services.dto;
 
+
 /**
  * User DTO.
  * 
@@ -34,7 +35,7 @@ public class UserDTO {
 	/**
 	 * the user type
 	 */
-	private final String type;
+	private final UserType type;
 
 	/**
 	 * @param name
@@ -44,7 +45,7 @@ public class UserDTO {
 	 * @param type
 	 */
 	public UserDTO(final Integer id, final String name, final String lastName,
-			final String email, final String username, final String type) {
+			final String email, final String username, final UserType type) {
 		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
@@ -84,7 +85,7 @@ public class UserDTO {
 	/**
 	 * @return the type
 	 */
-	public String getType() {
+	public UserType getType() {
 		return type;
 	}
 
