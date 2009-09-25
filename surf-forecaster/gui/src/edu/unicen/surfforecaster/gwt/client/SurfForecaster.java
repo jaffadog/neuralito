@@ -4,7 +4,9 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -18,11 +20,9 @@ import edu.unicen.surfforecaster.gwt.client.panels.UserStatePanel;
 public class SurfForecaster implements EntryPoint {
 
 	// Create an instance of SurfForecasterConstants interface
-	private final SurfForecasterConstants localeConstants = GWT
-			.create(SurfForecasterConstants.class);
+	private final SurfForecasterConstants localeConstants = GWT.create(SurfForecasterConstants.class);
 	// Create an instance of SurfForecasterMessages interface
-	private final SurfForecasterMessages localeMessages = GWT
-			.create(SurfForecasterMessages.class);
+	private final SurfForecasterMessages localeMessages = GWT.create(SurfForecasterMessages.class);
 	// history old token
 	private String oldToken = null;
 
@@ -30,9 +30,13 @@ public class SurfForecaster implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		
 		GWTUtils.LOCALE_CONSTANTS = localeConstants;
 		GWTUtils.LOCALE_MESSAGES = localeMessages;
-		// this.testService();
+		
+		//set the valid history tokens values
+		GWTUtils.setValidHistoryTokens();
+		
 		final RootPanel rootPanel = RootPanel.get();
 		rootPanel.addStyleName("gwt-RootPanel");
 
@@ -69,16 +73,18 @@ public class SurfForecaster implements EntryPoint {
 			}
 		};
 		History.addValueChangeHandler(historyHandler);
-
+		
+		/*
 		if (History.getToken().length() > 0) {
 			if (GWTUtils.VALID_HISTORY_TOKENS.contains(History.getToken())) {
 				System.out.println("token-valido: " + History.getToken());
 				History.fireCurrentHistoryState();
 			} else {
-				ContentPanel.getInstance().setPanelState(
-						GWTUtils.DEFAULT_HISTORY_TOKEN);
+				System.out.println("token-invalido: " + History.getToken());
+				ContentPanel.getInstance().setPanelState(GWTUtils.DEFAULT_HISTORY_TOKEN);
 			}
 		} 
+		*/
 //		else {
 //			// Use the first token available
 //			ContentPanel.getInstance().setPanelState(

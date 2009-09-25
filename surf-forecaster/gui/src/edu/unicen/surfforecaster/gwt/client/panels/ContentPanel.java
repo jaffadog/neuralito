@@ -29,9 +29,6 @@ public class ContentPanel extends SimplePanel {
 		if (registerUserPanel == null)
 			registerUserPanel = new RegisterUserPanel();
 
-		if (!GWTUtils.VALID_HISTORY_TOKENS.contains("registerNewUser"))
-			GWTUtils.VALID_HISTORY_TOKENS.add("registerNewUser");
-
 		setWidget(registerUserPanel);
 	}
 	
