@@ -71,6 +71,7 @@ public class SpotDAOHibernateImplTest {
 		zone.addSpot(spot);
 
 		final Integer areaId = spotDAO.saveArea(area);
+		spotDAO.saveSpot(spot);
 
 		final List<Area> loadedAreas = spotDAO.getAllAreas();
 		Assert.assertEquals(initialAreas + 1, loadedAreas.size());
