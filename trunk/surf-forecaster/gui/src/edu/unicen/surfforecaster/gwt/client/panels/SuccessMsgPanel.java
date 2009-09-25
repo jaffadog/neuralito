@@ -3,9 +3,11 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 import java.util.Enumeration;
 import java.util.Vector;
 
+
 import com.google.gwt.user.client.ui.Label;
 
-import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+
 
 public class SuccessMsgPanel extends MessagePanel {
 	
