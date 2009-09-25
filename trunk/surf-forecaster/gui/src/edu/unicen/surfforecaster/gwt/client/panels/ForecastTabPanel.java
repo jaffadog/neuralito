@@ -10,9 +10,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.gwt.client.SessionData;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 public class ForecastTabPanel extends DecoratedTabPanel {
 	

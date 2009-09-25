@@ -7,6 +7,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
+
 @RemoteServiceRelativePath("ForecastCommonServices")
 public interface ForecastCommonServices extends RemoteService {
 	/**

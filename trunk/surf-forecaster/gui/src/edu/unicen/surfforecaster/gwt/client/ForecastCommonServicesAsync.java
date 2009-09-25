@@ -3,10 +3,10 @@ package edu.unicen.surfforecaster.gwt.client;
 import java.util.Map;
 import java.util.Vector;
 
+import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface ForecastCommonServicesAsync {
-
 	void login(String userName, String password, AsyncCallback<User> callback);
 
 	void getSessionData(AsyncCallback<SessionData> callback);
@@ -19,7 +19,7 @@ public interface ForecastCommonServicesAsync {
 
 	void getZones(String country, AsyncCallback<Map<String, Vector>> callback);
 
-	void getSpots(String zone, AsyncCallback<Map<String, Vector>> callback);
+	void getSpots(String spot, AsyncCallback<Map<String, Vector>> callback);
 
 	void getArea(AsyncCallback<Area> callback);
 }

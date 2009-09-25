@@ -17,10 +17,10 @@ import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.gwt.client.SessionData;
 import edu.unicen.surfforecaster.gwt.client.Spot;
 import edu.unicen.surfforecaster.gwt.client.User;
 import edu.unicen.surfforecaster.gwt.client.Zone;
+import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.server.util.SpringGWTServlet;
 
 public class ForecastCommonServicesImpl extends SpringGWTServlet implements
