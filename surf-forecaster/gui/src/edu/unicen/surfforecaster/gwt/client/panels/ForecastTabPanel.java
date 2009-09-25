@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.SessionData;
+import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
 
 public class ForecastTabPanel extends DecoratedTabPanel {
 	
@@ -59,6 +60,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 					add(newSpotPanel, GWTUtils.LOCALE_CONSTANTS.newSpot());					
 					historyTokens.add("newSpotTab");
 				}
+				SurfForecaster.getInstance().gotoHistoryToken();
 			}
 
 			public void onFailure(Throwable caught) {

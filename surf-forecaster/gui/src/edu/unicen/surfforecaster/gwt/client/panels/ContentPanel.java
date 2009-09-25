@@ -2,8 +2,6 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import edu.unicen.surfforecaster.gwt.client.GWTUtils;
-
 public class ContentPanel extends SimplePanel {
 	
 	private static ContentPanel instance = null;
