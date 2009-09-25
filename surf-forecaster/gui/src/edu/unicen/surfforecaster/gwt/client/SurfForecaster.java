@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -11,6 +12,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.ContentPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.LogoPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.UserStatePanel;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.

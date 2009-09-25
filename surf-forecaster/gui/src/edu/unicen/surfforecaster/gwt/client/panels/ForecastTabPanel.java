@@ -2,6 +2,7 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Vector;
 
+
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.History;
@@ -9,9 +10,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.gwt.client.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.SessionData;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class ForecastTabPanel extends DecoratedTabPanel {
 	

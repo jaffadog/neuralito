@@ -1,9 +1,9 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
+
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -26,8 +26,8 @@ import com.google.gwt.user.client.ui.Widget;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.gwt.client.GWTUtils;
-import edu.unicen.surfforecaster.gwt.client.TimeZones;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
 
 public class NewSpotDataPanel extends LazyPanel {
 

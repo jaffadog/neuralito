@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.gwt.client;
+package edu.unicen.surfforecaster.gwt.client.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;

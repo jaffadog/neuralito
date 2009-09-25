@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.gwt.client;
+package edu.unicen.surfforecaster.gwt.client.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,6 +8,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
+import edu.unicen.surfforecaster.gwt.client.SurfForecasterMessages;
 
 /**
  * GWTUtils is a set of helper classes to make it easier to work with GWT
