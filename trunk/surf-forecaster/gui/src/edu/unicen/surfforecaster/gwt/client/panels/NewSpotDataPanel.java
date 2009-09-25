@@ -27,6 +27,7 @@ import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.TimeZones;
 
 public class NewSpotDataPanel extends LazyPanel {
 
@@ -231,11 +232,11 @@ public class NewSpotDataPanel extends LazyPanel {
 	}
 	
 	private void setTimeZoneItems() {
-		HashMap<String, Object> timeZones = GWTUtils.getTimeZones();
-		Object[] keys = (Object[]) timeZones.get("orderedKeys");
+		TimeZones timeZones = TimeZones.getInstance();
+		Object[] keys = (Object[]) timeZones.getTimeZones().get("orderedKeys");
 		
 		for (int i = 0; i < keys.length; i++) 
-			this.timeZoneBox.addItem((String)keys[i], (String)timeZones.get(keys[i]));
+			this.timeZoneBox.addItem((String)keys[i], (String)timeZones.getTimeZones().get(keys[i]));
 	}
 	
 	private void setAreaListItems(){

@@ -4,9 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -25,11 +23,20 @@ public class SurfForecaster implements EntryPoint {
 	private final SurfForecasterMessages localeMessages = GWT.create(SurfForecasterMessages.class);
 	// history old token
 	private String oldToken = null;
-
+	
+	private static SurfForecaster instance = null;
+	
+	public static SurfForecaster getInstance() {
+        return instance;
+    }
+	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		
+		//Set this instance of SurfForecaster
+		SurfForecaster.instance = this;
 		
 		GWTUtils.LOCALE_CONSTANTS = localeConstants;
 		GWTUtils.LOCALE_MESSAGES = localeMessages;
@@ -73,8 +80,12 @@ public class SurfForecaster implements EntryPoint {
 			}
 		};
 		History.addValueChangeHandler(historyHandler);
-		
-		/*
+	}
+	
+	/**
+	 * Check if exist any history token in the url and calls ValueChangeHandler of history object 
+	 */
+	public void gotoHistoryToken() {
 		if (History.getToken().length() > 0) {
 			if (GWTUtils.VALID_HISTORY_TOKENS.contains(History.getToken())) {
 				System.out.println("token-valido: " + History.getToken());
@@ -84,13 +95,6 @@ public class SurfForecaster implements EntryPoint {
 				ContentPanel.getInstance().setPanelState(GWTUtils.DEFAULT_HISTORY_TOKEN);
 			}
 		} 
-		*/
-//		else {
-//			// Use the first token available
-//			ContentPanel.getInstance().setPanelState(
-//					GWTUtils.DEFAULT_HISTORY_TOKEN);
-//		}
-
 	}
 
 }
