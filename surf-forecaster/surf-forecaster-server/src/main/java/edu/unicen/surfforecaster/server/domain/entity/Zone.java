@@ -3,21 +3,22 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.Validate;
+
+import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 
 /**
  * A zone its a geographic area inside a country.
@@ -33,24 +34,45 @@ public class Zone {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	/**
+	 * The zone name.
+	 */
+	@Column(nullable = false, length = 255)
 	private String name;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	/**
+	 * The spots this zone contains.
+	 */
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "zone")
 	private Set<Spot> spots;
+	/**
+	 * The country this zone belongs.
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Country country;
 
 	/**
 	 * 
 	 */
 	public Zone() {
-		// TODO Auto-generated constructor stub
+		// ORM purpose.
 	}
 
 	/**
 	 * Creates a new Zone.
 	 */
-	public Zone(String name) {
+	public Zone(final String name) {
 		Validate.notEmpty(name, "The zone name cannot be null");
 		this.name = name;
-		this.spots = new HashSet<Spot>();
+		spots = new HashSet<Spot>();
+	}
+
+	/**
+	 * @param names
+	 * @param countryId
+	 */
+	public Zone(final String name, final Country country) {
+		this.name = name;
+		this.country = country;
 	}
 
 	/**
@@ -58,7 +80,7 @@ public class Zone {
 	 * 
 	 * @param id
 	 */
-	public void setId(Integer id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
@@ -66,7 +88,7 @@ public class Zone {
 	 * @return the id
 	 */
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
 
 	public String getName() {
@@ -77,13 +99,36 @@ public class Zone {
 		return Collections.unmodifiableSet(spots);
 	}
 
-	public void addSpot(Spot theSpot) {
+	public void addSpot(final Spot theSpot) {
 		Validate.notNull(theSpot, "The spot to be added cannot be null");
-		this.spots.add(theSpot);
+		spots.add(theSpot);
 	}
 
-	public void removeSpot(Spot theSpot) {
+	public void removeSpot(final Spot theSpot) {
 		Validate.notNull(theSpot, "The spot to be removed cannot be null");
 		spots.remove(theSpot);
+	}
+
+	/**
+	 * @return
+	 */
+	public ZoneDTO getDTO() {
+		final ZoneDTO dto = new ZoneDTO(id, name);
+		return dto;
+	}
+
+	/**
+	 * @return
+	 */
+	public Country getCountry() {
+		return country;
+	}
+
+	/**
+	 * @param country2
+	 */
+	public void setCountry(final Country country2) {
+		country = country2;
+
 	}
 }

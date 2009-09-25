@@ -3,6 +3,7 @@ package edu.unicen.surfforecaster.server.domain.entity;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
+import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 
 /**
  * A surf spot.
@@ -26,21 +29,34 @@ public class Spot implements Serializable {
 	/**
 	 * The name of the surf spot.
 	 */
+	@Column(nullable = false, length = 100)
 	private String name;
 	/**
 	 * Latitude of the surf spot. TODO: define in whic units latitude is given.
 	 */
+	@Column(nullable = false)
 	private double latitude;
 	/**
 	 * Longitude of the surf spot. TODO: define in whic units latitude is given.
 	 */
+	@Column(nullable = false)
 	private double longitude;
 	/**
-	 * The region where this spot is located.
+	 * If this spots is public or not.
 	 */
-	@ManyToOne
-	private Area region;
+	@Column(nullable = false)
+	private boolean publik;
+	/**
+	 * Spot creator.
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	private User user;
 
+	/**
+	 * The zone where this spot is located.
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Zone zone;
 	/**
 	 * Description of the spot.
 	 */
@@ -51,6 +67,7 @@ public class Spot implements Serializable {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(length = 11)
 	private Integer id;
 
 	public Integer getId() {
@@ -76,13 +93,6 @@ public class Spot implements Serializable {
 	 */
 	public double getLongitude() {
 		return longitude;
-	}
-
-	/**
-	 * @return the region
-	 */
-	public Area getRegion() {
-		return region;
 	}
 
 	/**
@@ -118,14 +128,6 @@ public class Spot implements Serializable {
 	}
 
 	/**
-	 * @param region
-	 *            the region to set
-	 */
-	public void setRegion(final Area region) {
-		this.region = region;
-	}
-
-	/**
 	 * @param description
 	 *            the description to set
 	 */
@@ -138,6 +140,66 @@ public class Spot implements Serializable {
 	 */
 	public Description getDescription() {
 		return description;
+	}
+
+	/**
+	 * @param publik
+	 *            the publik to set
+	 */
+	public void setPublik(final boolean publik) {
+		this.publik = publik;
+	}
+
+	/**
+	 * @return the publik
+	 */
+	public boolean isPublik() {
+		return publik;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user
+	 *            the user to set
+	 */
+	public void setUser(final User user) {
+		this.user = user;
+	}
+
+	/**
+	 * @return the zone
+	 */
+	public Zone getZone() {
+		return zone;
+	}
+
+	/**
+	 * @param zone
+	 *            the zone to set
+	 */
+	public void setZone(final Zone zone) {
+		this.zone = zone;
+	}
+
+	/**
+	 * Creates the dto for this instance.
+	 * 
+	 * @param spot
+	 * @return
+	 */
+	public SpotDTO getDTO(final Spot spot) {
+		final SpotDTO spotDTO = new SpotDTO(spot.getId(), spot.getName(), spot
+				.getLatitude(), spot.getLongitude(), spot.getZone().getDTO(),
+				spot.getZone().getCountry().getDTO(), spot.getZone()
+						.getCountry().getArea().getDTO(), spot.getUser()
+						.getId(), spot.isPublik());
+		return spotDTO;
 	}
 
 }

@@ -50,8 +50,8 @@ public interface UserService {
 			throws NeuralitoException;
 
 	/**
-	 * @param createdUserId
+	 * @param userId
 	 */
-	public void removeUser(Integer createdUserId) throws NeuralitoException;
+	public void removeUser(Integer userId) throws NeuralitoException;
 
 }

@@ -51,6 +51,7 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements
 	/**
 	 * @see edu.unicen.surfforecaster.server.dao.UserDAO#getUserByEmail(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public User getUserByEmail(final String email) {
 		final DetachedCriteria criteria = DetachedCriteria.forClass(User.class)
@@ -77,6 +78,14 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements
 		if (user != null) {
 			getHibernateTemplate().delete(user);
 		}
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.UserDAO#getUserByUserId(java.lang.Integer)
+	 */
+	@Override
+	public User getUserByUserId(final Integer userId) {
+		return (User) getHibernateTemplate().get(User.class, userId);
 	}
 
 }

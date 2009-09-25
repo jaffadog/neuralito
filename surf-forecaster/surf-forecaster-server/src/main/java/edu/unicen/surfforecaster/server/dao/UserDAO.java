@@ -40,4 +40,9 @@ public interface UserDAO {
 	 */
 	public void removeUser(Integer userId);
 
+	/**
+	 * @param userId
+	 */
+	public User getUserByUserId(Integer userId);
+
 }
