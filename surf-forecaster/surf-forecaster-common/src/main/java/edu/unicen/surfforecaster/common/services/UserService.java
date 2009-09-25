@@ -5,6 +5,7 @@ package edu.unicen.surfforecaster.common.services;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
+import edu.unicen.surfforecaster.common.services.dto.UserType;
 
 /**
  * Service definition for all user related operations.
@@ -34,7 +35,7 @@ public interface UserService {
 	 * @throws NeuralitoException
 	 */
 	public Integer addUser(String name, String surname, String email,
-			String username, String password, String type)
+			String username, String password, UserType type)
 			throws NeuralitoException;
 
 	/**

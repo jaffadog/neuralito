@@ -10,6 +10,7 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ErrorCode;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
+import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.server.dao.UserDAO;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 
@@ -34,7 +35,7 @@ public class UserServiceImplementation implements UserService {
 	@Override
 	public Integer addUser(final String name, final String lastName,
 			final String email, final String username, final String password,
-			final String userType) throws NeuralitoException {
+			final UserType userType) throws NeuralitoException {
 		validate(name, lastName, email, username, password, userType);
 		User user = new User(name, lastName, username, password, email,
 				userType);
@@ -53,7 +54,7 @@ public class UserServiceImplementation implements UserService {
 	 */
 	private void validate(final String name, final String lastName,
 			final String email, final String username, final String password,
-			final String userType) throws NeuralitoException {
+			final UserType userType) throws NeuralitoException {
 		// Validates username is not empty
 		if (StringUtils.isEmpty(username))
 			throw new NeuralitoException(ErrorCode.USERNAME_EMPTY);
@@ -64,8 +65,8 @@ public class UserServiceImplementation implements UserService {
 		if (StringUtils.isEmpty(email))
 			throw new NeuralitoException(ErrorCode.EMAIL_EMPTY);
 		// Validates usertype is not empty
-		if (StringUtils.isEmpty(userType))
-			throw new NeuralitoException(ErrorCode.USER_TYPE_EMPTY);
+		if (userType == null)
+			throw new NeuralitoException(ErrorCode.USER_TYPE_NULL);
 		// Validates username not already exists
 		if (userDAO.getUserByUserName(username) != null)
 			throw new NeuralitoException(ErrorCode.DUPLICATED_USER_USERNAME);

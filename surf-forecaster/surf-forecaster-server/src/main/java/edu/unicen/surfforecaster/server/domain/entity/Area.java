@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +22,7 @@ import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.Validate;
 
+import edu.unicen.surfforecaster.common.services.ErrorCode;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 
 /**
@@ -52,6 +54,9 @@ public class Area implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@MapKey(name = "language")
 	private final Map<String, I18nKeyValue> names = new HashMap<String, I18nKeyValue>();
+
+	@Enumerated
+	private ErrorCode code;
 
 	/**
 	 * Constructor

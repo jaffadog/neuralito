@@ -20,6 +20,7 @@ import edu.unicen.surfforecaster.common.services.ErrorCode;
 import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.common.services.dto.UserType;
 
 /**
  * @author esteban
@@ -79,11 +80,11 @@ public class SpotServiceImplementationTest {
 			userId1 = userService.addUser("name", "lastName", System
 					.currentTimeMillis()
 					+ "@.com", System.currentTimeMillis() + "user", "pass",
-					"admin");
+					UserType.ADMINISTRATOR);
 			userId2 = userService.addUser("name", "lastName", System
 					.currentTimeMillis()
 					+ "@.com", System.currentTimeMillis() + "user", "pass",
-					"admin");
+					UserType.ADMINISTRATOR);
 
 			// Create 4 Spots
 

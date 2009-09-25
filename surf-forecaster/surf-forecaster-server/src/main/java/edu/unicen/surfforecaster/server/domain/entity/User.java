@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +19,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.Validate;
+
+import edu.unicen.surfforecaster.common.services.dto.UserType;
 
 /**
  * A User.
@@ -67,7 +71,8 @@ public class User {
 	 * the user type.
 	 */
 	@Column(nullable = false, length = 100)
-	private String userType;
+	@Enumerated(EnumType.STRING)
+	private UserType userType;
 	/**
 	 * the spots comparations this user have created and saved.
 	 */
@@ -95,11 +100,11 @@ public class User {
 
 	public User(final String name, final String lastName,
 			final String userName, final String password, final String email,
-			final String userType) {
+			final UserType userType) {
 		Validate.notEmpty(userName, "The user name should not be empty.");
 		Validate.notEmpty(password, "The user password should not be empty.");
 		Validate.notEmpty(password, "The email should not be empty.");
-		Validate.notEmpty(userType, "The user type should not be empty.");
+		Validate.notNull(userType, "The user type should not be empty.");
 		setName(name);
 		setLastName(lastName);
 		setUserName(userName);
@@ -161,7 +166,7 @@ public class User {
 	/**
 	 * @return the userType
 	 */
-	public String getUserType() {
+	public UserType getUserType() {
 		return userType;
 	}
 
@@ -234,8 +239,8 @@ public class User {
 	 * @param userType
 	 *            the userType to set
 	 */
-	public void setUserType(final String userType) {
-		Validate.notEmpty(userType, "The user type should not be empty.");
+	public void setUserType(final UserType userType) {
+		Validate.notNull(userType, "The user type should not be null.");
 		this.userType = userType;
 	}
 
