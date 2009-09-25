@@ -17,8 +17,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.gwt.client.SessionData;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 
 public class UserStatePanel extends Composite {
