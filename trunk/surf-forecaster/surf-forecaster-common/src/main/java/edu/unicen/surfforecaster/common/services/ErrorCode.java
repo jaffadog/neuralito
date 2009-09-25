@@ -48,7 +48,59 @@ public enum ErrorCode implements Serializable {
 	/**
 	 * The user id is not a valid one.
 	 */
-	USER_ID_INVALID(11);
+	USER_ID_INVALID(11),
+	/**
+	 * There is no user with the given user id.
+	 */
+	USER_ID_DOES_NOT_EXIST(12),
+	/**
+	 * Spot id does not exists.
+	 */
+	SPOT_ID_DOES_NOT_EXISTS(13),
+	/**
+	 * Spot id cannot be null.
+	 */
+	SPOT_ID_NULL(14),
+	/**
+	 * Spot id is invalid.
+	 */
+	SPOT_ID_INVALID(15),
+	/**
+	 * The zone id cannot be null.
+	 */
+	ZONE_ID_NULL(16),
+	/**
+	 * The zone id is not a valid id.
+	 */
+	ZONE_ID_INVALID(17),
+	/**
+	 * The zone id does not exists.
+	 */
+	ZONE_ID_DOES_NOT_EXISTS(18),
+	/**
+	 * The country id is null.
+	 */
+	COUNTRY_ID_NULL(19),
+	/**
+	 * The country id is invalid.
+	 */
+	COUNTRY_ID_INVALID(20),
+	/**
+	 * The country is does not exist.
+	 */
+	COUNTRY_ID_DOES_NOT_EXISTS(21),
+	/**
+	 * The area id is null.
+	 */
+	AREA_ID_NULL(22),
+	/**
+	 * The area id is invalid.
+	 */
+	AREA_ID_INVALID(23),
+	/**
+	 * The area id does not exists.
+	 */
+	AREA_ID_DOES_NOT_EXISTS(24);
 
 	private int code;
 

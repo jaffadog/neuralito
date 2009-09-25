@@ -3,11 +3,14 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,10 +18,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.Validate;
+
+import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 
 /**
  * Represents a country which contains a set of zones.
@@ -45,8 +51,11 @@ public class Country {
 	/**
 	 * the zones this country contains.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "country")
 	private final Set<Zone> zones = new HashSet<Zone>();
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Area area;
 
 	/**
 	 * Empty constructor.
@@ -54,6 +63,23 @@ public class Country {
 	public Country() {
 		names.put("es", new I18nKeyValue("es", "argentina"));
 		// ORM purpose.
+	}
+
+	/**
+	 * @param countryNamesMap
+	 * @param areaId
+	 */
+	public Country(final Map<String, String> countryNamesMap, final Area area) {
+		this.area = area;
+		final Collection<Entry<String, String>> keyValues = countryNamesMap
+				.entrySet();
+		for (final Iterator<Entry<String, String>> iterator = keyValues
+				.iterator(); iterator.hasNext();) {
+			final Entry<String, String> entry = iterator.next();
+			names.put(entry.getKey(), new I18nKeyValue(entry.getKey(), entry
+					.getValue()));
+
+		}
 	}
 
 	/**
@@ -103,4 +129,37 @@ public class Country {
 		else
 			return null;
 	}
+
+	/**
+	 * Obtain the DTO for this instance.
+	 * 
+	 * @return
+	 */
+	public CountryDTO getDTO() {
+		final Map<String, String> names = new HashMap<String, String>();
+		final Collection<I18nKeyValue> attributes = this.names.values();
+		for (final Iterator<I18nKeyValue> iterator = attributes.iterator(); iterator
+				.hasNext();) {
+			final I18nKeyValue i18nKeyValue = iterator.next();
+			names.put(i18nKeyValue.getLanguague(), i18nKeyValue.getText());
+		}
+		final CountryDTO dto = new CountryDTO(id, names);
+		return dto;
+	}
+
+	/**
+	 * @param area
+	 *            the area to set
+	 */
+	public void setArea(final Area area) {
+		this.area = area;
+	}
+
+	/**
+	 * @return the area
+	 */
+	public Area getArea() {
+		return area;
+	}
+
 }

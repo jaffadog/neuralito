@@ -1,11 +1,14 @@
 package edu.unicen.surfforecaster.server.domain.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,6 +20,8 @@ import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.Validate;
+
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 
 /**
  * Class that represents a geographic zone containing several countries.
@@ -39,7 +44,7 @@ public class Area implements Serializable {
 	/**
 	 * The countries this area contains.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "area")
 	private final Set<Country> countries = new HashSet<Country>();
 	/**
 	 * Map containing language/area-name values.
@@ -53,6 +58,20 @@ public class Area implements Serializable {
 	 */
 	public Area() {
 		// ORM purpose
+	}
+
+	/**
+	 * @param areaNamesMap
+	 */
+	public Area(final Map<String, String> areaNamesMap) {
+		final Collection<Entry<String, String>> keyValues = areaNamesMap
+				.entrySet();
+		for (final Iterator<Entry<String, String>> iterator = keyValues
+				.iterator(); iterator.hasNext();) {
+			final Entry<String, String> entry = iterator.next();
+			names.put(entry.getKey(), new I18nKeyValue(entry.getKey(), entry
+					.getValue()));
+		}
 	}
 
 	/**
@@ -113,6 +132,21 @@ public class Area implements Serializable {
 			return names.get(language).getText();
 		else
 			return null;
+	}
+
+	/**
+	 * @return
+	 */
+	public AreaDTO getDTO() {
+		final Map<String, String> names = new HashMap<String, String>();
+		final Collection<I18nKeyValue> attributes = this.names.values();
+		for (final Iterator<I18nKeyValue> iterator = attributes.iterator(); iterator
+				.hasNext();) {
+			final I18nKeyValue i18nKeyValue = iterator.next();
+			names.put(i18nKeyValue.getLanguague(), i18nKeyValue.getText());
+		}
+		final AreaDTO dto = new AreaDTO(id, names);
+		return dto;
 	}
 
 }

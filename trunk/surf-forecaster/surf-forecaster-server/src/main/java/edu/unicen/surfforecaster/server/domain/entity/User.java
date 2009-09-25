@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,43 +36,55 @@ public class User {
 	/**
 	 * the user name.
 	 */
+	@Column(nullable = false, length = 100)
 	private String name;
 
 	/**
 	 * the user surname.
 	 */
+	@Column(nullable = false, length = 100)
 	private String lastName;
 
 	/**
 	 * the user email.
 	 */
+	@Column(nullable = false, length = 100)
 	private String email;
 
 	/**
 	 * the login password.
 	 */
+	@Column(nullable = false, length = 50)
 	private String password;
 
 	/**
 	 * the username.
 	 */
+	@Column(nullable = false, length = 50)
 	private String userName;
 
 	/**
 	 * the user type.
 	 */
+	@Column(nullable = false, length = 100)
 	private String userType;
 	/**
 	 * the spots comparations this user have created and saved.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
 	private final Set<Comparation> comparations = new HashSet<Comparation>();;
 
+	// /**
+	// * the zones this user have created and saved.
+	// */
+	// @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	// private final Set<Zone> zones = new HashSet<Zone>();
+
 	/**
-	 * the zones this user have created and saved.
+	 * the spots this user have created and saved.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private final Set<Zone> zones = new HashSet<Zone>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+	private Set<Spot> spots;
 
 	/**
 	 * 
@@ -152,12 +165,12 @@ public class User {
 		return userType;
 	}
 
-	/**
-	 * @return the zones
-	 */
-	public Set<Zone> getZones() {
-		return Collections.unmodifiableSet(zones);
-	}
+	// /**
+	// * @return the zones
+	// */
+	// public Set<Zone> getZones() {
+	// return Collections.unmodifiableSet(spot);
+	// }
 
 	/**
 	 * @param email
@@ -242,19 +255,45 @@ public class User {
 		comparations.remove(comparation);
 	}
 
+	// /**
+	// * Add a new zone to the user.
+	// */
+	// public void addZone(final Zone zone) {
+	// Validate.notNull(zone, "The zone should not be null");
+	// zones.add(zone);
+	// }
+	//
+	// /**
+	// * Removes a zone from the user.
+	// */
+	// public void removeZone(final Zone zone) {
+	// Validate.notNull(zone, "The zone should not be null");
+	// zones.remove(zone);
+	// }
+
 	/**
-	 * Add a new zone to the user.
+	 * Add a new spot to the user.
 	 */
-	public void addZone(final Zone zone) {
-		Validate.notNull(zone, "The zone should not be null");
-		zones.add(zone);
+	public void addSpot(final Spot spot) {
+		Validate.notNull(spot, "The spot should not be null");
+		spots.add(spot);
 	}
 
 	/**
-	 * Removes a zone from the user.
+	 * Add a new spot to the user.
 	 */
-	public void removeZone(final Zone zone) {
-		Validate.notNull(zone, "The zone should not be null");
-		zones.remove(zone);
+	public void removeSpot(final Spot spot) {
+		Validate.notNull(spot, "The spot should not be null");
+		spots.remove(spot);
 	}
+
+	/**
+	 * Obtain the spots this user have created.
+	 * 
+	 * @return
+	 */
+	public Set<Spot> getSpots() {
+		return Collections.unmodifiableSet(spots);
+	}
+
 }

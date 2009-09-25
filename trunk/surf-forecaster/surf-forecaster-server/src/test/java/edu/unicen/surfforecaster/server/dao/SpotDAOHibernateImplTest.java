@@ -14,7 +14,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Country;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
 
-public class SurfSpotDAOHibernateImplTest {
+public class SpotDAOHibernateImplTest {
 	private SpotDAO spotDAO;
 
 	@Before
@@ -50,8 +50,6 @@ public class SurfSpotDAOHibernateImplTest {
 	public void saveAndLoad() {
 		// number of areas in the DB before adding a new entity
 		final int initialAreas = spotDAO.getAllAreas().size();
-		final String areaName = "Europe";
-		final String countryName = "France";
 		final String zoneName = "westCoast";
 		final String spotName = "biologia";
 		final double latitude = 2L;
@@ -59,23 +57,25 @@ public class SurfSpotDAOHibernateImplTest {
 
 		Area area = new Area();
 		Country country = new Country();
-
+		country.setArea(area);
 		Zone zone = new Zone(zoneName);
+		zone.setCountry(country);
 		Spot spot = new Spot();
 		spot.setLatitude(latitude);
 		spot.setLongitude(longitude);
 		spot.setName(spotName);
+		spot.setZone(zone);
 
 		area.addCountry(country);
 		country.addZone(zone);
 		zone.addSpot(spot);
 
-		area = spotDAO.saveArea(area);
+		final Integer areaId = spotDAO.saveArea(area);
 
 		final List<Area> loadedAreas = spotDAO.getAllAreas();
 		Assert.assertEquals(initialAreas + 1, loadedAreas.size());
 
-		area = spotDAO.getAreaById(area.getId());
+		area = spotDAO.getAreaById(areaId);
 
 		Assert.assertEquals("Area should have 1 country and it has:"
 				+ area.getCountries().size(), 1, area.getCountries().size());

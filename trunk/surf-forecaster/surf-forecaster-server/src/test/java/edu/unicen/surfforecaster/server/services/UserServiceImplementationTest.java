@@ -255,8 +255,8 @@ public class UserServiceImplementationTest {
 		}
 		try {
 			email2 = null;
-			final Integer id = userService.addUser(name2, lastName2, email2,
-					username2, password2, type2);
+			userService.addUser(name2, lastName2, email2, username2, password2,
+					type2);
 			Assert
 					.fail("User should not ve been added because email was empty");
 		} catch (final NeuralitoException e) {

@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang.Validate;
 
@@ -36,6 +37,9 @@ public class Comparation {
 	 */
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	List<Spot> spots = new ArrayList<Spot>();
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	User user;
 
 	/**
 	 * 

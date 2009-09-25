@@ -3,6 +3,7 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,10 +26,12 @@ public class I18nKeyValue {
 	/**
 	 * The key.
 	 */
+	@Column(nullable = false, length = 100)
 	private String language;
 	/**
 	 * The value.
 	 */
+	@Column(nullable = false, length = 255)
 	private String text;
 
 	/**
