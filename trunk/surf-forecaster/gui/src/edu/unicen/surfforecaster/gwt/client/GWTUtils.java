@@ -36,6 +36,16 @@ public final class GWTUtils {
 	//Timezones hash
 	private static HashMap<String, Object> timeZones = null;
 	
+	/**
+	 * Set the valid history tokens values in the valid tokens vector
+	 */
+	public static void setValidHistoryTokens() {
+		VALID_HISTORY_TOKENS.add("forecastTab");
+		VALID_HISTORY_TOKENS.add("descriptionTab");
+		VALID_HISTORY_TOKENS.add("comparatorTab");
+		VALID_HISTORY_TOKENS.add("newSpotTab");
+		VALID_HISTORY_TOKENS.add("registerNewUser");
+	}
 	
 	/**
 	 * 
