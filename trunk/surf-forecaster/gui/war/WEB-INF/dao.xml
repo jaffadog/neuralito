@@ -10,13 +10,13 @@
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.connection.autocommit">true</prop>
 
-<!--				HSQL CONFIG-->
+<!--				HSQL-->
 <!--				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>-->
 <!--				<prop key="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</prop>-->
 <!--				<prop key="hibernate.connection.url">jdbc:hsqldb:mem:z</prop>-->
 <!--				<prop key="hibernate.connection.username">sa</prop>-->
 <!--				<prop key="hibernate.connection.password"></prop>-->
-<!--				MYSQL CONFIG-->
+
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
 				<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/test</prop>
