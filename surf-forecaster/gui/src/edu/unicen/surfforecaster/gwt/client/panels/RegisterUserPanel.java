@@ -154,7 +154,7 @@ public class RegisterUserPanel extends VerticalPanel {
 			            }
 			            public void onFailure(Throwable caught){
 			            	
-			            	//System.out.println("fault adding a new user");
+			            	System.out.println("fault adding a new user");
 			            	caught.printStackTrace();
 			            }
 						});

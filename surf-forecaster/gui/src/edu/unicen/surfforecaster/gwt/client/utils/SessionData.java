@@ -4,7 +4,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SessionData implements IsSerializable {
 	private String userName = null;
-	private Integer userType = null;
+	private String userType = null;
 	
 	public String getUserName() {
 		return userName;
@@ -14,11 +14,11 @@ public class SessionData implements IsSerializable {
 		this.userName = userName;
 	}
 	
-	public Integer getUserType() {
+	public String getUserType() {
 		return userType;
 	}
 	
-	public void setUserType(Integer userType) {
+	public void setUserType(String userType) {
 		this.userType = userType;
 	}
 }
