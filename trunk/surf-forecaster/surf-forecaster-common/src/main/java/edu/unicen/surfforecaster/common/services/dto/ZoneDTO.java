@@ -3,12 +3,15 @@
  */
 package edu.unicen.surfforecaster.common.services.dto;
 
+import java.io.Serializable;
 
 /**
  * @author esteban
  * 
  */
-public class ZoneDTO {
+public class ZoneDTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	/**
 	 * Zone id
 	 */
