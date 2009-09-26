@@ -3,13 +3,16 @@
  */
 package edu.unicen.surfforecaster.common.services.dto;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author esteban
  * 
  */
-public class CountryDTO {
+public class CountryDTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	public Integer id;
 	public Map<String, String> names;
 

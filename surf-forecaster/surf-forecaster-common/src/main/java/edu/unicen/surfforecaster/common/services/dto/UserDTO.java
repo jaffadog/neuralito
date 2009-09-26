@@ -3,6 +3,7 @@
  */
 package edu.unicen.surfforecaster.common.services.dto;
 
+import java.io.Serializable;
 
 /**
  * User DTO.
@@ -10,8 +11,12 @@ package edu.unicen.surfforecaster.common.services.dto;
  * @author esteban
  * 
  */
-public class UserDTO {
+public class UserDTO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * User id in DB.
 	 */
