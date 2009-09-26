@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
+import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
@@ -268,6 +269,18 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 	 */
 	public UserService getService() {
 		return userService;
+	}
+
+	@Override
+	public Integer addUser(String name, String lastname, String email,
+			String username, String password, int type) {
+		
+		try {
+			return userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
+		} catch (final NeuralitoException e) {
+			logger.log(Level.INFO,"New User: '" + username + "' could not be added to the system.",e);
+			return null;
+		}
 	}
 
 }

@@ -11,22 +11,18 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class SuccessMsgPanel extends MessagePanel {
 	
-	public SuccessMsgPanel(){}
+	public SuccessMsgPanel(){
+		super();
+		this.addStyleName("gwt-successPanel");
+		this.getImage().setUrl(GWTUtils.IMAGE_GOOD_ICON);
+		this.setLabelsStyleNames("gwt-Label-success");
+	}
 	
 	/**
 	 * @wbp.parser.constructor
 	 */
 	public SuccessMsgPanel(Vector<String> messages){
-		super();
-		this.addStyleName("gwt-successPanel");
-		this.getImage().setUrl(GWTUtils.IMAGE_GOOD_ICON);
-		
-		for (Enumeration<String> e = messages.elements(); e.hasMoreElements();){
-			Label lblMessage = new Label("- " + e.nextElement());
-			lblMessage.addStyleName("gwt-Label-success");
-			this.getMessagesVPanel().add(lblMessage);
-		}
-		
-		
+		this();
+		this.setMessages(messages);
 	}
 }
