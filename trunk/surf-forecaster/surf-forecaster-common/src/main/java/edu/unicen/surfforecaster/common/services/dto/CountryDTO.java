@@ -11,6 +11,12 @@ import java.util.Map;
  * 
  */
 public class CountryDTO implements Serializable {
+	/**
+	 * 
+	 */
+	public CountryDTO() {
+		// gwt purpose
+	}
 
 	private static final long serialVersionUID = 1L;
 	public Integer id;

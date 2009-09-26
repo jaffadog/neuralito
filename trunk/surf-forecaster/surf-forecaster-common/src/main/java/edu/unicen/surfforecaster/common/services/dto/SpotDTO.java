@@ -13,43 +13,50 @@ public class SpotDTO implements Serializable {
 	/**
 	 * 
 	 */
+	public SpotDTO() {
+		// gwt purpose
+	}
+
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Spot Id.
 	 */
-	private final Integer id;
+	private Integer id;
 	/**
 	 * Spot name
 	 */
-	private final String name;
+	private String name;
 	/**
 	 * Longitude where this spot is located.
 	 */
-	private final double longitude;
+	private double longitude;
 	/**
 	 * Latitude where this spot is located.
 	 */
-	private final double latitude;
+	private double latitude;
 	/**
 	 * Zone that this spot belongs.
 	 */
-	private final ZoneDTO zone;
+	private ZoneDTO zone;
 	/**
 	 * Country that this spot belongs.
 	 */
-	private final CountryDTO country;
+	private CountryDTO country;
 	/**
 	 * Area that this spot belongs.
 	 */
-	private final AreaDTO area;
+	private AreaDTO area;
 	/**
 	 * The user id of the user who created this spot.
 	 */
-	private final Integer userId;
+	private Integer userId;
 	/**
 	 * Visibility of spot.
 	 */
-	private final boolean publik;
+	private boolean publik;
 
 	/**
 	 * @param id

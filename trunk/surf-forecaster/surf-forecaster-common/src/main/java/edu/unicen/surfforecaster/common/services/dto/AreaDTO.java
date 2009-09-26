@@ -11,6 +11,13 @@ import java.util.Map;
  * 
  */
 public class AreaDTO implements Serializable {
+	/**
+	 * 
+	 */
+	public AreaDTO() {
+		// gwt purpose
+	}
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 
