@@ -22,7 +22,7 @@ import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.Validate;
 
-import edu.unicen.surfforecaster.common.services.ErrorCode;
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 
 /**

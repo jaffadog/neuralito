@@ -1,8 +1,9 @@
-package edu.unicen.surfforecaster.common.services;
+package edu.unicen.surfforecaster.common.exceptions;
 
 import java.io.Serializable;
 
 public enum ErrorCode implements Serializable {
+
 	/**
 	 * Database exception
 	 */
@@ -101,6 +102,13 @@ public enum ErrorCode implements Serializable {
 	 * The area id does not exists.
 	 */
 	AREA_ID_DOES_NOT_EXISTS(24);
+
+	/**
+	 * 
+	 */
+	private ErrorCode() {
+		// GWT purpose
+	}
 
 	private int code;
 

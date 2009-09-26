@@ -10,8 +10,8 @@ import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.ErrorCode;
 import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.server.dao.SpotDAO;

@@ -3,13 +3,21 @@
  */
 package edu.unicen.surfforecaster.common.exceptions;
 
-import edu.unicen.surfforecaster.common.services.ErrorCode;
+import java.io.Serializable;
+
 
 /**
  * @author esteban
  * 
  */
-public class NeuralitoException extends Exception {
+public class NeuralitoException extends Exception implements Serializable {
+	/**
+	 * 
+	 */
+	public NeuralitoException() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * 
 	 */
@@ -17,7 +25,7 @@ public class NeuralitoException extends Exception {
 	/**
 	 * The error code associated with this exception.
 	 */
-	private final ErrorCode errorCode;
+	private ErrorCode errorCode;
 	private String message;
 
 	/**
