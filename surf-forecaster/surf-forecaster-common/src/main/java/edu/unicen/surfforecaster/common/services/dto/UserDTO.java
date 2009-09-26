@@ -12,6 +12,12 @@ import java.io.Serializable;
  * 
  */
 public class UserDTO implements Serializable {
+	/**
+	 * 
+	 */
+	public UserDTO() {
+		// gwt purpose
+	}
 
 	/**
 	 * 
@@ -20,27 +26,27 @@ public class UserDTO implements Serializable {
 	/**
 	 * User id in DB.
 	 */
-	private final Integer id;
+	private Integer id;
 	/**
 	 * the user name.
 	 */
-	private final String name;
+	private String name;
 	/**
 	 * the user last name
 	 */
-	private final String lastName;
+	private String lastName;
 	/**
 	 * the user email
 	 */
-	private final String email;
+	private String email;
 	/**
 	 * the user name
 	 */
-	private final String username;
+	private String username;
 	/**
 	 * the user type
 	 */
-	private final UserType type;
+	private UserType type;
 
 	/**
 	 * @param name

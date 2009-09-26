@@ -12,5 +12,13 @@ import java.io.Serializable;
  * 
  */
 public enum UserType implements Serializable {
+
 	ADMINISTRATOR, REGISTERED_USER;
+
+	/**
+	 * 
+	 */
+	UserType() {
+		// GWT purpose.
+	}
 }

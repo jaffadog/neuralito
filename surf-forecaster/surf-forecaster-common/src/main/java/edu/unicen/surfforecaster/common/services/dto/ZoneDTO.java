@@ -11,15 +11,22 @@ import java.io.Serializable;
  */
 public class ZoneDTO implements Serializable {
 
+	/**
+	 * 
+	 */
+	public ZoneDTO() {
+		// GWT purpose.
+	}
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Zone id
 	 */
-	private final Integer id;
+	private Integer id;
 	/**
 	 * Zone name.
 	 */
-	private final String name;
+	private String name;
 
 	/**
 	 * @param id
