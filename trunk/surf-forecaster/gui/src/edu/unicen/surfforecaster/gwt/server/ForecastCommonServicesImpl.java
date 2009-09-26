@@ -45,40 +45,20 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 	 *            password
 	 * @return User user if exist any user with that values or Null
 	 */
-	public User login(final String userName, final String password) {
-		try {
-			Thread.sleep(2500);
-			try {
-				final UserDTO userDTO = userService.loginUser(userName,
-						password);
-				final User user = new User();
-				user.setId(userDTO.getId());
-				user.setName(userDTO.getName());
-				user.setLastName(userDTO.getLastName());
-				user.setUserName(userDTO.getUsername());
-				final HttpSession session = getSession();
-				session.setMaxInactiveInterval(1200); // 120seg
-				session
-						.setAttribute("gwtForecast-UserName", user
-								.getUserName());
-				session.setAttribute("gwtForecast-UserType", user.getType());
-				return user;
-			} catch (final NeuralitoException e) {
-				logger
-						.log(
-								Level.INFO,
-								"User:'"
-										+ userName
-										+ "' could not login. User service failed to log the user.",
-								e);
-				return null;
-			}
-		} catch (final InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 
+	public UserDTO login(final String userName, final String password) {
+		try {
+			final UserDTO userDTO = userService.loginUser(userName, password);
+			final HttpSession session = getSession();
+			session.setMaxInactiveInterval(1200); // 120seg
+			session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
+			session.setAttribute("gwtForecast-UserType", userDTO.getType());
+			logger.log(Level.INFO,"User: '" + userDTO.getUsername() + "' retrieved.");
+			return userDTO;
+		} catch (final NeuralitoException e) {
+			logger.log(Level.INFO,"User: '" + userName + "' could not login. User service failed to log the user.",e);
+			return null;
+		}
 	}
 
 	public Area getArea() {
@@ -226,10 +206,8 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 		} else {
 
 			final SessionData sessionData = new SessionData();
-			sessionData.setUserName(session
-					.getAttribute("gwtForecast-UserName").toString());
-			sessionData.setUserType(new Integer(session.getAttribute(
-					"gwtForecast-UserType").toString()));
+			sessionData.setUserName(session.getAttribute("gwtForecast-UserName").toString());
+			sessionData.setUserType(session.getAttribute("gwtForecast-UserType").toString());
 			return sessionData;
 		}
 
@@ -278,7 +256,7 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 		try {
 			return userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
 		} catch (final NeuralitoException e) {
-			logger.log(Level.INFO,"New User: '" + username + "' could not be added to the system.",e);
+			logger.log(Level.INFO,"New User: '" + username + "' could not be added to the system." +  e.getErrorCode());
 			return null;
 		}
 	}

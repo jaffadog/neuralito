@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.User;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
@@ -101,8 +102,8 @@ public class LoginBox extends DialogBox{
 					showFormPanel();
 				}
 				else{
-					ForecastCommonServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<User>(){
-						public void onSuccess(User result) {
+					ForecastCommonServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<UserDTO>(){
+						public void onSuccess(UserDTO result) {
 							if (result == null) {
 								label_loginMessage.setVisible(true);
 								showFormPanel();
@@ -112,7 +113,7 @@ public class LoginBox extends DialogBox{
 						}
 							
 						public void onFailure(Throwable caught) {
-							
+							System.out.println("failed login async method." + caught);
 						}
 					});
 				}
