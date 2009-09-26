@@ -12,6 +12,7 @@ import java.util.Set;
 import org.apache.commons.lang.Validate;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
@@ -204,4 +205,35 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getZoneByNameAndCountry(java.lang.String,
+	 *      java.lang.Integer)
+	 */
+	@Override
+	public Zone getZoneByNameAndCountry(final String zoneName,
+			final Country country) {
+		Validate.notEmpty(zoneName);
+		Validate.notNull(country);
+		final DetachedCriteria criteria = DetachedCriteria.forClass(Zone.class)
+				.add(Restrictions.eq("name", zoneName));
+		criteria.add(Restrictions.eq("country", country));
+		final List<Zone> zones = getHibernateTemplate()
+				.findByCriteria(criteria);
+		if (zones.size() > 1)
+			throw new DataIntegrityViolationException(
+					"zone name is not unique for a given Country");
+		if (zones.size() == 0)
+			return null;
+		return zones.get(0);
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getPublicSpots()
+	 */
+	@Override
+	public Collection<Spot> getPublicSpots() {
+		final DetachedCriteria criteria = DetachedCriteria.forClass(Spot.class)
+				.add(Restrictions.eq("publik", true));
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
 }

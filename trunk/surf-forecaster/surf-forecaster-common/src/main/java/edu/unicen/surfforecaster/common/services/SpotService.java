@@ -31,6 +31,28 @@ public interface SpotService {
 			throws NeuralitoException;
 
 	/**
+	 * Creates a zone, and adds a new spot to it. If a zone with the same name
+	 * exists then zone is not created and spot is added to this zone.
+	 * 
+	 * @param zoneName
+	 *            the zone name.
+	 * @param countryId
+	 *            the country to which the zone belongs.
+	 * @param spotName
+	 *            the spot name
+	 * @param longitude
+	 * @param latitude
+	 * @param userId
+	 *            the creator of the spot
+	 * @param publik
+	 *            whether this spots is public or private.
+	 * @return
+	 */
+	public Integer addZoneAndSpot(String zoneName, Integer countryId,
+			String spotName, double longitude, double latitude, Integer userId,
+			boolean publik) throws NeuralitoException;
+
+	/**
 	 * Obtain all the spots for the given user.
 	 * 
 	 * @param userId
@@ -85,5 +107,16 @@ public interface SpotService {
 	 * @param areaId
 	 */
 	public void removeArea(Integer areaId) throws NeuralitoException;
+
+	/**
+	 * @param spotId
+	 */
+	public SpotDTO getSpotById(Integer spotId) throws NeuralitoException;
+
+	/**
+	 * @return
+	 * @throws NeuralitoException
+	 */
+	public Collection<SpotDTO> getPublicSpots() throws NeuralitoException;
 
 }
