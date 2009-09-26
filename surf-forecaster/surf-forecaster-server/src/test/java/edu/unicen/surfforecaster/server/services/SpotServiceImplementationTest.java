@@ -44,7 +44,7 @@ public class SpotServiceImplementationTest {
 	private Integer zoneId2;
 	private Integer zoneId3;
 	private Integer zoneId4;
-
+	private String zoneName1;
 	private Integer userId1;
 	private Integer userId2;
 
@@ -60,7 +60,7 @@ public class SpotServiceImplementationTest {
 	public void createTestData() {
 		try {
 			// Create 4 Zones.
-			final String zoneName1 = "zone1" + System.currentTimeMillis();
+			zoneName1 = "zone1" + System.currentTimeMillis();
 			final String zoneName2 = "zone2" + System.currentTimeMillis();
 			final String zoneName3 = "zone3" + System.currentTimeMillis();
 			final String zoneName4 = "zone4" + System.currentTimeMillis();
@@ -188,7 +188,86 @@ public class SpotServiceImplementationTest {
 					spot4Founded);
 		} catch (final NeuralitoException e) {
 			// TODO Auto-generated catch block
+			Assert.fail();
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * List all the spots a public user is able to see. He may see all spots
+	 * declared as public.
+	 * {@link SpotServiceImplementationTest#createTestData()}
+	 */
+	@Test
+	public void getPublicSpots() {
+		try {
+			final Collection<SpotDTO> spots = spotService.getPublicSpots();
+			boolean spot1Founded = false;
+			boolean spot4Founded = false;
+			for (final Iterator<SpotDTO> iterator = spots.iterator(); iterator
+					.hasNext();) {
+				final SpotDTO spotDTO = iterator.next();
+				Assert
+						.assertFalse(
+								"Spot with id:"
+										+ spot3Id
+										+ ", should not be seen by this user. Because it was created private",
+								spotDTO.getId().equals(spot3Id));
+				Assert
+						.assertFalse(
+								"Spot with id:"
+										+ spot2Id
+										+ ", should not be seen by this user. Because it was created private",
+								spotDTO.getId().equals(spot2Id));
+				if (spotDTO.getId().equals(spot1Id)) {
+					spot1Founded = true;
+				}
+				if (spotDTO.getId().equals(spot4Id)) {
+					spot4Founded = true;
+				}
+			}
+			Assert.assertTrue(
+					"Spot 1 should ve been in the list of user spots.",
+					spot1Founded);
+			Assert.assertTrue(
+					"Spot 4 should ve been in the list of user spots.",
+					spot4Founded);
+		} catch (final NeuralitoException e) {
+			// TODO Auto-generated catch block
+			Assert.fail();
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void addZoneAndSpot() {
+		try {
+			final String zoneName = "one zone";
+			final Integer spotId = spotService.addZoneAndSpot(zoneName,
+					countryId, "some spot name", 1L, 2L, userId1, true);
+			final SpotDTO spot = spotService.getSpotById(spotId);
+			Assert.assertEquals(zoneName, spot.getZone().getName());
+			Assert.assertEquals(countryId, spot.getCountry().getId());
+			spotService.removeSpot(spotId);
+			spotService.removeZone(spot.getZone().getId());
+		} catch (final NeuralitoException e) {
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void addZoneAndSpot2() {
+		try {
+			final Integer spotId = spotService.addZoneAndSpot(zoneName1,
+					countryId, "some spot name", 1L, 2L, userId1, true);
+
+			final SpotDTO spot = spotService.getSpotById(spotId);
+
+			Assert.assertEquals(zoneName1, spot.getZone().getName());
+			Assert.assertEquals(countryId, spot.getCountry().getId());
+			spotService.removeSpot(spotId);
+		} catch (final NeuralitoException e) {
+			Assert.fail();
 		}
 	}
 }

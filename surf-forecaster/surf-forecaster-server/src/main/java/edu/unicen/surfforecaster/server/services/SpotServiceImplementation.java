@@ -72,7 +72,7 @@ public class SpotServiceImplementation implements SpotService {
 	@Override
 	public Collection<SpotDTO> getSpotsForUser(final Integer userId)
 			throws NeuralitoException {
-		validate(userId);
+		validateUserId(userId);
 		// Obtain all the spots this user is able to see.
 		final User user = userDAO.getUserByUserId(userId);
 		final Collection<Spot> userSpots = spotDAO.getSpotsForUser(user);
@@ -118,7 +118,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @param userId
 	 * @throws NeuralitoException
 	 */
-	private void validate(final Integer userId) throws NeuralitoException {
+	private void validateUserId(final Integer userId) throws NeuralitoException {
 		if (userId == null)
 			throw new NeuralitoException(ErrorCode.USER_ID_NULL);
 		if (userId < 0)
@@ -160,7 +160,8 @@ public class SpotServiceImplementation implements SpotService {
 	@Override
 	public Integer addZone(final String name, final Integer countryId)
 			throws NeuralitoException {
-		validate(name, countryId);
+		validateCountryId(countryId);
+		validateZoneName(name);
 		final Country country = spotDAO.getCountryById(countryId);
 		final Zone zone = new Zone(name, country);
 		try {
@@ -169,6 +170,14 @@ public class SpotServiceImplementation implements SpotService {
 		} catch (final DataAccessException e) {
 			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
 		}
+	}
+
+	/**
+	 * @param name
+	 */
+	private void validateZoneName(final String name) {
+		// Validate zone name
+
 	}
 
 	/**
@@ -213,20 +222,6 @@ public class SpotServiceImplementation implements SpotService {
 			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
 		}
 	}
-
-	// @SuppressWarnings("unchecked")
-	// private Collection<SpotDTO> getSpotsToDisplay(final Integer userId) {
-	// final User user = userDAO.getUserByUserId(userId);
-	// final Collection<Spot> publicSpots = spotDAO.getUserVisibleSpots(user);
-	//
-	// final Collection<SpotDTO> visibleSpots = new ArrayList();
-	// for (final Iterator iterator = publicSpots.iterator(); iterator
-	// .hasNext();) {
-	// final Spot spot = (Spot) iterator.next();
-	// visibleSpots.add(spot.getDTO(spot));
-	// }
-	// return visibleSpots;
-	// }
 
 	/**
 	 * @param countryNamesMap
@@ -321,6 +316,103 @@ public class SpotServiceImplementation implements SpotService {
 			throw new NeuralitoException(ErrorCode.AREA_ID_INVALID);
 		if (spotDAO.getAreaById(areaId) == null)
 			throw new NeuralitoException(ErrorCode.AREA_ID_DOES_NOT_EXISTS);
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#addZoneAndSpot(java.lang.String,
+	 *      java.lang.Integer, java.lang.String, double, double,
+	 *      java.lang.Integer, boolean)
+	 */
+	@Override
+	public Integer addZoneAndSpot(final String zoneName,
+			final Integer countryId, final String spotName,
+			final double longitude, final double latitude,
+			final Integer userId, final boolean publik)
+			throws NeuralitoException {
+		validateCountryId(countryId);
+		validateUserId(userId);
+		validateSpotName(spotName);
+		validateLatAndLong(latitude, longitude);
+		validateZoneName(zoneName);
+		// Check if zone for the given country exists.
+		final Country country = spotDAO.getCountryById(countryId);
+		final Zone zone = spotDAO.getZoneByNameAndCountry(zoneName, country);
+		Integer zoneId;
+		if (zone == null) {
+			// Zone does not exist so we create one.
+			zoneId = addZone(zoneName, countryId);
+		} else {
+			// Zone exist so we add the spot to the zone.
+			zoneId = zone.getId();
+		}
+		return addSpot(spotName, longitude, latitude, zoneId, userId, publik);
+	}
+
+	/**
+	 * @param spotName
+	 */
+	private void validateSpotName(final String spotName) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @param latitude
+	 * @param longitude
+	 */
+	private void validateLatAndLong(final double latitude,
+			final double longitude) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @param spotName
+	 * @param longitude
+	 * @param latitude
+	 */
+	private void validateSpotName(final String spotName,
+			final double longitude, final double latitude) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpotById(java.lang.Integer)
+	 */
+	@Override
+	public SpotDTO getSpotById(final Integer spotId) throws NeuralitoException {
+		validateSpotId(spotId);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		return spot.getDTO(spot);
+	}
+
+	/**
+	 * @param spotId
+	 */
+	private void validateSpotId(final Integer spotId) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getPublicSpots()
+	 */
+	@Override
+	public Collection<SpotDTO> getPublicSpots() throws NeuralitoException {
+		try {
+			final Collection<Spot> userSpots = spotDAO.getPublicSpots();
+			// Create spots DTOs.
+			final Collection<SpotDTO> userSpotsDTOs = new ArrayList<SpotDTO>();
+			for (final Iterator<Spot> iterator = userSpots.iterator(); iterator
+					.hasNext();) {
+				final Spot spot = iterator.next();
+				userSpotsDTOs.add(spot.getDTO(spot));
+			}
+			return userSpotsDTOs;
+		} catch (final DataAccessException e) {
+			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
+		}
 	}
 
 }

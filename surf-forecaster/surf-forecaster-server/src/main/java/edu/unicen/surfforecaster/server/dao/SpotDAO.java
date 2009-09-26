@@ -68,4 +68,16 @@ public interface SpotDAO {
 	 */
 	public void removeArea(Area areaById);
 
+	/**
+	 * @param zoneName
+	 * @param countryId
+	 * @return
+	 */
+	public Zone getZoneByNameAndCountry(String zoneName, Country country);
+
+	/**
+	 * @return
+	 */
+	public Collection<Spot> getPublicSpots();
+
 }
