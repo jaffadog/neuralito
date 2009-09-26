@@ -8,6 +8,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface ForecastCommonServicesAsync {
 	void login(String userName, String password, AsyncCallback<User> callback);
+	
+	void addUser(String name, String lastname, String email, String username, String password, int type, AsyncCallback<Integer> callback);
 
 	void getSessionData(AsyncCallback<SessionData> callback);
 

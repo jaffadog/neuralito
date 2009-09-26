@@ -1,9 +1,12 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -14,6 +17,7 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 
@@ -24,6 +28,16 @@ public class RegisterUserPanel extends VerticalPanel {
 	public RegisterUserPanel() {
 		setSpacing(10);
 		this.setWidth(GWTUtils.APLICATION_WIDTH);
+		
+		final MessagePanel errorPanel = new ErrorMsgPanel();
+		errorPanel.setVisible(false);
+		this.add(errorPanel);
+		
+		Vector<String> message = new Vector<String>();
+		message.add("Los cambios se guardaron exitosamente!");
+		final MessagePanel successPanel = new SuccessMsgPanel(message);
+		successPanel.setVisible(false);
+		this.add(successPanel);
 		
 		final FlexTable flexTable = new FlexTable();
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.registerSectionTitle());
@@ -42,7 +56,7 @@ public class RegisterUserPanel extends VerticalPanel {
 		flexTable.setCellSpacing(5);
 		flexTable.setSize("450", "300");
 
-		errorlabel = new Label(GWTUtils.LOCALE_CONSTANTS.starFields());
+		errorlabel = new Label();
 		errorlabel.setStylePrimaryName("gwt-Label-error");
 		flexTable.setWidget(0, 0, errorlabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
@@ -108,48 +122,50 @@ public class RegisterUserPanel extends VerticalPanel {
 
 		final PushButton registerBtn = new PushButton();
 		btnsPanel.add(registerBtn);
-//		registerBtn.addClickListener(new ClickListener() {
-//			public void onClick(final Widget sender) {
-//				if (nameTxt.getText().trim() != "" && lastNameTxt.getText().trim() != "" && userTxt.getText().trim() != "" && passTxt.getText().trim() != ""){
-//					int userPermissions = 2;
-//					if (user != null && user.getIdUserType() == 1 && adminCheck.isChecked())
-//						userPermissions = 1;
-//					DBService.Util.getInstance().addNewUser(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
-//							userTxt.getText().trim(), passTxt.getText().trim(), userPermissions, new AsyncCallback<Integer>(){
-//						public void onSuccess(Integer result){
-//							if (result == null){
-//								//System.out.println("No se pudo salvar el usuario");
-//								flexTable.getCellFormatter().setVisible(0, 0, false);
-//							}
-//							else
-//								if (result > 0){
-//									//System.out.println("El usuario fue grabado con exito.");
-//									if (user != null && user.getIdUserType() == 1)
-//										new MessageBoxUI("Aceptar", "Usuario registrado exitosamente!!!");
-//									else
-//										new MessageBoxUI("Aceptar", "Bienvenido al sistema!!!, usted ya ha sido registrado");
-//									flexTable.getCellFormatter().setVisible(0, 0, false);
-//									hide();
-//								}
-//								else{
-//									//System.out.println("Ya existe un usuario con ese userName.");
-//									errorlabel.setText("Ya existe ese nombre de usuario en el sistema, ingrese otro por favor.");
-//									flexTable.getCellFormatter().setVisible(0, 0, true);
-//								}
-//			            }
-//			            public void onFailure(Throwable caught){
-//			            	
-//			            	//System.out.println("fault adding a new user");
-//			            	caught.printStackTrace();
-//			            }
-//						});
-//				}
-//				else{
-//					errorlabel.setText("Los campos marcados con (*) son obligatorios.");
-//					flexTable.getCellFormatter().setVisible(0, 0, true);
-//				}
-//			}
-//		});
+		registerBtn.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				
+				final Vector<String> messages = new Vector<String>();
+				errorPanel.setVisible(false);
+				successPanel.setVisible(false);
+				
+				if (nameTxt.getText().trim() != "" && lastNameTxt.getText().trim() != "" && emailTxt.getText().trim() != "" 
+					&& userTxt.getText().trim() != "" && passTxt.getText().trim() != ""){
+					
+					ForecastCommonServices.Util.getInstance().addUser(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
+							emailTxt.getText().trim(), userTxt.getText().trim(), passTxt.getText().trim(), 2, new AsyncCallback<Integer>(){
+						public void onSuccess(Integer result){
+							if (result == null){
+								messages.add("No se pudo salvar el usuario.");
+								errorPanel.setMessages(messages);
+								errorPanel.setVisible(true);
+							}
+							else
+								if (result > 0){
+									successPanel.setVisible(true);
+								}
+								else{
+									
+									messages.add("Ya existe ese nombre de usuario en el sistema, ingrese otro por favor.");
+									errorPanel.setMessages(messages);
+									errorPanel.setVisible(true);
+									//System.out.println("Ya existe un usuario con ese userName.");
+								}
+			            }
+			            public void onFailure(Throwable caught){
+			            	
+			            	//System.out.println("fault adding a new user");
+			            	caught.printStackTrace();
+			            }
+						});
+				}
+				else{
+					messages.add(GWTUtils.LOCALE_CONSTANTS.starFields());
+					errorPanel.setMessages(messages);
+					errorPanel.setVisible(true);
+				}
+			}
+		});
 		registerBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
 		registerBtn.setText(GWTUtils.LOCALE_CONSTANTS.register());
 
