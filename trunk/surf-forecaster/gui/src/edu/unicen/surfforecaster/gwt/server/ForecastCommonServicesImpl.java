@@ -251,14 +251,14 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 
 	@Override
 	public Integer addUser(String name, String lastname, String email,
-			String username, String password, int type) {
+			String username, String password, int type) throws NeuralitoException {
 		
-		try {
+		//try {
 			return userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
-		} catch (final NeuralitoException e) {
-			logger.log(Level.INFO,"New User: '" + username + "' could not be added to the system." +  e.getErrorCode());
-			return null;
-		}
+//		} catch (final NeuralitoException e) {
+//			logger.log(Level.INFO,"New User: '" + username + "' could not be added to the system." +  e.getErrorCode());
+//			return null;
+//		}
 	}
 
 }
