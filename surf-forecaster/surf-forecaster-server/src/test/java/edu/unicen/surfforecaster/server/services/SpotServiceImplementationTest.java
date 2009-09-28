@@ -48,10 +48,10 @@ public class SpotServiceImplementationTest {
 	private Integer userId1;
 	private Integer userId2;
 
-	private Integer spot1Id;
-	private Integer spot2Id;
-	private Integer spot3Id;
-	private Integer spot4Id;
+	protected Integer spot1Id;
+	protected Integer spot2Id;
+	protected Integer spot3Id;
+	protected Integer spot4Id;
 
 	private Integer countryId;
 	private Integer areaId;

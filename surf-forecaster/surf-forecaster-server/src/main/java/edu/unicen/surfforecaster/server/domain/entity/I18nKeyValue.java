@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.unicen.surfforecaster.server.domain.entity;
 
 import javax.persistence.Column;

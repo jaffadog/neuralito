@@ -1,6 +1,8 @@
 package edu.unicen.surfforecaster.server.domain.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,9 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.apache.commons.lang.Validate;
+
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
 
 /**
  * A surf spot.
@@ -62,6 +68,12 @@ public class Spot implements Serializable {
 	 */
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Description description;
+
+	/**
+	 * The available forecasters for this spot.
+	 */
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Collection<Forecaster> forecasters;
 	/**
 	 * The id for ORM pupose.
 	 */
@@ -200,6 +212,29 @@ public class Spot implements Serializable {
 						.getCountry().getArea().getDTO(), spot.getUser()
 						.getId(), spot.isPublik());
 		return spotDTO;
+	}
+
+	/**
+	 * Add a forecaster to this spot.
+	 */
+	public void addForecaster(final Forecaster forecaster) {
+		Validate.notNull(forecaster);
+		forecasters.add(forecaster);
+	}
+
+	/**
+	 * Obtain forecasters for this spot.
+	 */
+	public Collection<Forecaster> getForecasters() {
+		return Collections.unmodifiableCollection(forecasters);
+	}
+
+	/**
+	 * Add a forecaster to this spot.
+	 */
+	public void removeForecaster(final Forecaster forecaster) {
+		Validate.notNull(forecaster);
+		forecasters.remove(forecaster);
 	}
 
 }
