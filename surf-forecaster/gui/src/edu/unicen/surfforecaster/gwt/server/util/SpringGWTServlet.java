@@ -16,7 +16,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class SpringGWTServlet extends RemoteServiceServlet  implements HttpRequestHandler, ServletContextAware{
 
-	@Override
 	public void handleRequest(HttpServletRequest arg0, HttpServletResponse arg1)
 			throws ServletException, IOException {
 		service(arg0, arg1);		
@@ -26,19 +25,19 @@ public class SpringGWTServlet extends RemoteServiceServlet  implements HttpReque
 		  final ServletContext context = servletContext;
 		  try {
 		    init(new ServletConfig() {
-		      @Override
+		      
 		      public String getInitParameter(String name) {
 		        return null;
 		      }
-		      @Override
+		      
 		      public Enumeration getInitParameterNames() {
 		        return null;
 		      }
-		      @Override
+		      
 		      public ServletContext getServletContext() {
 		        return context;
 		      }
-		      @Override
+		      
 		      public String getServletName() {
 		        return null;
 		      }
