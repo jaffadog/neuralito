@@ -14,7 +14,7 @@
   <!-- I18N inherits                                      -->
   <inherits name="com.google.gwt.i18n.I18N"/>
   
-  <inherits name='edu.unicen.surfforecaster.common.services.GWTShineCommon' />
+  <inherits name='edu.unicen.surfforecaster.common.GWTShineCommon' />
   
   <!-- Google Maps                                      -->
   <inherits name="com.google.gwt.maps.GoogleMaps" />
