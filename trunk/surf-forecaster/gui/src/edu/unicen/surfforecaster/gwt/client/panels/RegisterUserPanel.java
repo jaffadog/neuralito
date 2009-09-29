@@ -17,7 +17,9 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.utils.ErrorMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 
@@ -153,9 +155,14 @@ public class RegisterUserPanel extends VerticalPanel {
 								}
 			            }
 			            public void onFailure(Throwable caught){
+			            	System.out.println(((NeuralitoException)caught).getErrorCode().toString());
+			            	System.out.println("maxi: " + ErrorMessages.getErrorMessage(((NeuralitoException)caught).getErrorCode().toString()));
+//			            	messages.add(ErrorMessages.getErrorMessage(((NeuralitoException)caught).getErrorCode().toString()));
+//							errorPanel.setMessages(messages);
+//							errorPanel.setVisible(true);
 			            	
-			            	System.out.println("fault adding a new user");
-			            	caught.printStackTrace();
+			            	//System.out.println("fault adding a new user");
+			            	//caught.printStackTrace();
 			            }
 						});
 				}
