@@ -113,4 +113,12 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Visibilidad de ola")
 	String spotVisibility();
 	
+	//ErrorMessages
+	@DefaultStringValue("Fallo la conexion con la base de datos, intentelo nuevamente mas tarde...")
+	String DATABASE_ERROR();
+	
+	@DefaultStringValue("El nombre de usuario especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
+	String DUPLICATED_USER_USERNAME();
+	
+	
 }
