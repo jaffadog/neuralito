@@ -21,7 +21,15 @@ import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 public class ForecastServiceImplementationTest extends
 		SpotServiceImplementationTest {
 
-	private ForecastService forecastService;
+	private final ForecastService forecastService;
+
+	/**
+	 * 
+	 */
+	public ForecastServiceImplementationTest() {
+		super();// TODO Auto-generated constructor stub
+		forecastService = (ForecastService) context.getBean("forecastService");
+	}
 
 	/**
 	 * Create a ww3 forecaster for a given spot.
@@ -31,7 +39,7 @@ public class ForecastServiceImplementationTest extends
 		try {
 			final Collection<PointDTO> gridPoints = forecastService
 					.getWW3GridPoints(1D, 2D);
-			final PointDTO gridPoint = null;
+			final PointDTO gridPoint = new PointDTO(2D, 24D);
 			final Integer forecasterId = forecastService.createWW3Forecaster(
 					spot1Id, gridPoint);
 

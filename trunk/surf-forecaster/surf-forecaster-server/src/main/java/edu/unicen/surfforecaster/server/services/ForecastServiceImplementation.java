@@ -14,7 +14,7 @@ import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
-import edu.unicen.surfforecaster.server.dao.ForecasterDAO;
+import edu.unicen.surfforecaster.server.dao.ForecastDAO;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
@@ -25,8 +25,14 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
  * 
  */
 public class ForecastServiceImplementation implements ForecastService {
-	SpotService spotService;
-	private ForecasterDAO forecasterDAO;
+	/**
+	 * The spot service.
+	 */
+	private SpotService spotService;
+	/**
+	 * The forecast dao.
+	 */
+	private ForecastDAO forecastDAO;
 
 	/**
 	 * @see edu.unicen.surfforecaster.common.services.ForecastService#createWW3Forecaster(java.lang.Integer,
@@ -42,7 +48,7 @@ public class ForecastServiceImplementation implements ForecastService {
 		final SpotDTO spot = spotService.getSpotById(spotId);
 		final WW3Forecaster forecaster = new WW3Forecaster(list, new Point(spot
 				.getLatitude(), spot.getLongitude()));
-		final Integer id = forecasterDAO.save(forecaster);
+		final Integer id = forecastDAO.save(forecaster);
 
 		return id;
 	}
@@ -69,7 +75,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Override
 	public List<ForecastDTO> getForecasts(final Integer forecasterId)
 			throws NeuralitoException {
-		final Forecaster forecaster = forecasterDAO
+		final Forecaster forecaster = forecastDAO
 				.getForecasterById(forecasterId);
 		final Collection<Forecast> forecasts = forecaster.getForecasts();
 		final List<ForecastDTO> forecastsDtos = new ArrayList<ForecastDTO>();
@@ -97,6 +103,22 @@ public class ForecastServiceImplementation implements ForecastService {
 			pointsDTOs.add(point.getDTO());
 		}
 		return pointsDTOs;
+	}
+
+	/**
+	 * @param spotService
+	 *            the spotService to set
+	 */
+	public void setSpotService(final SpotService spotService) {
+		this.spotService = spotService;
+	}
+
+	/**
+	 * @param forecastDAO
+	 *            the forecastDAO to set
+	 */
+	public void setForecastDAO(final ForecastDAO forecastDAO) {
+		this.forecastDAO = forecastDAO;
 	}
 
 }

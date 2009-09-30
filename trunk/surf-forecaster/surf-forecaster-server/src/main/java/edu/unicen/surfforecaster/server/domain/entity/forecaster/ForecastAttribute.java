@@ -3,8 +3,13 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity.forecaster;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 import org.apache.commons.lang.Validate;
 
@@ -12,17 +17,34 @@ import edu.unicen.surfforecaster.common.services.dto.ForecastAttributeDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 
 /**
+ * A forecast attribute. It may be double, integer, or string.
+ * 
  * @author esteban
  * 
  */
+@Entity
 public class ForecastAttribute {
+	/**
+	 * The id for ORM pupose.
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(length = 11)
+	private Integer id;
+
+	public Integer getId() {
+		return id;
+	}
+
 	/**
 	 * the attribute
 	 */
-	String attribute;
+	@Column(nullable = false, length = 100)
+	String attributeName;
 	/**
-	 * double
+	 * double value
 	 */
+
 	Double dValue;
 	/**
 	 * int value
@@ -31,9 +53,21 @@ public class ForecastAttribute {
 	/**
 	 * string value
 	 */
+	@Column(length = 100)
 	String sValue;
+
+	/**
+	 * The unit of the attribute.
+	 */
 	@Enumerated(EnumType.STRING)
-	private final Unit unit;
+	private Unit unit;
+
+	/**
+	 * 
+	 */
+	public ForecastAttribute() {
+		// ORM purpose.
+	}
 
 	/**
 	 * @param string
@@ -44,7 +78,7 @@ public class ForecastAttribute {
 		Validate.notNull(attribute);
 		Validate.notNull(value);
 		Validate.notNull(unit);
-		this.attribute = attribute;
+		attributeName = attribute;
 		this.unit = unit;
 		dValue = value;
 	}
@@ -58,7 +92,7 @@ public class ForecastAttribute {
 		Validate.notNull(attribute);
 		Validate.notNull(value);
 		Validate.notNull(unit);
-		this.attribute = attribute;
+		attributeName = attribute;
 		this.unit = unit;
 		sValue = value;
 	}
@@ -72,7 +106,7 @@ public class ForecastAttribute {
 		Validate.notNull(attribute);
 		Validate.notNull(value);
 		Validate.notNull(unit);
-		this.attribute = attribute;
+		attributeName = attribute;
 		this.unit = unit;
 		iValue = value;
 	}
@@ -87,8 +121,8 @@ public class ForecastAttribute {
 	/**
 	 * @return
 	 */
-	public String getAttribute() {
-		return attribute;
+	public String getAttributeName() {
+		return attributeName;
 	}
 
 	/**

@@ -12,11 +12,11 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
  * @author esteban
  * 
  */
-public class ForecasterDAOHibernateImpl extends HibernateDaoSupport implements
-		ForecasterDAO {
+public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
+		ForecastDAO {
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.dao.ForecasterDAO#save(edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster)
+	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#save(edu.unicen.surfforecaster.server.domain.entity.forecast.WW3Forecaster)
 	 */
 	@Override
 	public Integer save(final WW3Forecaster forecaster) {
@@ -26,7 +26,7 @@ public class ForecasterDAOHibernateImpl extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.dao.ForecasterDAO#getForecasterById(java.lang.Integer)
+	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#getForecasterById(java.lang.Integer)
 	 */
 	@Override
 	public Forecaster getForecasterById(final Integer forecasterId) {

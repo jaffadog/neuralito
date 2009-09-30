@@ -14,6 +14,47 @@
 		<property name="userDAO" ref="userDAO"></property>
 		<property name="spotDAO" ref="spotDAO"></property>
 	</bean>
+	<bean id="forecastService"
+		class="edu.unicen.surfforecaster.server.services.ForecastServiceImplementation">
+		<property name="forecastDAO" ref="forecastDAO"></property>
+		<property name="spotService" ref="spotService"></property>
+	</bean>
+	<bean name="exampleJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass"
+			value="edu.unicen.surfforecaster.server.domain.entity.forecaster.ScheduledDownloader" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="timeout" value="5" />
+			</map>
+		</property>
+		<property name="jobListenerNames">
+			<list>
+				<value>downloadListener</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="exampleJob" />
+		<!-- 10 seconds -->
+		<property name="startDelay" value="5000" />
+		<!-- repeat every 50 seconds -->
+		<property name="repeatInterval" value="10000" />
+	</bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger" />
+			</list>
+		</property>
+		<property name="jobListeners">
+			<list>
+				<ref bean="downloadListener" />
+			</list>
+		</property>
+	</bean>
+	<bean id="downloadListener" class=" edu.unicen.surfforecaster.server.domain.entity.forecaster.downloaderListener">
+		<property name="name" value="downloadListener"/>
+	</bean>
 
 
 </beans>

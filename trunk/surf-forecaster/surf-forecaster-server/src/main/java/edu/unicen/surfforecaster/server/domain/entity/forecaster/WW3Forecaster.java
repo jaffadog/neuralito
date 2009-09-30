@@ -10,49 +10,44 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 
 /**
+ * Wave Watch 3 Forecaster. This forecaster will use NOAA wave watch 3 output to
+ * generate the forecast for the given grid points.
+ * 
  * @author esteban
  * 
  */
 @Entity
 public class WW3Forecaster extends Forecaster {
-	/**
-	 * The id for ORM pupose.
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length = 11)
-	private Integer id;
 
-	@Override
-	public Integer getId() {
-		return id;
-	}
+	// WW3DAO ww3Dao;
 
 	public static final Collection<Point> getSurroundingGridPoints(
 			final Point location) {
-		return null;
+		final Point poin = new Point(1D, 4D);
+		final ArrayList<Point> points = new ArrayList<Point>();
+		points.add(poin);
+		return points;
+
 	}
 
 	public static final Collection<Point> getAllGridPoints() {
 		return null;
+
 	}
 
 	/**
 	 * Grid points used for giving the forecast.
 	 */
-	@ManyToMany
+	@ManyToMany()
 	private Collection<Point> gridPoints;
+
 	/**
 	 * Forecast location
 	 */
@@ -63,7 +58,7 @@ public class WW3Forecaster extends Forecaster {
 	 * 
 	 */
 	public WW3Forecaster() {
-
+		// ORM purpose
 	}
 
 	/**
@@ -76,7 +71,7 @@ public class WW3Forecaster extends Forecaster {
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster#getDescription()
+	 * @see edu.unicen.surfforecaster.server.domain.entity.forecast.Forecaster#getDescription()
 	 */
 	@Override
 	public String getDescription() {
@@ -84,7 +79,7 @@ public class WW3Forecaster extends Forecaster {
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster#getDescription()
+	 * @see edu.unicen.surfforecaster.server.domain.entity.forecast.Forecaster#getDescription()
 	 */
 	@Override
 	public String getName() {
@@ -92,7 +87,7 @@ public class WW3Forecaster extends Forecaster {
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster#getForecast()
+	 * @see edu.unicen.surfforecaster.server.domain.entity.forecast.Forecaster#getForecast()
 	 */
 	@Override
 	public Collection<Forecast> getForecasts() {
@@ -105,6 +100,12 @@ public class WW3Forecaster extends Forecaster {
 		forecasts.add(forecast);
 		return forecasts;
 	}
+
+	// private void getForecast() {
+	// // get latest forecast for grid points:Collection<Forecast>
+	// final Collection<Forecast> forecasts = ww3Dao
+	// .getLatestForecast(gridPoints);
+	// }
 
 	/**
 	 * @return the gridPoints

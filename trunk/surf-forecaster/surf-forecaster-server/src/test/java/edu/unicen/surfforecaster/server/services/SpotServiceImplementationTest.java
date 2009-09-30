@@ -27,10 +27,10 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
  * 
  */
 public class SpotServiceImplementationTest {
-	private final ApplicationContext context = new ClassPathXmlApplicationContext(
+	protected final ApplicationContext context = new ClassPathXmlApplicationContext(
 			"/services.xml");
-	private final SpotService spotService;
-	private final UserService userService;
+	protected final SpotService spotService;
+	protected final UserService userService;
 
 	/**
 	 * 
