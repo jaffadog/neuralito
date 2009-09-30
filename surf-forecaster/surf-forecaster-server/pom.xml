@@ -40,9 +40,10 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-
-
-
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-annotations</artifactId>
@@ -51,7 +52,34 @@
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 		</dependency>
+		<dependency>
+			<!-- required to read Grib-2 JPEG2000 compressed files -->
+			<groupId>essi-unidata</groupId>
+			<artifactId>jpeg2000</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+
+		</dependency>
+
+		<dependency>
+			<groupId>essi-unidata</groupId>
+			<artifactId>netcdf-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>essi-unidata</groupId>
+			<artifactId>grib</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>

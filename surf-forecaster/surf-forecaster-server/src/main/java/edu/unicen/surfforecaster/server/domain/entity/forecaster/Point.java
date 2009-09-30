@@ -32,18 +32,24 @@ public class Point {
 	/**
 	 * The latitude.
 	 */
-	private final double latitude;
+	private double latitude;
 	/**
 	 * The longitude.
 	 */
-	private final double longitude;
+	private double longitude;
+
+	/**
+	 * 
+	 */
+	public Point() {
+		// ORM purpose
+	}
 
 	/**
 	 * @param latitude
 	 * @param longitude
 	 */
 	public Point(final double latitude, final double longitude) {
-		super();
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
@@ -67,7 +73,7 @@ public class Point {
 	 */
 	public PointDTO getDTO() {
 		// TODO Auto-generated method stub
-		return null;
+		return new PointDTO(latitude, longitude);
 	}
 
 }

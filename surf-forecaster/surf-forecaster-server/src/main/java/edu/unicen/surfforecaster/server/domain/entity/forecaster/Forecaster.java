@@ -14,6 +14,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 /**
+ * Abstract class to be extended by all forecasters.
+ * 
  * @author esteban
  * 
  */
@@ -47,7 +49,7 @@ public abstract class Forecaster {
 	public abstract String getName();
 
 	/**
-	 * Obtain the most recent forecast;
+	 * Obtain the most recent forecasts;
 	 * 
 	 * @param inputData
 	 * @return

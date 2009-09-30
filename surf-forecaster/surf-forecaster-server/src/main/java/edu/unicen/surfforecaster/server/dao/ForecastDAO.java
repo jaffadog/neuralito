@@ -10,7 +10,7 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
  * @author esteban
  * 
  */
-public interface ForecasterDAO {
+public interface ForecastDAO {
 
 	/**
 	 * @param forecaster

@@ -72,7 +72,7 @@ public class Spot implements Serializable {
 	/**
 	 * The available forecasters for this spot.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<Forecaster> forecasters;
 	/**
 	 * The id for ORM pupose.
@@ -219,7 +219,7 @@ public class Spot implements Serializable {
 	 */
 	public void addForecaster(final Forecaster forecaster) {
 		Validate.notNull(forecaster);
-		forecasters.add(forecaster);
+		// forecasters.add(forecaster);
 	}
 
 	/**
@@ -227,6 +227,7 @@ public class Spot implements Serializable {
 	 */
 	public Collection<Forecaster> getForecasters() {
 		return Collections.unmodifiableCollection(forecasters);
+
 	}
 
 	/**
