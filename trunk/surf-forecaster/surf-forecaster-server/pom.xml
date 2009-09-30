@@ -90,6 +90,11 @@
 			<artifactId>hsqldb</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.enterprisedt</groupId>
+			<artifactId>edtFTPj</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

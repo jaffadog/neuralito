@@ -25,8 +25,7 @@ public class WWW3Access {
 	@Test
 	public void openGribFile() {
 		try {
-			final File file = new File(
-					"src/test/resources/multi_1.glo_30m.DIRPW.grb2");
+			final File file = new File("e2.txt");
 			// final NetcdfFile ncfile = NetcdfDataset
 			// .open(file.getAbsolutePath());
 			// final List<Variable> variables = ncfile.getVariables();
