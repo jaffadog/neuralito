@@ -73,7 +73,7 @@ public class NewSpotDataPanel extends LazyPanel {
 		container.add(flexTable);
 		flexTable.setCellSpacing(5);
 
-		errorlabel = new Label(GWTUtils.LOCALE_CONSTANTS.starFields());
+		errorlabel = new Label(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
 		errorlabel.setStylePrimaryName("gwt-Label-error");
 		flexTable.setWidget(0, 0, errorlabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
