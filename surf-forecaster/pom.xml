@@ -200,7 +200,11 @@
       <artifactId>commons-collections</artifactId>
       <version>3.2.1</version>
     </dependency>
-
+	<dependency>
+		  <groupId>com.enterprisedt</groupId>
+		  <artifactId>edtFTPj</artifactId>
+		  <version>2.0.4</version>
+	</dependency>
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
@@ -286,6 +290,14 @@
 	            </snapshots>
 	            <id>netcdf</id>
 	            <url>http://ulisse.pin.unifi.it:8080/archiva/repository/ext.public.rel</url>
+	        </repository>
+			<repository>
+	            <name>Neuralito Google Code repo</name>
+	            <snapshots>
+	                <enabled>true</enabled>
+	            </snapshots>
+	            <id>neuralito</id>
+	            <url>http://neuralito.googlecode.com/svn/repo</url>
 	        </repository>
 	</repositories>
 		
