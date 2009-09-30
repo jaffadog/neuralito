@@ -1,6 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client.utils;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -35,9 +34,6 @@ public final class GWTUtils {
 	//Valid history tokens
 	public static Vector<String> VALID_HISTORY_TOKENS = new Vector<String>();
 	public final static String DEFAULT_HISTORY_TOKEN = "forecastTab";
-	
-	//Timezones hash
-	private static HashMap<String, Object> timeZones = null;
 	
 	/**
 	 * Set the valid history tokens values in the valid tokens vector

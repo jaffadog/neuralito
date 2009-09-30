@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.gwt.client.utils.ErrorMessages;
+import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 
@@ -36,7 +36,7 @@ public class RegisterUserPanel extends VerticalPanel {
 		this.add(errorPanel);
 		
 		Vector<String> message = new Vector<String>();
-		message.add("Los cambios se guardaron exitosamente!");
+		message.add(ClientI18NMessages.getInstance().getErrorMessage("CHANGES_SAVED_SUCCESFULLY"));
 		final MessagePanel successPanel = new SuccessMsgPanel(message);
 		successPanel.setVisible(false);
 		this.add(successPanel);
@@ -155,19 +155,17 @@ public class RegisterUserPanel extends VerticalPanel {
 								}
 			            }
 			            public void onFailure(Throwable caught){
-			            	System.out.println(((NeuralitoException)caught).getErrorCode().toString());
-			            	System.out.println("maxi: " + ErrorMessages.getErrorMessage(((NeuralitoException)caught).getErrorCode().toString()));
-//			            	messages.add(ErrorMessages.getErrorMessage(((NeuralitoException)caught).getErrorCode().toString()));
-//							errorPanel.setMessages(messages);
-//							errorPanel.setVisible(true);
+			            	messages.add(ClientI18NMessages.getInstance().getErrorMessage((NeuralitoException)caught));
+							errorPanel.setMessages(messages);
+							errorPanel.setVisible(true);
 			            	
-			            	//System.out.println("fault adding a new user");
-			            	//caught.printStackTrace();
+			            	System.out.println("fault adding a new user");
+			            	
 			            }
 						});
 				}
 				else{
-					messages.add(GWTUtils.LOCALE_CONSTANTS.starFields());
+					messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
 					errorPanel.setMessages(messages);
 					errorPanel.setVisible(true);
 				}

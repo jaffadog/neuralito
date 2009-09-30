@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.User;
+import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class LoginBox extends DialogBox{
@@ -55,7 +56,7 @@ public class LoginBox extends DialogBox{
 		final VerticalPanel verticalPanel = new VerticalPanel();
 		horizontalPanel.add(verticalPanel);
 		
-		label_loginMessage = new Label(GWTUtils.LOCALE_CONSTANTS.invalidUserPass());
+		label_loginMessage = new Label(ClientI18NMessages.getInstance().getErrorMessage("INVALID_USER_OR_PASS"));
 		verticalPanel.add(label_loginMessage);
 		label_loginMessage.addStyleName("gwt-Label-error");
 		label_loginMessage.setVisible(false);

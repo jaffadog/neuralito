@@ -20,9 +20,6 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Registrarse")
 	String register();
 	
-	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
-	String starFields();
-	
 	@DefaultStringValue("Pron\u00F3stico")
 	String forecast();
 	
@@ -55,9 +52,6 @@ public interface SurfForecasterConstants extends Constants {
 	String settings();
 	
 	//LoginBox
-	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a")
-	String invalidUserPass();
-	
 	@DefaultStringValue("Espere por favor")
 	String waitPlease();
 	
@@ -114,11 +108,26 @@ public interface SurfForecasterConstants extends Constants {
 	String spotVisibility();
 	
 	//ErrorMessages
+	@DefaultStringValue("Los cambios se guardaron exitosamente !!!")
+	String CHANGES_SAVED_SUCCESFULLY();
+	
+	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
+	String MANDATORY_FIELDS();
+	
+	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a")
+	String INVALID_USER_OR_PASS();
+	
 	@DefaultStringValue("Fallo la conexion con la base de datos, intentelo nuevamente mas tarde...")
 	String DATABASE_ERROR();
 	
 	@DefaultStringValue("El nombre de usuario especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
 	String DUPLICATED_USER_USERNAME();
+	
+	@DefaultStringValue("El email especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
+	String DUPLICATED_USER_EMAIL();
+	
+	@DefaultStringValue("El password no puede ser vacio o igual al nombre de usuario, por favor ingrese uno distinto.")
+	String INVALID_PASSWORD();
 	
 	
 }
