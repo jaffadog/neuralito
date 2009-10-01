@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -26,6 +25,11 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 public class RegisterUserPanel extends VerticalPanel {
 	
 	private Label errorlabel = null;
+	private TextBox nameTxt;
+	private TextBox lastNameTxt;
+	private TextBox emailTxt;
+	private TextBox userTxt;
+	private PasswordTextBox passTxt;
 	
 	public RegisterUserPanel() {
 		setSpacing(10);
@@ -84,43 +88,41 @@ public class RegisterUserPanel extends VerticalPanel {
 		flexTable.setWidget(5, 0, passLabel);
 		flexTable.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
-		final TextBox nameTxt = new TextBox();
+		nameTxt = new TextBox();
 		flexTable.setWidget(1, 2, nameTxt);
 		nameTxt.setWidth("300px");
 
-		final TextBox lastNameTxt = new TextBox();
+		lastNameTxt = new TextBox();
 		flexTable.setWidget(2, 2, lastNameTxt);
 		lastNameTxt.setWidth("300px");
 		
-		final TextBox emailTxt = new TextBox();
+		emailTxt = new TextBox();
 		flexTable.setWidget(3, 2, emailTxt);
 		emailTxt.setWidth("300px");
 
-		final TextBox userTxt = new TextBox();
+		userTxt = new TextBox();
 		flexTable.setWidget(4, 2, userTxt);
 		userTxt.setWidth("300px");
 
-		final PasswordTextBox passTxt = new PasswordTextBox();
+		passTxt = new PasswordTextBox();
 		flexTable.setWidget(5, 2, passTxt);
 		passTxt.setWidth("300px");
 		
-		final Label adminLabel = new Label(GWTUtils.LOCALE_CONSTANTS.administrator() + ":");
-		flexTable.setWidget(6, 0, adminLabel);
-		adminLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-
-		final CheckBox adminCheck = new CheckBox();
-		flexTable.setWidget(6, 2, adminCheck);
-		
-//		if (user == null){
-//			flexTable.getCellFormatter().setVisible(5, 0, false);
-//			flexTable.getCellFormatter().setVisible(5, 2, false);
-//		}
+//		final Label adminLabel = new Label(GWTUtils.LOCALE_CONSTANTS.administrator() + ":");
+//		flexTable.setWidget(6, 0, adminLabel);
+//		adminLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//
+//		final CheckBox adminCheck = new CheckBox();
+//		flexTable.setWidget(6, 2, adminCheck);
+//		
+//		flexTable.getCellFormatter().setVisible(6, 0, false);
+//		flexTable.getCellFormatter().setVisible(6, 2, false);
 
 		final HorizontalPanel btnsPanel = new HorizontalPanel();
-		flexTable.setWidget(7, 0, btnsPanel);
+		flexTable.setWidget(6, 0, btnsPanel);
 		btnsPanel.setSpacing(5);
-		flexTable.getCellFormatter().setHorizontalAlignment(7, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getFlexCellFormatter().setColSpan(7, 0, 3);
+		flexTable.getCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getFlexCellFormatter().setColSpan(6, 0, 3);
 
 		final PushButton registerBtn = new PushButton();
 		btnsPanel.add(registerBtn);
@@ -137,30 +139,13 @@ public class RegisterUserPanel extends VerticalPanel {
 					ForecastCommonServices.Util.getInstance().addUser(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
 							emailTxt.getText().trim(), userTxt.getText().trim(), passTxt.getText().trim(), 2, new AsyncCallback<Integer>(){
 						public void onSuccess(Integer result){
-							if (result == null){
-								messages.add("No se pudo salvar el usuario.");
-								errorPanel.setMessages(messages);
-								errorPanel.setVisible(true);
-							}
-							else
-								if (result > 0){
-									successPanel.setVisible(true);
-								}
-								else{
-									
-									messages.add("Ya existe ese nombre de usuario en el sistema, ingrese otro por favor.");
-									errorPanel.setMessages(messages);
-									errorPanel.setVisible(true);
-									//System.out.println("Ya existe un usuario con ese userName.");
-								}
+							clearFields();		
+							successPanel.setVisible(true);
 			            }
 			            public void onFailure(Throwable caught){
 			            	messages.add(ClientI18NMessages.getInstance().getErrorMessage((NeuralitoException)caught));
 							errorPanel.setMessages(messages);
 							errorPanel.setVisible(true);
-			            	
-			            	System.out.println("fault adding a new user");
-			            	
 			            }
 						});
 				}
@@ -190,6 +175,14 @@ public class RegisterUserPanel extends VerticalPanel {
 		cancelBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
 		cancelBtn.setText(GWTUtils.LOCALE_CONSTANTS.goBack());
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+	}
+	
+	private void clearFields() {
+		this.emailTxt.setText("");
+		this.nameTxt.setText("");
+		this.lastNameTxt.setText("");
+		this.userTxt.setText("");
+		this.passTxt.setText("");
 	}
 		
 }

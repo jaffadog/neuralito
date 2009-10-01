@@ -46,13 +46,14 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 	 */
 
 	public UserDTO login(final String userName, final String password) throws NeuralitoException{
-			final UserDTO userDTO = userService.loginUser(userName, password);
-			final HttpSession session = getSession();
-			session.setMaxInactiveInterval(1200); // 120seg
-			session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
-			session.setAttribute("gwtForecast-UserType", userDTO.getType());
-			logger.log(Level.INFO,"User: '" + userDTO.getUsername() + "' retrieved.");
-			return userDTO;
+		logger.log(Level.INFO,"ForecastCommonServicesImpl - login - Finding User: '" + userName + "'.");
+		final UserDTO userDTO = userService.loginUser(userName, password);
+		final HttpSession session = getSession();
+		session.setMaxInactiveInterval(1200); // 120seg
+		session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
+		session.setAttribute("gwtForecast-UserType", userDTO.getType());
+		logger.log(Level.INFO,"ForecastCommonServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
+		return userDTO;
 	}
 
 	public Area getArea() {
@@ -245,8 +246,12 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 
 	public Integer addUser(String name, String lastname, String email,
 			String username, String password, int type) throws NeuralitoException {
-
-		return userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
+		
+		logger.log(Level.INFO,"ForecastCommonServicesImpl - addUser - Adding user with username: '" + username + "'.");
+		Integer result = userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
+		logger.log(Level.INFO,"ForecastCommonServicesImpl - addUser - User with username: '" + username + "' successfully added.");
+		
+		return result;
 	}
 
 }
