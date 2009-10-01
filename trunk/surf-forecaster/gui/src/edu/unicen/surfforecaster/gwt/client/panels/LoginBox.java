@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.User;
@@ -56,7 +57,7 @@ public class LoginBox extends DialogBox{
 		final VerticalPanel verticalPanel = new VerticalPanel();
 		horizontalPanel.add(verticalPanel);
 		
-		label_loginMessage = new Label(ClientI18NMessages.getInstance().getErrorMessage("INVALID_USER_OR_PASS"));
+		label_loginMessage = new Label();
 		verticalPanel.add(label_loginMessage);
 		label_loginMessage.addStyleName("gwt-Label-error");
 		label_loginMessage.setVisible(false);
@@ -99,22 +100,20 @@ public class LoginBox extends DialogBox{
 				label_loginMessage.setVisible(false);
 				showLoadingPanel();
 				if (loginUserName.getText().trim().equals("") || loginPassword.getText().trim().equals("")){
+					label_loginMessage.setText(GWTUtils.LOCALE_CONSTANTS.INVALID_LOGIN());
 					label_loginMessage.setVisible(true);
 					showFormPanel();
 				}
 				else{
 					ForecastCommonServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<UserDTO>(){
 						public void onSuccess(UserDTO result) {
-							if (result == null) {
-								label_loginMessage.setVisible(true);
-								showFormPanel();
-							} else {
-								Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
-							}
+							Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
 						}
 							
 						public void onFailure(Throwable caught) {
-							System.out.println("failed login async method." + caught);
+							label_loginMessage.setText(ClientI18NMessages.getInstance().getErrorMessage((NeuralitoException)caught));
+							label_loginMessage.setVisible(true);
+							showFormPanel();
 						}
 					});
 				}

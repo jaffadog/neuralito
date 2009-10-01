@@ -115,9 +115,9 @@ public interface SurfForecasterConstants extends Constants {
 	String MANDATORY_FIELDS();
 	
 	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a")
-	String INVALID_USER_OR_PASS();
+	String INVALID_LOGIN();
 	
-	@DefaultStringValue("Fallo la conexion con la base de datos, intentelo nuevamente mas tarde...")
+	@DefaultStringValue("Fallo la conexion con la base de datos, intentelo nuevamente m\u00E1s tarde...")
 	String DATABASE_ERROR();
 	
 	@DefaultStringValue("El nombre de usuario especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
