@@ -45,8 +45,7 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 	 * @return User user if exist any user with that values or Null
 	 */
 
-	public UserDTO login(final String userName, final String password) {
-		try {
+	public UserDTO login(final String userName, final String password) throws NeuralitoException{
 			final UserDTO userDTO = userService.loginUser(userName, password);
 			final HttpSession session = getSession();
 			session.setMaxInactiveInterval(1200); // 120seg
@@ -54,10 +53,6 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 			session.setAttribute("gwtForecast-UserType", userDTO.getType());
 			logger.log(Level.INFO,"User: '" + userDTO.getUsername() + "' retrieved.");
 			return userDTO;
-		} catch (final NeuralitoException e) {
-			logger.log(Level.INFO,"User: '" + userName + "' could not login. User service failed to log the user.",e);
-			return null;
-		}
 	}
 
 	public Area getArea() {
@@ -250,13 +245,8 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 
 	public Integer addUser(String name, String lastname, String email,
 			String username, String password, int type) throws NeuralitoException {
-		
-		//try {
-			return userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
-//		} catch (final NeuralitoException e) {
-//			logger.log(Level.INFO,"New User: '" + username + "' could not be added to the system." +  e.getErrorCode());
-//			return null;
-//		}
+
+		return userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
 	}
 
 }
