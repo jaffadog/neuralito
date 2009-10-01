@@ -27,7 +27,7 @@ public interface ForecastCommonServices extends RemoteService {
 		}
 	}
 
-	UserDTO login(String userName, String password);
+	UserDTO login(String userName, String password) throws NeuralitoException;
 	
 	Integer addUser(String name, String lastname, String email, String username, String password, int type) throws NeuralitoException;
 
