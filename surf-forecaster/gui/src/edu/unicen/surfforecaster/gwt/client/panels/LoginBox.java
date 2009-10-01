@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
-import edu.unicen.surfforecaster.gwt.client.User;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
