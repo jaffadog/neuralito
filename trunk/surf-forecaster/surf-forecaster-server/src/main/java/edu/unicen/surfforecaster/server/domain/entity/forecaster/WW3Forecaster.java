@@ -95,8 +95,7 @@ public class WW3Forecaster extends Forecaster {
 		final Map<String, ForecastAttribute> attributes = new HashMap<String, ForecastAttribute>();
 		attributes.put("wave height", new ForecastAttribute("wave height", 2D,
 				Unit.Meters));
-		final Forecast forecast = new Forecast(new Date(), new Date(),
-				new Date(), attributes, this);
+		final Forecast forecast = new Forecast(new Date(), 3, attributes, this);
 		forecasts.add(forecast);
 		return forecasts;
 	}

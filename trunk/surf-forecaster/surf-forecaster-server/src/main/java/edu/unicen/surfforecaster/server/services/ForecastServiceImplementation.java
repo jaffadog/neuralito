@@ -35,6 +35,72 @@ public class ForecastServiceImplementation implements ForecastService {
 	private ForecastDAO forecastDAO;
 
 	/**
+	 * 
+	 */
+	public ForecastServiceImplementation() {
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
+																			// Auto-generated
+																			// constructor
+																			// stub
+	}
+
+	/**
 	 * @see edu.unicen.surfforecaster.common.services.ForecastService#createWW3Forecaster(java.lang.Integer,
 	 *      edu.unicen.surfforecaster.common.services.dto.PointDTO)
 	 */

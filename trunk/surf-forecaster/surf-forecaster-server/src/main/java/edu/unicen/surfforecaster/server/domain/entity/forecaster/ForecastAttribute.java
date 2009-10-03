@@ -61,6 +61,7 @@ public class ForecastAttribute {
 	 */
 	@Enumerated(EnumType.STRING)
 	private Unit unit;
+	private float fValue;
 
 	/**
 	 * 
@@ -109,6 +110,21 @@ public class ForecastAttribute {
 		attributeName = attribute;
 		this.unit = unit;
 		iValue = value;
+	}
+
+	/**
+	 * @param string
+	 * @param f
+	 * @param meters
+	 */
+	public ForecastAttribute(final String string, final float f,
+			final Unit meters) {
+		Validate.notNull(string);
+		Validate.notNull(f);
+		Validate.notNull(unit);
+		attributeName = string;
+		unit = meters;
+		fValue = f;
 	}
 
 	/**

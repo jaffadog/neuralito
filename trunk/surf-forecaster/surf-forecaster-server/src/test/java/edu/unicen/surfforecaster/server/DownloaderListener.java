@@ -1,4 +1,5 @@
 package edu.unicen.surfforecaster.server;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,10 +10,11 @@ import com.enterprisedt.net.ftp.EventListener;
  */
 
 /**
+ * 
  * @author esteban
  * 
  */
-public class MyEventLister implements EventListener {
+public class DownloaderListener implements EventListener {
 
 	private final Map<String, Long> map = new HashMap<String, Long>();
 
@@ -44,7 +46,6 @@ public class MyEventLister implements EventListener {
 	 */
 	@Override
 	public void downloadCompleted(final String arg0, final String arg1) {
-		// TODO Auto-generated method stub
 
 	}
 
