@@ -4,14 +4,11 @@
 package edu.unicen.surfforecaster.server;
 
 import java.io.File;
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.List;
-
-import org.junit.Test;
 
 import ucar.ma2.ArrayDouble;
 import ucar.ma2.ArrayFloat;
-import ucar.nc2.Attribute;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 import ucar.nc2.dataset.NetcdfDataset;
@@ -20,41 +17,43 @@ import ucar.nc2.dataset.NetcdfDataset;
  * @author esteban
  * 
  */
-public class WWW3Access {
+public class WWW3Access implements Runnable {
 
-	@Test
+	final File file = new File("src/test/resources/multi_1.glo_30m.DIRPW.grb2");
+
+	// @Test
 	public void openGribFile() {
+
+	}
+
+	public static void main(final String[] args) {
+		final WWW3Access ww3 = new WWW3Access();
+		for (int i = 0; i < 1000; i++) {
+			final Thread t = new Thread(ww3);
+			t.start();
+		}
+	}
+
+	static void a() {
+
+	}
+
+	/**
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
 		try {
-			final File file = new File("e2.txt");
-			// final NetcdfFile ncfile = NetcdfDataset
-			// .open(file.getAbsolutePath());
-			// final List<Variable> variables = ncfile.getVariables();
+			final NetcdfFile dataFile = file();
+
+			final List<Variable> variables = dataFile.getVariables();
 			// for (final Iterator iterator = variables.iterator(); iterator
 			// .hasNext();) {
 			// final Variable variable = (Variable) iterator.next();
 			// final List<Attribute> attributes = variable.getAttributes();
 			// System.out.println();
 			// System.out.println("Var Name: " + variable.getName() + ". ");
-			// for (final Iterator iterator2 = attributes.iterator(); iterator2
-			// .hasNext();) {
-			// final Attribute attribute = (Attribute) iterator2.next();
-			// System.out.println("Attribute: " + attribute.getName()
-			// + "       Val1---" + attribute.getStringValue()
-			// + "       Val2--- " + attribute.getStringValue(2));
 			// }
-			// }
-			// open = GridDataset.open(file.getAbsolutePath());
-			final NetcdfFile dataFile = NetcdfDataset.open(file
-					.getAbsolutePath());
-
-			final List<Variable> variables = dataFile.getVariables();
-			for (final Iterator iterator = variables.iterator(); iterator
-					.hasNext();) {
-				final Variable variable = (Variable) iterator.next();
-				final List<Attribute> attributes = variable.getAttributes();
-				System.out.println();
-				System.out.println("Var Name: " + variable.getName() + ". ");
-			}
 			// final int NLVL = 2;
 			// final int NLAT = 6;
 			// final int NLON = 12;
@@ -100,10 +99,10 @@ public class WWW3Access {
 			// Get the pressure and temperature variables.
 			final Variable presVar = dataFile
 					.findVariable("Primary_wave_direction");
-			if (presVar == null) {
-				System.out.println("Cant find Variable pressure");
-				return;
-			}
+			// if (presVar == null) {
+			// System.out.println("Cant find Variable pressure");
+			// return;
+			// }
 
 			// final Variable tempVar = dataFile.findVariable("temperature");
 			// if (lonVar == null) {
@@ -118,7 +117,7 @@ public class WWW3Access {
 			shape[0] = 1; // only one rec per read
 
 			// loop over the rec dimension
-			for (int rec = 0; rec < recLen; rec++) {
+			for (int rec = 0; rec < 1; rec++) {
 				origin[0] = rec; // read this index
 
 				// read 3D array for that index
@@ -131,21 +130,22 @@ public class WWW3Access {
 				// .reduce();
 
 				// now checking the value
-				int count = 0;
-
-				for (int lat = 0; lat < 40; lat++) {
-					for (int lon = 0; lon < 49; lon++) {
-						if (presArray.get(lat, lon) != SAMPLE_PRESSURE + count) {
-							System.out.println(presArray.get(lat, lon));
-							// System.err
-							// .println("ERROR incorrect value in variable pressure or temperature");
-						}
-						count++;
-					}
-				}
+				final int count = 0;
+				System.out.println(presArray.get(2, 1));
+				// for (int lat = 0; lat < 1; lat++) {
+				// for (int lon = 0; lon < 2; lon++) {
+				// if (presArray.get(lat, lon) != SAMPLE_PRESSURE + count) {
+				// System.out.println(presArray.get(lat, lon));
+				// // System.err
+				// //
+				// .println("ERROR incorrect value in variable pressure or temperature");
+				// }
+				// count++;
+				// }
+				// }
 
 			}
-
+			dataFile.close();
 			// System.out.println(open.getInfo());
 			// final List<GridDatatype> grids = open.getGrids();
 			// for (final Iterator iterator = grids.iterator();
@@ -159,6 +159,18 @@ public class WWW3Access {
 
 		} catch (final Exception e) {
 			e.printStackTrace();
+		}
+
+	}
+
+	public NetcdfFile file() {
+		try {
+			return NetcdfDataset.open(file.getAbsolutePath(), null);
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

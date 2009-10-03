@@ -32,11 +32,11 @@ public class Point {
 	/**
 	 * The latitude.
 	 */
-	private double latitude;
+	private Double latitude;
 	/**
 	 * The longitude.
 	 */
-	private double longitude;
+	private Double longitude;
 
 	/**
 	 * 
@@ -57,14 +57,14 @@ public class Point {
 	/**
 	 * @return the latitude
 	 */
-	public double getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
 	/**
 	 * @return the longitude
 	 */
-	public double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
@@ -72,8 +72,27 @@ public class Point {
 	 * @return
 	 */
 	public PointDTO getDTO() {
-		// TODO Auto-generated method stub
 		return new PointDTO(latitude, longitude);
 	}
 
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object obj) {
+		final Point point = (Point) obj;
+		if (getLatitude().equals(point.getLatitude())
+				&& getLongitude().equals(point.getLongitude()))
+			return true;
+		else
+			return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 31 * hash + (null == latitude ? 0 : latitude.intValue());
+		hash = 31 * hash + (null == longitude ? 0 : longitude.intValue());
+		return hash;
+	}
 }
