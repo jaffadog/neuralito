@@ -17,13 +17,13 @@ import edu.unicen.surfforecaster.common.services.dto.ForecastAttributeDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 
 /**
- * A forecast attribute. It may be double, integer, or string.
+ * A forecast parameter. It may be double, integer, or string.
  * 
  * @author esteban
  * 
  */
 @Entity
-public class ForecastAttribute {
+public class ForecastParameter {
 	/**
 	 * The id for ORM pupose.
 	 */
@@ -37,10 +37,10 @@ public class ForecastAttribute {
 	}
 
 	/**
-	 * the attribute
+	 * the parameter name
 	 */
 	@Column(nullable = false, length = 100)
-	String attributeName;
+	String parameterName;
 	/**
 	 * double value
 	 */
@@ -66,7 +66,7 @@ public class ForecastAttribute {
 	/**
 	 * 
 	 */
-	public ForecastAttribute() {
+	public ForecastParameter() {
 		// ORM purpose.
 	}
 
@@ -74,12 +74,12 @@ public class ForecastAttribute {
 	 * @param string
 	 * @param l
 	 */
-	public ForecastAttribute(final String attribute, final Double value,
+	public ForecastParameter(final String parameterName, final Double value,
 			final Unit unit) {
-		Validate.notNull(attribute);
+		Validate.notNull(parameterName);
 		Validate.notNull(value);
 		Validate.notNull(unit);
-		attributeName = attribute;
+		this.parameterName = parameterName;
 		this.unit = unit;
 		dValue = value;
 	}
@@ -88,12 +88,12 @@ public class ForecastAttribute {
 	 * @param string
 	 * @param l
 	 */
-	public ForecastAttribute(final String attribute, final String value,
+	public ForecastParameter(final String parameterName, final String value,
 			final Unit unit) {
-		Validate.notNull(attribute);
+		Validate.notNull(parameterName);
 		Validate.notNull(value);
 		Validate.notNull(unit);
-		attributeName = attribute;
+		this.parameterName = parameterName;
 		this.unit = unit;
 		sValue = value;
 	}
@@ -102,28 +102,28 @@ public class ForecastAttribute {
 	 * @param string
 	 * @param l
 	 */
-	public ForecastAttribute(final String attribute, final Integer value,
+	public ForecastParameter(final String parameterName, final Integer value,
 			final Unit unit) {
-		Validate.notNull(attribute);
+		Validate.notNull(parameterName);
 		Validate.notNull(value);
 		Validate.notNull(unit);
-		attributeName = attribute;
+		this.parameterName = parameterName;
 		this.unit = unit;
 		iValue = value;
 	}
 
 	/**
-	 * @param string
+	 * @param parameterName
 	 * @param f
-	 * @param meters
+	 * @param unit
 	 */
-	public ForecastAttribute(final String string, final float f,
-			final Unit meters) {
-		Validate.notNull(string);
+	public ForecastParameter(final String parameterName, final float f,
+			final Unit unit) {
+		Validate.notNull(parameterName);
 		Validate.notNull(f);
 		Validate.notNull(unit);
-		attributeName = string;
-		unit = meters;
+		this.parameterName = parameterName;
+		this.unit = unit;
 		fValue = f;
 	}
 
@@ -137,8 +137,8 @@ public class ForecastAttribute {
 	/**
 	 * @return
 	 */
-	public String getAttributeName() {
-		return attributeName;
+	public String getParameterName() {
+		return parameterName;
 	}
 
 	/**

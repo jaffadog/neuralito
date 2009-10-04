@@ -84,11 +84,14 @@ public class DownloaderJobListener extends Observable implements JobListener {
 	@Override
 	public void jobWasExecuted(final JobExecutionContext ctxt,
 			final JobExecutionException exception) {
+		// If download was correct
 		if (exception == null) {
 			log.info("Download Job was executed successfully");
+			// Obtain from the job context the downloaded files.
 			final Collection<File> files = (Collection<File>) ctxt
 					.get(DownloaderJob.DownloadedFiles);
 			setChanged();
+			// Notify observers of the just downloaded files.
 			this.notifyObservers(files);
 			reschedulings = 0;
 		} else {

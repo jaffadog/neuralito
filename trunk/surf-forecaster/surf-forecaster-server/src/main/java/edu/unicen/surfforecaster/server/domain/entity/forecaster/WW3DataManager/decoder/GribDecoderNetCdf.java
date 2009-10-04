@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import ucar.ma2.Array;
@@ -15,8 +16,9 @@ import ucar.nc2.dt.GridCoordSystem;
 import ucar.nc2.dt.GridDatatype;
 import ucar.nc2.dt.grid.GridDataset;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Attribute;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Parameter;
 
 /**
  * 
@@ -25,9 +27,11 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Attribute;
  * @author esteban
  * 
  */
-public class GribDecoderNetCdf implements GribDecoder {
+public class GribDecoderNetcdf implements GribDecoder {
 
 	/**
+	 * TODO: Define Exceptions to throw. TODO: See perfomance issues.
+	 * 
 	 * @see edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder#getForecasts(java.util.Collection,
 	 *      edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastPoints)
 	 */
@@ -39,33 +43,43 @@ public class GribDecoderNetCdf implements GribDecoder {
 
 			final GridDataset gridDataSet = GridDataset.open(file
 					.getAbsolutePath());
-			for (final WW3Attribute parameter : WW3Attribute.values()) {
-				final GridDatatype pwd = gridDataSet.findGridDatatype(parameter
-						.getValue());
-				System.out.println(pwd.getInfo());
-
-				final GridCoordSystem pwdGcs = pwd.getCoordinateSystem();
-				final int[] result = null;
-				for (final Iterator it = points.iterator(); it.hasNext();) {
-					final Point point = (Point) it.next();
-					// Get index value for Lat 30.0 and Lon 179
-					final int[] idx = pwdGcs.findXYindexFromLatLon(point
-							.getLatitude(), point.getLongitude(), result);
-
-					for (int i = 0; i < 31; i++) {
+			// For each point
+			for (final Iterator it = points.iterator(); it.hasNext();) {
+				final Point point = (Point) it.next();
+				// For each time
+				for (int i = 0; i < 31; i++) {
+					final HashMap<String, ForecastParameter> parameters = new HashMap<String, ForecastParameter>();
+					Date forecastBaseDate = null;
+					// For each parameter
+					for (final WW3Parameter parameter : WW3Parameter.values()) {
+						final GridDatatype pwd = gridDataSet
+								.findGridDatatype(parameter.getValue());
+						final GridCoordSystem pwdGcs = pwd
+								.getCoordinateSystem();
+						final int[] result = null;
+						// Get index value for Lat 30.0 and Lon 179
+						final int[] idx = pwdGcs.findXYindexFromLatLon(point
+								.getLatitude(), point.getLongitude(), result);
 						final Array data = pwd.readDataSlice(i, -1, idx[1],
 								idx[0]);
 						final IndexIterator iter = data.getIndexIterator();
+
 						while (iter.hasNext()) {
 							final float val = iter.getFloatNext();
-							System.out
-									.println(parameter.getValue() + " " + val);
-							final Forecast forecast = new Forecast();
-							forecasts.add(forecast);
+							parameters.put(parameter.getValue(),
+									new ForecastParameter(parameter.getValue(),
+											val, parameter.getUnit()));
 						}
+						forecastBaseDate = pwdGcs.getDateRange().getStart()
+								.getDate();
+
 					}
+
+					final Integer forecastTime = i;
+					final Forecast forecast = new Forecast(forecastBaseDate,
+							forecastTime * 3, parameters, point);
+					forecasts.add(forecast);
 				}
-				System.out.println("Success");
 			}
 		} catch (final Exception exc) {
 			exc.printStackTrace();
@@ -74,12 +88,4 @@ public class GribDecoderNetCdf implements GribDecoder {
 		return forecasts;
 	}
 
-	/**
-	 * @param variable
-	 * @return
-	 */
-	private final Date getRunTime(final GridDatatype variable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

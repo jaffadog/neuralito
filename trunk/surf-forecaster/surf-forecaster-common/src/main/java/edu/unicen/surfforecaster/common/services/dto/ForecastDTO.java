@@ -3,31 +3,41 @@
  */
 package edu.unicen.surfforecaster.common.services.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
 /**
+ * DTO for a Forecast
+ * 
  * @author esteban
  * 
  */
-public class ForecastDTO {
+public class ForecastDTO implements Serializable {
 
-	private final Map<String, ForecastAttributeDTO> map;
-	private final Date forecastDate;
-	private final Date runDate;
-	private final Date baseDate;
+	private static long serialVersionUID = 1L;
+	private Map<String, ForecastAttributeDTO> map;
+	private Integer forecastTime;
+	private Date baseDate;
 
 	/**
+	 * 
+	 */
+	public ForecastDTO() {
+		// GWT purpose
+	}
+
+	/**
+	 * Constructor.
+	 * 
 	 * @param baseDate
-	 * @param runDate
-	 * @param forecastDate
+	 * @param forecastTime
 	 * @param map
 	 */
-	public ForecastDTO(final Date baseDate, final Date runDate,
-			final Date forecastDate, final Map<String, ForecastAttributeDTO> map) {
+	public ForecastDTO(final Date baseDate, final Integer forecastTime,
+			final Map<String, ForecastAttributeDTO> map) {
 		this.baseDate = baseDate;
-		this.runDate = runDate;
-		this.forecastDate = forecastDate;
+		this.forecastTime = forecastTime;
 		this.map = map;
 	}
 
@@ -39,24 +49,17 @@ public class ForecastDTO {
 	}
 
 	/**
-	 * @return the forecastDate
-	 */
-	public Date getForecastDate() {
-		return forecastDate;
-	}
-
-	/**
-	 * @return the runDate
-	 */
-	public Date getRunDate() {
-		return runDate;
-	}
-
-	/**
 	 * @return the baseDate
 	 */
 	public Date getBaseDate() {
 		return baseDate;
+	}
+
+	/**
+	 * @return the forecastTime
+	 */
+	public Integer getForecastTime() {
+		return forecastTime;
 	}
 
 }

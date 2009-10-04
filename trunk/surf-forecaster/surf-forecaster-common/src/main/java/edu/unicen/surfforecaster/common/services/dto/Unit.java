@@ -10,5 +10,5 @@ package edu.unicen.surfforecaster.common.services.dto;
  * 
  */
 public enum Unit {
-	KilometersPerHour, Meters, Seconds, Degrees;
+	KilometersPerHour, Meters, Seconds, Degrees, Meterspersecond;
 }

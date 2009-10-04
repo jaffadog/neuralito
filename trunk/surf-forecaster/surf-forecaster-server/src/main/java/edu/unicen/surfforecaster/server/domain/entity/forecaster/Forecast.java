@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.apache.commons.lang.Validate;
 
@@ -45,12 +46,18 @@ public class Forecast {
 	 */
 	private Integer forecastTime;
 	/**
-	 * Map with <attributeName, attributeValue> info. Attributes may be:
+	 * Map with <parameterName, parameterValue> info. Parameters may be:
 	 * waveHeight, wavePeriod, waveDirection, windSpeed.
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@MapKey(name = "attributeName")
-	private Map<String, ForecastAttribute> attributes;
+	@MapKey(name = "parameterName")
+	private Map<String, ForecastParameter> parameters;
+
+	/**
+	 * The location this forecast belongs.
+	 */
+	@OneToOne
+	private Point point;
 
 	/**
 	 * Default Constructor.
@@ -63,18 +70,18 @@ public class Forecast {
 	 * @param baseDate
 	 * @param runDate
 	 * @param forecastDate
-	 * @param attributes
+	 * @param parameters
+	 * @param point2
 	 * @param ww3Forecaster
 	 */
 	public Forecast(final Date baseDate, final Integer forecastTime,
-			final Map<String, ForecastAttribute> attributes,
-			final Forecaster forecaster) {
+			final Map<String, ForecastParameter> parameters, final Point point2) {
 		Validate.notNull(baseDate);
-		Validate.notNull(attributes);
-		Validate.notNull(forecaster);
+		Validate.notNull(parameters);
 		this.baseDate = baseDate;
 		this.forecastTime = forecastTime;
-		this.attributes = attributes;
+		this.parameters = parameters;
+		point = point2;
 	}
 
 	/**
@@ -87,8 +94,8 @@ public class Forecast {
 	/**
 	 * @return the attributes this forecast has.
 	 */
-	public ForecastAttribute getAttribute(final String attributeName) {
-		return attributes.get(attributeName);
+	public ForecastParameter getParameter(final String parameterName) {
+		return parameters.get(parameterName);
 	}
 
 	/**
@@ -110,12 +117,12 @@ public class Forecast {
 	 * @return
 	 */
 	public ForecastDTO getDTO() {
-		final Collection<ForecastAttribute> values = attributes.values();
+		final Collection<ForecastParameter> values = parameters.values();
 		final Map<String, ForecastAttributeDTO> map = new HashMap<String, ForecastAttributeDTO>();
 		for (final Iterator iterator = values.iterator(); iterator.hasNext();) {
-			final ForecastAttribute forecastAttribute = (ForecastAttribute) iterator
+			final ForecastParameter forecastParameter = (ForecastParameter) iterator
 					.next();
-			map.put(forecastAttribute.getAttributeName(), forecastAttribute
+			map.put(forecastParameter.getParameterName(), forecastParameter
 					.getDTO());
 		}
 		return new ForecastDTO(getBaseDate(), getForecastTime(), map);
@@ -125,8 +132,7 @@ public class Forecast {
 	 * @return
 	 */
 	public Point getPoint() {
-		// TODO Auto-generated method stub
-		return null;
+		return point;
 	}
 
 }

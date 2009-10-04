@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -26,7 +27,17 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
 @Entity
 public class WW3Forecaster extends Forecaster {
 
-	// WW3DAO ww3Dao;
+	/**
+	 * Grid points used for giving the forecast.
+	 */
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Collection<Point> gridPoints;
+
+	/**
+	 * Forecast location
+	 */
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Point location;
 
 	public static final Collection<Point> getSurroundingGridPoints(
 			final Point location) {
@@ -41,18 +52,6 @@ public class WW3Forecaster extends Forecaster {
 		return null;
 
 	}
-
-	/**
-	 * Grid points used for giving the forecast.
-	 */
-	@ManyToMany()
-	private Collection<Point> gridPoints;
-
-	/**
-	 * Forecast location
-	 */
-	@ManyToOne
-	private Point location;
 
 	/**
 	 * 
@@ -92,10 +91,10 @@ public class WW3Forecaster extends Forecaster {
 	@Override
 	public Collection<Forecast> getForecasts() {
 		final Collection<Forecast> forecasts = new ArrayList<Forecast>();
-		final Map<String, ForecastAttribute> attributes = new HashMap<String, ForecastAttribute>();
-		attributes.put("wave height", new ForecastAttribute("wave height", 2D,
+		final Map<String, ForecastParameter> attributes = new HashMap<String, ForecastParameter>();
+		attributes.put("wave height", new ForecastParameter("wave height", 2D,
 				Unit.Meters));
-		final Forecast forecast = new Forecast(new Date(), 3, attributes, this);
+		final Forecast forecast = new Forecast(new Date(), 3, attributes);
 		forecasts.add(forecast);
 		return forecasts;
 	}

@@ -12,10 +12,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import com.enterprisedt.net.ftp.EventListener;
 import com.enterprisedt.net.ftp.FileTransferClient;
-
-import edu.unicen.surfforecaster.server.DownloaderListener;
 
 /**
  * Download a file from an FTP server.
@@ -40,8 +37,8 @@ public class DownloaderJob extends QuartzJobBean {
 		try {
 			log.info("Creating FTP client");
 			ftp = new FileTransferClient();
-			final EventListener listener = new DownloaderListener();
-			ftp.setEventListener(listener);
+			// final EventListener listener = new DownloaderListener();
+			// ftp.setEventListener(listener);
 
 			// set remote host
 			ftp.setRemoteHost(getHost());
@@ -53,8 +50,8 @@ public class DownloaderJob extends QuartzJobBean {
 			log.info("Connected and logged in to server " + getHost());
 			// Download file
 			log.info("Downloading file: " + getFilePath());
-			((DownloaderListener) listener).setFileSize(getFilePath(), ftp
-					.getSize(getFilePath()));
+			// ((DownloaderListener) listener).setFileSize(getFilePath(), ftp
+			// .getSize(getFilePath()));
 			ftp.downloadFile(getDestinationFileName(), getFilePath());
 			log.info("File downloaded");
 			final Collection<File> files = new ArrayList<File>();

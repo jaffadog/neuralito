@@ -3,6 +3,7 @@
  */
 package edu.unicen.surfforecaster.server;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.enterprisedt.net.ftp.EventListener;
@@ -17,6 +18,7 @@ import com.enterprisedt.util.debug.Logger;
 
 public class FTPTransferTest {
 	@Test
+	@Ignore
 	public void transferNOAAFile() {
 		// Server parameters
 		final String host = "polar.ncep.noaa.gov";

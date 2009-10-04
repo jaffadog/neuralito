@@ -3,15 +3,17 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
@@ -30,8 +32,8 @@ public class ForecastPoints {
 	/**
 	 * The latest forecast list
 	 */
-	@OneToOne(fetch = FetchType.EAGER)
-	private Collection<Point> points;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private final Collection<Point> points = new ArrayList<Point>();
 
 	/**
 	 * The default constructor.
@@ -65,5 +67,12 @@ public class ForecastPoints {
 		if (!alreadyExist) {
 			points.add(pointToAdd);
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection<Point> getPoints() {
+		return points;
 	}
 }

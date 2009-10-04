@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
-import edu.unicen.surfforecaster.server.dao.WW3DAO;
+import edu.unicen.surfforecaster.server.dao.WaveWatchDAO;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder;
@@ -38,11 +38,11 @@ public class DataManager implements Observer {
 	/**
 	 * The ww3 forecast archive.
 	 */
-	private final WW3ForecastArchive ww3archive;
+	private ForecastArchive ww3archive;
 	/**
 	 * the latest forecast
 	 */
-	private final WW3LatestForecast latestForecasts;
+	private LatestForecast latestForecasts;
 	/**
 	 * the points to obtain the forecasts.
 	 */
@@ -50,14 +50,13 @@ public class DataManager implements Observer {
 	/**
 	 * The ww3 DAO.
 	 */
-	private WW3DAO ww3DAO;
+	private WaveWatchDAO waveWatchDAO;
 
 	/**
 	 * Constructor.
 	 */
 	public DataManager() {
-		latestForecasts = ww3DAO.getLatestForecast();
-		ww3archive = ww3DAO.getWW3Archive();
+
 	}
 
 	/**
@@ -68,17 +67,9 @@ public class DataManager implements Observer {
 	 */
 	public void registerPoint(final Point point) {
 		validatePoint(point);
+
 		points.addPoint(point);
-
-	}
-
-	/**
-	 * This method is called by the file downloader when the new forecast files
-	 * has been downloaded.
-	 * 
-	 * @param files
-	 */
-	public void newForecastFilesDownloaded(final Collection<File> files) {
+		waveWatchDAO.save(points);
 
 	}
 
@@ -118,20 +109,20 @@ public class DataManager implements Observer {
 	}
 
 	/**
-	 * 
+	 * Archive latest forecasts corresponding to times of 0 hours and 3 hours.
 	 */
 	private void archiveLatestForecasts() {
 		final Collection<Forecast> latestForecast = latestForecasts
 				.getLatestForecast();
-		for (final Iterator iterator = latestForecast.iterator(); iterator
+		for (final Iterator<Forecast> iterator = latestForecast.iterator(); iterator
 				.hasNext();) {
-			final Forecast forecast = (Forecast) iterator.next();
+			final Forecast forecast = iterator.next();
 			if (forecast.getForecastTime().equals(0)
 					|| forecast.getForecastTime().equals(3)) {
 				ww3archive.add(forecast);
 			}
 		}
-		ww3DAO.save(ww3archive);
+		waveWatchDAO.update(ww3archive);
 	}
 
 	/**
@@ -152,30 +143,59 @@ public class DataManager implements Observer {
 	}
 
 	/**
-	 * 
-	 * @param ww3dao
-	 *            the ww3DAO to set
-	 */
-	public void setWw3DAO(final WW3DAO ww3dao) {
-		ww3DAO = ww3dao;
-	}
-
-	/**
 	 * This method is called by the file downloader when the new forecast files
 	 * has been downloaded.
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void update(final Observable o, final Object files) {
+	public void update(final Observable o, final Object file) {
 		if (!(o instanceof DownloaderJobListener))
 			throw new IncompatibleClassChangeError();
-		if (!(files instanceof Collection<?>))
+		if (!(file instanceof File))
 			throw new InvalidParameterException();
+		// Now that we have new forecasts from NOOA the latest forecast goes to
+		// the archive.
 		archiveLatestForecasts();
-		final Collection<Forecast> forecasts = gribDecoder.getForecasts(
-				(Collection<File>) files, points);
-		latestForecasts.setLatestForecast(forecasts);
-		ww3DAO.save(latestForecasts);
+		obtainLatestForecasts((File) file);
+
+	}
+
+	/**
+	 * Decode given grib file and obtain latest forecast.
+	 * 
+	 * @param file
+	 */
+	private void obtainLatestForecasts(final File file) {
+		// Decode downloaded NOAA grib files to obtain latest forecasts.
+		final Collection<Forecast> forecasts = gribDecoder.getForecasts(file,
+				points.getPoints());
+		latestForecasts.setLatest(forecasts);
+		// Save latest forecasts
+		waveWatchDAO.update(latestForecasts);
+	}
+
+	/**
+	 * @param waveWatchDAO
+	 *            the waveWatchDAO to set
+	 */
+	public void setWaveWatchDAO(final WaveWatchDAO waveWatchDAO) {
+		this.waveWatchDAO = waveWatchDAO;
+		latestForecasts = waveWatchDAO.getLatestForecast();
+		if (latestForecasts == null) {
+			latestForecasts = new LatestForecast();
+			waveWatchDAO.save(latestForecasts);
+		}
+		ww3archive = waveWatchDAO.getWW3Archive();
+		if (ww3archive == null) {
+			ww3archive = new ForecastArchive();
+			waveWatchDAO.save(ww3archive);
+		}
+		points = waveWatchDAO.getForecastPoints();
+		if (points == null) {
+			points = new ForecastPoints();
+			waveWatchDAO.save(points);
+		}
+
 	}
 
 }
