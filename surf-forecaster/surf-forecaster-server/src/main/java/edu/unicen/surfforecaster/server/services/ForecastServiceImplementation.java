@@ -38,66 +38,6 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * 
 	 */
 	public ForecastServiceImplementation() {
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
-		System.out.println("ME LLAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"); // TODO
-																			// Auto-generated
-																			// constructor
-																			// stub
 	}
 
 	/**

@@ -26,11 +26,12 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
  * @author esteban
  * 
  */
+
 public class SpotServiceImplementationTest {
-	protected final ApplicationContext context = new ClassPathXmlApplicationContext(
+	protected ApplicationContext context = new ClassPathXmlApplicationContext(
 			"/services.xml");
-	protected final SpotService spotService;
-	protected final UserService userService;
+	protected SpotService spotService;
+	protected UserService userService;
 
 	/**
 	 * 
@@ -38,6 +39,7 @@ public class SpotServiceImplementationTest {
 	public SpotServiceImplementationTest() {
 		spotService = (SpotService) context.getBean("spotService");
 		userService = (UserService) context.getBean("userService");
+
 	}
 
 	private Integer zoneId1;
@@ -59,6 +61,7 @@ public class SpotServiceImplementationTest {
 	@Before
 	public void createTestData() {
 		try {
+
 			// Create 4 Zones.
 			zoneName1 = "zone1" + System.currentTimeMillis();
 			final String zoneName2 = "zone2" + System.currentTimeMillis();
@@ -270,4 +273,5 @@ public class SpotServiceImplementationTest {
 			Assert.fail();
 		}
 	}
+
 }

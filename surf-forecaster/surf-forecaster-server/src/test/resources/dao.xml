@@ -46,11 +46,15 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.User</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WekaForecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Point</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastAttribute</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArchive</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.LatestForecast</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastPoints</value>
 			</list>
 		</property>
 	</bean>
@@ -69,6 +73,10 @@
 		
 		<bean id="forecastDaoTarget"
 		class="edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+
+	<bean id="waveWatchDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.WaveWatchDAOHibernateImpl"
 		autowire="byName" /><!--sessionFactory will get autowired-->
 
 
@@ -102,6 +110,17 @@
 			<list>
 				<value>hibernateInterceptor</value>
 				<value>forecastDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="waveWatchDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.WaveWatchDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>waveWatchDaoTarget</value>
 			</list>
 		</property>
 	</bean>
