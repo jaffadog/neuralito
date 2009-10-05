@@ -27,7 +27,7 @@ public class ClientI18NMessages extends HashMap<String, String>{
 	 * @param String key to search the according message
 	 * @return String. Returns a localized message
 	 */
-	public String getErrorMessage(String key) {
+	public String getMessage(String key) {
 		String message = this.get(key); 
 		if (message == null)
 			message = "The message for this key: " + key + " is not generated yet.";
@@ -39,7 +39,7 @@ public class ClientI18NMessages extends HashMap<String, String>{
 	 * @param NeuralitoException to search the according message
 	 * @return String. Returns a localized message
 	 */
-	public String getErrorMessage(NeuralitoException e) {
+	public String getMessage(NeuralitoException e) {
 		String message = this.get(e.getErrorCode().toString()); 
 		if (message == null)
 			message = "The message for this error: " + e.getErrorCode().toString() + " is not generated yet.";

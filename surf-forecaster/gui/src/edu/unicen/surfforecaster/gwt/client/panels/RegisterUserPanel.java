@@ -40,7 +40,7 @@ public class RegisterUserPanel extends VerticalPanel {
 		this.add(errorPanel);
 		
 		Vector<String> message = new Vector<String>();
-		message.add(ClientI18NMessages.getInstance().getErrorMessage("CHANGES_SAVED_SUCCESFULLY"));
+		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
 		final MessagePanel successPanel = new SuccessMsgPanel(message);
 		successPanel.setVisible(false);
 		this.add(successPanel);
@@ -143,7 +143,7 @@ public class RegisterUserPanel extends VerticalPanel {
 							successPanel.setVisible(true);
 			            }
 			            public void onFailure(Throwable caught){
-			            	messages.add(ClientI18NMessages.getInstance().getErrorMessage((NeuralitoException)caught));
+			            	messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
 							errorPanel.setMessages(messages);
 							errorPanel.setVisible(true);
 			            }

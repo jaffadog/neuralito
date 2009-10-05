@@ -23,9 +23,11 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
 
@@ -35,6 +37,10 @@ public class NewSpotDataPanel extends LazyPanel {
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
 	private ListBox timeZoneBox = null;
+	private ListBox zoneBox;
+	private TextBox zoneTxt;
+	private PushButton chooseZoneBtn;
+	private PushButton createZoneBtn;
 	
 	public NewSpotDataPanel() {}
 	
@@ -46,14 +52,14 @@ public class NewSpotDataPanel extends LazyPanel {
 		container.setSpacing(10);
 		container.setWidth(GWTUtils.APLICATION_WIDTH);
 		
-		Vector<String> errors = new Vector<String>();
-		errors.add("error 1"); errors.add("error 2"); errors.add("error 3");
-		MessagePanel errorPanel = new ErrorMsgPanel(errors);
+		final MessagePanel errorPanel = new ErrorMsgPanel();
+		errorPanel.setVisible(false);
 		container.add(errorPanel);
 		
 		Vector<String> message = new Vector<String>();
-		message.add("Los cambios se guardaron exitosamente");
-		MessagePanel successPanel = new SuccessMsgPanel(message);
+		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
+		final MessagePanel successPanel = new SuccessMsgPanel(message);
+		successPanel.setVisible(false);
 		container.add(successPanel);
 		
 		
@@ -105,33 +111,65 @@ public class NewSpotDataPanel extends LazyPanel {
 		flexTable.setWidget(3, 0, lblZone);
 
 		final Label lblSpot = new Label("* " + GWTUtils.LOCALE_CONSTANTS.spot() + ":");
-		flexTable.setWidget(4, 0, lblSpot);
-		flexTable.getCellFormatter().setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		flexTable.setWidget(5, 0, lblSpot);
+		flexTable.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		final Label lblTimeZone = new Label(GWTUtils.LOCALE_CONSTANTS.timeZone() + ":");
-		flexTable.setWidget(5, 0, lblTimeZone);
-		flexTable.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		flexTable.setWidget(6, 0, lblTimeZone);
+		flexTable.getCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
-		final TextBox zoneTxt = new TextBox();
+		zoneBox = new ListBox();
+		zoneBox.setWidth("300");
+		flexTable.setWidget(3, 2, zoneBox);
+		
+		zoneTxt = new TextBox();
 		zoneTxt.setMaxLength(50);
-		flexTable.setWidget(3, 2, zoneTxt);
 		zoneTxt.setWidth("300");
+		zoneTxt.setVisible(false);
+		flexTable.setWidget(4, 2, zoneTxt);
+		
+		createZoneBtn = new PushButton();
+		createZoneBtn.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+					zoneBox.setEnabled(false);
+					zoneTxt.setVisible(true);
+					chooseZoneBtn.setVisible(true);
+					createZoneBtn.setVisible(false);
+			}
+		});
+		createZoneBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
+		createZoneBtn.setText("Create a Zone");
+		flexTable.setWidget(3, 3, createZoneBtn);
+		
+		chooseZoneBtn = new PushButton();
+		chooseZoneBtn.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+					zoneBox.setEnabled(true);
+					zoneTxt.setVisible(false);
+					chooseZoneBtn.setVisible(false);
+					createZoneBtn.setVisible(true);
+			}
+		});
+		chooseZoneBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
+		chooseZoneBtn.setText("Choose a Zone");
+		chooseZoneBtn.setVisible(false);
+		flexTable.setWidget(4, 3, chooseZoneBtn);
 
 		final TextBox spotTxt = new TextBox();
 		spotTxt.setMaxLength(50);
-		flexTable.setWidget(4, 2, spotTxt);
+		flexTable.setWidget(5, 2, spotTxt);
 		spotTxt.setWidth("300");
 		
 		timeZoneBox = new ListBox();
 		timeZoneBox.setWidth("300");
-		flexTable.setWidget(5, 2, timeZoneBox);
+		flexTable.setWidget(6, 2, timeZoneBox);
 		
 		Label lblSpotVisibility = new Label(GWTUtils.LOCALE_CONSTANTS.spotVisibility() + ":");
-		flexTable.setWidget(6, 0, lblSpotVisibility);
+		flexTable.setWidget(7, 0, lblSpotVisibility);
 		
 		HorizontalPanel radioPanel = new HorizontalPanel();
 		radioPanel.setSpacing(5);
-		flexTable.setWidget(6, 2, radioPanel);
+		flexTable.setWidget(7, 2, radioPanel);
 		
 		RadioButton radioPrivateButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.private_());
 		radioPrivateButton.setValue(true);
@@ -142,61 +180,49 @@ public class NewSpotDataPanel extends LazyPanel {
 		radioPanel.add(radioPublicButton);
 		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
-		flexTable.setWidget(7, 0, lblLocalization);
+		flexTable.setWidget(8, 0, lblLocalization);
 		
 		//MapPanel mapPanel = new MapPanel();
-		//flexTable.setWidget(8, 2, mapPanel);
+		//flexTable.setWidget(9, 2, mapPanel);
 
 		final HorizontalPanel btnsPanel = new HorizontalPanel();
-		flexTable.setWidget(9, 0, btnsPanel);
+		flexTable.setWidget(10, 0, btnsPanel);
 		btnsPanel.setSpacing(5);
-		flexTable.getCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getFlexCellFormatter().setColSpan(9, 0, 3);
+		flexTable.getCellFormatter().setHorizontalAlignment(10, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getFlexCellFormatter().setColSpan(10, 0, 3);
 
 		final PushButton saveBtn = new PushButton();
 		btnsPanel.add(saveBtn);
-//		registerBtn.addClickListener(new ClickListener() {
-//			public void onClick(final Widget sender) {
-//				if (nameTxt.getText().trim() != "" && lastNameTxt.getText().trim() != "" && userTxt.getText().trim() != "" && passTxt.getText().trim() != ""){
-//					int userPermissions = 2;
-//					if (user != null && user.getIdUserType() == 1 && adminCheck.isChecked())
-//						userPermissions = 1;
-//					DBService.Util.getInstance().addNewUser(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
-//							userTxt.getText().trim(), passTxt.getText().trim(), userPermissions, new AsyncCallback<Integer>(){
-//						public void onSuccess(Integer result){
-//							if (result == null){
-//								//System.out.println("No se pudo salvar el usuario");
-//								flexTable.getCellFormatter().setVisible(0, 0, false);
-//							}
-//							else
-//								if (result > 0){
-//									//System.out.println("El usuario fue grabado con exito.");
-//									if (user != null && user.getIdUserType() == 1)
-//										new MessageBoxUI("Aceptar", "Usuario registrado exitosamente!!!");
-//									else
-//										new MessageBoxUI("Aceptar", "Bienvenido al sistema!!!, usted ya ha sido registrado");
-//									flexTable.getCellFormatter().setVisible(0, 0, false);
-//									hide();
-//								}
-//								else{
-//									//System.out.println("Ya existe un usuario con ese userName.");
-//									errorlabel.setText("Ya existe ese nombre de usuario en el sistema, ingrese otro por favor.");
-//									flexTable.getCellFormatter().setVisible(0, 0, true);
-//								}
-//			            }
-//			            public void onFailure(Throwable caught){
-//			            	
-//			            	//System.out.println("fault adding a new user");
-//			            	caught.printStackTrace();
-//			            }
-//						});
-//				}
-//				else{
-//					errorlabel.setText("Los campos marcados con (*) son obligatorios.");
-//					flexTable.getCellFormatter().setVisible(0, 0, true);
-//				}
-//			}
-//		});
+		saveBtn.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				
+				final Vector<String> messages = new Vector<String>();
+				errorPanel.setVisible(false);
+				successPanel.setVisible(false);
+				
+				if (spotTxt.getText().trim() != ""){
+					
+					ForecastCommonServices.Util.getInstance().addSpot(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
+							emailTxt.getText().trim(), userTxt.getText().trim(), passTxt.getText().trim(), 2, new AsyncCallback<Integer>(){
+						public void onSuccess(Integer result){
+							clearFields();		
+							successPanel.setVisible(true);
+			            }
+			            public void onFailure(Throwable caught){
+			            	messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+							errorPanel.setMessages(messages);
+							errorPanel.setVisible(true);
+			            }
+						});
+				}
+				else{
+					messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
+					errorPanel.setMessages(messages);
+					errorPanel.setVisible(true);
+				}
+			}
+		});
+		
 		saveBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
 		saveBtn.setText(GWTUtils.LOCALE_CONSTANTS.save());
 
@@ -223,7 +249,7 @@ public class NewSpotDataPanel extends LazyPanel {
 		btnsPanel.add(cancelBtn);
 
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-		flexTable.getFlexCellFormatter().setColSpan(7, 0, 3);
+		flexTable.getFlexCellFormatter().setColSpan(8, 0, 3);
 		
 		this.setAreaListItems();
 		this.setTimeZoneItems();
