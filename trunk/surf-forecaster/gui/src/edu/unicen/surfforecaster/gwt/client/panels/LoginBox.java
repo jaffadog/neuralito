@@ -110,7 +110,7 @@ public class LoginBox extends DialogBox{
 						}
 							
 						public void onFailure(Throwable caught) {
-							label_loginMessage.setText(ClientI18NMessages.getInstance().getErrorMessage((NeuralitoException)caught));
+							label_loginMessage.setText(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
 							label_loginMessage.setVisible(true);
 							showFormPanel();
 						}
