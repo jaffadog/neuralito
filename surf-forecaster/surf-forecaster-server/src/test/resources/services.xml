@@ -55,7 +55,7 @@
 	<bean id="downloaderListener" class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJobListener">
 		<property name="name" value="downloaderJobListener"/>
 	</bean>
-	<bean id="ww3DataManager" class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DataManager">
+	<bean id="ww3DataManager" class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DataManager" init-method="init">
 		<property name="waveWatchDAO" ref="waveWatchDAO"/>
 		<property name="gribDecoder" ref="gribDecoder"/>
 	</bean>

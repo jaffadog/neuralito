@@ -5,6 +5,8 @@ package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import javax.persistence.OneToMany;
 import org.apache.commons.lang.Validate;
 
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * An archive with past NOAA wave watch forecasts.
@@ -33,7 +36,7 @@ public class ForecastArchive {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	/**
-	 * The latest forecast list
+	 * The archive
 	 */
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private final Collection<Forecast> archive = new ArrayList<Forecast>();
@@ -53,11 +56,40 @@ public class ForecastArchive {
 	}
 
 	/**
+	 * Add a forecast to the archive.
+	 * 
 	 * @param forecast
 	 */
 	public void add(final Forecast forecast) {
 		Validate.notNull(forecast);
 		archive.add(forecast);
 
+	}
+
+	/**
+	 * Obtain the archived forecast for the given point for the specified time
+	 * range.
+	 * 
+	 * @param from
+	 * @param to
+	 * @param point
+	 */
+	public Collection<Forecast> getArchiveForecast(final Date from,
+			final Date to, final Point point) {
+		Validate.notNull(from);
+		Validate.notNull(to);
+		Validate.notNull(point);
+		final Collection<Forecast> forecasts = new ArrayList<Forecast>();
+		for (final Iterator<Forecast> iterator = archive.iterator(); iterator
+				.hasNext();) {
+			final Forecast forecast = iterator.next();
+			if (forecast.getBaseDate().getTime() > from.getTime()
+					&& forecast.getBaseDate().getTime() < to.getTime()
+					&& point.equals(forecast.getPoint())) {
+				forecasts.add(forecast);
+			}
+
+		}
+		return forecasts;
 	}
 }

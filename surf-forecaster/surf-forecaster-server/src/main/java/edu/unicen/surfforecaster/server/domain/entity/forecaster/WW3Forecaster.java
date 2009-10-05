@@ -39,8 +39,9 @@ public class WW3Forecaster extends Forecaster {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Point location;
 
-	public static final Collection<Point> getSurroundingGridPoints(
+	public static final Collection<Point> getNearbyGridPoints(
 			final Point location) {
+
 		final Point poin = new Point(1D, 4D);
 		final ArrayList<Point> points = new ArrayList<Point>();
 		points.add(poin);
@@ -63,8 +64,7 @@ public class WW3Forecaster extends Forecaster {
 	/**
 	 * @param configuration
 	 */
-	public WW3Forecaster(final Collection<Point> gridPoints,
-			final Point location) {
+	public WW3Forecaster(final Collection<Point> gridPoints, final Point location) {
 		this.gridPoints = gridPoints;
 		this.location = location;
 	}
@@ -94,7 +94,7 @@ public class WW3Forecaster extends Forecaster {
 		final Map<String, ForecastParameter> attributes = new HashMap<String, ForecastParameter>();
 		attributes.put("wave height", new ForecastParameter("wave height", 2D,
 				Unit.Meters));
-		final Forecast forecast = new Forecast(new Date(), 3, attributes);
+		final Forecast forecast = new Forecast(new Date(), 3, attributes, null);
 		forecasts.add(forecast);
 		return forecasts;
 	}

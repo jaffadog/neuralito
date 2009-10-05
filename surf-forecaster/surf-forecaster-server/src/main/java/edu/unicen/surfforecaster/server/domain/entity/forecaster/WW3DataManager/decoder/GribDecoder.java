@@ -21,4 +21,10 @@ public interface GribDecoder {
 	 * @return
 	 */
 	Collection<Forecast> getForecasts(File file, Collection<Point> points);
+
+	/**
+	 * @param file
+	 * @return
+	 */
+	Collection<Point> getValidPoints(File file);
 }

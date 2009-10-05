@@ -11,6 +11,7 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArchive;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastPoints;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.LatestForecast;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ValidGridPoints;
 
 /**
  * @author esteban
@@ -38,9 +39,9 @@ public interface WaveWatchDAO {
 			Collection<Point> gridPoints);
 
 	/**
-	 * @param latestForecasts
+	 * @param validGridPoints
 	 */
-	public void save(LatestForecast latestForecasts);
+	public void save(ValidGridPoints validGridPoints);
 
 	/**
 	 * @param ww3archive
@@ -76,5 +77,15 @@ public interface WaveWatchDAO {
 	 * @param ww3archive
 	 */
 	void update(ForecastArchive ww3archive);
+
+	/**
+	 * @return
+	 */
+	public ValidGridPoints getValidGridPoints();
+
+	/**
+	 * @param latestForecasts
+	 */
+	void save(LatestForecast latestForecasts);
 
 }
