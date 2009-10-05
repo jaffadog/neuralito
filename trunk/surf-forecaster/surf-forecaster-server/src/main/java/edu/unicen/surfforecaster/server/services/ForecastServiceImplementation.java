@@ -94,14 +94,14 @@ public class ForecastServiceImplementation implements ForecastService {
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getWW3GridPoints(double,
+	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getNearbyGridPoints(double,
 	 *      double)
 	 */
 	@Override
-	public Collection<PointDTO> getWW3GridPoints(final double d, final double e)
-			throws NeuralitoException {
+	public Collection<PointDTO> getNearbyGridPoints(final double d,
+			final double e) throws NeuralitoException {
 		final Collection<Point> surroundingGridPoints = WW3Forecaster
-				.getSurroundingGridPoints(new Point(d, e));
+				.getNearbyGridPoints(new Point(d, e));
 		final Collection<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
 		for (final Iterator iterator = surroundingGridPoints.iterator(); iterator
 				.hasNext();) {

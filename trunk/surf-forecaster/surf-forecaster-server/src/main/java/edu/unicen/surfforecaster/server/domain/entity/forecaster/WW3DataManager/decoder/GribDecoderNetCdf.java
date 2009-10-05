@@ -15,6 +15,7 @@ import ucar.ma2.IndexIterator;
 import ucar.nc2.dt.GridCoordSystem;
 import ucar.nc2.dt.GridDatatype;
 import ucar.nc2.dt.grid.GridDataset;
+import ucar.unidata.geoloc.LatLonPoint;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
@@ -88,4 +89,38 @@ public class GribDecoderNetcdf implements GribDecoder {
 		return forecasts;
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder#getValidPoints(java.io.File)
+	 */
+	@Override
+	public Collection<Point> getValidPoints(final File file) {
+		final Collection<Point> validPoints = new ArrayList<Point>();
+
+		try {
+			final GridDataset gridDataSet = GridDataset.open(file
+					.getAbsolutePath());
+			final GridDatatype pwd = gridDataSet
+					.findGridDatatype("Significant_height_of_combined_wind_waves_and_swell");
+			final GridCoordSystem pwdGcs = pwd.getCoordinateSystem();
+			final Array data = pwd.readVolumeData(0);
+			final float[][] a = (float[][]) data.copyToNDJavaArray();
+			for (int i = 0; i < a.length; i++) {
+				for (int j = 0; j < a[i].length; j++) {
+					final LatLonPoint latLon = pwdGcs.getLatLon(j, i);
+					final Float val = a[i][j];
+					if (!val.isNaN()) {
+						validPoints.add(new Point(latLon.getLatitude(), latLon
+								.getLongitude()));
+					}
+				}
+			}
+
+		} catch (final Exception exc) {
+			exc.printStackTrace();
+			return null;
+		}
+
+		return validPoints;
+
+	}
 }

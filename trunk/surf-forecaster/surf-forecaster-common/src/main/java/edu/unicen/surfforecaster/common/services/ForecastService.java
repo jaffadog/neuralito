@@ -25,7 +25,7 @@ public interface ForecastService {
 	 * @param longitude
 	 * @return
 	 */
-	Collection<PointDTO> getWW3GridPoints(double latitude, double longitude)
+	Collection<PointDTO> getNearbyGridPoints(double latitude, double longitude)
 			throws NeuralitoException;
 
 	/**

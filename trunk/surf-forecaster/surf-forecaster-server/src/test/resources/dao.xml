@@ -9,6 +9,9 @@
 				<prop key="hibernate.connection.pool_size">1</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.connection.autocommit">true</prop>
+				<prop key="hibernate.jdbc.batch_size">40</prop>
+				
+				
 
 <!--				HSQL-->
 <!--				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>-->
@@ -55,6 +58,7 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArchive</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.LatestForecast</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastPoints</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ValidGridPoints</value>
 			</list>
 		</property>
 	</bean>

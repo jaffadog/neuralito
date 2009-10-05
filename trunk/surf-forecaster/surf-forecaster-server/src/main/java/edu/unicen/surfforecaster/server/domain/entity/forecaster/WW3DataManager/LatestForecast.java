@@ -87,6 +87,8 @@ public class LatestForecast {
 	}
 
 	/**
+	 * Obtain the date of this forecasts.
+	 * 
 	 * @return
 	 */
 	public Date getForecastsDate() {
