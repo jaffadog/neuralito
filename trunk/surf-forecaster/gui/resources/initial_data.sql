@@ -1,4 +1,4 @@
-USE `test`;
+﻿USE `test`;
 
 /*Data for the table `area` */
 
@@ -55,5 +55,3 @@ insert  into `user`(`id`,`name`,`lastName`,`email`,`password`,`userName`,`userTy
 insert  into `zone`(`id`,`name`,`country_id`) values (1,'Mar del Plata - Sur',1);
 insert  into `zone`(`id`,`name`,`country_id`) values (2,'Mar del Plata - Centro',1);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
