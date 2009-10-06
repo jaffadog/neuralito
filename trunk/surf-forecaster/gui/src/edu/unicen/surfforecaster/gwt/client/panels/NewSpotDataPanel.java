@@ -27,6 +27,7 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
@@ -139,7 +140,7 @@ public class NewSpotDataPanel extends LazyPanel {
 					createZoneBtn.setVisible(false);
 			}
 		});
-		createZoneBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
+		createZoneBtn.setSize("100", GWTUtils.PUSHBUTTON_HEIGHT);
 		createZoneBtn.setText("Create a Zone");
 		flexTable.setWidget(3, 3, createZoneBtn);
 		
@@ -153,10 +154,11 @@ public class NewSpotDataPanel extends LazyPanel {
 					createZoneBtn.setVisible(true);
 			}
 		});
-		chooseZoneBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
+		chooseZoneBtn.setSize("100", GWTUtils.PUSHBUTTON_HEIGHT);
 		chooseZoneBtn.setText("Choose a Zone");
 		chooseZoneBtn.setVisible(false);
 		flexTable.setWidget(4, 3, chooseZoneBtn);
+		flexTable.getCellFormatter().setHorizontalAlignment(4, 3, HasHorizontalAlignment.ALIGN_LEFT);
 
 		final TextBox spotTxt = new TextBox();
 		spotTxt.setMaxLength(50);
@@ -205,7 +207,7 @@ public class NewSpotDataPanel extends LazyPanel {
 				int countryId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
 				if (spotTxt.getText().trim() != ""){
 					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
-					ForecastCommonServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLong(), mapPanel.getSpotLat(),
+					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLong(), mapPanel.getSpotLat(),
 							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
 							new AsyncCallback<Integer>(){
 						public void onSuccess(Integer result){
