@@ -24,6 +24,16 @@
   	<url-pattern>/surfforecaster/ForecastCommonServices</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>SpotServices</servlet-name>
+  	<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>SpotServices</servlet-name>
+  	<url-pattern>/surfforecaster/SpotServices</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>SurfForecaster.html</welcome-file>
