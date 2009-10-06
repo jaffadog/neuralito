@@ -162,5 +162,21 @@ public class MapPanel extends VerticalPanel {
 	    flexTable.setWidget(10, 0, txtBuoyLat);
 	    txtBuoyLat.setWidth("100");
 	}
+	
+	public String getSpotLong() {
+		return this.txtSpotLong.getText();
+	}
+	
+	public String getSpotLat() {
+		return this.txtSpotLat.getText();
+	}
+	
+	public String getBuoyLong() {
+		return this.txtBuoyLong.getText();
+	}
+	
+	public String getBuoyLat() {
+		return this.txtBuoyLat.getText();
+	}
 
 }

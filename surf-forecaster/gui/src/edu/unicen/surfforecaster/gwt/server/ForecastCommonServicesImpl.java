@@ -11,7 +11,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
@@ -33,6 +35,35 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 	 * The user services interface.
 	 */
 	private UserService userService;
+	private SpotService spotService;
+	
+	/**
+	 * @param service the service to set
+	 */
+	public void setUserService(final UserService service) {
+		userService = service;
+	}
+
+	/**
+	 * @return the user service
+	 */
+	public UserService getUserService() {
+		return userService;
+	}
+	
+	/**
+	 * @param service the service to set
+	 */
+	public void setSpotService(final SpotService service) {
+		spotService = service;
+	}
+
+	/**
+	 * @return the spot service
+	 */
+	public SpotService getSpotService() {
+		return spotService;
+	}
 
 	/**
 	 * Check if exists any user with the username and password passed as
@@ -52,6 +83,7 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 		session.setMaxInactiveInterval(1200); // 120seg
 		session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
 		session.setAttribute("gwtForecast-UserType", userDTO.getType());
+		session.setAttribute("gwtForecast-UserId", userDTO.getId());
 		logger.log(Level.INFO,"ForecastCommonServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
 		return userDTO;
 	}
@@ -191,18 +223,16 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 		final HttpSession session = getSession();
 
 		if ((String) session.getAttribute("gwtForecast-UserName") == null
-				|| ((String) session.getAttribute("gwtForecast-UserName"))
-						.equals("")) {
-			System.out
-					.println("the session is null or empty, this is the result after request for username: "
-							+ (String) session
-									.getAttribute("gwtForecast-UserName"));
+				|| ((String) session.getAttribute("gwtForecast-UserName")).equals("")) {
+			System.out.println("the session is null or empty, this is the result after request for username: "
+							+ (String) session.getAttribute("gwtForecast-UserName"));
 			return null;
 		} else {
 
 			final SessionData sessionData = new SessionData();
 			sessionData.setUserName(session.getAttribute("gwtForecast-UserName").toString());
 			sessionData.setUserType(session.getAttribute("gwtForecast-UserType").toString());
+			sessionData.setUserId(session.getAttribute("gwtForecast-UserId").toString());
 			return sessionData;
 		}
 
@@ -227,22 +257,7 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 
 		session.removeAttribute("gwtForecast-UserName");
 		session.removeAttribute("gwtForecast-UserType");
-	}
-
-	/**
-	 * @param service
-	 *            the service to set
-	 */
-	public void setService(final UserService service) {
-		userService = service;
-	}
-
-	/**
-	 * @return the service
-	 */
-	public UserService getService() {
-		return userService;
-	}
+	}	
 
 	public Integer addUser(String name, String lastname, String email,
 			String username, String password, int type) throws NeuralitoException {
@@ -252,6 +267,29 @@ public class ForecastCommonServicesImpl extends SpringGWTServlet implements
 		logger.log(Level.INFO,"ForecastCommonServicesImpl - addUser - User with username: '" + username + "' successfully added.");
 		
 		return result;
+	}
+
+	@Override
+	public Integer addSpot(String spotName, String longitude, String latitude,
+			Integer zoneId, Integer countryId, String zoneName, boolean public_)
+			throws NeuralitoException {
+		SessionData sessionData = this.getSessionData();
+		if (sessionData == null) {
+			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
+		} else {
+			double longitudeNum = new Double(longitude);
+			double latitudeNum = new Double(latitude);
+			Integer userId = new Integer(sessionData.getUserId());
+			Integer result = null;
+			if (zoneName.trim().equals("")){
+				result = spotService.addSpot(spotName, longitudeNum, latitudeNum, zoneId, userId, public_);
+			} else {
+				//result = spotService.addZoneAndSpot(zoneName, countryId, spotName, longitudeNum, latitudeNum, userId, public_);
+				result = spotService.addZoneAndSpot(zoneName, 1, spotName, longitudeNum, latitudeNum, userId, public_);
+				System.out.println(public_);
+			}
+			return result;
+		}
 	}
 
 }

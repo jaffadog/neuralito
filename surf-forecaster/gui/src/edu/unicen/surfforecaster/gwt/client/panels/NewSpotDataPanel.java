@@ -41,6 +41,8 @@ public class NewSpotDataPanel extends LazyPanel {
 	private TextBox zoneTxt;
 	private PushButton chooseZoneBtn;
 	private PushButton createZoneBtn;
+	private MapPanel mapPanel;
+	private RadioButton radioPublicButton;
 	
 	public NewSpotDataPanel() {}
 	
@@ -144,6 +146,7 @@ public class NewSpotDataPanel extends LazyPanel {
 		chooseZoneBtn = new PushButton();
 		chooseZoneBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+					zoneTxt.setText("");
 					zoneBox.setEnabled(true);
 					zoneTxt.setVisible(false);
 					chooseZoneBtn.setVisible(false);
@@ -176,14 +179,14 @@ public class NewSpotDataPanel extends LazyPanel {
 		radioPanel.add(radioPrivateButton);
 		
 		
-		RadioButton radioPublicButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.public_());
+		radioPublicButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.public_());
 		radioPanel.add(radioPublicButton);
 		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
 		flexTable.setWidget(8, 0, lblLocalization);
 		
-		//MapPanel mapPanel = new MapPanel();
-		//flexTable.setWidget(9, 2, mapPanel);
+		mapPanel = new MapPanel();
+		flexTable.setWidget(9, 2, mapPanel);
 
 		final HorizontalPanel btnsPanel = new HorizontalPanel();
 		flexTable.setWidget(10, 0, btnsPanel);
@@ -199,13 +202,14 @@ public class NewSpotDataPanel extends LazyPanel {
 				final Vector<String> messages = new Vector<String>();
 				errorPanel.setVisible(false);
 				successPanel.setVisible(false);
-				
+				int countryId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
 				if (spotTxt.getText().trim() != ""){
-					
-					ForecastCommonServices.Util.getInstance().addSpot(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
-							emailTxt.getText().trim(), userTxt.getText().trim(), passTxt.getText().trim(), 2, new AsyncCallback<Integer>(){
+					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
+					ForecastCommonServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLong(), mapPanel.getSpotLat(),
+							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
+							new AsyncCallback<Integer>(){
 						public void onSuccess(Integer result){
-							clearFields();		
+							//clearFields();		
 							successPanel.setVisible(true);
 			            }
 			            public void onFailure(Throwable caught){

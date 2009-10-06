@@ -13,6 +13,8 @@ public interface ForecastCommonServicesAsync {
 	void addUser(String name, String lastname, String email, String username, String password, int type, AsyncCallback<Integer> callback);
 
 	void getSessionData(AsyncCallback<SessionData> callback);
+	
+	void addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, String zoneName, boolean public_, AsyncCallback<Integer> callback);
 
 	void closeSession(AsyncCallback<Void> callback);
 
