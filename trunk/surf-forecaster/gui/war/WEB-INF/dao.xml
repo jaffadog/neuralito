@@ -9,6 +9,9 @@
 				<prop key="hibernate.connection.pool_size">1</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.connection.autocommit">true</prop>
+				<prop key="hibernate.jdbc.batch_size">40</prop>
+				
+				
 
 <!--				HSQL-->
 <!--				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>-->
@@ -45,8 +48,18 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.Comparation</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.User</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
-
-
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast2</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Point</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArchive</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.LatestForecast</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastPoints</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ValidGridPoints</value>
 			</list>
 		</property>
 	</bean>
@@ -58,8 +71,17 @@
 	<bean id="spotDaoTarget"
 		class="edu.unicen.surfforecaster.server.dao.SpotDAOHibernateImpl"
 		autowire="byName" /><!--sessionFactory will get autowired-->
+	
 	<bean id="userDaoTarget"
 		class="edu.unicen.surfforecaster.server.dao.UserDAOHibernateImpl"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+		
+		<bean id="forecastDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+
+	<bean id="waveWatchDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.WaveWatchDAOHibernateImpl"
 		autowire="byName" /><!--sessionFactory will get autowired-->
 
 
@@ -82,6 +104,28 @@
 			<list>
 				<value>hibernateInterceptor</value>
 				<value>userDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="forecastDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.ForecastDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>forecastDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="waveWatchDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.WaveWatchDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>waveWatchDaoTarget</value>
 			</list>
 		</property>
 	</bean>
