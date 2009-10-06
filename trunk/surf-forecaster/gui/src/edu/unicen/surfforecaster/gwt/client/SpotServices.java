@@ -8,8 +8,6 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.UserDTO;
-import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 @RemoteServiceRelativePath("SpotServices")
 public interface SpotServices extends RemoteService {

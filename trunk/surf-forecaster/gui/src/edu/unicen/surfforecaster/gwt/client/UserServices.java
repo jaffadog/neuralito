@@ -1,8 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client;
 
-import java.util.Map;
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -11,17 +8,17 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
-@RemoteServiceRelativePath("ForecastCommonServices")
-public interface ForecastCommonServices extends RemoteService {
+@RemoteServiceRelativePath("UserServices")
+public interface UserServices extends RemoteService {
 	/**
 	 * Utility class for simplifying access to the instance of async service.
 	 */
 	public static class Util {
-		private static ForecastCommonServicesAsync instance;
+		private static UserServicesAsync instance;
 
-		public static ForecastCommonServicesAsync getInstance() {
+		public static UserServicesAsync getInstance() {
 			if (instance == null) {
-				instance = GWT.create(ForecastCommonServices.class);
+				instance = GWT.create(UserServices.class);
 			}
 			return instance;
 		}
@@ -32,18 +29,7 @@ public interface ForecastCommonServices extends RemoteService {
 	Integer addUser(String name, String lastname, String email, String username, String password, int type) throws NeuralitoException;
 
 	SessionData getSessionData();
-	
-	Integer addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, String zoneName, boolean public_) throws NeuralitoException;
 
 	void closeSession();
 
-	Map<String, Vector> getAreas();
-
-	Map<String, Vector> getCountries(String area);
-
-	Map<String, Vector> getZones(String country);
-
-	Map<String, Vector> getSpots(String spot);
-
-	Area getArea();
 }

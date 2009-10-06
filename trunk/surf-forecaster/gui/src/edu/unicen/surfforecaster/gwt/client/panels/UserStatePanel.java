@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
-import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
@@ -121,7 +121,7 @@ public class UserStatePanel extends Composite {
 		lnkSignOut = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.signOut(), "");
 		lnkSignOut.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				ForecastCommonServices.Util.getInstance().closeSession(new AsyncCallback<Void>(){
+				UserServices.Util.getInstance().closeSession(new AsyncCallback<Void>(){
 					
 					public void onSuccess(Void result){
 						Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
@@ -138,7 +138,7 @@ public class UserStatePanel extends Composite {
 	}
 	
 	private void getSessionData(){
-		ForecastCommonServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
+		UserServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
 			public void onSuccess(SessionData result) {
 				if (result == null) {
 					horizontalPanel.insert(lnkLogin, 1);
