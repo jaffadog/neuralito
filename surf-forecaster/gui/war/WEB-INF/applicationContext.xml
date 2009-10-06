@@ -6,8 +6,8 @@
     <import resource="services.xml"/>
 	
     <bean id="ForecastCommonServices" class="edu.unicen.surfforecaster.gwt.server.ForecastCommonServicesImpl">
-    <property name="service" ref="userService"></property>
-        
+	    <property name="userService" ref="userService"></property>
+	    <property name="spotService" ref="spotService"></property>
     </bean>
 
 </beans>
