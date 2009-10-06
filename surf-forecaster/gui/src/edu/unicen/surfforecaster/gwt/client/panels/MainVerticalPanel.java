@@ -1,7 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
