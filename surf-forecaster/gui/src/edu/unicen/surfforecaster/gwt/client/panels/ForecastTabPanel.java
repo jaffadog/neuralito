@@ -9,7 +9,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 
-import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
@@ -54,7 +54,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 	}
 	
 	private void getSessionData(){
-		ForecastCommonServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
+		UserServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
 			public void onSuccess(SessionData result) {
 				if (result != null) {
 					NewSpotPanel newSpotPanel = new NewSpotPanel();

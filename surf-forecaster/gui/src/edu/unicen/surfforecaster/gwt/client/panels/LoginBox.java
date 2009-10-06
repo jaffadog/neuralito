@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
-import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
+import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
@@ -104,7 +104,7 @@ public class LoginBox extends DialogBox{
 					showFormPanel();
 				}
 				else{
-					ForecastCommonServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<UserDTO>(){
+					UserServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<UserDTO>(){
 						public void onSuccess(UserDTO result) {
 							Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
 						}

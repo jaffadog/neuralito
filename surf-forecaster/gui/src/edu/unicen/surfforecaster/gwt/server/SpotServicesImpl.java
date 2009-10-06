@@ -8,15 +8,11 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.SpotService;
-import edu.unicen.surfforecaster.common.services.UserService;
-import edu.unicen.surfforecaster.common.services.dto.UserDTO;
-import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.Spot;
@@ -82,17 +78,6 @@ public class SpotServicesImpl extends SpringGWTServlet implements
 		final HttpServletRequest request = getThreadLocalRequest();
 		final HttpSession session = request.getSession();
 		return session;
-	}
-
-	/**
-	 * Removes all the session values stored in the current session
-	 */
-	public void closeSession() {
-		final HttpSession session = getSession();
-
-		session.removeAttribute("gwtForecast-UserName");
-		session.removeAttribute("gwtForecast-UserType");
-		session.removeAttribute("gwtForecast-UserId");
 	}
 
 	public Map<String, Vector> getAreas() {

@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,7 +25,6 @@ import com.google.gwt.user.client.ui.Widget;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
-import edu.unicen.surfforecaster.gwt.client.ForecastCommonServices;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
@@ -272,7 +270,7 @@ public class NewSpotDataPanel extends LazyPanel {
 	}
 	
 	private void setAreaListItems(){
-		ForecastCommonServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
+		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
 			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
 				} else {
@@ -304,7 +302,7 @@ public class NewSpotDataPanel extends LazyPanel {
 	
 	private void setCountryListItems(String area){
 		countryBox.clear();
-		ForecastCommonServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, Vector>>(){
+		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, Vector>>(){
 			public void onSuccess(Map<String, Vector> result) {
 				if (result == null) {
 				} else {
