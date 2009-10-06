@@ -21,17 +21,17 @@ import edu.unicen.surfforecaster.gwt.client.Zone;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.server.util.SpringGWTServlet;
 
-public class SpotServicesImpl extends SpringGWTServlet implements
-		SpotServices {
+public class SpotServicesImpl extends SpringGWTServlet implements SpotServices {
 	/**
 	 * Logger.
 	 */
 	Logger logger = Logger.getLogger(SpotServicesImpl.class);
-	
+
 	private SpotService spotService;
-	
+
 	/**
-	 * @param service the service to set
+	 * @param service
+	 *            the service to set
 	 */
 	public void setSpotService(final SpotService service) {
 		spotService = service;
@@ -43,7 +43,7 @@ public class SpotServicesImpl extends SpringGWTServlet implements
 	public SpotService getSpotService() {
 		return spotService;
 	}
-	
+
 	/**
 	 * Return a sessionData object with all the values stored in the current
 	 * session
@@ -54,16 +54,22 @@ public class SpotServicesImpl extends SpringGWTServlet implements
 		final HttpSession session = getSession();
 
 		if ((String) session.getAttribute("gwtForecast-UserName") == null
-				|| ((String) session.getAttribute("gwtForecast-UserName")).equals("")) {
-			System.out.println("the session is null or empty, this is the result after request for username: "
-							+ (String) session.getAttribute("gwtForecast-UserName"));
+				|| ((String) session.getAttribute("gwtForecast-UserName"))
+						.equals("")) {
+			System.out
+					.println("the session is null or empty, this is the result after request for username: "
+							+ (String) session
+									.getAttribute("gwtForecast-UserName"));
 			return null;
 		} else {
 
 			final SessionData sessionData = new SessionData();
-			sessionData.setUserName(session.getAttribute("gwtForecast-UserName").toString());
-			sessionData.setUserType(session.getAttribute("gwtForecast-UserType").toString());
-			sessionData.setUserId(session.getAttribute("gwtForecast-UserId").toString());
+			sessionData.setUserName(session
+					.getAttribute("gwtForecast-UserName").toString());
+			sessionData.setUserType(session
+					.getAttribute("gwtForecast-UserType").toString());
+			sessionData.setUserId(session.getAttribute("gwtForecast-UserId")
+					.toString());
 			return sessionData;
 		}
 
@@ -201,22 +207,26 @@ public class SpotServicesImpl extends SpringGWTServlet implements
 		return result3;
 	}
 
-	public Integer addSpot(String spotName, String longitude, String latitude,
-			Integer zoneId, Integer countryId, String zoneName, boolean public_)
-			throws NeuralitoException {
-		SessionData sessionData = this.getSessionData();
-		if (sessionData == null) {
+	public Integer addSpot(final String spotName, final String longitude,
+			final String latitude, final Integer zoneId,
+			final Integer countryId, final String zoneName,
+			final boolean public_) throws NeuralitoException {
+		final SessionData sessionData = getSessionData();
+		if (sessionData == null)
 			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
-		} else {
-			double longitudeNum = new Double(longitude);
-			double latitudeNum = new Double(latitude);
-			Integer userId = new Integer(sessionData.getUserId());
+		else {
+			final double longitudeNum = new Double(longitude);
+			final double latitudeNum = new Double(latitude);
+			final Integer userId = new Integer(sessionData.getUserId());
 			Integer result = null;
-			if (zoneName.trim().equals("")){
-				result = spotService.addSpot(spotName, longitudeNum, latitudeNum, zoneId, userId, public_);
+			if (zoneName.trim().equals("")) {
+				result = spotService.addSpot(spotName, longitudeNum,
+						latitudeNum, zoneId, userId, public_, "ATC");
 			} else {
-				//result = spotService.addZoneAndSpot(zoneName, countryId, spotName, longitudeNum, latitudeNum, userId, public_);
-				result = spotService.addZoneAndSpot(zoneName, 1, spotName, longitudeNum, latitudeNum, userId, public_);
+				// result = spotService.addZoneAndSpot(zoneName, countryId,
+				// spotName, longitudeNum, latitudeNum, userId, public_);
+				result = spotService.addZoneAndSpot(zoneName, 1, spotName,
+						longitudeNum, latitudeNum, userId, public_, "ATC");
 				System.out.println(public_);
 			}
 			return result;
