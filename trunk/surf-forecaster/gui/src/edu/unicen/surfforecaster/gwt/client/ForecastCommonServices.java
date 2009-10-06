@@ -32,6 +32,8 @@ public interface ForecastCommonServices extends RemoteService {
 	Integer addUser(String name, String lastname, String email, String username, String password, int type) throws NeuralitoException;
 
 	SessionData getSessionData();
+	
+	Integer addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, String zoneName, boolean public_) throws NeuralitoException;
 
 	void closeSession();
 
