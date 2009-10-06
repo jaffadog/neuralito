@@ -9,5 +9,9 @@
 	    <property name="userService" ref="userService"></property>
 	    <property name="spotService" ref="spotService"></property>
     </bean>
+    
+    <bean id="SpotServices" class="edu.unicen.surfforecaster.gwt.server.SpotServicesImpl">
+	    <property name="spotService" ref="spotService"></property>
+    </bean>
 
 </beans>
