@@ -27,6 +27,8 @@ public class SpotServicesImpl extends SpringGWTServlet implements SpotServices {
 	 */
 	Logger logger = Logger.getLogger(SpotServicesImpl.class);
 
+	UserServicesImpl userService = new UserServicesImpl();
+	
 	private SpotService spotService;
 
 	/**
