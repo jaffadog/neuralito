@@ -15,13 +15,13 @@
     
   <!-- Servlets -->
   <servlet>
-  	<servlet-name>ForecastCommonServices</servlet-name>
+  	<servlet-name>UserServices</servlet-name>
   	<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
-  	<servlet-name>ForecastCommonServices</servlet-name>
-  	<url-pattern>/surfforecaster/ForecastCommonServices</url-pattern>
+  	<servlet-name>UserServices</servlet-name>
+  	<url-pattern>/surfforecaster/UserServices</url-pattern>
   </servlet-mapping>
   
   <servlet>
