@@ -86,19 +86,16 @@ public class UserServicesImpl extends SpringGWTServlet implements UserServices {
 	}
 
 	/**
-	 * Check if exists any user with the username and password passed as
-	 * parameters
+	 * Check if exists any user with the username and password passed as parameters
 	 * 
-	 * @param String
-	 *            userName
-	 * @param String
-	 *            password
+	 * @param String userName
+	 * @param String password
 	 * @return User user if exist any user with that values or Null
 	 */
 	public UserDTO login(final String userName, final String password) throws NeuralitoException{
 		logger.log(Level.INFO,"ForecastCommonServicesImpl - login - Finding User: '" + userName + "'.");
 		final UserDTO userDTO = userService.loginUser(userName, password);
-		final HttpSession session = getSession();
+		final HttpSession session = this.getSession();
 		session.setMaxInactiveInterval(1200); // 120seg
 		session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
 		session.setAttribute("gwtForecast-UserType", userDTO.getType());
