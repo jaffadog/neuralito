@@ -25,7 +25,8 @@ public interface SpotServices extends RemoteService {
 		}
 	}
 	
-	Integer addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, String zoneName, boolean public_) throws NeuralitoException;
+	Integer addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, 
+			String zoneName, boolean public_, String timezone) throws NeuralitoException;
 
 	Map<String, Vector> getAreas();
 

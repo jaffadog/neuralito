@@ -212,7 +212,8 @@ public class SpotServicesImpl extends SpringGWTServlet implements SpotServices {
 	public Integer addSpot(final String spotName, final String longitude,
 			final String latitude, final Integer zoneId,
 			final Integer countryId, final String zoneName,
-			final boolean public_) throws NeuralitoException {
+			final boolean public_, final String timezone) throws NeuralitoException {
+
 		final SessionData sessionData = getSessionData();
 		if (sessionData == null)
 			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
@@ -223,13 +224,13 @@ public class SpotServicesImpl extends SpringGWTServlet implements SpotServices {
 			Integer result = null;
 			if (zoneName.trim().equals("")) {
 				result = spotService.addSpot(spotName, longitudeNum,
-						latitudeNum, zoneId, userId, public_, "ATC");
+						latitudeNum, zoneId, userId, public_, timezone);
 			} else {
 				// result = spotService.addZoneAndSpot(zoneName, countryId,
 				// spotName, longitudeNum, latitudeNum, userId, public_);
+					
 				result = spotService.addZoneAndSpot(zoneName, 1, spotName,
-						longitudeNum, latitudeNum, userId, public_, "ATC");
-				System.out.println(public_);
+						longitudeNum, latitudeNum, userId, public_, timezone);
 			}
 			return result;
 		}

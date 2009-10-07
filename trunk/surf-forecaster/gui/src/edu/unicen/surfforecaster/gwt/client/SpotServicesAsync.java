@@ -6,8 +6,8 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface SpotServicesAsync {
-		
-	void addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, String zoneName, boolean public_, AsyncCallback<Integer> callback);
+	void addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, 
+			String zoneName, boolean public_, String timezone, AsyncCallback<Integer> callback);
 
 	void getAreas(AsyncCallback<Map<String, Vector>> callback);
 
@@ -16,5 +16,4 @@ public interface SpotServicesAsync {
 	void getZones(String country, AsyncCallback<Map<String, Vector>> callback);
 
 	void getSpots(String spot, AsyncCallback<Map<String, Vector>> callback);
-
 }
