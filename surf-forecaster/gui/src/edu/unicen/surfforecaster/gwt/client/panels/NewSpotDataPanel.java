@@ -42,6 +42,7 @@ public class NewSpotDataPanel extends LazyPanel {
 	private PushButton createZoneBtn;
 	private MapPanel mapPanel;
 	private RadioButton radioPublicButton;
+	private TextBox spotTxt;
 	
 	public NewSpotDataPanel() {}
 	
@@ -158,7 +159,7 @@ public class NewSpotDataPanel extends LazyPanel {
 		flexTable.setWidget(4, 3, chooseZoneBtn);
 		flexTable.getCellFormatter().setHorizontalAlignment(4, 3, HasHorizontalAlignment.ALIGN_LEFT);
 
-		final TextBox spotTxt = new TextBox();
+		spotTxt = new TextBox();
 		spotTxt.setMaxLength(50);
 		flexTable.setWidget(5, 2, spotTxt);
 		spotTxt.setWidth("300");
@@ -207,7 +208,7 @@ public class NewSpotDataPanel extends LazyPanel {
 					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
 					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLong(), mapPanel.getSpotLat(),
 							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
-							new AsyncCallback<Integer>(){
+							timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
 						public void onSuccess(Integer result){
 							//clearFields();		
 							successPanel.setVisible(true);
