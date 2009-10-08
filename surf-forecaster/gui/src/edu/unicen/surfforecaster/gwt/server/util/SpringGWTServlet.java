@@ -7,11 +7,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.context.ServletContextAware;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 
 public class SpringGWTServlet extends RemoteServiceServlet  implements HttpRequestHandler, ServletContextAware{
@@ -46,6 +49,5 @@ public class SpringGWTServlet extends RemoteServiceServlet  implements HttpReque
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		  }
-		}
-
+	}
 }

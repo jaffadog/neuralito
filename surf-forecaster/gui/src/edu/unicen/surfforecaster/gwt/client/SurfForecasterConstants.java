@@ -4,6 +4,15 @@ import com.google.gwt.i18n.client.Constants;
 
 public interface SurfForecasterConstants extends Constants {
 	
+	/**
+	 * á = \u00E1
+	 * é = 
+	 * í = \u00ED
+	 * ó = \u00F3
+	 * ú = \u00FA
+	 * ñ = \u00F1
+	 */
+	
 	//Commons
 	@DefaultStringValue("Iniciar sesi\u00F3n")
 	String signIn();
@@ -108,16 +117,26 @@ public interface SurfForecasterConstants extends Constants {
 	String spotVisibility();
 	
 	//ErrorMessages
+	
 	@DefaultStringValue("Los cambios se guardaron exitosamente !!!")
 	String CHANGES_SAVED_SUCCESFULLY();
 	
 	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
 	String MANDATORY_FIELDS();
 	
-	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a")
+	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a.")
 	String INVALID_LOGIN();
 	
-	@DefaultStringValue("Fallo la conexion con la base de datos, intentelo nuevamente m\u00E1s tarde...")
+	@DefaultStringValue("El campo zona es obligatorio.")
+	String MANDATORY_ZONE_NAME();
+	
+	@DefaultStringValue("El campo ola es obligatorio.")
+	String MANDATORY_SPOT_NAME();
+	
+	@DefaultStringValue("Debe clickear en algun punto mapa para poder configurar correctamente la longitud y latitud de la ola.")
+	String MANDATORY_SPOT_LAT_LONG();
+	
+	@DefaultStringValue("Fall\u00F3 la conexi\u00F3n con la base de datos, intentelo nuevamente m\u00E1s tarde...")
 	String DATABASE_ERROR();
 	
 	@DefaultStringValue("El nombre de usuario especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")

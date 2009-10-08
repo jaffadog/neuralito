@@ -5,9 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
@@ -19,15 +16,12 @@ import edu.unicen.surfforecaster.gwt.client.Spot;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.Zone;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
-import edu.unicen.surfforecaster.gwt.server.util.SpringGWTServlet;
 
-public class SpotServicesImpl extends SpringGWTServlet implements SpotServices {
+public class SpotServicesImpl extends SessionServicesImpl implements SpotServices {
 	/**
 	 * Logger.
 	 */
 	Logger logger = Logger.getLogger(SpotServicesImpl.class);
-
-	UserServicesImpl userService = new UserServicesImpl();
 	
 	private SpotService spotService;
 
@@ -44,48 +38,6 @@ public class SpotServicesImpl extends SpringGWTServlet implements SpotServices {
 	 */
 	public SpotService getSpotService() {
 		return spotService;
-	}
-
-	/**
-	 * Return a sessionData object with all the values stored in the current
-	 * session
-	 * 
-	 * @return SessionData or null if not exists any session values
-	 */
-	public SessionData getSessionData() {
-		final HttpSession session = getSession();
-
-		if ((String) session.getAttribute("gwtForecast-UserName") == null
-				|| ((String) session.getAttribute("gwtForecast-UserName"))
-						.equals("")) {
-			System.out
-					.println("the session is null or empty, this is the result after request for username: "
-							+ (String) session
-									.getAttribute("gwtForecast-UserName"));
-			return null;
-		} else {
-
-			final SessionData sessionData = new SessionData();
-			sessionData.setUserName(session
-					.getAttribute("gwtForecast-UserName").toString());
-			sessionData.setUserType(session
-					.getAttribute("gwtForecast-UserType").toString());
-			sessionData.setUserId(session.getAttribute("gwtForecast-UserId")
-					.toString());
-			return sessionData;
-		}
-
-	}
-
-	/**
-	 * Returns the currents user session in the browser
-	 * 
-	 * @return HttpSession session
-	 */
-	private HttpSession getSession() {
-		final HttpServletRequest request = getThreadLocalRequest();
-		final HttpSession session = request.getSession();
-		return session;
 	}
 
 	public Map<String, Vector> getAreas() {
@@ -214,7 +166,7 @@ public class SpotServicesImpl extends SpringGWTServlet implements SpotServices {
 			final Integer countryId, final String zoneName,
 			final boolean public_, final String timezone) throws NeuralitoException {
 
-		final SessionData sessionData = getSessionData();
+		final SessionData sessionData = this.getSessionData();
 		if (sessionData == null)
 			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
 		else {
