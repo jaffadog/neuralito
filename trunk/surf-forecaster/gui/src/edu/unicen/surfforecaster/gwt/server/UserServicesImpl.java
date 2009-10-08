@@ -11,7 +11,7 @@ import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 
-public class UserServicesImpl extends SessionServicesImpl implements UserServices {
+public class UserServicesImpl extends ServicesImpl implements UserServices {
 	/**
 	 * Logger.
 	 */
@@ -53,6 +53,7 @@ public class UserServicesImpl extends SessionServicesImpl implements UserService
 			session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
 			session.setAttribute("gwtForecast-UserType", userDTO.getType());
 			session.setAttribute("gwtForecast-UserId", userDTO.getId());
+			session.setAttribute("gwtForecast-User", userDTO);
 			logger.log(Level.INFO,"ForecastCommonServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
 			return userDTO;
 		//} catch(Exception e) {System.out.println(e);}

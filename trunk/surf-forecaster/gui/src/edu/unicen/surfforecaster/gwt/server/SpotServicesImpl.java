@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.SpotService;
+import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.Spot;
@@ -17,7 +18,7 @@ import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.Zone;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
-public class SpotServicesImpl extends SessionServicesImpl implements SpotServices {
+public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	/**
 	 * Logger.
 	 */
@@ -172,7 +173,7 @@ public class SpotServicesImpl extends SessionServicesImpl implements SpotService
 		else {
 			final double longitudeNum = new Double(longitude);
 			final double latitudeNum = new Double(latitude);
-			final Integer userId = new Integer(sessionData.getUserId());
+			final Integer userId = new Integer(((UserDTO)sessionData.getUserDTO()).getId());
 			Integer result = null;
 			if (zoneName.trim().equals("")) {
 				result = spotService.addSpot(spotName, longitudeNum,

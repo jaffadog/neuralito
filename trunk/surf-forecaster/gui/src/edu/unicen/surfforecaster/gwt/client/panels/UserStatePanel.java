@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 
+import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
@@ -148,7 +149,7 @@ public class UserStatePanel extends Composite {
 					
 					horizontalPanel.add(lnkRegister);
 				} else {
-					lblUserName = new Label(result.getUserName());
+					lblUserName = new Label(((UserDTO)result.getUserDTO()).getUsername());
 					lblUserName.addStyleName("gwt-Label-Username");
 					horizontalPanel.insert(lblUserName, 1);
 					
