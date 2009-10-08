@@ -3,7 +3,6 @@ package edu.unicen.surfforecaster.gwt.server;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.UserService;
@@ -12,10 +11,7 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 
 public class UserServicesImpl extends ServicesImpl implements UserServices {
-	/**
-	 * Logger.
-	 */
-	Logger logger = Logger.getLogger(UserServicesImpl.class);
+
 	/**
 	 * The user services interface.
 	 */
@@ -45,26 +41,24 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 	 * @return User user if exist any user with that values or Null
 	 */
 	public UserDTO login(final String userName, final String password) throws NeuralitoException{
-		logger.log(Level.INFO,"ForecastCommonServicesImpl - login - Finding User: '" + userName + "'.");
-		//try{
-			UserDTO userDTO = userService.loginUser(userName, password);
-			final HttpSession session = this.getSession();
-			session.setMaxInactiveInterval(1200); // 120seg
-			session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
-			session.setAttribute("gwtForecast-UserType", userDTO.getType());
-			session.setAttribute("gwtForecast-UserId", userDTO.getId());
-			session.setAttribute("gwtForecast-User", userDTO);
-			logger.log(Level.INFO,"ForecastCommonServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
-			return userDTO;
-		//} catch(Exception e) {System.out.println(e);}
+		logger.log(Level.INFO,"UserServicesImpl - login - Finding User: '" + userName + "'...");
+		UserDTO userDTO = userService.loginUser(userName, password);
+		final HttpSession session = this.getSession();
+		session.setMaxInactiveInterval(1200); // 120seg
+		session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
+		session.setAttribute("gwtForecast-UserType", userDTO.getType());
+		session.setAttribute("gwtForecast-UserId", userDTO.getId());
+		session.setAttribute("gwtForecast-User", userDTO);
+		logger.log(Level.INFO,"UserServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
+		return userDTO;
 	}
 
 	public Integer addUser(String name, String lastname, String email,
-			String username, String password, int type) throws NeuralitoException {
+			String username, String password, UserType userType) throws NeuralitoException {
 		
-		logger.log(Level.INFO,"ForecastCommonServicesImpl - addUser - Adding user with username: '" + username + "'.");
-		Integer result = userService.addUser(name, lastname, email, username, password, UserType.REGISTERED_USER);
-		logger.log(Level.INFO,"ForecastCommonServicesImpl - addUser - User with username: '" + username + "' successfully added.");
+		logger.log(Level.INFO,"UserServicesImpl - addUser - Adding user with username: '" + username + "'...");
+		Integer result = userService.addUser(name, lastname, email, username, password, userType);
+		logger.log(Level.INFO,"UserServicesImpl - addUser - User with username: '" + username + "' successfully added.");
 		
 		return result;
 	}

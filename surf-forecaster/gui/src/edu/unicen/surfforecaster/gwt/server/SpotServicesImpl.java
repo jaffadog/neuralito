@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
@@ -19,10 +19,6 @@ import edu.unicen.surfforecaster.gwt.client.Zone;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 public class SpotServicesImpl extends ServicesImpl implements SpotServices {
-	/**
-	 * Logger.
-	 */
-	Logger logger = Logger.getLogger(SpotServicesImpl.class);
 	
 	private SpotService spotService;
 
@@ -166,7 +162,9 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			final String latitude, final Integer zoneId,
 			final Integer countryId, final String zoneName,
 			final boolean public_, final String timezone) throws NeuralitoException {
-
+		
+		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Trying to add a new spot: '" + spotName + "'...");
+		
 		final SessionData sessionData = this.getSessionData();
 		if (sessionData == null)
 			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
@@ -176,15 +174,20 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			final Integer userId = new Integer(((UserDTO)sessionData.getUserDTO()).getId());
 			Integer result = null;
 			if (zoneName.trim().equals("")) {
+				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding only the spot: '" + spotName + "'...");
 				result = spotService.addSpot(spotName, longitudeNum,
 						latitudeNum, zoneId, userId, public_, timezone);
 			} else {
 				// result = spotService.addZoneAndSpot(zoneName, countryId,
 				// spotName, longitudeNum, latitudeNum, userId, public_);
-					
-				result = spotService.addZoneAndSpot(zoneName, 1, spotName,
+				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding both zone: '"  + zoneName.trim() + "' and spot: '" + spotName + "'...");	
+				result = spotService.addZoneAndSpot(zoneName.trim(), 1, spotName,
 						longitudeNum, latitudeNum, userId, public_, timezone);
 			}
+			
+			if (result != null)
+				logger.log(Level.INFO,"SpotServicesImpl - addSpot - New spot '" + spotName + "' added");
+			
 			return result;
 		}
 	}
