@@ -204,7 +204,8 @@ public class NewSpotDataPanel extends LazyPanel {
 				errorPanel.setVisible(false);
 				successPanel.setVisible(false);
 				int countryId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
-				if (spotTxt.getText().trim() != ""){
+				messages.addAll(validateForm());
+				if (messages.isEmpty()){
 					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
 					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLong(), mapPanel.getSpotLat(),
 							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
@@ -221,7 +222,7 @@ public class NewSpotDataPanel extends LazyPanel {
 						});
 				}
 				else{
-					messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
+					//messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
 					errorPanel.setMessages(messages);
 					errorPanel.setVisible(true);
 				}
@@ -260,6 +261,17 @@ public class NewSpotDataPanel extends LazyPanel {
 		this.setTimeZoneItems();
 		
 		return container;
+	}
+	
+	private Vector<String> validateForm() {
+		Vector<String> messages = new Vector<String>();
+		if (this.zoneTxt.isVisible() && this.zoneTxt.getText().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_ZONE_NAME());
+		if (this.spotTxt.getText().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_SPOT_NAME());
+		if (this.mapPanel.getSpotLat().trim().equals("") || this.mapPanel.getSpotLong().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_SPOT_LAT_LONG());
+		return messages;
 	}
 	
 	private void setTimeZoneItems() {
