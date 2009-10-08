@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
@@ -137,7 +138,7 @@ public class RegisterUserPanel extends VerticalPanel {
 					&& userTxt.getText().trim() != "" && passTxt.getText().trim() != ""){
 					
 					UserServices.Util.getInstance().addUser(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
-							emailTxt.getText().trim(), userTxt.getText().trim(), passTxt.getText().trim(), 2, new AsyncCallback<Integer>(){
+							emailTxt.getText().trim(), userTxt.getText().trim(), passTxt.getText().trim(), UserType.REGISTERED_USER, new AsyncCallback<Integer>(){
 						public void onSuccess(Integer result){
 							clearFields();		
 							successPanel.setVisible(true);
