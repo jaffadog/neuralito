@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Vector;
 
@@ -8,6 +9,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 
 @RemoteServiceRelativePath("SpotServices")
 public interface SpotServices extends RemoteService {
@@ -28,7 +30,7 @@ public interface SpotServices extends RemoteService {
 	Integer addSpot(String spotName, String longitude, String latitude, Integer zoneId, Integer countryId, 
 			String zoneName, boolean public_, String timezone) throws NeuralitoException;
 
-	Map<String, Vector> getAreas();
+	Collection<AreaDTO> getAreas() throws NeuralitoException;
 
 	Map<String, Vector> getCountries(String area);
 

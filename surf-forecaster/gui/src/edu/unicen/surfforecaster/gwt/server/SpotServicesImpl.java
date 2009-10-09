@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.server;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.apache.log4j.Level;
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.SpotService;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
@@ -36,26 +38,31 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	public SpotService getSpotService() {
 		return spotService;
 	}
-
-	public Map<String, Vector> getAreas() {
-		final Area a1 = new Area("AN", "America del norte");
-		final Area a2 = new Area("AS", "America del sur");
-		final Area a3 = new Area("EU", "Europa");
-		final Area a4 = new Area("OC", "Oceania");
-
-		final Vector<Area> result = new Vector<Area>();
-		result.add(a1);
-		result.add(a2);
-		result.add(a3);
-		result.add(a4);
-
-		final Map<String, Vector> result3 = new HashMap<String, Vector>();
-		if (!result.isEmpty()) {
-			result3.put("areas", result);
-			result3.putAll(getCountries(result.elementAt(0).getId()));
-		}
-		return result3;
+	
+	public Collection<AreaDTO> getAreas() throws NeuralitoException {
+		System.out.println("relajados: " + spotService.getAreas().size());
+		return spotService.getAreas();
 	}
+	
+//	public Map<String, Vector> getAreas() {
+//		final Area a1 = new Area("AN", "America del norte");
+//		final Area a2 = new Area("AS", "America del sur");
+//		final Area a3 = new Area("EU", "Europa");
+//		final Area a4 = new Area("OC", "Oceania");
+//
+//		final Vector<Area> result = new Vector<Area>();
+//		result.add(a1);
+//		result.add(a2);
+//		result.add(a3);
+//		result.add(a4);
+//
+//		final Map<String, Vector> result3 = new HashMap<String, Vector>();
+//		if (!result.isEmpty()) {
+//			result3.put("areas", result);
+//			result3.putAll(getCountries(result.elementAt(0).getId()));
+//		}
+//		return result3;
+//	}
 
 	public Map<String, Vector> getCountries(final String area) {
 		final Country a1 = new Country("AR", "Argentina", "AS");

@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
@@ -23,6 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
@@ -283,10 +285,14 @@ public class NewSpotDataPanel extends LazyPanel {
 	}
 	
 	private void setAreaListItems(){
-		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
-				if (result == null) {
-				} else {
+		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Collection<AreaDTO>>(){
+			public void onSuccess(Collection<AreaDTO> result) {
+				if (result != null) {
+					for (final Iterator iterator = result.iterator(); iterator.hasNext();) {
+						final AreaDTO area = (AreaDTO) iterator.next();
+						areaBox.addItem(area.getNames().get("en"), area.getId().toString());
+					}
+					/*
 					Iterator i = null;
 					if (result.containsKey("areas")){
 						i = result.get("areas").iterator();
@@ -303,6 +309,7 @@ public class NewSpotDataPanel extends LazyPanel {
 							countryBox.addItem(country.getName(), country.getId());
 						}
 					}
+					*/
 					
 				}
 			}
