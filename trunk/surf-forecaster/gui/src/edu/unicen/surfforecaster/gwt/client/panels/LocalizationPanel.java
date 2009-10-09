@@ -133,58 +133,58 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 			}
 		}
 		
-		this.setAreaListItems();
+		//this.setAreaListItems();
 	}
 	
-	private void setAreaListItems(){
-		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
-				if (result == null) {
-				} else {
-					Iterator i = null;
-					if (result.containsKey("areas")){
-						i = result.get("areas").iterator();
-						while (i.hasNext()){
-							Area area = (Area)i.next();
-							areaBox.addItem(area.getName(), area.getId());
-						}
-					}
-					
-					if (result.containsKey("countries")){
-						i = result.get("countries").iterator();
-						while (i.hasNext()){
-							Country country = (Country)i.next();
-							countryBox.addItem(country.getName(), country.getId());
-						}
-					}
-					
-					if (result.containsKey("zones")){
-						i = result.get("zones").iterator();
-						while (i.hasNext()){
-							Zone zone = (Zone)i.next();
-							zoneBox.addItem(zone.getName(), zone.getId());
-						}
-					}
-					
-					if (result.containsKey("spots")) {
-						i = result.get("spots").iterator();
-						while (i.hasNext()){
-							Spot spot = (Spot)i.next();
-							spotBox.addItem(spot.getName(), spot.getId());
-						}
-					}
-				}
-				setForecastButtonState();
-				//Show the forecastTabPanel after
-				if (spotBox.getItemCount() > 0 && new Integer(spotBox.getValue(spotBox.getSelectedIndex())) > 0 )
-					renderSpotInfo();
-			}
-				
-			public void onFailure(Throwable caught) {
-				
-			}
-		});
-	}
+//	private void setAreaListItems(){
+//		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
+//			public void onSuccess(Map<String, Vector> result) {
+//				if (result == null) {
+//				} else {
+//					Iterator i = null;
+//					if (result.containsKey("areas")){
+//						i = result.get("areas").iterator();
+//						while (i.hasNext()){
+//							Area area = (Area)i.next();
+//							areaBox.addItem(area.getName(), area.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("countries")){
+//						i = result.get("countries").iterator();
+//						while (i.hasNext()){
+//							Country country = (Country)i.next();
+//							countryBox.addItem(country.getName(), country.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("zones")){
+//						i = result.get("zones").iterator();
+//						while (i.hasNext()){
+//							Zone zone = (Zone)i.next();
+//							zoneBox.addItem(zone.getName(), zone.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("spots")) {
+//						i = result.get("spots").iterator();
+//						while (i.hasNext()){
+//							Spot spot = (Spot)i.next();
+//							spotBox.addItem(spot.getName(), spot.getId());
+//						}
+//					}
+//				}
+//				setForecastButtonState();
+//				//Show the forecastTabPanel after
+//				if (spotBox.getItemCount() > 0 && new Integer(spotBox.getValue(spotBox.getSelectedIndex())) > 0 )
+//					renderSpotInfo();
+//			}
+//				
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//		});
+//	}
 	
 	private void renderSpotInfo() {
 		if (this.baseParentPanel instanceof SpotDescriptionPanel) {

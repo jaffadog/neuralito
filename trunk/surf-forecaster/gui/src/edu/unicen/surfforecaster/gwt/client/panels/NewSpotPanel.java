@@ -9,6 +9,7 @@ public class NewSpotPanel extends VerticalPanel {
 	
 	public NewSpotPanel() {
 		newSpotDataPanel = new NewSpotDataPanel();
+		newSpotDataPanel.setVisible(true);
 		add(newSpotDataPanel);
 		newSpotTrainPanel = new NewSpotTrainPanel();
 		newSpotTrainPanel.setVisible(false);
