@@ -10,8 +10,10 @@ import org.apache.log4j.Level;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
+import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
@@ -23,6 +25,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	
 	private SpotService spotService;
+	private ForecastService forecastService;
 
 	/**
 	 * @param service
@@ -39,30 +42,54 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return spotService;
 	}
 	
-	public Collection<AreaDTO> getAreas() throws NeuralitoException {
-		System.out.println("relajados: " + spotService.getAreas().size());
-		return spotService.getAreas();
+	/**
+	 * @param service
+	 *            the service to set
+	 */
+	public void setForecastService(final ForecastService service) {
+		forecastService = service;
 	}
-	
-//	public Map<String, Vector> getAreas() {
-//		final Area a1 = new Area("AN", "America del norte");
-//		final Area a2 = new Area("AS", "America del sur");
-//		final Area a3 = new Area("EU", "Europa");
-//		final Area a4 = new Area("OC", "Oceania");
-//
-//		final Vector<Area> result = new Vector<Area>();
-//		result.add(a1);
-//		result.add(a2);
-//		result.add(a3);
-//		result.add(a4);
-//
-//		final Map<String, Vector> result3 = new HashMap<String, Vector>();
-//		if (!result.isEmpty()) {
-//			result3.put("areas", result);
-//			result3.putAll(getCountries(result.elementAt(0).getId()));
-//		}
-//		return result3;
-//	}
+
+	/**
+	 * @return the forecast service
+	 */
+	public ForecastService getForecastService() {
+		return forecastService;
+	}
+	/*
+	public Map<String, Vector> getAreas() throws NeuralitoException {
+		final Map<String, Collection> result = new HashMap<String, Collection>();
+		
+		Collection<AreaDTO> areas = spotService.getAreas();
+		
+		
+		if (!areas.isEmpty()) {
+			result.put("areas", areas);
+			result.putAll(getCountries(((AreaDTO)areas.toArray()[0]).getId()));
+		}
+		return result;
+		
+	}
+	*/
+	public Map<String, Vector> getAreas() {
+		final Area a1 = new Area("AN", "America del norte");
+		final Area a2 = new Area("AS", "America del sur");
+		final Area a3 = new Area("EU", "Europa");
+		final Area a4 = new Area("OC", "Oceania");
+
+		final Vector<Area> result = new Vector<Area>();
+		result.add(a1);
+		result.add(a2);
+		result.add(a3);
+		result.add(a4);
+
+		final Map<String, Vector> result3 = new HashMap<String, Vector>();
+		if (!result.isEmpty()) {
+			result3.put("areas", result);
+			result3.putAll(getCountries(result.elementAt(0).getId()));
+		}
+		return result3;
+	}
 
 	public Map<String, Vector> getCountries(final String area) {
 		final Country a1 = new Country("AR", "Argentina", "AS");
@@ -165,8 +192,8 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return result3;
 	}
 
-	public Integer addSpot(final String spotName, final String longitude,
-			final String latitude, final Integer zoneId,
+	public Integer addSpot(final String spotName, final String spotLongitude,
+			final String spotLatitude, final String buoyLongitude, final String buoyLatitude, final Integer zoneId,
 			final Integer countryId, final String zoneName,
 			final boolean public_, final String timezone) throws NeuralitoException {
 		
@@ -176,20 +203,25 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		if (sessionData == null)
 			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
 		else {
-			final double longitudeNum = new Double(longitude);
-			final double latitudeNum = new Double(latitude);
+			final double spotLongitudeNum = new Double(spotLongitude);
+			final double spotLatitudeNum = new Double(spotLatitude);
+			final double buoyLongitudeNum = new Double(buoyLongitude);
+			final double buoyLatitudeNum = new Double(buoyLatitude);
 			final Integer userId = new Integer(((UserDTO)sessionData.getUserDTO()).getId());
 			Integer result = null;
 			if (zoneName.trim().equals("")) {
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding only the spot: '" + spotName + "'...");
-				result = spotService.addSpot(spotName, longitudeNum,
-						latitudeNum, zoneId, userId, public_, timezone);
+				result = spotService.addSpot(spotName, spotLongitudeNum,
+						spotLatitudeNum, zoneId, userId, public_, timezone);
 			} else {
 				// result = spotService.addZoneAndSpot(zoneName, countryId,
 				// spotName, longitudeNum, latitudeNum, userId, public_);
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding both zone: '"  + zoneName.trim() + "' and spot: '" + spotName + "'...");	
 				result = spotService.addZoneAndSpot(zoneName.trim(), 1, spotName,
-						longitudeNum, latitudeNum, userId, public_, timezone);
+						spotLongitudeNum, spotLatitudeNum, userId, public_, timezone);
+				if (result != null) {
+					forecastService.createWW3Forecaster(result, new PointDTO(buoyLongitudeNum, buoyLatitudeNum));
+				}
 			}
 			
 			if (result != null)

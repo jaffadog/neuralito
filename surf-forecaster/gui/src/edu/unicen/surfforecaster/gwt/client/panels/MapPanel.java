@@ -1,5 +1,8 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.google.gwt.maps.client.InfoWindow;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
@@ -8,11 +11,15 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.Overlay;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.TextBox;
+
+import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 
 public class MapPanel extends VerticalPanel {
 	
@@ -94,19 +101,7 @@ public class MapPanel extends VerticalPanel {
 	          }
 	        }
 	        
-	        private void showWW3Buoys(MapWidget map, LatLng point){
-	        	MarkerOptions options = MarkerOptions.newInstance();
-	        	options.setTitle("Boya WW3");
-	        	Marker marker = new Marker(LatLng.newInstance(point.getLatitude() - 1, point.getLongitude() - 1), options);
-	        	marker.getIcon().setImageURL("images/buoy.png");
-	        	map.addOverlay(marker);
-	        	marker = new Marker(LatLng.newInstance(point.getLatitude() - 1, point.getLongitude() + 1), options);
-	        	map.addOverlay(marker);
-	        	marker = new Marker(LatLng.newInstance(point.getLatitude() + 1, point.getLongitude() - 1), options);
-	        	map.addOverlay(marker);
-	        	marker = new Marker(LatLng.newInstance(point.getLatitude() + 1, point.getLongitude() + 1), options);
-	        	map.addOverlay(marker);
-	        }
+	        
 	      });
 	    // Add the map to the HTML host page
 	    //RootPanel.get("mapsTutorial").add(map);
@@ -162,6 +157,31 @@ public class MapPanel extends VerticalPanel {
 	    flexTable.setWidget(10, 0, txtBuoyLat);
 	    txtBuoyLat.setWidth("100");
 	}
+	
+	private void showWW3Buoys(final MapWidget map, LatLng point){
+		ForecastServices.Util.getInstance().getNearbyGridPoints(point.getLatitude(), point.getLongitude(), new AsyncCallback<List<PointDTO>>(){
+			public void onSuccess(List<PointDTO> result) {
+				if (result != null) {
+					MarkerOptions options = MarkerOptions.newInstance();
+					options.setTitle("Boya WW3");
+					
+					Iterator<PointDTO> i = result.iterator();
+					Marker marker = null;
+					while (i.hasNext()) {
+						PointDTO point = i.next();
+						marker = new Marker(LatLng.newInstance(point.getLatitude(), point.getLongitude()), options);
+				    	marker.getIcon().setImageURL("images/buoy.png");
+				    	map.addOverlay(marker);
+					}
+					
+				}
+			}
+				
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
+    }
 	
 	public String getSpotLong() {
 		return this.txtSpotLong.getText();

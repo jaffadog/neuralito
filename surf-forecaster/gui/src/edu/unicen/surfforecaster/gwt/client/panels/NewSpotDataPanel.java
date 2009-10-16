@@ -1,6 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
@@ -24,7 +23,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
@@ -210,6 +208,7 @@ public class NewSpotDataPanel extends LazyPanel {
 				if (messages.isEmpty()){
 					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
 					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLong(), mapPanel.getSpotLat(),
+							mapPanel.getBuoyLong(), mapPanel.getBuoyLat(), 
 							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
 							timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
 						public void onSuccess(Integer result){
@@ -273,6 +272,8 @@ public class NewSpotDataPanel extends LazyPanel {
 			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_SPOT_NAME());
 		if (this.mapPanel.getSpotLat().trim().equals("") || this.mapPanel.getSpotLong().trim().equals(""))
 			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_SPOT_LAT_LONG());
+		if (this.mapPanel.getBuoyLat().trim().equals("") || this.mapPanel.getBuoyLong().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_BUOY_LAT_LONG());
 		return messages;
 	}
 	
@@ -285,14 +286,14 @@ public class NewSpotDataPanel extends LazyPanel {
 	}
 	
 	private void setAreaListItems(){
-		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Collection<AreaDTO>>(){
-			public void onSuccess(Collection<AreaDTO> result) {
+		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
+			public void onSuccess(Map<String, Vector> result) {
 				if (result != null) {
-					for (final Iterator iterator = result.iterator(); iterator.hasNext();) {
-						final AreaDTO area = (AreaDTO) iterator.next();
-						areaBox.addItem(area.getNames().get("en"), area.getId().toString());
-					}
-					/*
+//					for (final Iterator iterator = result.iterator(); iterator.hasNext();) {
+//						final AreaDTO area = (AreaDTO) iterator.next();
+//						areaBox.addItem(area.getNames().get("en"), area.getId().toString());
+//					}
+					
 					Iterator i = null;
 					if (result.containsKey("areas")){
 						i = result.get("areas").iterator();
@@ -309,7 +310,7 @@ public class NewSpotDataPanel extends LazyPanel {
 							countryBox.addItem(country.getName(), country.getId());
 						}
 					}
-					*/
+					
 					
 				}
 			}
