@@ -136,6 +136,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Debe clickear en algun punto mapa para poder configurar correctamente la longitud y latitud de la ola.")
 	String MANDATORY_SPOT_LAT_LONG();
 	
+	@DefaultStringValue("Debe seleccionar alguna de las boyas que rodean a la playa de donde se obtendr\u00E1n pron\u00F3sticos.")
+	String MANDATORY_BUOY_LAT_LONG();
+	
 	@DefaultStringValue("Fall\u00F3 la conexi\u00F3n con la base de datos, intentelo nuevamente m\u00E1s tarde...")
 	String DATABASE_ERROR();
 	
