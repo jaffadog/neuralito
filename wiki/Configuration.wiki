@@ -1,8 +1,4 @@
-#summary One-sentence summary of this page.
-
-= Introduction =
-
-This page is intended to contain all necessary steps in order to install the application.
+#summary This page is intended to contain all necessary steps in order to install the application.
 
 == DB SETUP ==
 
