@@ -2,8 +2,8 @@
 
 == DB SETUP ==
 
-  # Download and Install Mysql version 5.1
-  # Configure db.properties located in:(?) file with port, schema, user and pass
+  # Download and Install Mysql version 5.1.
+  # Configure db.properties located in:(?) with port, schema, user and pass.
   # Add this line to the mysql config file:
 {{{
    #
