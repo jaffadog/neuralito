@@ -3,9 +3,13 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -21,6 +25,7 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJob;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJobListener;
+import edu.unicen.surfforecaster.server.services.ForecastArch;
 
 /**
  * This class provides the latest forecasts issued by the NOAA and also archived
@@ -84,10 +89,13 @@ public class DataManager implements Observer {
 	 * @param point
 	 */
 	public void registerPoint(final Point point) {
-		validatePoint(point);
-
+		Validate.notNull(point);
 		points.addPoint(point);
 		waveWatchDAO.save(points);
+		// TODO here if point does not exist then the latest forecast for spot
+		// should be decoded from latest grib file.
+		// or if all forecasts are decoded then is not neccesary to perform
+		// this.
 
 	}
 
@@ -160,23 +168,6 @@ public class DataManager implements Observer {
 	}
 
 	/**
-	 * Archive latest forecasts corresponding to times of 0 hours and 3 hours.
-	 */
-	private void archiveLatestForecasts() {
-		final Collection<Forecast> latestForecast = latestForecasts
-				.getLatestForecast();
-		for (final Iterator<Forecast> iterator = latestForecast.iterator(); iterator
-				.hasNext();) {
-			final Forecast forecast = iterator.next();
-			if (forecast.getForecastTime().equals(0)
-					|| forecast.getForecastTime().equals(3)) {
-				ww3archive.add(forecast);
-			}
-		}
-		waveWatchDAO.update(ww3archive);
-	}
-
-	/**
 	 * Sets the waveWatchDAO to use.
 	 * 
 	 * @param waveWatchDAO
@@ -211,6 +202,7 @@ public class DataManager implements Observer {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(final Observable o, final Object file) {
+		final long init = System.currentTimeMillis();
 		if (!initialized)
 			throw new IllegalStateException(
 					"Object was not initialized before calling this method.");
@@ -218,21 +210,20 @@ public class DataManager implements Observer {
 			throw new IncompatibleClassChangeError();
 		if (!(file instanceof File))
 			throw new InvalidParameterException();
+		// Save latest forecast files. In case new spots are registered and
+		// forecasts should be obtained.
+
 		// Now that we have new forecasts from NOOA the latest forecast goes to
 		// the archive.
-		archiveLatestForecasts();
-		// The new grib2 forecasts files received should be decoded and saved
-		// into latest
-		// forecasts.
+
+		// TODO Begin transaction
+		// Move latest forecasts to archive table.
+		waveWatchDAO.archiveLatestForecasts();
 		decodeAndSaveLatestForecasts((File) file);
-
-	}
-
-	/**
-	 * @param point
-	 */
-	private void validatePoint(final Point point) {
-		// Point should be a grid point.
+		final long end = System.currentTimeMillis();
+		System.out.println("Elapsed Time To update forecasts: " + (end - init)
+				/ 1000);
+		// TODO End Transaction
 	}
 
 	/**
@@ -240,13 +231,103 @@ public class DataManager implements Observer {
 	 * 
 	 * @param file
 	 */
-	private void decodeAndSaveLatestForecasts(final File file) {
+	private void decodeAndSaveLatestForecasts(final File gribFile) {
 		// Decode downloaded NOAA grib files to obtain latest forecasts.
-		final Collection<Forecast> forecasts = gribDecoder.getForecasts(file,
-				points.getPoints());
-		latestForecasts.setLatest(forecasts);
-		// Save latest forecasts
-		waveWatchDAO.update(latestForecasts);
+		final File textFile = new File("c:/latestForecast.csv");
+		if (textFile.exists())
+			if (textFile.isFile()) {
+				textFile.delete();
+			}
+		for (int time = 0; time < 61; time++) {
+			try {
+				final Collection<ForecastArch> forecasts = gribDecoder
+						.getForecastForTime(gribFile, time);
+				appendForecastsToFile(textFile, forecasts);
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		}
+		waveWatchDAO.insertIntoLatestForecastFromFile(textFile);
+	}
+
+	/**
+	 * 
+	 * @param forecasts
+	 */
+	private void appendForecastsToFile(final File file,
+			final Collection forecasts) {
+		final long init = System.currentTimeMillis();
+		try {
+			final BufferedWriter output = new BufferedWriter(new FileWriter(
+					file, true));
+
+			for (final Iterator iterator = forecasts.iterator(); iterator
+					.hasNext();) {
+				final ForecastArch forecast = (ForecastArch) iterator.next();
+				final float windWaveHeight = forecast.getWindWaveHeight()
+						.isNaN() ? -1F : forecast.getWindWaveHeight();
+				final float windWavePeriod = forecast.getWindWavePeriod()
+						.isNaN() ? -1F : forecast.getWindWavePeriod();
+				final float windWaveDirection = forecast.getWindWaveDirection()
+						.isNaN() ? -1F : forecast.getWindWaveDirection();
+				final float swellWaveHeight = forecast.getSwellWaveHeight()
+						.isNaN() ? -1F : forecast.getSwellWaveHeight();
+				final float swellWavePeriod = forecast.getSwellWavePeriod()
+						.isNaN() ? -1F : forecast.getSwellWavePeriod();
+				final float swellWaveDirection = forecast
+						.getSwellWaveDirection().isNaN() ? -1F : forecast
+						.getSwellWaveDirection();
+				final float combinaedWaveHeight = forecast
+						.getCombinedWaveHeight().isNaN() ? -1F : forecast
+						.getCombinedWaveHeight();
+				final float peakWavePeriod = forecast.getPeakWavePeriod()
+						.isNaN() ? -1F : forecast.getPeakWavePeriod();
+				final float peakWaveDirection = forecast.getPeakWaveDirection()
+						.isNaN() ? -1F : forecast.getPeakWaveDirection();
+				final float windSpeed = forecast.getWindSpeed().isNaN() ? -1F
+						: forecast.getWindSpeed();
+				final float windDirection = forecast.getWindDirection().isNaN() ? -1F
+						: forecast.getWindDirection();
+				final float windU = forecast.getWindU().isNaN() ? -1F
+						: forecast.getWindU();
+				final float windV = forecast.getWindV().isNaN() ? -1F
+						: forecast.getWindV();
+				final int year = forecast.getIssuedDate().get(Calendar.YEAR);
+				final int month = forecast.getIssuedDate().get(Calendar.MONTH) + 1;
+				;
+				final int day = forecast.getIssuedDate().get(
+						Calendar.DAY_OF_MONTH);
+				;
+				final int hour = forecast.getIssuedDate().get(
+						Calendar.HOUR_OF_DAY);
+				final int minute = forecast.getIssuedDate()
+						.get(Calendar.MINUTE);
+				;
+				final int seconds = forecast.getIssuedDate().get(
+						Calendar.SECOND);
+				;
+				final String line = "x" + year + "-" + month + "-" + day + " "
+						+ hour + ":" + minute + ":" + seconds + ","
+						+ forecast.getValidTime() + ","
+						+ forecast.getLatitude() + ","
+						+ forecast.getLongitude() + "," + windWaveHeight + ","
+						+ windWavePeriod + "," + windWaveDirection + ","
+						+ swellWaveHeight + "," + swellWavePeriod + ","
+						+ swellWaveDirection + "," + combinaedWaveHeight + ","
+						+ peakWavePeriod + "," + peakWaveDirection + ","
+						+ windSpeed + "," + windDirection + "," + windU + ","
+						+ windV + "e";
+				output.append(line);
+				output.newLine();
+
+			}
+			output.close();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+		final long end = System.currentTimeMillis();
+		System.out.println("Writing forecasts to file");
+		System.out.println("Elapsed time: " + (end - init) / 1000);
 	}
 
 	/**
@@ -275,23 +356,32 @@ public class DataManager implements Observer {
 			// save
 			// the valid
 			// grid points into DB.
-			if (validGridPoints == null) {
-				final File file = new File(
-						"src/test/resources/multi_1.glo_30m.HTSGW.grb2");
-				final Collection<Point> validPoints = gribDecoder
-						.getValidPoints(file);
-				System.out.println(validPoints.size());
-
-				validGridPoints = new ValidGridPoints();
-				validGridPoints.setValidPoints(validPoints);
-				final long startTime = System.currentTimeMillis();
-				waveWatchDAO.save(validGridPoints);
-				final long endTime = System.currentTimeMillis();
-				log.info("Elapsed time to save: " + validPoints.size()
-						+ " Points records: " + (endTime - startTime) / 1000
-						+ "secs.");
-
-			}
+			// if (validGridPoints == null) {
+			// final File file = new File(
+			// "src/test/resources/multi_1.glo_30m.HTSGW.grb2");
+			// final Collection<Point> validPoints = gribDecoder
+			// .getValidPoints(file);
+			// System.out.println(validPoints.size());
+			//
+			// validGridPoints = new ValidGridPoints();
+			// validGridPoints.setValidPoints(validPoints);
+			// final long startTime = System.currentTimeMillis();
+			// waveWatchDAO.save(validGridPoints);
+			// final long endTime = System.currentTimeMillis();
+			// log.info("Elapsed time to save: " + validPoints.size()
+			// + " Points records: " + (endTime - startTime) / 1000
+			// + "secs.");
+			//
+			// }
 		}
+	}
+
+	/**
+	 * @param gridPoint
+	 * @return
+	 */
+	public boolean isGridPoint(final Point gridPoint) {
+		return validGridPoints.isValid(gridPoint);
+
 	}
 }

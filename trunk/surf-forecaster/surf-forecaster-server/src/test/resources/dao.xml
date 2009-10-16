@@ -50,6 +50,7 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast2</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Point</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter</value>

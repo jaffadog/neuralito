@@ -80,4 +80,10 @@ public interface SpotDAO {
 	 */
 	public Collection<Spot> getPublicSpots();
 
+	/**
+	 * @param area
+	 * @return
+	 */
+	public Collection<Country> getAreaCountries(Area area);
+
 }

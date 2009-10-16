@@ -81,6 +81,11 @@ public class Spot implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length = 11)
 	private Integer id;
+	/**
+	 * The timezone of the spot.
+	 */
+	@Column(nullable = false)
+	private String timeZone;
 
 	public Integer getId() {
 		return id;
@@ -219,7 +224,7 @@ public class Spot implements Serializable {
 	 */
 	public void addForecaster(final Forecaster forecaster) {
 		Validate.notNull(forecaster);
-		// forecasters.add(forecaster);
+		forecasters.add(forecaster);
 	}
 
 	/**
@@ -236,6 +241,21 @@ public class Spot implements Serializable {
 	public void removeForecaster(final Forecaster forecaster) {
 		Validate.notNull(forecaster);
 		forecasters.remove(forecaster);
+	}
+
+	/**
+	 * @param timeZone
+	 */
+	public void setTimeZone(final String timeZone) {
+		this.timeZone = timeZone;
+
+	}
+
+	/**
+	 * @return the timeZone
+	 */
+	public String getTimeZone() {
+		return timeZone;
 	}
 
 }

@@ -163,4 +163,20 @@ public class ForecastParameter {
 				"At least some of the three variables should be instantiated.");
 	}
 
+	/**
+	 * @return the dValue
+	 */
+	public Double getdValue() {
+		if (dValue == null)
+			return -1D;
+		return dValue;
+	}
+
+	/**
+	 * @return the fValue
+	 */
+	public float getfValue() {
+		return fValue;
+	}
+
 }

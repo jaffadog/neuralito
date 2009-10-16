@@ -3,6 +3,7 @@
  */
 package edu.unicen.surfforecaster.server;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -16,6 +17,7 @@ public class QuartzTest {
 			"/services.xml");
 
 	@Test
+	@Ignore
 	public void doNothing() {
 		try {
 			Thread.sleep(30000);

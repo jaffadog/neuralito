@@ -56,7 +56,7 @@ public class Forecast {
 	/**
 	 * The location this forecast belongs.
 	 */
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Point point;
 
 	/**
