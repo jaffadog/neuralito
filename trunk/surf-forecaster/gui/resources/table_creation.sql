@@ -1,8 +1,8 @@
 DROP TABLE wavewatchlatestforecast;
 DROP TABLE wavewatchforecastarchive;
 CREATE TABLE `wavewatchlatestforecast` (
-  `issuedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `validTime` tinyint(4) NOT NULL,
+  `issuedDate` DATETIME NOT NULL,
+  `validTime` tinyint(4) unsigned NOT NULL,
   `latitude` float NOT NULL,
   `longitude` float NOT NULL,
   `windWaveHeight` float DEFAULT NULL,
@@ -20,8 +20,8 @@ CREATE TABLE `wavewatchlatestforecast` (
   `windV` float DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `wavewatchforecastarchive` (
-  `issuedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `validTime` tinyint(4) NOT NULL,
+  `issuedDate` DATETIME NOT NULL,
+  `validTime` tinyint(4) unsigned NOT NULL,
   `latitude` float NOT NULL,
   `longitude` float NOT NULL,
   `windWaveHeight` float DEFAULT NULL,
