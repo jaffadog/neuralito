@@ -31,7 +31,7 @@ import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
  */
 
 public class SpotServiceImplementationTest {
-	protected ApplicationContext context = new ClassPathXmlApplicationContext(
+	protected static final ApplicationContext context = new ClassPathXmlApplicationContext(
 			"/services.xml");
 	protected SpotService spotService;
 	protected UserService userService;

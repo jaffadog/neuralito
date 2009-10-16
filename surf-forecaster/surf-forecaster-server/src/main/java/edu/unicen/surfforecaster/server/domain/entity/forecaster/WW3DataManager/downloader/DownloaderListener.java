@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server;
+package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,7 @@ import com.enterprisedt.net.ftp.EventListener;
  */
 
 /**
+ * Custom listener to register with the FTP file downloader library(edtFTPj).
  * 
  * @author esteban
  * 

@@ -30,7 +30,7 @@ public class Description {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@MapKey(name = "language")
-	private final Map<String, I18nKeyValue> texts = new HashMap<String, I18nKeyValue>();
+	private final Map<String, I18n> texts = new HashMap<String, I18n>();
 	/**
 	 * The id for ORM pupose.
 	 */
@@ -56,7 +56,7 @@ public class Description {
 	public void addText(final String language, final String text) {
 		Validate.notEmpty(language, "Language cannot be empty");
 		Validate.notEmpty(text, "Text cannot be empty");
-		texts.put(language, new I18nKeyValue(language, text));
+		texts.put(language, new I18n(language, text));
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class Description {
 	 * @return text description, null if no description for given language.
 	 */
 	public String getText(final String language) {
-		final I18nKeyValue value = texts.get(language);
+		final I18n value = texts.get(language);
 		if (value != null)
 			return value.getText();
 		else

@@ -11,6 +11,8 @@ import com.enterprisedt.net.ftp.FileTransferClient;
 import com.enterprisedt.util.debug.Level;
 import com.enterprisedt.util.debug.Logger;
 
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderListener;
+
 /**
  * @author esteban
  * 

@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -25,7 +26,6 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJob;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJobListener;
-import edu.unicen.surfforecaster.server.services.ForecastArch;
 
 /**
  * This class provides the latest forecasts issued by the NOAA and also archived
@@ -51,18 +51,6 @@ public class DataManager implements Observer {
 	 */
 	private GribDecoder gribDecoder;
 	/**
-	 * The ww3 forecast archive.
-	 */
-	private ForecastArchive ww3archive;
-	/**
-	 * The latest forecast
-	 */
-	private LatestForecast latestForecasts;
-	/**
-	 * The points to obtain the forecasts.
-	 */
-	private ForecastPoints points;
-	/**
 	 * The ww3 DAO.
 	 */
 	private WaveWatchDAO waveWatchDAO;
@@ -83,19 +71,42 @@ public class DataManager implements Observer {
 	}
 
 	/**
-	 * Adds a new location to which a forecast should be obtained from the grib2
-	 * file.
-	 * 
-	 * @param point
+	 * Initializes the data manager.
 	 */
-	public void registerPoint(final Point point) {
-		Validate.notNull(point);
-		points.addPoint(point);
-		waveWatchDAO.save(points);
-		// TODO here if point does not exist then the latest forecast for spot
-		// should be decoded from latest grib file.
-		// or if all forecasts are decoded then is not neccesary to perform
-		// this.
+	public void init() {
+		if (!initialized) {
+			initialized = true;
+			validGridPoints = waveWatchDAO.getValidGridPoints();
+			// If no list of valid grid points exists, read a grib2 file and
+			// save
+			// the valid
+			// grid points into DB.
+			// if (validGridPoints == null) {
+			// final File file = new File(
+			// "src/test/resources/multi_1.glo_30m.HTSGW.grb2");
+			// final Collection<Point> validPoints = gribDecoder
+			// .getValidPoints(file);
+			// System.out.println(validPoints.size());
+			//
+			// validGridPoints = new ValidGridPoints();
+			// validGridPoints.setValidPoints(validPoints);
+			// final long startTime = System.currentTimeMillis();
+			// waveWatchDAO.save(validGridPoints);
+			// final long endTime = System.currentTimeMillis();
+			// log.info("Elapsed time to save: " + validPoints.size()
+			// + " Points records: " + (endTime - startTime) / 1000
+			// + "secs.");
+			//
+			// }
+		}
+	}
+
+	/**
+	 * @param gridPoint
+	 * @return
+	 */
+	public boolean isGridPoint(final Point gridPoint) {
+		return validGridPoints.isValid(gridPoint);
 
 	}
 
@@ -105,11 +116,11 @@ public class DataManager implements Observer {
 	 * @param point
 	 * @return
 	 */
-	public Collection<Forecast> getLatestForecast(final Point point) {
+	public List<Forecast> getLatestForecast(final Point point) {
 		if (!initialized)
 			throw new IllegalStateException(
 					"Object was not initialized before calling this method.");
-		return latestForecasts.getLatestForecastForLocation(point);
+		return null;
 	}
 
 	/**
@@ -121,15 +132,15 @@ public class DataManager implements Observer {
 	 * @param point
 	 * @return
 	 */
-	public Collection<Forecast> getArchiveForecast(final Date from,
-			final Date to, final Point point) {
+	public List<Forecast> getArchiveForecast(final Date from, final Date to,
+			final Point point) {
 		if (!initialized)
 			throw new IllegalStateException(
 					"Object was not initialized before calling this method.");
 		Validate.notNull(from);
 		Validate.notNull(to);
 		Validate.notNull(point);
-		return ww3archive.getArchiveForecast(from, to, point);
+		return null;
 
 	}
 
@@ -141,7 +152,7 @@ public class DataManager implements Observer {
 		if (!initialized)
 			throw new IllegalStateException(
 					"Object was not initialized before calling this method.");
-		return latestForecasts.getForecastsDate();
+		return null;
 	}
 
 	/**
@@ -150,11 +161,10 @@ public class DataManager implements Observer {
 	 * @param point
 	 * @return
 	 */
-	public Collection<Point> getNearbyGridPoints(final Point point) {
+	public List<Point> getNearbyGridPoints(final Point point) {
 
-		final Collection<Point> validPoints = validGridPoints
-				.getValidGridPoints();
-		final Collection<Point> nearbyPoints = new ArrayList<Point>();
+		final List<Point> validPoints = validGridPoints.getValidGridPoints();
+		final List<Point> nearbyPoints = new ArrayList<Point>();
 		for (final Iterator iterator = validPoints.iterator(); iterator
 				.hasNext();) {
 			final Point validPoint = (Point) iterator.next();
@@ -168,33 +178,14 @@ public class DataManager implements Observer {
 	}
 
 	/**
-	 * Sets the waveWatchDAO to use.
-	 * 
-	 * @param waveWatchDAO
-	 *            the waveWatchDAO to set
-	 */
-	public void setWaveWatchDAO(final WaveWatchDAO waveWatchDAO) {
-		this.waveWatchDAO = waveWatchDAO;
-		latestForecasts = waveWatchDAO.getLatestForecast();
-
-	}
-
-	/**
-	 * Sets the Grib decoder to use.
-	 * 
-	 * @param decoder
-	 *            the decoder to set
-	 */
-	public void setGribDecoder(final GribDecoder decoder) {
-		gribDecoder = decoder;
-	}
-
-	/**
-	 * This method is called by the file downloader when a new forecast file has
-	 * been downloaded.
+	 * Called when a new Grib file with latest forecast data has been
+	 * downloaded. Actions performed are: 1)Move latest forecast to the archive.
+	 * 2)Decode grib file and obtain latest forecast. 3)Persist latest forecast
+	 * into DB.
 	 * 
 	 * @param observable
-	 *            This should be the {@link DownloaderJobListener}
+	 *            {@link DownloaderJobListener} notifies when a new forecast
+	 *            file has been downloaded.
 	 * @param file
 	 *            grib2 file containing latest wave watch forecasts just
 	 *            downloaded by {@link DownloaderJob}
@@ -227,7 +218,7 @@ public class DataManager implements Observer {
 	}
 
 	/**
-	 * Decode given grib file and obtain latest forecast.
+	 * Decode given grib file and create forecasts objects.
 	 * 
 	 * @param file
 	 */
@@ -251,6 +242,8 @@ public class DataManager implements Observer {
 	}
 
 	/**
+	 * Writes the given forecasts to a text file, this file will be used to
+	 * perform massive inserts into DB.
 	 * 
 	 * @param forecasts
 	 */
@@ -331,57 +324,24 @@ public class DataManager implements Observer {
 	}
 
 	/**
-	 * Initializes the data manager.
+	 * Sets the waveWatchDAO to use.
+	 * 
+	 * @param waveWatchDAO
+	 *            the waveWatchDAO to set
 	 */
-	public void init() {
-		if (!initialized) {
-			initialized = true;
-			latestForecasts = waveWatchDAO.getLatestForecast();
-			if (latestForecasts == null) {
-				latestForecasts = new LatestForecast();
-				waveWatchDAO.save(latestForecasts);
-			}
-			ww3archive = waveWatchDAO.getWW3Archive();
-			if (ww3archive == null) {
-				ww3archive = new ForecastArchive();
-				waveWatchDAO.save(ww3archive);
-			}
-			points = waveWatchDAO.getForecastPoints();
-			if (points == null) {
-				points = new ForecastPoints();
-				waveWatchDAO.save(points);
-			}
-			validGridPoints = waveWatchDAO.getValidGridPoints();
-			// If no list of valid grid points exists, read a grib2 file and
-			// save
-			// the valid
-			// grid points into DB.
-			// if (validGridPoints == null) {
-			// final File file = new File(
-			// "src/test/resources/multi_1.glo_30m.HTSGW.grb2");
-			// final Collection<Point> validPoints = gribDecoder
-			// .getValidPoints(file);
-			// System.out.println(validPoints.size());
-			//
-			// validGridPoints = new ValidGridPoints();
-			// validGridPoints.setValidPoints(validPoints);
-			// final long startTime = System.currentTimeMillis();
-			// waveWatchDAO.save(validGridPoints);
-			// final long endTime = System.currentTimeMillis();
-			// log.info("Elapsed time to save: " + validPoints.size()
-			// + " Points records: " + (endTime - startTime) / 1000
-			// + "secs.");
-			//
-			// }
-		}
+	public void setWaveWatchDAO(final WaveWatchDAO waveWatchDAO) {
+		this.waveWatchDAO = waveWatchDAO;
+
 	}
 
 	/**
-	 * @param gridPoint
-	 * @return
+	 * Sets the Grib decoder to use.
+	 * 
+	 * @param decoder
+	 *            the decoder to set
 	 */
-	public boolean isGridPoint(final Point gridPoint) {
-		return validGridPoints.isValid(gridPoint);
-
+	public void setGribDecoder(final GribDecoder decoder) {
+		gribDecoder = decoder;
 	}
+
 }
