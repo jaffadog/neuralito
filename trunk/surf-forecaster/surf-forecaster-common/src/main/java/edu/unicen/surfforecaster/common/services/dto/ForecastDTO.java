@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * DTO for a Forecast
+ * A forecast issued at Base Time, and valid for BaseTime + forecastTime; The
+ * forecast is composed of several parameters like: Wave Height, Wind Direction,
+ * Wave Period...
+ * 
  * 
  * @author esteban
  * 
@@ -16,7 +19,7 @@ import java.util.Map;
 public class ForecastDTO implements Serializable {
 
 	private static long serialVersionUID = 1L;
-	private Map<String, ForecastAttributeDTO> map;
+	private Map<String, ForecastAttributeDTO> forecastParameters;
 	private Integer forecastTime;
 	private Date baseDate;
 
@@ -38,14 +41,14 @@ public class ForecastDTO implements Serializable {
 			final Map<String, ForecastAttributeDTO> map) {
 		this.baseDate = baseDate;
 		this.forecastTime = forecastTime;
-		this.map = map;
+		forecastParameters = map;
 	}
 
 	/**
 	 * @return the map
 	 */
 	public Map<String, ForecastAttributeDTO> getMap() {
-		return map;
+		return forecastParameters;
 	}
 
 	/**

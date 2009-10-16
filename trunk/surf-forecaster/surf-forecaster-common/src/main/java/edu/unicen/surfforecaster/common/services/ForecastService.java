@@ -3,7 +3,6 @@
  */
 package edu.unicen.surfforecaster.common.services;
 
-import java.util.Collection;
 import java.util.List;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
@@ -11,7 +10,7 @@ import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 
 /**
- * Forecast related services.
+ * Services for creating new forecasters and obtaining forecasts.
  * 
  * @author esteban
  * 
@@ -19,33 +18,37 @@ import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 public interface ForecastService {
 
 	/**
-	 * Obtains all the wave watch 3 grid points that surrounds the given point
+	 * Creates a wave watch 3 forecaster for the given spot. The forecast data
+	 * produced by this forecaster will correspond to the output of the wave
+	 * watch model at the given grid point.
+	 * 
+	 * @param spotId
+	 * @param gridPoint
+	 * @return id the id of the created forecaster.
+	 */
+	public Integer createWW3Forecaster(Integer spotId, PointDTO gridPoint)
+			throws NeuralitoException;
+
+	/**
+	 * Obtains all the wave watch 3 grid points that surrounds the given point.
+	 * If given point is placed exactly on a grid point that is the only grid
+	 * point returned.
 	 * 
 	 * @param latitude
 	 * @param longitude
 	 * @return
 	 */
-	Collection<PointDTO> getNearbyGridPoints(double latitude, double longitude)
+	public List<PointDTO> getNearbyGridPoints(double latitude, double longitude)
 			throws NeuralitoException;
 
 	/**
-	 * Creates a wave watch 3 forecaster, for the selected grid point and associates it with the given
-	 * spot.
-	 * 
-	 * @param spot1Id
-	 * @param gridPoint
-	 * @return
-	 */
-	Integer createWW3Forecaster(Integer spot1Id, PointDTO gridPoint)
-			throws NeuralitoException;
-
-	/**
-	 * Obtain the forecast of the given forecaster.
+	 * Obtain the latest forecasts of the given forecaster.
 	 * 
 	 * @param forecasterId
+	 *            the id of the forecaster who will provide the forecast.
 	 * @return
 	 */
-	List<ForecastDTO> getForecasts(Integer forecasterId)
+	public List<ForecastDTO> getForecasts(Integer forecasterId)
 			throws NeuralitoException;
 
 }

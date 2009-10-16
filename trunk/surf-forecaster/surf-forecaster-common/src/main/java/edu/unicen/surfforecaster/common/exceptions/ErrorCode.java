@@ -101,7 +101,19 @@ public enum ErrorCode implements Serializable {
 	/**
 	 * The area id does not exists.
 	 */
-	AREA_ID_DOES_NOT_EXISTS(24);
+	AREA_ID_DOES_NOT_EXISTS(24),
+	/**
+	 * The grid point does not belong to a valid grid point.
+	 */
+	GRID_POINT_INVALID(25),
+	/**
+	 * The grid point cannot be null.
+	 */
+	GRID_POINT_CANNOT_BE_NULL(26),
+	/**
+	 * The user session expired.
+	 */
+	USER_SESSION_EXPIRED(27);
 
 	/**
 	 * 

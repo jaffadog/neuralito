@@ -4,8 +4,8 @@
 package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,19 +44,19 @@ public class ValidGridPoints {
 	}
 
 	@OneToMany(fetch = FetchType.EAGER)
-	private Collection<Point> validPoints = new ArrayList<Point>();
+	private List<Point> validPoints = new ArrayList<Point>();
 
 	/**
 	 * @return
 	 */
-	public Collection<Point> getValidGridPoints() {
+	public List<Point> getValidGridPoints() {
 		return validPoints;
 	}
 
 	/**
 	 * @param validPoints2
 	 */
-	public void setValidPoints(final Collection<Point> validPoints2) {
+	public void setValidPoints(final List<Point> validPoints2) {
 		validPoints = validPoints2;
 	}
 

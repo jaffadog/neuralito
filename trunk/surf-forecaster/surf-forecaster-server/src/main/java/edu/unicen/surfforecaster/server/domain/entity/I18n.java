@@ -13,7 +13,7 @@ import org.apache.commons.lang.Validate;
  * 
  */
 @Entity
-public class I18nKeyValue {
+public class I18n {
 	/**
 	 * The id.
 	 */
@@ -34,14 +34,14 @@ public class I18nKeyValue {
 	/**
 	 * Constructor
 	 */
-	public I18nKeyValue() {
+	public I18n() {
 		// Orm purpose
 	}
 
 	/**
 	 * Constructor
 	 */
-	public I18nKeyValue(final String language, final String name) {
+	public I18n(final String language, final String name) {
 		setLanguague(language);
 		setText(name);
 	}

@@ -3,11 +3,14 @@
  */
 package edu.unicen.surfforecaster.common.services;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
+import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 
 /**
  * Service interface for spots related operations.
@@ -27,7 +30,7 @@ public interface SpotService {
 	 * @return
 	 */
 	public Integer addSpot(String spotName, double longitude, double latitude,
-			Integer zoneId, Integer userId, boolean publik)
+			Integer zoneId, Integer userId, boolean publik, String timeZone)
 			throws NeuralitoException;
 
 	/**
@@ -50,15 +53,16 @@ public interface SpotService {
 	 */
 	public Integer addZoneAndSpot(String zoneName, Integer countryId,
 			String spotName, double longitude, double latitude, Integer userId,
-			boolean publik) throws NeuralitoException;
+			boolean publik, String timeZone) throws NeuralitoException;
 
 	/**
-	 * Obtain all the spots for the given user.
+	 * Obtain all the spots for the given user. That is all the spots the user
+	 * is able to see within the application.
 	 * 
 	 * @param userId
 	 * @return
 	 */
-	public Collection<SpotDTO> getSpotsForUser(Integer userId)
+	public List<SpotDTO> getSpotsForUser(Integer userId)
 			throws NeuralitoException;
 
 	/**
@@ -117,6 +121,23 @@ public interface SpotService {
 	 * @return
 	 * @throws NeuralitoException
 	 */
-	public Collection<SpotDTO> getPublicSpots() throws NeuralitoException;
+	public List<SpotDTO> getPublicSpots() throws NeuralitoException;
+
+	/**
+	 * @param spot1Id
+	 */
+	public List<ForecasterDTO> getSpotForecasters(Integer spot1Id)
+			throws NeuralitoException;
+
+	/**
+	 * @param spot1Id
+	 */
+	public List<AreaDTO> getAreas() throws NeuralitoException;
+
+	public List<CountryDTO> getCountries(Integer idArea)
+			throws NeuralitoException;
+
+	public List<ZoneDTO> getZones(Integer idCountry, Integer idUser)
+			throws NeuralitoException;
 
 }

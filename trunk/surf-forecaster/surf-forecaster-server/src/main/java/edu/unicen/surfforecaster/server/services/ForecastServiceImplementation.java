@@ -31,8 +31,11 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * The forecast dao.
 	 */
 	private ForecastDAO forecastDAO;
-
+	/**
+	 * The Datamanager, used to validate grid points.
+	 */
 	private DataManager dataManager;
+
 	private SpotDAO spotDAO;
 
 	/**
@@ -86,11 +89,11 @@ public class ForecastServiceImplementation implements ForecastService {
 	 *      double)
 	 */
 	@Override
-	public Collection<PointDTO> getNearbyGridPoints(final double latitude,
+	public List<PointDTO> getNearbyGridPoints(final double latitude,
 			final double longitude) throws NeuralitoException {
-		final Collection<Point> surroundingGridPoints = dataManager
+		final List<Point> surroundingGridPoints = dataManager
 				.getNearbyGridPoints(new Point(latitude, longitude));
-		final Collection<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
+		final List<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
 		for (final Iterator iterator = surroundingGridPoints.iterator(); iterator
 				.hasNext();) {
 			final Point point = (Point) iterator.next();

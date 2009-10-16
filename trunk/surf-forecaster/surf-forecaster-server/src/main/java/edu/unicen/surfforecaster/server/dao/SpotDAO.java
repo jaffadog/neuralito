@@ -3,7 +3,6 @@
  */
 package edu.unicen.surfforecaster.server.dao;
 
-import java.util.Collection;
 import java.util.List;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
@@ -34,7 +33,7 @@ public interface SpotDAO {
 
 	public Zone getZoneById(Integer zoneId);
 
-	public Collection<Spot> getSpotsForUser(User user);
+	public List<Spot> getSpotsForUser(User user);
 
 	/**
 	 * @param countryId
@@ -78,12 +77,12 @@ public interface SpotDAO {
 	/**
 	 * @return
 	 */
-	public Collection<Spot> getPublicSpots();
+	public List<Spot> getPublicSpots();
 
 	/**
 	 * @param area
 	 * @return
 	 */
-	public Collection<Country> getAreaCountries(Area area);
+	public List<Country> getAreaCountries(Area area);
 
 }

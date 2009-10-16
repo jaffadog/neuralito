@@ -81,14 +81,14 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpotsForUser(java.lang.Integer)
 	 */
 	@Override
-	public Collection<SpotDTO> getSpotsForUser(final Integer userId)
+	public List<SpotDTO> getSpotsForUser(final Integer userId)
 			throws NeuralitoException {
 		validateUserId(userId);
 		// Obtain all the spots this user is able to see.
 		final User user = userDAO.getUserByUserId(userId);
 		final Collection<Spot> userSpots = spotDAO.getSpotsForUser(user);
 		// Create spots DTOs.
-		final Collection<SpotDTO> userSpotsDTOs = new ArrayList<SpotDTO>();
+		final List<SpotDTO> userSpotsDTOs = new ArrayList<SpotDTO>();
 		for (final Iterator<Spot> iterator = userSpots.iterator(); iterator
 				.hasNext();) {
 			final Spot spot = iterator.next();
@@ -413,11 +413,11 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getPublicSpots()
 	 */
 	@Override
-	public Collection<SpotDTO> getPublicSpots() throws NeuralitoException {
+	public List<SpotDTO> getPublicSpots() throws NeuralitoException {
 		try {
-			final Collection<Spot> userSpots = spotDAO.getPublicSpots();
+			final List<Spot> userSpots = spotDAO.getPublicSpots();
 			// Create spots DTOs.
-			final Collection<SpotDTO> userSpotsDTOs = new ArrayList<SpotDTO>();
+			final List<SpotDTO> userSpotsDTOs = new ArrayList<SpotDTO>();
 			for (final Iterator<Spot> iterator = userSpots.iterator(); iterator
 					.hasNext();) {
 				final Spot spot = iterator.next();
@@ -433,12 +433,12 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpotForecasters(java.lang.Integer)
 	 */
 	@Override
-	public Collection<ForecasterDTO> getSpotForecasters(final Integer spotId)
+	public List<ForecasterDTO> getSpotForecasters(final Integer spotId)
 			throws NeuralitoException {
 		validateSpotExists(spotId);
 		final Spot spot = spotDAO.getSpotById(spotId);
 		final Collection<Forecaster> forecasters = spot.getForecasters();
-		final Collection<ForecasterDTO> forecastersDTOs = new ArrayList<ForecasterDTO>();
+		final List<ForecasterDTO> forecastersDTOs = new ArrayList<ForecasterDTO>();
 		for (final Iterator iterator = forecasters.iterator(); iterator
 				.hasNext();) {
 			final Forecaster forecaster = (Forecaster) iterator.next();
@@ -451,9 +451,9 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getAreas()
 	 */
 	@Override
-	public Collection<AreaDTO> getAreas() throws NeuralitoException {
+	public List<AreaDTO> getAreas() throws NeuralitoException {
 		final List<Area> allAreas = spotDAO.getAllAreas();
-		final Collection<AreaDTO> areasDTOs = new ArrayList<AreaDTO>();
+		final List<AreaDTO> areasDTOs = new ArrayList<AreaDTO>();
 		for (final Iterator iterator = allAreas.iterator(); iterator.hasNext();) {
 			final Area area = (Area) iterator.next();
 			areasDTOs.add(area.getDTO());
@@ -465,12 +465,12 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getCountries(java.lang.Integer)
 	 */
 	@Override
-	public Collection<CountryDTO> getCountries(final Integer areaId)
+	public List<CountryDTO> getCountries(final Integer areaId)
 			throws NeuralitoException {
 		validateAreaId(areaId);
 		final Area area = spotDAO.getAreaById(areaId);
 		final Collection<Country> countries = spotDAO.getAreaCountries(area);
-		final Collection<CountryDTO> countriesDTOs = new ArrayList<CountryDTO>();
+		final List<CountryDTO> countriesDTOs = new ArrayList<CountryDTO>();
 		for (final Iterator iterator = countries.iterator(); iterator.hasNext();) {
 			final Country country = (Country) iterator.next();
 			countriesDTOs.add(country.getDTO());
@@ -485,8 +485,8 @@ public class SpotServiceImplementation implements SpotService {
 	 *      java.lang.Integer)
 	 */
 	@Override
-	public Collection<ZoneDTO> getZones(final Integer idCountry,
-			final Integer idUser) throws NeuralitoException {
+	public List<ZoneDTO> getZones(final Integer idCountry, final Integer idUser)
+			throws NeuralitoException {
 		final User user = userDAO.getUserByUserId(idUser);
 		final Collection<Spot> spotsForUser = spotDAO.getSpotsForUser(user);
 		final Set<ZoneDTO> zonesDtos = new HashSet<ZoneDTO>();
@@ -497,7 +497,7 @@ public class SpotServiceImplementation implements SpotService {
 				zonesDtos.add(spot.getZone().getDTO());
 			}
 		}
-		return zonesDtos;
+		return new ArrayList<ZoneDTO>(zonesDtos);
 	}
 
 }

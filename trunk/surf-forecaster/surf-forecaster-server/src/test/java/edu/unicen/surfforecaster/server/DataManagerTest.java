@@ -9,7 +9,6 @@ import java.util.Iterator;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DataManager;
@@ -21,17 +20,18 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.
  */
 public class DataManagerTest {
 
-	protected ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-			"/services.xml");
+	// protected ClassPathXmlApplicationContext context = new
+	// ClassPathXmlApplicationContext(
+	// "/services.xml");
 
-	private final DataManager dataManager;
+	private DataManager dataManager;
 
 	/**
 	 * 
 	 */
 
 	public DataManagerTest() {
-		dataManager = (DataManager) context.getBean("ww3DataManager");
+		// dataManager = (DataManager) context.getBean("ww3DataManager");
 
 	}
 
@@ -41,6 +41,7 @@ public class DataManagerTest {
 	 * previous latest forecasts exists they should be archived.
 	 */
 	@Test
+	@Ignore
 	public void test() {
 		// final Point point = new Point(39D, 170D);
 		// final Point point2 = new Point(23.1, 400D);

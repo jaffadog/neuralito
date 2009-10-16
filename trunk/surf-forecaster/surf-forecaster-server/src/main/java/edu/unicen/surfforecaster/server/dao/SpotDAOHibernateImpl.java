@@ -4,7 +4,6 @@
 package edu.unicen.surfforecaster.server.dao;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -121,7 +120,7 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Spot> getSpotsForUser(final User user) {
+	public List<Spot> getSpotsForUser(final User user) {
 		// Find all public spots in the system which doesnt belong to the user.
 		final DetachedCriteria criteria = DetachedCriteria.forClass(Spot.class)
 				.add(Restrictions.eq("publik", true));
@@ -232,7 +231,7 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getPublicSpots()
 	 */
 	@Override
-	public Collection<Spot> getPublicSpots() {
+	public List<Spot> getPublicSpots() {
 		final DetachedCriteria criteria = DetachedCriteria.forClass(Spot.class)
 				.add(Restrictions.eq("publik", true));
 		return getHibernateTemplate().findByCriteria(criteria);
@@ -242,7 +241,7 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getAreaCountries(edu.unicen.surfforecaster.server.domain.entity.Area)
 	 */
 	@Override
-	public Collection<Country> getAreaCountries(final Area area) {
+	public List<Country> getAreaCountries(final Area area) {
 		final DetachedCriteria criteria = DetachedCriteria.forClass(
 				Country.class).add(Restrictions.eq("area", area));
 		return getHibernateTemplate().findByCriteria(criteria);

@@ -46,7 +46,7 @@ public class Country {
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@MapKey(name = "language")
-	private final Map<String, I18nKeyValue> names = new HashMap<String, I18nKeyValue>();
+	private final Map<String, I18n> names = new HashMap<String, I18n>();
 
 	/**
 	 * the zones this country contains.
@@ -61,7 +61,7 @@ public class Country {
 	 * Empty constructor.
 	 */
 	public Country() {
-		names.put("es", new I18nKeyValue("es", "argentina"));
+		names.put("es", new I18n("es", "argentina"));
 		// ORM purpose.
 	}
 
@@ -76,7 +76,7 @@ public class Country {
 		for (final Iterator<Entry<String, String>> iterator = keyValues
 				.iterator(); iterator.hasNext();) {
 			final Entry<String, String> entry = iterator.next();
-			names.put(entry.getKey(), new I18nKeyValue(entry.getKey(), entry
+			names.put(entry.getKey(), new I18n(entry.getKey(), entry
 					.getValue()));
 
 		}
@@ -123,7 +123,7 @@ public class Country {
 	 */
 	public String getName(final String language) {
 		Validate.notNull(language);
-		final I18nKeyValue value = names.get(language);
+		final I18n value = names.get(language);
 		if (value != null)
 			return value.getText();
 		else
@@ -137,10 +137,10 @@ public class Country {
 	 */
 	public CountryDTO getDTO() {
 		final Map<String, String> names = new HashMap<String, String>();
-		final Collection<I18nKeyValue> attributes = this.names.values();
-		for (final Iterator<I18nKeyValue> iterator = attributes.iterator(); iterator
+		final Collection<I18n> attributes = this.names.values();
+		for (final Iterator<I18n> iterator = attributes.iterator(); iterator
 				.hasNext();) {
-			final I18nKeyValue i18nKeyValue = iterator.next();
+			final I18n i18nKeyValue = iterator.next();
 			names.put(i18nKeyValue.getLanguague(), i18nKeyValue.getText());
 		}
 		final CountryDTO dto = new CountryDTO(id, names);
