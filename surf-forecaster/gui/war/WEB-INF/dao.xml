@@ -44,21 +44,17 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.Country</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Zone</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Spot</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.I18nKeyValue</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.I18n</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Comparation</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.User</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast2</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Point</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArchive</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.LatestForecast</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastPoints</value>
+		
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ValidGridPoints</value>
 			</list>
 		</property>
