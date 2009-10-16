@@ -19,8 +19,11 @@ import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.UserService;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
+import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
+import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 
 /**
  * @author esteban
@@ -92,13 +95,13 @@ public class SpotServiceImplementationTest {
 			// Create 4 Spots
 
 			spot1Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId1,
-					userId1, true);
+					userId1, true, "ACT");
 			spot2Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId2,
-					userId1, false);
+					userId1, false, "UTC");
 			spot3Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId3,
-					userId2, false);
+					userId2, false, "UTC");
 			spot4Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId4,
-					userId2, true);
+					userId2, true, "ACT");
 		} catch (final NeuralitoException e) {
 			System.out.println(e.getMessage());
 			Assert.fail(e.toString());
@@ -247,7 +250,7 @@ public class SpotServiceImplementationTest {
 		try {
 			final String zoneName = "one zone";
 			final Integer spotId = spotService.addZoneAndSpot(zoneName,
-					countryId, "some spot name", 1L, 2L, userId1, true);
+					countryId, "some spot name", 1L, 2L, userId1, true, "ACT");
 			final SpotDTO spot = spotService.getSpotById(spotId);
 			Assert.assertEquals(zoneName, spot.getZone().getName());
 			Assert.assertEquals(countryId, spot.getCountry().getId());
@@ -262,7 +265,7 @@ public class SpotServiceImplementationTest {
 	public void addZoneAndSpot2() {
 		try {
 			final Integer spotId = spotService.addZoneAndSpot(zoneName1,
-					countryId, "some spot name", 1L, 2L, userId1, true);
+					countryId, "some spot name", 1L, 2L, userId1, true, "ACT");
 
 			final SpotDTO spot = spotService.getSpotById(spotId);
 
@@ -274,4 +277,67 @@ public class SpotServiceImplementationTest {
 		}
 	}
 
+	@Test
+	public void getAllCountries() {
+		try {
+			Collection<CountryDTO> countries = spotService.getCountries(areaId);
+			final int initialSize = countries.size();
+			final Map<String, String> countryNamesMap = new HashMap<String, String>();
+			countryNamesMap.put("es", "argentina");
+			final Integer countryId = spotService.addCountry(countryNamesMap,
+					areaId);
+			countries = spotService.getCountries(areaId);
+			Assert.assertEquals(initialSize + 1, countries.size());
+			spotService.removeCountry(countryId);
+			Assert
+					.assertTrue(spotService.getCountries(areaId).size() == initialSize);
+		} catch (final NeuralitoException e) {
+			Assert.fail();
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void getAllAreas() {
+		try {
+			Collection<AreaDTO> areas = spotService.getAreas();
+			final int initialSize = areas.size();
+			final Map<String, String> areaNamesMap = new HashMap<String, String>();
+			areaNamesMap.put("es", "argentina");
+			final Integer areaId = spotService.addArea(areaNamesMap);
+			areas = spotService.getAreas();
+			Assert.assertEquals(initialSize + 1, areas.size());
+			spotService.removeArea(areaId);
+			Assert.assertTrue(spotService.getAreas().size() == initialSize);
+		} catch (final NeuralitoException e) {
+			Assert.fail();
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void getZones() {
+		try {
+			final int initialZones = spotService.getZones(countryId, userId1)
+					.size();
+			final String zoneName = "one zone";
+			final Integer spotId = spotService.addZoneAndSpot(zoneName,
+					countryId, "some spot name", 1L, 2L, userId1, true, "ACT");
+			final SpotDTO spot = spotService.getSpotById(spotId);
+			Assert.assertEquals(zoneName, spot.getZone().getName());
+			Assert.assertEquals(countryId, spot.getCountry().getId());
+
+			Collection<ZoneDTO> zones = spotService
+					.getZones(countryId, userId1);
+
+			Assert.assertEquals(initialZones + 1, zones.size());
+
+			spotService.removeSpot(spotId);
+			spotService.removeZone(spot.getZone().getId());
+			zones = spotService.getZones(countryId, userId1);
+			Assert.assertEquals(initialZones, zones.size());
+		} catch (final NeuralitoException e) {
+			Assert.fail();
+		}
+	}
 }

@@ -8,17 +8,19 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
-import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
-import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAO;
+import edu.unicen.surfforecaster.server.dao.SpotDAO;
+import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DataManager;
 
 /**
  * @author esteban
@@ -26,13 +28,12 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
  */
 public class ForecastServiceImplementation implements ForecastService {
 	/**
-	 * The spot service.
-	 */
-	private SpotService spotService;
-	/**
 	 * The forecast dao.
 	 */
 	private ForecastDAO forecastDAO;
+
+	private DataManager dataManager;
+	private SpotDAO spotDAO;
 
 	/**
 	 * 
@@ -49,30 +50,17 @@ public class ForecastServiceImplementation implements ForecastService {
 			final PointDTO gridPoint) throws NeuralitoException {
 		validateSpotExists(spotId);
 		validateGridPoint(gridPoint);
+		final Point point = new Point(gridPoint.getLatitude(), gridPoint
+				.getLongitude());
 		final ArrayList<Point> list = new ArrayList<Point>();
-		list.add(new Point(gridPoint.getLatitude(), gridPoint.getLongitude()));
-		final SpotDTO spot = spotService.getSpotById(spotId);
-		final WW3Forecaster forecaster = new WW3Forecaster(list, new Point(spot
-				.getLatitude(), spot.getLongitude()));
+		list.add(point);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		final WW3Forecaster forecaster = new WW3Forecaster(list, point);
 		final Integer id = forecastDAO.save(forecaster);
+		spot.addForecaster(forecaster);
+		spotDAO.saveSpot(spot);
 
 		return id;
-	}
-
-	/**
-	 * @param gridPoint
-	 */
-	private void validateGridPoint(final PointDTO gridPoint) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * @param spotId
-	 */
-	private void validateSpotExists(final Integer spotId) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -98,10 +86,10 @@ public class ForecastServiceImplementation implements ForecastService {
 	 *      double)
 	 */
 	@Override
-	public Collection<PointDTO> getNearbyGridPoints(final double d,
-			final double e) throws NeuralitoException {
-		final Collection<Point> surroundingGridPoints = WW3Forecaster
-				.getNearbyGridPoints(new Point(d, e));
+	public Collection<PointDTO> getNearbyGridPoints(final double latitude,
+			final double longitude) throws NeuralitoException {
+		final Collection<Point> surroundingGridPoints = dataManager
+				.getNearbyGridPoints(new Point(latitude, longitude));
 		final Collection<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
 		for (final Iterator iterator = surroundingGridPoints.iterator(); iterator
 				.hasNext();) {
@@ -112,19 +100,57 @@ public class ForecastServiceImplementation implements ForecastService {
 	}
 
 	/**
-	 * @param spotService
-	 *            the spotService to set
-	 */
-	public void setSpotService(final SpotService spotService) {
-		this.spotService = spotService;
-	}
-
-	/**
 	 * @param forecastDAO
 	 *            the forecastDAO to set
 	 */
 	public void setForecastDAO(final ForecastDAO forecastDAO) {
 		this.forecastDAO = forecastDAO;
+	}
+
+	/**
+	 * 
+	 * @param dataManager
+	 */
+	public void setDataManager(final DataManager dataManager) {
+		this.dataManager = dataManager;
+	}
+
+	/**
+	 * @param gridPoint
+	 */
+	private void validateGridPoint(final PointDTO gridPoint)
+			throws NeuralitoException {
+		if (gridPoint == null)
+			throw new NeuralitoException(ErrorCode.GRID_POINT_CANNOT_BE_NULL);
+		if (dataManager.isGridPoint(new Point(gridPoint.getLatitude(),
+				gridPoint.getLongitude())))
+			return;
+		else
+			throw new NeuralitoException(ErrorCode.GRID_POINT_INVALID);
+
+	}
+
+	/**
+	 * @param spotId
+	 * @throws NeuralitoException
+	 */
+	private void validateSpotExists(final Integer spotId)
+			throws NeuralitoException {
+		if (spotId == null)
+			throw new NeuralitoException(ErrorCode.SPOT_ID_NULL);
+		if (spotId < 0)
+			throw new NeuralitoException(ErrorCode.SPOT_ID_INVALID);
+		if (spotDAO.getSpotById(spotId) == null)
+			throw new NeuralitoException(ErrorCode.SPOT_ID_DOES_NOT_EXISTS);
+
+	}
+
+	/**
+	 * @param spotDAO
+	 *            the spotDAO to set
+	 */
+	public void setSpotDAO(final SpotDAO spotDAO) {
+		this.spotDAO = spotDAO;
 	}
 
 }

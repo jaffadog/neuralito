@@ -5,7 +5,6 @@ package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -50,23 +49,15 @@ public class ForecastPoints {
 	}
 
 	/**
-	 * Add a point.
+	 * Add a point if not already exists.
 	 * 
 	 * @param pointToAdd
 	 */
 	public void addPoint(final Point pointToAdd) {
-		// Check that point not already exists
-		boolean alreadyExist = false;
-		for (final Iterator<Point> i = points.iterator(); i.hasNext();) {
-			final Point point = i.next();
-			if (point.getLatitude().equals(pointToAdd.getLatitude())
-					&& point.getLongitude().equals(pointToAdd.getLongitude())) {
-				alreadyExist = true;
-			}
-		}
-		if (!alreadyExist) {
+		if (!points.contains(pointToAdd)) {
 			points.add(pointToAdd);
 		}
+
 	}
 
 	/**

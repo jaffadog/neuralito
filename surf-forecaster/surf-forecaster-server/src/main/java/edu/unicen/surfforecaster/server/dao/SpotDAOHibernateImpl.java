@@ -25,6 +25,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Zone;
  * @author esteban
  * 
  */
+
 public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 		SpotDAO {
 
@@ -234,6 +235,16 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	public Collection<Spot> getPublicSpots() {
 		final DetachedCriteria criteria = DetachedCriteria.forClass(Spot.class)
 				.add(Restrictions.eq("publik", true));
+		return getHibernateTemplate().findByCriteria(criteria);
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getAreaCountries(edu.unicen.surfforecaster.server.domain.entity.Area)
+	 */
+	@Override
+	public Collection<Country> getAreaCountries(final Area area) {
+		final DetachedCriteria criteria = DetachedCriteria.forClass(
+				Country.class).add(Restrictions.eq("area", area));
 		return getHibernateTemplate().findByCriteria(criteria);
 	}
 }

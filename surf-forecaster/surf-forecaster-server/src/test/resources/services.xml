@@ -17,50 +17,62 @@
 	<bean id="forecastService"
 		class="edu.unicen.surfforecaster.server.services.ForecastServiceImplementation">
 		<property name="forecastDAO" ref="forecastDAO"></property>
-		<property name="spotService" ref="spotService"></property>
+		<property name="spotDAO" ref="spotDAO"></property>
+		<property name="dataManager" ref="ww3DataManager"></property>
 	</bean>
-	<bean name="exampleJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+
+	<bean id="ww3DataManager"
+		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DataManager"
+		init-method="init">
+		<property name="waveWatchDAO" ref="waveWatchDAO" />
+		<property name="gribDecoder" ref="gribDecoder" />
+	</bean>
+	<bean id="gribDecoder"
+		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoderNetcdf">
+	</bean>
+
+	<!--			QUARTZ	SCHEDULER CONFIGURATION				-->
+	<!--														-->
+	<!--		AUTOMATIC DOWNLOAD OF NOAA FORECASTS			-->
+
+	<!--	THE JOB -->
+	<bean name="downloadNOAAForecastsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
 		<property name="jobClass"
 			value="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJob" />
-		<property name="jobDataAsMap">
-			<map>
-				
-			</map>
-		</property>
 		<property name="jobListenerNames">
 			<list>
 				<value>downloaderListener</value>
 			</list>
 		</property>
 	</bean>
+	<!--	THE TRIGGER WHICH WILL FIRE THE JOB-->
 	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-		<property name="jobDetail" ref="exampleJob" />
-		<!-- 10 seconds -->
+		<property name="jobDetail" ref="downloadNOAAForecastsJob" />
 		<property name="startDelay" value="5000" />
-		<!-- repeat every 50 seconds -->
 		<property name="repeatInterval" value="21600000" />
 	</bean>
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list>
-				<ref bean="simpleTrigger" />
-			</list>
-		</property>
-		<property name="jobListeners">
-			<list>
-				<ref bean="downloaderListener" />
-			</list>
-		</property>
+	<!--	THE LISTENER OF THE JOB EXECUTION-->
+	<bean id="downloaderListener"
+		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJobListener">
+		<property name="name" value="downloaderJobListener" />
 	</bean>
-	<bean id="downloaderListener" class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJobListener">
-		<property name="name" value="downloaderJobListener"/>
-	</bean>
-	<bean id="ww3DataManager" class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DataManager" init-method="init">
-		<property name="waveWatchDAO" ref="waveWatchDAO"/>
-		<property name="gribDecoder" ref="gribDecoder"/>
-	</bean>
-	<bean id="gribDecoder" class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoderNetcdf">
-	</bean>		
 
+<!--COMMENTED AS WE ARE TESTING WE DO NOT WANT TO LOAD SCHEDULER-->
+<!--	REGISTER TRIGGERS AND LISTENERS WITH THE SCHEDULER -->
+<!--	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+
+<!--		<property name="triggers">-->
+<!--			<list>-->
+<!--				<ref bean="simpleTrigger" />-->
+<!--			</list>-->
+<!--		</property>-->
+<!--		<property name="jobListeners">-->
+<!--			<list>-->
+<!--				<ref bean="downloaderListener" />-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
+
+	<!--	END QUARTZ CONFIGURATION -->
 
 </beans>

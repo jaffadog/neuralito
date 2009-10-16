@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
+import edu.unicen.surfforecaster.common.services.ForecasterDTO;
+
 /**
  * Abstract class to be extended by all forecasters.
  * 
@@ -55,5 +57,12 @@ public abstract class Forecaster {
 	 * @return
 	 */
 	public abstract Collection<Forecast> getForecasts();
+
+	/**
+	 * @return
+	 */
+	public ForecasterDTO getDTO() {
+		return new ForecasterDTO(id, getName(), getDescription());
+	}
 
 }

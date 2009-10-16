@@ -5,15 +5,22 @@ package edu.unicen.surfforecaster.server.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.dao.DataAccessException;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.ForecasterDTO;
 import edu.unicen.surfforecaster.common.services.SpotService;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
+import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.server.dao.SpotDAO;
 import edu.unicen.surfforecaster.server.dao.UserDAO;
 import edu.unicen.surfforecaster.server.domain.entity.Area;
@@ -21,6 +28,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Country;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
 
 /**
  * 
@@ -45,8 +53,10 @@ public class SpotServiceImplementation implements SpotService {
 	@Override
 	public Integer addSpot(final String spotName, final double longitude,
 			final double latitude, final Integer zoneId, final Integer userId,
-			final boolean publik) throws NeuralitoException {
-		validate(spotName, longitude, latitude, zoneId, userId, publik);
+			final boolean publik, final String timeZone)
+			throws NeuralitoException {
+		validate(spotName, longitude, latitude, zoneId, userId, publik,
+				timeZone);
 		final User user = userDAO.getUserByUserId(userId);
 		final Zone zone = spotDAO.getZoneById(zoneId);
 		final Spot spot = new Spot();
@@ -56,6 +66,7 @@ public class SpotServiceImplementation implements SpotService {
 		spot.setPublik(publik);
 		spot.setZone(zone);
 		spot.setUser(user);
+		spot.setTimeZone(timeZone);
 		user.addSpot(spot);
 		zone.addSpot(spot);
 		try {
@@ -129,11 +140,13 @@ public class SpotServiceImplementation implements SpotService {
 
 	/**
 	 * @param publik
+	 * @param timeZone
 	 * 
 	 */
 	private void validate(final String spotName, final double longitude,
 			final double latitude, final Integer zoneId, final Integer userId,
-			final boolean publik) throws NeuralitoException {
+			final boolean publik, final String timeZone)
+			throws NeuralitoException {
 		// TODO:perform validations
 	}
 
@@ -327,7 +340,7 @@ public class SpotServiceImplementation implements SpotService {
 	public Integer addZoneAndSpot(final String zoneName,
 			final Integer countryId, final String spotName,
 			final double longitude, final double latitude,
-			final Integer userId, final boolean publik)
+			final Integer userId, final boolean publik, final String timeZone)
 			throws NeuralitoException {
 		validateCountryId(countryId);
 		validateUserId(userId);
@@ -345,7 +358,8 @@ public class SpotServiceImplementation implements SpotService {
 			// Zone exist so we add the spot to the zone.
 			zoneId = zone.getId();
 		}
-		return addSpot(spotName, longitude, latitude, zoneId, userId, publik);
+		return addSpot(spotName, longitude, latitude, zoneId, userId, publik,
+				timeZone);
 	}
 
 	/**
@@ -413,6 +427,77 @@ public class SpotServiceImplementation implements SpotService {
 		} catch (final DataAccessException e) {
 			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
 		}
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpotForecasters(java.lang.Integer)
+	 */
+	@Override
+	public Collection<ForecasterDTO> getSpotForecasters(final Integer spotId)
+			throws NeuralitoException {
+		validateSpotExists(spotId);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		final Collection<Forecaster> forecasters = spot.getForecasters();
+		final Collection<ForecasterDTO> forecastersDTOs = new ArrayList<ForecasterDTO>();
+		for (final Iterator iterator = forecasters.iterator(); iterator
+				.hasNext();) {
+			final Forecaster forecaster = (Forecaster) iterator.next();
+			forecastersDTOs.add(forecaster.getDTO());
+		}
+		return forecastersDTOs;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getAreas()
+	 */
+	@Override
+	public Collection<AreaDTO> getAreas() throws NeuralitoException {
+		final List<Area> allAreas = spotDAO.getAllAreas();
+		final Collection<AreaDTO> areasDTOs = new ArrayList<AreaDTO>();
+		for (final Iterator iterator = allAreas.iterator(); iterator.hasNext();) {
+			final Area area = (Area) iterator.next();
+			areasDTOs.add(area.getDTO());
+		}
+		return areasDTOs;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getCountries(java.lang.Integer)
+	 */
+	@Override
+	public Collection<CountryDTO> getCountries(final Integer areaId)
+			throws NeuralitoException {
+		validateAreaId(areaId);
+		final Area area = spotDAO.getAreaById(areaId);
+		final Collection<Country> countries = spotDAO.getAreaCountries(area);
+		final Collection<CountryDTO> countriesDTOs = new ArrayList<CountryDTO>();
+		for (final Iterator iterator = countries.iterator(); iterator.hasNext();) {
+			final Country country = (Country) iterator.next();
+			countriesDTOs.add(country.getDTO());
+		}
+		return countriesDTOs;
+	}
+
+	/**
+	 * Obtain All zones of the country and the specified user.
+	 * 
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getZones(java.lang.Integer,
+	 *      java.lang.Integer)
+	 */
+	@Override
+	public Collection<ZoneDTO> getZones(final Integer idCountry,
+			final Integer idUser) throws NeuralitoException {
+		final User user = userDAO.getUserByUserId(idUser);
+		final Collection<Spot> spotsForUser = spotDAO.getSpotsForUser(user);
+		final Set<ZoneDTO> zonesDtos = new HashSet<ZoneDTO>();
+		for (final Iterator iterator = spotsForUser.iterator(); iterator
+				.hasNext();) {
+			final Spot spot = (Spot) iterator.next();
+			if (spot.getZone().getCountry().getId().equals(idCountry)) {
+				zonesDtos.add(spot.getZone().getDTO());
+			}
+		}
+		return zonesDtos;
 	}
 
 }

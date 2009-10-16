@@ -3,8 +3,11 @@
  */
 package edu.unicen.surfforecaster.server.dao;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
@@ -12,6 +15,7 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastPoints;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.LatestForecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ValidGridPoints;
+import edu.unicen.surfforecaster.server.services.ForecastArch;
 
 /**
  * @author esteban
@@ -84,8 +88,39 @@ public interface WaveWatchDAO {
 	public ValidGridPoints getValidGridPoints();
 
 	/**
+	 * 
 	 * @param latestForecasts
 	 */
 	void save(LatestForecast latestForecasts);
+
+	/**
+	 * @param latestForecasts
+	 */
+	void saveDirect(LatestForecast latestForecasts);
+
+	/**
+	 * @param forecasts
+	 */
+	public void saveDirect(List forecasts);
+
+	/**
+	 * @param lat
+	 * @param lon
+	 * @param from
+	 * @param to
+	 * @return
+	 */
+	public List<ForecastArch> getForecasts(float lat, float lon,
+			GregorianCalendar from, GregorianCalendar to);
+
+	/**
+	 * Moves the 0h and 3h forecasts from LatestForecasts to ArchiveForecasts.
+	 */
+	public void archiveLatestForecasts();
+
+	/**
+	 * @param textFile
+	 */
+	public void insertIntoLatestForecastFromFile(File textFile);
 
 }

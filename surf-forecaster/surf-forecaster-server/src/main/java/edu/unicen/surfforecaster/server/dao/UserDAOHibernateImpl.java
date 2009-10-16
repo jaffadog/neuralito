@@ -28,14 +28,8 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements
 		final DetachedCriteria criteria = DetachedCriteria.forClass(User.class)
 				.add(Restrictions.eq("userName", userName));
 		final List<User> user = getHibernateTemplate().findByCriteria(criteria);
-		if (user.size() > 0) {
-			if (user.size() == 1)
-				return user.get(0);
-			else
-				throw new DataIntegrityViolationException(
-						"Found more than one user for the given username:'"
-								+ userName + "'.");
-		}
+		if (user.size() > 0)
+			return user.get(0);
 		return null;
 	}
 

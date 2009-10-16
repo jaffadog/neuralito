@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import org.apache.commons.lang.Validate;
 
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast2;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
@@ -40,6 +41,11 @@ public class LatestForecast {
 	 */
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Collection<Forecast> latest = new ArrayList<Forecast>();
+	/**
+	 * The latest forecast list
+	 */
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Collection<Forecast2> forecasts2 = new ArrayList<Forecast2>();
 
 	/**
 	 * The default constructor.
@@ -62,6 +68,7 @@ public class LatestForecast {
 	 */
 	public Collection<Forecast> getLatestForecast() {
 		return latest;
+
 	}
 
 	/**
@@ -84,6 +91,7 @@ public class LatestForecast {
 
 		}
 		return forecasts;
+		// return null;
 	}
 
 	/**
@@ -97,5 +105,21 @@ public class LatestForecast {
 			return forecast.getBaseDate();
 		}
 		return null;
+	}
+
+	/**
+	 * @param forecasts
+	 */
+	public void setLatest2(final Collection<Forecast2> forecasts) {
+		forecasts2 = forecasts;
+
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection<Forecast2> getLatestForecast2() {
+		// TODO Auto-generated method stub
+		return forecasts2;
 	}
 }
