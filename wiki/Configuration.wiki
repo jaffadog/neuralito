@@ -4,7 +4,7 @@
 
   # Download and Install Mysql version 5.1.
   # Configure db.properties located in:(?) with port, schema, user and pass.
-  # Add this line to the mysql config file:
+  # Add this line to the mysql config file below [mysqld] tag:
 {{{
    #
    # The number of files that the operating system allows mysqld to open.
