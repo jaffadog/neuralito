@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class SpotComparatorPanel extends VerticalPanel {
 
 	public SpotComparatorPanel() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 }

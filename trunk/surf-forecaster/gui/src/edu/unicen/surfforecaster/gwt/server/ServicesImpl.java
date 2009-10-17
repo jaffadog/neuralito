@@ -65,4 +65,16 @@ public class ServicesImpl extends SpringGWTServlet {
 		session.removeAttribute("gwtForecast-User");
 		logger.log(Level.INFO, "ServicesImpl - closeSession - Session closed.");
 	}
+	
+	/**
+	 * Returns null or a userDTO object depending the session status
+	 * @return UserDTO, the logged in user
+	 */
+	public UserDTO getUser() {
+		final SessionData sessionData = this.getSessionData();
+		if (sessionData == null)
+			return null;
+		else
+			return sessionData.getUserDTO();
+	}
 }
