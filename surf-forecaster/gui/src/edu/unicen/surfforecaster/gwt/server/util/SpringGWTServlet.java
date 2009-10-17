@@ -46,7 +46,6 @@ public class SpringGWTServlet extends RemoteServiceServlet  implements HttpReque
 		      }
 		    });
 		  } catch (ServletException e) {
-		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		  }
 	}

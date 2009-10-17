@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -62,7 +63,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 						areaBox = new ListBox();
 						areaBox.addChangeHandler(new ChangeHandler() {
 							public void onChange(ChangeEvent event) {
-								setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
+								//setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
 							}
 						});
 						localizationForm.setWidget(0, 1, areaBox);
@@ -77,7 +78,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 						countryBox = new ListBox();
 						countryBox.addChangeHandler(new ChangeHandler() {
 							public void onChange(ChangeEvent event) {
-								setZoneListItems(countryBox.getValue(countryBox.getSelectedIndex()));
+								//setZoneListItems(countryBox.getValue(countryBox.getSelectedIndex()));
 							}
 						});
 						localizationForm.setWidget(0, 3, countryBox);
@@ -92,7 +93,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 						zoneBox = new ListBox();
 						zoneBox.addChangeHandler(new ChangeHandler() {
 							public void onChange(ChangeEvent event) {
-								setSpotListItems(zoneBox.getValue(zoneBox.getSelectedIndex()));
+								//setSpotListItems(zoneBox.getValue(zoneBox.getSelectedIndex()));
 							}
 						});
 						localizationForm.setWidget(1, 1, zoneBox);
@@ -133,58 +134,58 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 			}
 		}
 		
-		this.setAreaListItems();
+		//this.setAreaListItems();
 	}
 	
-	private void setAreaListItems(){
-		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
-				if (result == null) {
-				} else {
-					Iterator i = null;
-					if (result.containsKey("areas")){
-						i = result.get("areas").iterator();
-						while (i.hasNext()){
-							Area area = (Area)i.next();
-							areaBox.addItem(area.getName(), area.getId());
-						}
-					}
-					
-					if (result.containsKey("countries")){
-						i = result.get("countries").iterator();
-						while (i.hasNext()){
-							Country country = (Country)i.next();
-							countryBox.addItem(country.getName(), country.getId());
-						}
-					}
-					
-					if (result.containsKey("zones")){
-						i = result.get("zones").iterator();
-						while (i.hasNext()){
-							Zone zone = (Zone)i.next();
-							zoneBox.addItem(zone.getName(), zone.getId());
-						}
-					}
-					
-					if (result.containsKey("spots")) {
-						i = result.get("spots").iterator();
-						while (i.hasNext()){
-							Spot spot = (Spot)i.next();
-							spotBox.addItem(spot.getName(), spot.getId());
-						}
-					}
-				}
-				setForecastButtonState();
-				//Show the forecastTabPanel after
-				if (spotBox.getItemCount() > 0 && new Integer(spotBox.getValue(spotBox.getSelectedIndex())) > 0 )
-					renderSpotInfo();
-			}
-				
-			public void onFailure(Throwable caught) {
-				
-			}
-		});
-	}
+//	private void setAreaListItems(){
+//		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, List>>(){
+//			public void onSuccess(Map<String, List> result) {
+//				if (result == null) {
+//				} else {
+//					Iterator i = null;
+//					if (result.containsKey("areas")){
+//						i = result.get("areas").iterator();
+//						while (i.hasNext()){
+//							Area area = (Area)i.next();
+//							areaBox.addItem(area.getName(), area.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("countries")){
+//						i = result.get("countries").iterator();
+//						while (i.hasNext()){
+//							Country country = (Country)i.next();
+//							countryBox.addItem(country.getName(), country.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("zones")){
+//						i = result.get("zones").iterator();
+//						while (i.hasNext()){
+//							Zone zone = (Zone)i.next();
+//							zoneBox.addItem(zone.getName(), zone.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("spots")) {
+//						i = result.get("spots").iterator();
+//						while (i.hasNext()){
+//							Spot spot = (Spot)i.next();
+//							spotBox.addItem(spot.getName(), spot.getId());
+//						}
+//					}
+//				}
+//				setForecastButtonState();
+//				//Show the forecastTabPanel after
+//				if (spotBox.getItemCount() > 0 && new Integer(spotBox.getValue(spotBox.getSelectedIndex())) > 0 )
+//					renderSpotInfo();
+//			}
+//				
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//		});
+//	}
 	
 	private void renderSpotInfo() {
 		if (this.baseParentPanel instanceof SpotDescriptionPanel) {
@@ -194,106 +195,106 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 		}
 	}
 	
-	private void setCountryListItems(String area){
-		countryBox.clear();
-		zoneBox.clear();
-		spotBox.clear();
-		setForecastButtonState();
-		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
-				if (result == null) {
-				} else {
-					Iterator i = null;
-					if (result.containsKey("countries")){
-						i = result.get("countries").iterator();
-						while (i.hasNext()){
-							Country country = (Country)i.next();
-							countryBox.addItem(country.getName(), country.getId());
-						}
-					}
-					
-					if (result.containsKey("zones")){
-						i = result.get("zones").iterator();
-						while (i.hasNext()){
-							Zone zone = (Zone)i.next();
-							zoneBox.addItem(zone.getName(), zone.getId());
-						}
-					}
-					
-					if (result.containsKey("spots")) {
-						i = result.get("spots").iterator();
-						while (i.hasNext()){
-							Spot spot = (Spot)i.next();
-							spotBox.addItem(spot.getName(), spot.getId());
-						}
-					}
-					
-				}
-				setForecastButtonState();
-			}
-				
-			public void onFailure(Throwable caught) {
-				
-			}
-		});
-	}
-	
-	private void setZoneListItems(String country){
-		zoneBox.clear();
-		spotBox.clear();
-		setForecastButtonState();
-		SpotServices.Util.getInstance().getZones(country, new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
-				if (result == null) {
-				} else {
-					Iterator i = null;
-					if (result.containsKey("zones")){
-						i = result.get("zones").iterator();
-						while (i.hasNext()){
-							Zone zone = (Zone)i.next();
-							zoneBox.addItem(zone.getName(), zone.getId());
-						}
-					}
-					if (result.containsKey("spots")) {
-						i = result.get("spots").iterator();
-						while (i.hasNext()){
-							Spot spot = (Spot)i.next();
-							spotBox.addItem(spot.getName(), spot.getId());
-						}
-					}
-				}
-				setForecastButtonState();
-			}
-				
-			public void onFailure(Throwable caught) {
-				
-			}
-		});
-	}
-	
-	private void setSpotListItems(String zone){
-		spotBox.clear();
-		setForecastButtonState();
-		SpotServices.Util.getInstance().getSpots(zone, new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
-				if (result == null) {
-				} else {
-					if (result.containsKey("spots")){
-						Iterator<Spot> i = result.get("spots").iterator();
-						while (i.hasNext()){
-							Spot spot = i.next();
-							spotBox.addItem(spot.getName(), spot.getId());
-						}
-					}
-				}
-				setForecastButtonState();
-			}
-				
-			public void onFailure(Throwable caught) {
-				
-			}
-		});
-	}
+//	private void setCountryListItems(String area){
+//		countryBox.clear();
+//		zoneBox.clear();
+//		spotBox.clear();
+//		setForecastButtonState();
+//		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, List>>(){
+//			public void onSuccess(Map<String, List> result) {
+//				if (result == null) {
+//				} else {
+//					Iterator i = null;
+//					if (result.containsKey("countries")){
+//						i = result.get("countries").iterator();
+//						while (i.hasNext()){
+//							Country country = (Country)i.next();
+//							countryBox.addItem(country.getName(), country.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("zones")){
+//						i = result.get("zones").iterator();
+//						while (i.hasNext()){
+//							Zone zone = (Zone)i.next();
+//							zoneBox.addItem(zone.getName(), zone.getId());
+//						}
+//					}
+//					
+//					if (result.containsKey("spots")) {
+//						i = result.get("spots").iterator();
+//						while (i.hasNext()){
+//							Spot spot = (Spot)i.next();
+//							spotBox.addItem(spot.getName(), spot.getId());
+//						}
+//					}
+//					
+//				}
+//				setForecastButtonState();
+//			}
+//				
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//		});
+//	}
+//	
+//	private void setZoneListItems(String country){
+//		zoneBox.clear();
+//		spotBox.clear();
+//		setForecastButtonState();
+//		SpotServices.Util.getInstance().getZones(country, new AsyncCallback<Map<String, List>>(){
+//			public void onSuccess(Map<String, List> result) {
+//				if (result == null) {
+//				} else {
+//					Iterator i = null;
+//					if (result.containsKey("zones")){
+//						i = result.get("zones").iterator();
+//						while (i.hasNext()){
+//							Zone zone = (Zone)i.next();
+//							zoneBox.addItem(zone.getName(), zone.getId());
+//						}
+//					}
+//					if (result.containsKey("spots")) {
+//						i = result.get("spots").iterator();
+//						while (i.hasNext()){
+//							Spot spot = (Spot)i.next();
+//							spotBox.addItem(spot.getName(), spot.getId());
+//						}
+//					}
+//				}
+//				setForecastButtonState();
+//			}
+//				
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//		});
+//	}
+//	
+//	private void setSpotListItems(String zone){
+//		spotBox.clear();
+//		setForecastButtonState();
+//		SpotServices.Util.getInstance().getSpots(zone, new AsyncCallback<Map<String, List>>(){
+//			public void onSuccess(Map<String, List> result) {
+//				if (result == null) {
+//				} else {
+//					if (result.containsKey("spots")){
+//						Iterator<Spot> i = result.get("spots").iterator();
+//						while (i.hasNext()){
+//							Spot spot = i.next();
+//							spotBox.addItem(spot.getName(), spot.getId());
+//						}
+//					}
+//				}
+//				setForecastButtonState();
+//			}
+//				
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//		});
+//	}
 	
 	/**
 	 * Set the forecast button enabled or disabled according if the spot listbox has a spot selected or not

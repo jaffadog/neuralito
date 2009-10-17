@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -23,6 +24,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
+import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.gwt.client.Area;
 import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
@@ -286,8 +289,8 @@ public class NewSpotDataPanel extends LazyPanel {
 	}
 	
 	private void setAreaListItems(){
-		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
+		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, List>>(){
+			public void onSuccess(Map<String, List> result) {
 				if (result != null) {
 //					for (final Iterator iterator = result.iterator(); iterator.hasNext();) {
 //						final AreaDTO area = (AreaDTO) iterator.next();
@@ -298,16 +301,16 @@ public class NewSpotDataPanel extends LazyPanel {
 					if (result.containsKey("areas")){
 						i = result.get("areas").iterator();
 						while (i.hasNext()){
-							Area area = (Area)i.next();
-							areaBox.addItem(area.getName(), area.getId());
+							AreaDTO area = (AreaDTO)i.next();
+							areaBox.addItem(area.getNames().get("en"), area.getId().toString());
 						}
 					}
 					
 					if (result.containsKey("countries")){
 						i = result.get("countries").iterator();
 						while (i.hasNext()){
-							Country country = (Country)i.next();
-							countryBox.addItem(country.getName(), country.getId());
+							CountryDTO country = (CountryDTO)i.next();
+							countryBox.addItem(country.getNames().get("en"), country.getId().toString());
 						}
 					}
 					
@@ -323,8 +326,8 @@ public class NewSpotDataPanel extends LazyPanel {
 	
 	private void setCountryListItems(String area){
 		countryBox.clear();
-		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, Vector>>(){
-			public void onSuccess(Map<String, Vector> result) {
+		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, List>>(){
+			public void onSuccess(Map<String, List> result) {
 				if (result == null) {
 				} else {
 					Iterator i = null;

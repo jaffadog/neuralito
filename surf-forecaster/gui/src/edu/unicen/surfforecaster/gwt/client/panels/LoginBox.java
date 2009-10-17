@@ -81,7 +81,6 @@ public class LoginBox extends DialogBox{
 		loginPassword.setWidth("150");
 		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getFlexCellFormatter().setColSpan(2, 0, 2);
-		// TODO Auto-generated constructor stub
 	
 		loginUserName.setText("admin");
 		loginPassword.setText("admin");
