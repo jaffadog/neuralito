@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
@@ -15,12 +16,12 @@ import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAO;
 import edu.unicen.surfforecaster.server.dao.SpotDAO;
+import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DataManager;
 
 /**
  * @author esteban
@@ -31,10 +32,8 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * The forecast dao.
 	 */
 	private ForecastDAO forecastDAO;
-	/**
-	 * The Datamanager, used to validate grid points.
-	 */
-	private DataManager dataManager;
+
+	Map<String, WaveWatchModel> models;
 
 	private SpotDAO spotDAO;
 
@@ -50,15 +49,15 @@ public class ForecastServiceImplementation implements ForecastService {
 	 */
 	@Override
 	public Integer createWW3Forecaster(final Integer spotId,
-			final PointDTO gridPoint) throws NeuralitoException {
+			final PointDTO gridPointDTO) throws NeuralitoException {
+		final String modelName = "GlobalModel";
 		validateSpotExists(spotId);
-		validateGridPoint(gridPoint);
-		final Point point = new Point(gridPoint.getLatitude(), gridPoint
-				.getLongitude());
-		final ArrayList<Point> list = new ArrayList<Point>();
-		list.add(point);
+		// validateGridPoint(gridPointDTO);
+		final Point gridPoint = new Point(gridPointDTO.getLatitude(),
+				gridPointDTO.getLongitude());
 		final Spot spot = spotDAO.getSpotById(spotId);
-		final WW3Forecaster forecaster = new WW3Forecaster(list, point);
+		final WW3Forecaster forecaster = new WW3Forecaster(modelName,
+				gridPoint, spot.getLocation());
 		final Integer id = forecastDAO.save(forecaster);
 		spot.addForecaster(forecaster);
 		spotDAO.saveSpot(spot);
@@ -74,7 +73,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			throws NeuralitoException {
 		final Forecaster forecaster = forecastDAO
 				.getForecasterById(forecasterId);
-		final Collection<Forecast> forecasts = forecaster.getForecasts();
+		final Collection<Forecast> forecasts = forecaster.getLatestForecasts();
 		final List<ForecastDTO> forecastsDtos = new ArrayList<ForecastDTO>();
 		for (final Iterator<Forecast> iterator = forecasts.iterator(); iterator
 				.hasNext();) {
@@ -91,7 +90,8 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Override
 	public List<PointDTO> getNearbyGridPoints(final double latitude,
 			final double longitude) throws NeuralitoException {
-		final List<Point> surroundingGridPoints = dataManager
+		final WaveWatchModel model = models.get("GlobalModel");
+		final List<Point> surroundingGridPoints = model
 				.getNearbyGridPoints(new Point(latitude, longitude));
 		final List<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
 		for (final Iterator iterator = surroundingGridPoints.iterator(); iterator
@@ -111,22 +111,15 @@ public class ForecastServiceImplementation implements ForecastService {
 	}
 
 	/**
-	 * 
-	 * @param dataManager
-	 */
-	public void setDataManager(final DataManager dataManager) {
-		this.dataManager = dataManager;
-	}
-
-	/**
 	 * @param gridPoint
 	 */
 	private void validateGridPoint(final PointDTO gridPoint)
 			throws NeuralitoException {
 		if (gridPoint == null)
 			throw new NeuralitoException(ErrorCode.GRID_POINT_CANNOT_BE_NULL);
-		if (dataManager.isGridPoint(new Point(gridPoint.getLatitude(),
-				gridPoint.getLongitude())))
+		final WaveWatchModel model = models.get("GlobalModel");
+		if (model.isGridPoint(new Point(gridPoint.getLatitude(), gridPoint
+				.getLongitude())))
 			return;
 		else
 			throw new NeuralitoException(ErrorCode.GRID_POINT_INVALID);
@@ -154,6 +147,14 @@ public class ForecastServiceImplementation implements ForecastService {
 	 */
 	public void setSpotDAO(final SpotDAO spotDAO) {
 		this.spotDAO = spotDAO;
+	}
+
+	/**
+	 * @param models
+	 *            the models to set
+	 */
+	public void setModels(final Map<String, WaveWatchModel> models) {
+		this.models = models;
 	}
 
 }

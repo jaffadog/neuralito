@@ -30,13 +30,9 @@ public class SpotDTO implements Serializable {
 	 */
 	private String name;
 	/**
-	 * Longitude where this spot is located.
+	 * Point DTO
 	 */
-	private double longitude;
-	/**
-	 * Latitude where this spot is located.
-	 */
-	private double latitude;
+	private PointDTO point;
 	/**
 	 * Zone that this spot belongs.
 	 */
@@ -69,16 +65,14 @@ public class SpotDTO implements Serializable {
 	 * @param userId
 	 * @param publik
 	 */
-	public SpotDTO(final Integer id, final String name, final double longitude,
-			final double latitude, final ZoneDTO zone,
-			final CountryDTO country, final AreaDTO area, final Integer userId,
-			final boolean publik) {
+	public SpotDTO(final Integer id, final String name, final PointDTO point,
+			final ZoneDTO zone, final CountryDTO country, final AreaDTO area,
+			final Integer userId, final boolean publik) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.longitude = longitude;
-		this.latitude = latitude;
 		this.zone = zone;
+		this.point = point;
 		this.country = country;
 		this.area = area;
 		this.userId = userId;
@@ -90,20 +84,6 @@ public class SpotDTO implements Serializable {
 	 */
 	public String getName() {
 		return name;
-	}
-
-	/**
-	 * @return the longitude
-	 */
-	public double getLongitude() {
-		return longitude;
-	}
-
-	/**
-	 * @return the latitude
-	 */
-	public double getLatitude() {
-		return latitude;
 	}
 
 	/**

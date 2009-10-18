@@ -15,7 +15,8 @@ import java.util.Random;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.unicen.surfforecaster.server.dao.WaveWatchDAO;
+import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArch;
 
 /**
@@ -34,25 +35,25 @@ public class DBTest {
 		// dao = (WaveWatchDAO) context.getBean("waveWatchDAO");
 	}
 
-	WaveWatchDAO dao;
+	WaveWatchModel dao;
 
-	@Test
-	@Ignore
-	public void testWritingFromFile() {
-		final File file = new File("c:/latest.csv");
-		if (file.exists()) {
-			file.delete();
-		}
-		for (int i = 0; i < 1; i++) {
-			final List forecasts = createForecasts(100);
-			generateFile(file, forecasts);
-
-			// clearList(forecasts);
-			// forecasts.clear();
-			// System.gc();
-		}
-		dao.insertIntoLatestForecastFromFile(file);
-	}
+	// @Test
+	// @Ignore
+	// public void testWritingFromFile() {
+	// final File file = new File("c:/latest.csv");
+	// if (file.exists()) {
+	// file.delete();
+	// }
+	// for (int i = 0; i < 1; i++) {
+	// final List forecasts = createForecasts(100);
+	// generateFile(file, forecasts);
+	//
+	// // clearList(forecasts);
+	// // forecasts.clear();
+	// // System.gc();
+	// }
+	// dao.insertIntoLatestForecastFromFile(file);
+	// }
 
 	/**
 	 * @param forecasts
@@ -102,8 +103,8 @@ public class DBTest {
 		final float lon = 21F;
 		final GregorianCalendar from = null;
 		final GregorianCalendar to = null;
-		final List<ForecastArch> forecasts = dao.getForecasts(lat, lon, from,
-				to);
+		final List<ForecastArch> forecasts = dao.getArchivedForecasts(
+				new Point(lat, lon), from, to);
 	}
 
 	/**

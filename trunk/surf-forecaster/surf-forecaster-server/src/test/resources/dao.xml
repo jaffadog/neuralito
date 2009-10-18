@@ -54,8 +54,6 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Point</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
-		
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ValidGridPoints</value>
 			</list>
 		</property>
 	</bean>
@@ -77,9 +75,16 @@
 		autowire="byName" /><!--sessionFactory will get autowired-->
 
 	<bean id="waveWatchDaoTarget"
-		class="edu.unicen.surfforecaster.server.dao.WaveWatchDAOHibernateImpl"
-		autowire="byName" /><!--sessionFactory will get autowired-->
+		class="edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel"
+		init-method="init" autowire="byName" >
+		<constructor-arg value="GlobalModel" />
+		<constructor-arg value="src/test/resources/multi_1.glo_30m.all.grb2" />
+		<property name="gribDecoder" ref="gribDecoder" />
+	</bean><!--sessionFactory will get autowired-->
 
+	<bean id="gribDecoder"
+		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoderNetcdf">
+	</bean>
 
 	<bean id="spotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="proxyInterfaces">
@@ -116,7 +121,7 @@
 	</bean>
 	<bean id="waveWatchDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="proxyInterfaces">
-			<value>edu.unicen.surfforecaster.server.dao.WaveWatchDAO</value>
+			<value>edu.unicen.surfforecaster.server.domain.WaveWatchModel</value>
 		</property>
 		<property name="interceptorNames">
 			<list>
