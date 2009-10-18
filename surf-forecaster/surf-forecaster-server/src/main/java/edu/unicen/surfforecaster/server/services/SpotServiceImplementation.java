@@ -29,6 +29,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * 
@@ -60,8 +61,7 @@ public class SpotServiceImplementation implements SpotService {
 		final User user = userDAO.getUserByUserId(userId);
 		final Zone zone = spotDAO.getZoneById(zoneId);
 		final Spot spot = new Spot();
-		spot.setLatitude(latitude);
-		spot.setLongitude(longitude);
+		spot.setLocation(new Point(latitude, longitude));
 		spot.setName(spotName);
 		spot.setPublik(publik);
 		spot.setZone(zone);

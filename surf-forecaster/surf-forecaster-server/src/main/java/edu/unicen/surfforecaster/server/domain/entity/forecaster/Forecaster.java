@@ -4,6 +4,7 @@
 package edu.unicen.surfforecaster.server.domain.entity.forecaster;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,7 +57,15 @@ public abstract class Forecaster {
 	 * @param inputData
 	 * @return
 	 */
-	public abstract Collection<Forecast> getForecasts();
+	public abstract Collection<Forecast> getLatestForecasts();
+
+	/**
+	 * Obtain the most recent forecasts;
+	 * 
+	 * @param inputData
+	 * @return
+	 */
+	public abstract Collection<Forecast> getArchivedForecasts(Date from, Date to);
 
 	/**
 	 * @return

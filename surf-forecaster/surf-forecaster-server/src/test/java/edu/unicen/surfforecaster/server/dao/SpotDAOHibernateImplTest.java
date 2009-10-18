@@ -13,6 +13,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Area;
 import edu.unicen.surfforecaster.server.domain.entity.Country;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 public class SpotDAOHibernateImplTest {
 	private SpotDAO spotDAO;
@@ -61,8 +62,7 @@ public class SpotDAOHibernateImplTest {
 		Zone zone = new Zone(zoneName);
 		zone.setCountry(country);
 		Spot spot = new Spot();
-		spot.setLatitude(latitude);
-		spot.setLongitude(longitude);
+		spot.setLocation(new Point(latitude, longitude));
 		spot.setName(spotName);
 		spot.setZone(zone);
 		spot.setTimeZone("UTC");

@@ -95,4 +95,13 @@ public class Point {
 		hash = 31 * hash + (null == longitude ? 0 : longitude.intValue());
 		return hash;
 	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Lat/Lon: " + latitude + ";" + longitude;
+	}
 }

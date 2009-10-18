@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="GlobalModel"
+		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.model.NoaaWaveWatchModel">
+		<constructor-arg value="GlobalModel" />
+		<property name="gribDecoder" ref="gribDecoder" />
+	</bean>
+	<bean id="gribDecoder"
+		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoderNetcdf">
+	</bean>
+
+	<!--			QUARTZ	SCHEDULER CONFIGURATION				-->
+	<!--														-->
+	<!--		AUTOMATIC DOWNLOAD OF NOAA FORECASTS			-->
+
+	<!--	THE JOB -->
+	<bean name="downloadNOAAForecastsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass"
+			value="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJob" />
+		<property name="jobListenerNames">
+			<list>
+				<value>downloaderListener</value>
+			</list>
+		</property>
+	</bean>
+	<!--	THE TRIGGER WHICH WILL FIRE THE JOB-->
+	<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="downloadNOAAForecastsJob" />
+		<property name="startDelay" value="5000" />
+		<property name="repeatInterval" value="21600000" />
+	</bean>
+	<!--	THE LISTENER OF THE JOB EXECUTION-->
+	<bean id="downloaderListener"
+		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJobListener">
+		<property name="name" value="downloaderJobListener" />
+		<property name="observers">
+			<list>
+				<ref bean="simpleTrigger" />
+			</list>			
+		</property>
+	</bean>
+
+	<!--COMMENTED AS WE ARE TESTING WE DO NOT WANT TO LOAD SCHEDULER-->
+	<!--	REGISTER TRIGGERS AND LISTENERS WITH THE SCHEDULER -->
+	<!--
+		<bean
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	-->
+
+	<!--		<property name="triggers">-->
+	<!--			<list>-->
+	<!--				<ref bean="simpleTrigger" />-->
+	<!--			</list>-->
+	<!--		</property>-->
+	<!--		<property name="jobListeners">-->
+	<!--			<list>-->
+	<!--				<ref bean="downloaderListener" />-->
+	<!--			</list>-->
+	<!--		</property>-->
+	<!--	</bean>-->
+
+	<!--	END QUARTZ CONFIGURATION -->
+
+</beans>

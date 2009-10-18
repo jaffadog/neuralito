@@ -17,8 +17,10 @@ import javax.persistence.OneToOne;
 
 import org.apache.commons.lang.Validate;
 
+import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * A surf spot.
@@ -38,15 +40,10 @@ public class Spot implements Serializable {
 	@Column(nullable = false, length = 100)
 	private String name;
 	/**
-	 * Latitude of the surf spot. TODO: define in whic units latitude is given.
+	 * The location of the spot
 	 */
-	@Column(nullable = false)
-	private double latitude;
-	/**
-	 * Longitude of the surf spot. TODO: define in whic units latitude is given.
-	 */
-	@Column(nullable = false)
-	private double longitude;
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Point location;
 	/**
 	 * If this spots is public or not.
 	 */
@@ -98,18 +95,8 @@ public class Spot implements Serializable {
 		return name;
 	}
 
-	/**
-	 * @return the latitude
-	 */
-	public double getLatitude() {
-		return latitude;
-	}
-
-	/**
-	 * @return the longitude
-	 */
-	public double getLongitude() {
-		return longitude;
+	public Point getLocation() {
+		return location;
 	}
 
 	/**
@@ -126,22 +113,6 @@ public class Spot implements Serializable {
 	 */
 	public void setName(final String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @param latitude
-	 *            the latitude to set
-	 */
-	public void setLatitude(final double latitude) {
-		this.latitude = latitude;
-	}
-
-	/**
-	 * @param longitude
-	 *            the longitude to set
-	 */
-	public void setLongitude(final double longitude) {
-		this.longitude = longitude;
 	}
 
 	/**
@@ -211,10 +182,10 @@ public class Spot implements Serializable {
 	 * @return
 	 */
 	public SpotDTO getDTO(final Spot spot) {
-		final SpotDTO spotDTO = new SpotDTO(spot.getId(), spot.getName(), spot
-				.getLatitude(), spot.getLongitude(), spot.getZone().getDTO(),
-				spot.getZone().getCountry().getDTO(), spot.getZone()
-						.getCountry().getArea().getDTO(), spot.getUser()
+		final SpotDTO spotDTO = new SpotDTO(spot.getId(), spot.getName(),
+				new PointDTO(location.getLatitude(), location.getLongitude()),
+				spot.getZone().getDTO(), spot.getZone().getCountry().getDTO(),
+				spot.getZone().getCountry().getArea().getDTO(), spot.getUser()
 						.getId(), spot.isPublik());
 		return spotDTO;
 	}
@@ -256,6 +227,14 @@ public class Spot implements Serializable {
 	 */
 	public String getTimeZone() {
 		return timeZone;
+	}
+
+	/**
+	 * @param location
+	 *            the location to set
+	 */
+	public void setLocation(final Point location) {
+		this.location = location;
 	}
 
 }
