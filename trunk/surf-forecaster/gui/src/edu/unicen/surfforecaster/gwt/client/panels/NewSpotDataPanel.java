@@ -1,8 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -26,14 +24,15 @@ import com.google.gwt.user.client.ui.Widget;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
-import edu.unicen.surfforecaster.gwt.client.Area;
-import edu.unicen.surfforecaster.gwt.client.Country;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.Observable;
+import edu.unicen.surfforecaster.gwt.client.utils.Observer;
 import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
 
-public class NewSpotDataPanel extends LazyPanel {
+public class NewSpotDataPanel extends LazyPanel implements Observer{
 
 	private Label errorlabel = null;
 	private ListBox areaBox = null;
@@ -47,7 +46,8 @@ public class NewSpotDataPanel extends LazyPanel {
 	private RadioButton radioPublicButton;
 	private TextBox spotTxt;
 	
-	public NewSpotDataPanel() {}
+	public NewSpotDataPanel() {
+	}
 	
 	@Override
 	protected Widget createWidget() {
@@ -99,7 +99,7 @@ public class NewSpotDataPanel extends LazyPanel {
 		areaBox.setWidth("300");
 		areaBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
-				setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
+				//setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
 			}
 		});
 		flexTable.setWidget(1, 2, areaBox);
@@ -261,7 +261,10 @@ public class NewSpotDataPanel extends LazyPanel {
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.getFlexCellFormatter().setColSpan(8, 0, 3);
 		
-		this.setAreaListItems();
+		//Make this panel an observer for LocalizationUtils object
+		LocalizationUtils.getInstance().addObserver(this);
+		
+		//this.setAreaListItems();
 		this.setTimeZoneItems();
 		
 		return container;
@@ -287,65 +290,90 @@ public class NewSpotDataPanel extends LazyPanel {
 		for (int i = 0; i < keys.length; i++) 
 			this.timeZoneBox.addItem((String)keys[i], (String)timeZones.getTimeZones().get(keys[i]));
 	}
+
+	public void update(Observable o, Object arg) {
+		if (o == LocalizationUtils.getInstance()) {
+			this.setAreaListItems();
+			this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
+		}
+	}
 	
-	private void setAreaListItems(){
-		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, List>>(){
-			public void onSuccess(Map<String, List> result) {
-				if (result != null) {
-//					for (final Iterator iterator = result.iterator(); iterator.hasNext();) {
-//						final AreaDTO area = (AreaDTO) iterator.next();
-//						areaBox.addItem(area.getNames().get("en"), area.getId().toString());
+	private void setAreaListItems() {
+		Iterator<AreaDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
+		while (i.hasNext()){
+			AreaDTO area = i.next();
+			this.areaBox.addItem(area.getNames().get("en"), area.getId().toString());
+			//TODO sacar la harcodeada de idioma
+		}
+	}
+	
+	private void setCountryListItems(Integer areaId) {
+		Iterator<CountryDTO> i = LocalizationUtils.getInstance().getCountries(areaId).iterator(); 
+		while (i.hasNext()){
+			CountryDTO country = i.next();
+			this.countryBox.addItem(country.getNames().get("en"), country.getId().toString());
+			//TODO sacar la harcodeada de idioma
+		}
+	}
+	
+//	private void setAreaListItems(){
+//		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, List>>(){
+//			public void onSuccess(Map<String, List> result) {
+//				if (result != null) {
+////					for (final Iterator iterator = result.iterator(); iterator.hasNext();) {
+////						final AreaDTO area = (AreaDTO) iterator.next();
+////						areaBox.addItem(area.getNames().get("en"), area.getId().toString());
+////					}
+//					
+//					Iterator i = null;
+//					if (result.containsKey("areas")){
+//						i = result.get("areas").iterator();
+//						while (i.hasNext()){
+//							AreaDTO area = (AreaDTO)i.next();
+//							areaBox.addItem(area.getNames().get("en"), area.getId().toString());
+//						}
 //					}
-					
-					Iterator i = null;
-					if (result.containsKey("areas")){
-						i = result.get("areas").iterator();
-						while (i.hasNext()){
-							AreaDTO area = (AreaDTO)i.next();
-							areaBox.addItem(area.getNames().get("en"), area.getId().toString());
-						}
-					}
-					
-					if (result.containsKey("countries")){
-						i = result.get("countries").iterator();
-						while (i.hasNext()){
-							CountryDTO country = (CountryDTO)i.next();
-							countryBox.addItem(country.getNames().get("en"), country.getId().toString());
-						}
-					}
-					
-					
-				}
-			}
-				
-			public void onFailure(Throwable caught) {
-				
-			}
-		});
-	}
-	
-	private void setCountryListItems(String area){
-		countryBox.clear();
-		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, List>>(){
-			public void onSuccess(Map<String, List> result) {
-				if (result == null) {
-				} else {
-					Iterator i = null;
-					if (result.containsKey("countries")){
-						i = result.get("countries").iterator();
-						while (i.hasNext()){
-							Country country = (Country)i.next();
-							countryBox.addItem(country.getName(), country.getId());
-						}
-					}
-					
-				}
-			}
-				
-			public void onFailure(Throwable caught) {
-				
-			}
-		});
-	}
+//					
+//					if (result.containsKey("countries")){
+//						i = result.get("countries").iterator();
+//						while (i.hasNext()){
+//							CountryDTO country = (CountryDTO)i.next();
+//							countryBox.addItem(country.getNames().get("en"), country.getId().toString());
+//						}
+//					}
+//					
+//					
+//				}
+//			}
+//				
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//		});
+//	}
+//	
+//	private void setCountryListItems(String area){
+//		countryBox.clear();
+//		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, List>>(){
+//			public void onSuccess(Map<String, List> result) {
+//				if (result == null) {
+//				} else {
+//					Iterator i = null;
+//					if (result.containsKey("countries")){
+//						i = result.get("countries").iterator();
+//						while (i.hasNext()){
+//							Country country = (Country)i.next();
+//							countryBox.addItem(country.getName(), country.getId());
+//						}
+//					}
+//					
+//				}
+//			}
+//				
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//		});
+//	}
 
 }

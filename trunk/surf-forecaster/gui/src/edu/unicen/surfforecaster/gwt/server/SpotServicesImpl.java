@@ -1,9 +1,7 @@
 package edu.unicen.surfforecaster.gwt.server;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Level;
 
@@ -54,60 +52,91 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return forecastService;
 	}
 	
-	public Map<String, List> getAreas() throws NeuralitoException {
-		final Map<String, List> result = new HashMap<String, List>();
-		
-		List<AreaDTO> areas = spotService.getAreas();
-		
-		
-		if (!areas.isEmpty()) {
-			result.put("areas", areas);
-			result.putAll(getCountries(areas.get(0).getId()));
-		}
-		return result;	
+	public List<AreaDTO> getAreas() throws NeuralitoException {
+		return spotService.getAreas();
+			
 	}
 	
-	public Map<String, List> getCountries(final Integer area) throws NeuralitoException {
-		final Map<String, List> result = new HashMap<String, List>();
-		
-		List<CountryDTO> countries = spotService.getCountries(area);
-		
-		
-		if (!countries.isEmpty()) {
-			result.put("countries", countries);
-			result.putAll(getZones(countries.get(0).getId(), this.getUser()));
-		}
-		return result;
+	public List<CountryDTO> getCountries() throws NeuralitoException {
+		return new ArrayList<CountryDTO>();
+		//TODO descomentar el metodo getcountries() cuando ya este implemetnado en el server
+		//return spotService.getCountries();
 	}
 	
-	public Map<String, List> getZones(final Integer country, final UserDTO user) throws NeuralitoException {
-		final Map<String, List> result = new HashMap<String, List>();
+	public List<ZoneDTO> getZones(final Integer country) throws NeuralitoException {
 		List<ZoneDTO> zones = new ArrayList<ZoneDTO>();
-		if (user != null)
-			zones = spotService.getZones(country, user.getId());
+		if (this.getUser() != null)
+			zones = spotService.getZones(country, this.getUser().getId());
 		//TODO agregar el else con getzones(idcountry) si no esta logueado el usuario
 		
-		if (!zones.isEmpty()) {
-			result.put("zones", zones);
-			result.putAll(getSpots(zones.get(0).getId(), this.getUser()));
-		}
-		return result;
+		return zones;
 	}
 	
-	public Map<String, List> getSpots(final Integer zone, final UserDTO user) throws NeuralitoException {
-		final Map<String, List> result = new HashMap<String, List>();
+	public List<SpotDTO> getSpots(final Integer zone, final UserDTO user) throws NeuralitoException {
 		List<SpotDTO> spots = new ArrayList<SpotDTO>();
-		if (user != null){
+		if (this.getUser() != null) {
 			//TODO get spots descomentar la sig linea
 			//spots = spotService.getSpots(zone, user.getId());
 		}
 		//TODO agregar el else con getpots(idzone) si no esta logueado el usuario
-			
-		if (!spots.isEmpty())
-			result.put("spots", spots);
 
-		return result;
+		return spots;
 	}
+	
+//	public Map<String, List> getAreas() throws NeuralitoException {
+//		final Map<String, List> result = new HashMap<String, List>();
+//		
+//		List<AreaDTO> areas = spotService.getAreas();
+//		
+//		
+//		if (!areas.isEmpty()) {
+//			result.put("areas", areas);
+//			result.putAll(getCountries(areas.get(0).getId()));
+//		}
+//		return result;	
+//	}
+//	
+//	public Map<String, List> getCountries(final Integer area) throws NeuralitoException {
+//		final Map<String, List> result = new HashMap<String, List>();
+//		
+//		List<CountryDTO> countries = spotService.getCountries(area);
+//		
+//		
+//		if (!countries.isEmpty()) {
+//			result.put("countries", countries);
+//			result.putAll(getZones(countries.get(0).getId(), this.getUser()));
+//		}
+//		return result;
+//	}
+//	
+//	public Map<String, List> getZones(final Integer country, final UserDTO user) throws NeuralitoException {
+//		final Map<String, List> result = new HashMap<String, List>();
+//		List<ZoneDTO> zones = new ArrayList<ZoneDTO>();
+//		if (user != null)
+//			zones = spotService.getZones(country, user.getId());
+//		//TODO agregar el else con getzones(idcountry) si no esta logueado el usuario
+//		
+//		if (!zones.isEmpty()) {
+//			result.put("zones", zones);
+//			result.putAll(getSpots(zones.get(0).getId(), this.getUser()));
+//		}
+//		return result;
+//	}
+//	
+//	public Map<String, List> getSpots(final Integer zone, final UserDTO user) throws NeuralitoException {
+//		final Map<String, List> result = new HashMap<String, List>();
+//		List<SpotDTO> spots = new ArrayList<SpotDTO>();
+//		if (user != null){
+//			//TODO get spots descomentar la sig linea
+//			//spots = spotService.getSpots(zone, user.getId());
+//		}
+//		//TODO agregar el else con getpots(idzone) si no esta logueado el usuario
+//			
+//		if (!spots.isEmpty())
+//			result.put("spots", spots);
+//
+//		return result;
+//	}
 	
 //	public Map<String, Vector> getAreas() {
 //		final Area a1 = new Area("AN", "America del norte");
@@ -270,19 +299,13 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	}
 
 	@Override
-	public Map<String, List> getCountries(String area) {
+	public List<SpotDTO> getSpots(String spot) throws NeuralitoException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, List> getSpots(String spot) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<String, List> getZones(String country) {
+	public List<ZoneDTO> getZones(String country) throws NeuralitoException {
 		// TODO Auto-generated method stub
 		return null;
 	}
