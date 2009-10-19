@@ -33,7 +33,7 @@ import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.
 public class GribDecoderNetcdf implements GribDecoder {
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder#getValidPoints(java.io.File)
+	 * @see edu.unicen.surfforecaster.server.domain.entity.forecasters.WW3DataManager.decoder.GribDecoder#getValidPoints(java.io.File)
 	 */
 	public Collection<Point> getValidPoints(final File file) {
 		final Collection<Point> validPoints = new ArrayList<Point>();
@@ -51,8 +51,9 @@ public class GribDecoderNetcdf implements GribDecoder {
 					final LatLonPoint latLon = pwdGcs.getLatLon(j, i);
 					final Float val = a[i][j];
 					if (!val.isNaN()) {
-						validPoints.add(new Point(latLon.getLatitude(), latLon
-								.getLongitude()));
+						validPoints.add(new Point(new Float(latLon
+								.getLatitude()), new Float(latLon
+								.getLongitude())));
 					}
 				}
 			}

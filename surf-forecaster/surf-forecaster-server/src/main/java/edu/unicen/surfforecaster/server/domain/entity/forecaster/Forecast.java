@@ -39,7 +39,7 @@ public class Forecast {
 	/**
 	 * The base date of this forecast.
 	 */
-	private Date baseDate;
+	private Date issuedDate;
 	/**
 	 * The date to which this forecast applies. This corresponds to Hours since
 	 * the baseDate.
@@ -78,7 +78,7 @@ public class Forecast {
 			final Map<String, ForecastParameter> parameters, final Point point2) {
 		Validate.notNull(baseDate);
 		Validate.notNull(parameters);
-		this.baseDate = baseDate;
+		issuedDate = baseDate;
 		this.forecastTime = forecastTime;
 		this.parameters = parameters;
 		point = point2;
@@ -102,7 +102,7 @@ public class Forecast {
 	 * @return the baseDate
 	 */
 	public Date getBaseDate() {
-		return baseDate;
+		return issuedDate;
 	}
 
 	/**

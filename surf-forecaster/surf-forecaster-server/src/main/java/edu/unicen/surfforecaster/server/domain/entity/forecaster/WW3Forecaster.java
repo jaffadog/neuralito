@@ -10,7 +10,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -31,13 +30,13 @@ public class WW3Forecaster extends Forecaster {
 	/**
 	 * Grid point of the model to extract forecasts.
 	 */
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	private Point gridPoint;
 
 	/**
 	 * Forecast location
 	 */
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	private Point location;
 	/**
 	 * The wave watch model to use.
@@ -88,8 +87,7 @@ public class WW3Forecaster extends Forecaster {
 	public Collection<Forecast> getLatestForecasts() {
 		final Collection<Forecast> forecasts = new ArrayList<Forecast>();
 		final Map<String, ForecastParameter> attributes = new HashMap<String, ForecastParameter>();
-		model.getLatestForecast(gridPoint);
-		return forecasts;
+		return model.getLatestForecast(gridPoint);
 	}
 
 	/**
@@ -100,7 +98,7 @@ public class WW3Forecaster extends Forecaster {
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster#getArchivedForecasts(java.util.Date,
+	 * @see edu.unicen.surfforecaster.server.domain.entity.forecasters.Forecaster#getArchivedForecasts(java.util.Date,
 	 *      java.util.Date)
 	 */
 	@Override
@@ -110,8 +108,7 @@ public class WW3Forecaster extends Forecaster {
 		fr.setTime(from);
 		final GregorianCalendar too = new GregorianCalendar();
 		too.setTime(to);
-		// return model.getArchivedForecasts(location, from, too);
-		return null;
+		return model.getArchivedForecasts(location, fr, too);
 	}
 
 	/**

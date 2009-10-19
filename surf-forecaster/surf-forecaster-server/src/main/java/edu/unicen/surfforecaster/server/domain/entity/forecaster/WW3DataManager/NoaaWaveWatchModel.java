@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain;
+package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,8 +18,10 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -29,11 +31,13 @@ import org.hibernate.HibernateException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArch;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJob;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader.DownloaderJobListener;
 
 /**
  * This class provides the latest forecasts issued by the NOAA and also archived
@@ -60,7 +64,6 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 * The grib decoder to use.
 	 */
 	private GribDecoder gribDecoder;
-
 	/**
 	 * Model Name
 	 */
@@ -120,6 +123,9 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		}
 		if (!tableExists(archiveTableName)) {
 			createArchiveTable();
+		}
+		if (!tableExists(latestForecastTableName)) {
+			createLatestForecastTable();
 		}
 	}
 
@@ -272,176 +278,6 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		}
 	}
 
-	/*
-	 * +
-	 * "	PARTITION	P3	VALUES LESS THAN (to_days('	2010-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P4	VALUES LESS THAN (to_days('	2010-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P5	VALUES LESS THAN (to_days('	2010-03-01	')), -- 	February	"
-	 * + "	PARTITION	P6	VALUES LESS THAN (to_days('	2010-04-01	')), -- 	March	"
-	 * + "	PARTITION	P7	VALUES LESS THAN (to_days('	2010-05-01	')), -- 	April	"
-	 * + "	PARTITION	P8	VALUES LESS THAN (to_days('	2010-06-01	')), -- 	May	" +
-	 * "	PARTITION	P9	VALUES LESS THAN (to_days('	2010-07-01	')), -- 	June	" +
-	 * "	PARTITION	P10	VALUES LESS THAN (to_days('	2010-08-01	')), -- 	July	" +
-	 * "	PARTITION	P11	VALUES LESS THAN (to_days('	2010-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P12	VALUES LESS THAN (to_days('	2010-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P13	VALUES LESS THAN (to_days('	2010-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P14	VALUES LESS THAN (to_days('	2010-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P15	VALUES LESS THAN (to_days('	2011-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P16	VALUES LESS THAN (to_days('	2011-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P17	VALUES LESS THAN (to_days('	2011-03-01	')), -- 	February	"
-	 * + "	PARTITION	P18	VALUES LESS THAN (to_days('	2011-04-01	')), -- 	March	"
-	 * + "	PARTITION	P19	VALUES LESS THAN (to_days('	2011-05-01	')), -- 	April	"
-	 * + "	PARTITION	P20	VALUES LESS THAN (to_days('	2011-06-01	')), -- 	May	" +
-	 * "	PARTITION	P21	VALUES LESS THAN (to_days('	2011-07-01	')), -- 	June	" +
-	 * "	PARTITION	P22	VALUES LESS THAN (to_days('	2011-08-01	')), -- 	July	" +
-	 * "	PARTITION	P23	VALUES LESS THAN (to_days('	2011-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P24	VALUES LESS THAN (to_days('	2011-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P25	VALUES LESS THAN (to_days('	2011-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P26	VALUES LESS THAN (to_days('	2011-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P27	VALUES LESS THAN (to_days('	2012-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P28	VALUES LESS THAN (to_days('	2012-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P29	VALUES LESS THAN (to_days('	2012-03-01	')), -- 	February	"
-	 * + "	PARTITION	P30	VALUES LESS THAN (to_days('	2012-04-01	')), -- 	March	"
-	 * + "	PARTITION	P31	VALUES LESS THAN (to_days('	2012-05-01	')), -- 	April	"
-	 * + "	PARTITION	P32	VALUES LESS THAN (to_days('	2012-06-01	')), -- 	May	" +
-	 * "	PARTITION	P33	VALUES LESS THAN (to_days('	2012-07-01	')), -- 	June	" +
-	 * "	PARTITION	P34	VALUES LESS THAN (to_days('	2012-08-01	')), -- 	July	" +
-	 * "	PARTITION	P35	VALUES LESS THAN (to_days('	2012-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P36	VALUES LESS THAN (to_days('	2012-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P37	VALUES LESS THAN (to_days('	2012-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P38	VALUES LESS THAN (to_days('	2012-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P39	VALUES LESS THAN (to_days('	2013-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P40	VALUES LESS THAN (to_days('	2013-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P41	VALUES LESS THAN (to_days('	2013-03-01	')), -- 	February	"
-	 * + "	PARTITION	P42	VALUES LESS THAN (to_days('	2013-04-01	')), -- 	March	"
-	 * + "	PARTITION	P43	VALUES LESS THAN (to_days('	2013-05-01	')), -- 	April	"
-	 * + "	PARTITION	P44	VALUES LESS THAN (to_days('	2013-06-01	')), -- 	May	" +
-	 * "	PARTITION	P45	VALUES LESS THAN (to_days('	2013-07-01	')), -- 	June	" +
-	 * "	PARTITION	P46	VALUES LESS THAN (to_days('	2013-08-01	')), -- 	July	" +
-	 * "	PARTITION	P47	VALUES LESS THAN (to_days('	2013-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P48	VALUES LESS THAN (to_days('	2013-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P49	VALUES LESS THAN (to_days('	2013-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P50	VALUES LESS THAN (to_days('	2013-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P51	VALUES LESS THAN (to_days('	2014-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P52	VALUES LESS THAN (to_days('	2014-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P53	VALUES LESS THAN (to_days('	2014-03-01	')), -- 	February	"
-	 * + "	PARTITION	P54	VALUES LESS THAN (to_days('	2014-04-01	')), -- 	March	"
-	 * + "	PARTITION	P55	VALUES LESS THAN (to_days('	2014-05-01	')), -- 	April	"
-	 * + "	PARTITION	P56	VALUES LESS THAN (to_days('	2014-06-01	')), -- 	May	" +
-	 * "	PARTITION	P57	VALUES LESS THAN (to_days('	2014-07-01	')), -- 	June	" +
-	 * "	PARTITION	P58	VALUES LESS THAN (to_days('	2014-08-01	')), -- 	July	" +
-	 * "	PARTITION	P59	VALUES LESS THAN (to_days('	2014-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P60	VALUES LESS THAN (to_days('	2014-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P61	VALUES LESS THAN (to_days('	2014-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P62	VALUES LESS THAN (to_days('	2014-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P63	VALUES LESS THAN (to_days('	2015-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P64	VALUES LESS THAN (to_days('	2015-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P65	VALUES LESS THAN (to_days('	2015-03-01	')), -- 	February	"
-	 * + "	PARTITION	P66	VALUES LESS THAN (to_days('	2015-04-01	')), -- 	March	"
-	 * + "	PARTITION	P67	VALUES LESS THAN (to_days('	2015-05-01	')), -- 	April	"
-	 * + "	PARTITION	P68	VALUES LESS THAN (to_days('	2015-06-01	')), -- 	May	" +
-	 * "	PARTITION	P69	VALUES LESS THAN (to_days('	2015-07-01	')), -- 	June	" +
-	 * "	PARTITION	P70	VALUES LESS THAN (to_days('	2015-08-01	')), -- 	July	" +
-	 * "	PARTITION	P71	VALUES LESS THAN (to_days('	2015-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P72	VALUES LESS THAN (to_days('	2015-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P73	VALUES LESS THAN (to_days('	2015-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P74	VALUES LESS THAN (to_days('	2015-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P75	VALUES LESS THAN (to_days('	2016-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P76	VALUES LESS THAN (to_days('	2016-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P77	VALUES LESS THAN (to_days('	2016-03-01	')), -- 	February	"
-	 * + "	PARTITION	P78	VALUES LESS THAN (to_days('	2016-04-01	')), -- 	March	"
-	 * + "	PARTITION	P79	VALUES LESS THAN (to_days('	2016-05-01	')), -- 	April	"
-	 * + "	PARTITION	P80	VALUES LESS THAN (to_days('	2016-06-01	')), -- 	May	" +
-	 * "	PARTITION	P81	VALUES LESS THAN (to_days('	2016-07-01	')), -- 	June	" +
-	 * "	PARTITION	P82	VALUES LESS THAN (to_days('	2016-08-01	')), -- 	July	" +
-	 * "	PARTITION	P83	VALUES LESS THAN (to_days('	2016-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P84	VALUES LESS THAN (to_days('	2016-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P85	VALUES LESS THAN (to_days('	2016-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P86	VALUES LESS THAN (to_days('	2016-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P87	VALUES LESS THAN (to_days('	2017-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P88	VALUES LESS THAN (to_days('	2017-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P89	VALUES LESS THAN (to_days('	2017-03-01	')), -- 	February	"
-	 * + "	PARTITION	P90	VALUES LESS THAN (to_days('	2017-04-01	')), -- 	March	"
-	 * + "	PARTITION	P91	VALUES LESS THAN (to_days('	2017-05-01	')), -- 	April	"
-	 * + "	PARTITION	P92	VALUES LESS THAN (to_days('	2017-06-01	')), -- 	May	" +
-	 * "	PARTITION	P93	VALUES LESS THAN (to_days('	2017-07-01	')), -- 	June	" +
-	 * "	PARTITION	P94	VALUES LESS THAN (to_days('	2017-08-01	')), -- 	July	" +
-	 * "	PARTITION	P95	VALUES LESS THAN (to_days('	2017-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P96	VALUES LESS THAN (to_days('	2017-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P97	VALUES LESS THAN (to_days('	2017-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P98	VALUES LESS THAN (to_days('	2017-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P99	VALUES LESS THAN (to_days('	2018-01-01	')), -- 	December	"
-	 * +
-	 * "	PARTITION	P100	VALUES LESS THAN (to_days('	2018-02-01	')), -- 	January	"
-	 * +
-	 * "	PARTITION	P101	VALUES LESS THAN (to_days('	2018-03-01	')), -- 	February	"
-	 * +
-	 * "	PARTITION	P102	VALUES LESS THAN (to_days('	2018-04-01	')), -- 	March	"
-	 * +
-	 * "	PARTITION	P103	VALUES LESS THAN (to_days('	2018-05-01	')), -- 	April	"
-	 * + "	PARTITION	P104	VALUES LESS THAN (to_days('	2018-06-01	')), -- 	May	"
-	 * + "	PARTITION	P105	VALUES LESS THAN (to_days('	2018-07-01	')), -- 	June	"
-	 * + "	PARTITION	P106	VALUES LESS THAN (to_days('	2018-08-01	')), -- 	July	"
-	 * +
-	 * "	PARTITION	P107	VALUES LESS THAN (to_days('	2018-09-01	')), -- 	August	"
-	 * +
-	 * "	PARTITION	P108	VALUES LESS THAN (to_days('	2018-10-01	')), -- 	September	"
-	 * +
-	 * "	PARTITION	P109	VALUES LESS THAN (to_days('	2018-11-01	')), -- 	October	"
-	 * +
-	 * "	PARTITION	P110	VALUES LESS THAN (to_days('	2018-12-01	')), -- 	November	"
-	 * +
-	 * "	PARTITION	P111	VALUES LESS THAN (to_days('	2019-01-01	')), -- 	December	"
-	 * + "PARTITION P112 VALUES LESS THAN MAXVALUE
-	 */
 	/**
 	 * @param gridFile
 	 * @return
@@ -535,7 +371,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 *      float, java.util.GregorianCalendar, java.util.GregorianCalendar)
 	 */
 	@Override
-	public List<ForecastArch> getArchivedForecasts(final Point point,
+	public List<Forecast> getArchivedForecasts(final Point point,
 			final GregorianCalendar from, final GregorianCalendar to) {
 		final long init = System.currentTimeMillis();
 		final float lat = new Float(point.getLatitude());
@@ -545,16 +381,16 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
 			final String fromDate = from.get(Calendar.YEAR) + "-"
-					+ from.get(Calendar.MONTH) + 1 + "-"
+					+ (from.get(Calendar.MONTH) + 1) + "-"
 					+ from.get(Calendar.DAY_OF_MONTH);
 			final String toDate = to.get(Calendar.YEAR) + "-"
-					+ to.get(Calendar.MONTH) + 1 + "-"
+					+ (to.get(Calendar.MONTH) + 1) + "-"
 					+ to.get(Calendar.DAY_OF_MONTH);
 
 			final ResultSet result = st.executeQuery("select * from "
-					+ archiveTableName + "where latitude = " + lat
+					+ archiveTableName + " where latitude = " + lat
 					+ " AND longitude = " + lon + " AND issuedDate BETWEEN '"
-					+ fromDate + "'AND '" + toDate + "'");
+					+ fromDate + "' AND '" + toDate + "'");
 
 			while (result.next() != false) {
 				final GregorianCalendar issuedDate = new GregorianCalendar(
@@ -599,14 +435,14 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		final long end = System.currentTimeMillis();
 		System.out.println("Readed: " + forecasts.size() + " forecasts.");
 		System.out.println("Elapsed Time: " + (end - init) / 1000);
-		return forecasts;
+		return translate(forecasts);
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#getLatestForecast(edu.unicen.surfforecaster.server.domain.entity.forecaster.Point)
+	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#getLatestForecast(edu.unicen.surfforecaster.server.domain.entity.forecasters.Point)
 	 */
 	@Override
-	public List<ForecastArch> getLatestForecast(final Point gridPoint) {
+	public List<Forecast> getLatestForecast(final Point gridPoint) {
 		System.out.println("Retrieving latest forecast for: " + gridPoint);
 		final long init = System.currentTimeMillis();
 		final List<ForecastArch> forecasts = new ArrayList<ForecastArch>();
@@ -614,9 +450,9 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
 			final ResultSet result = st.executeQuery("select * from "
-					+ latestForecastTableName + "where latitude = "
+					+ latestForecastTableName + " where latitude = "
 					+ gridPoint.getLatitude() + " AND longitude = "
-					+ gridPoint.getLongitude() + "");
+					+ gridPoint.getLongitude());
 			while (result.next() != false) {
 				final GregorianCalendar issuedDate = new GregorianCalendar(
 						result.getDate("issuedDate").getYear(), result.getDate(
@@ -658,7 +494,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		final long end = System.currentTimeMillis();
 		System.out.println("Elapsed Time To retrieve latest forecast : "
 				+ (end - init) / 1000);
-		return forecasts;
+		return translate(forecasts);
 	}
 
 	/**
@@ -740,8 +576,9 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			e.printStackTrace();
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time To archive forecast : " + (end - init)
-				/ 1000);
+		System.out.println("Found " + points.size() + " grid points");
+		System.out.println("Elapsed Time To retrieve valid grid points : "
+				+ (end - init) / 1000);
 		return points;
 	}
 
@@ -799,7 +636,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			final Statement st = connection.createStatement();
 			st.execute("insert into " + archiveTableName + " select * from "
 					+ latestForecastTableName
-					+ "where validTime=3 OR validTime=0;");
+					+ " where validTime=3 OR validTime=0;");
 			st.close();
 		} catch (final SQLException e) {
 			e.printStackTrace();
@@ -822,7 +659,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			if (textFile.isFile()) {
 				textFile.delete();
 			}
-		for (int time = 0; time < 61; time++) {
+		for (int time = 0; time < 1; time++) {
 			try {
 				final Collection<ForecastArch> forecasts = gribDecoder
 						.getForecastForTime(gribFile, time);
@@ -867,6 +704,22 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		System.out.println("Elapsed Time To insert data from file: "
 				+ (end - init) / 1000);
 
+	}
+
+	private void createLatestForecastTable() {
+		log.info("Creating table: " + latestForecastTableName);
+		try {
+			final Connection connection = this.getSession().connection();
+			final Statement st = connection.createStatement();
+			st
+					.execute("CREATE TABLE "
+							+ latestForecastTableName
+							+ "  (  `issuedDate` DATETIME NOT NULL,  `validTime` tinyint(4) unsigned NOT NULL,  `latitude` float NOT NULL,  `longitude` float NOT NULL,  `windWaveHeight` float DEFAULT NULL,  `windWavePeriod` float DEFAULT NULL,  `windWaveDirection` float DEFAULT NULL,  `swellWaveHeight` float DEFAULT NULL,  `swellWavePeriod` float DEFAULT NULL,  `swellWaveDirection` float DEFAULT NULL,  `combinedWaveHeight` float DEFAULT NULL,  `peakWavePeriod` float DEFAULT NULL,  `peakWaveDirection` float DEFAULT NULL,  `windSpeed` float DEFAULT NULL,  `windDirection` float DEFAULT NULL,  `windU` float DEFAULT NULL,  `windV` float DEFAULT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+			st.close();
+			connection.close();
+		} catch (final SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -955,7 +808,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#isGridPoint(edu.unicen.surfforecaster.server.domain.entity.forecaster.Point)
+	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#isGridPoint(edu.unicen.surfforecaster.server.domain.entity.forecasters.Point)
 	 */
 	@Override
 	public boolean isGridPoint(final Point point) {
@@ -965,7 +818,8 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
 			final String query = "SELECT * FROM " + gridPointsTableName
-					+ " WHERE latitude = " + point.getLatitude();
+					+ " WHERE latitude = " + point.getLatitude()
+					+ " AND longitude = " + point.getLongitude();
 			final ResultSet result = st.executeQuery(query);
 			boolean found = false;
 			if (result.next()) {
@@ -983,5 +837,68 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	private List<Forecast> translate(final List<ForecastArch> forecasts) {
+		final List<Forecast> translatedForecasts = new ArrayList<Forecast>();
+		for (final Iterator iterator = forecasts.iterator(); iterator.hasNext();) {
+			final ForecastArch forecastArch = (ForecastArch) iterator.next();
+			final Map<String, ForecastParameter> parameters = new HashMap<String, ForecastParameter>();
+			parameters.put(WW3Parameter.WIND_WAVE_HEIGHT.toString(),
+					new ForecastParameter(WW3Parameter.WIND_WAVE_HEIGHT
+							.toString(), forecastArch.getWindWaveHeight(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.WIND_WAVE_PERIOD.toString(),
+					new ForecastParameter(WW3Parameter.WIND_WAVE_PERIOD
+							.toString(), forecastArch.getWindWavePeriod(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.WIND_WAVE_DIRECTION.toString(),
+					new ForecastParameter(WW3Parameter.WIND_WAVE_DIRECTION
+							.toString(), forecastArch.getWindWaveDirection(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.SWELL_WAVE_HEIGHT.toString(),
+					new ForecastParameter(WW3Parameter.SWELL_WAVE_HEIGHT
+							.toString(), forecastArch.getSwellWaveHeight(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.SWELL_WAVE_PERIOD.toString(),
+					new ForecastParameter(WW3Parameter.SWELL_WAVE_PERIOD
+							.toString(), forecastArch.getSwellWavePeriod(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.SWELL_DIRECTION.toString(),
+					new ForecastParameter(WW3Parameter.SWELL_DIRECTION
+							.toString(), forecastArch.getSwellWaveDirection(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT
+					.toString(), new ForecastParameter(
+					WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString(),
+					forecastArch.getCombinedWaveHeight(), Unit.Meters));
+			parameters.put(WW3Parameter.PRIMARY_WAVE_PERIOD.toString(),
+					new ForecastParameter(WW3Parameter.PRIMARY_WAVE_PERIOD
+							.toString(), forecastArch.getPeakWavePeriod(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString(),
+					new ForecastParameter(WW3Parameter.PRIMARY_WAVE_DIRECTION
+							.toString(), forecastArch.getPeakWaveDirection(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.WIND_SPEED.toString(),
+					new ForecastParameter(WW3Parameter.WIND_SPEED.toString(),
+							forecastArch.getWindSpeed(), Unit.Meters));
+			parameters.put(WW3Parameter.WIND_DIRECTION.toString(),
+					new ForecastParameter(WW3Parameter.WIND_DIRECTION
+							.toString(), forecastArch.getWindDirection(),
+							Unit.Meters));
+			parameters.put(WW3Parameter.WINDUComponent.toString(),
+					new ForecastParameter(WW3Parameter.WINDUComponent
+							.toString(), forecastArch.getWindU(), Unit.Meters));
+			parameters.put(WW3Parameter.WINDVComponent.toString(),
+					new ForecastParameter(WW3Parameter.WINDVComponent
+							.toString(), forecastArch.getWindV(), Unit.Meters));
+			final Forecast forecast = new Forecast(forecastArch.getIssuedDate()
+					.getTime(), forecastArch.getValidTime(), parameters,
+					new Point(forecastArch.getLatitude(), forecastArch
+							.getLongitude()));
+			translatedForecasts.add(forecast);
+		}
+		return translatedForecasts;
 	}
 }

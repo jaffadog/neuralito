@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader;
+package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
 
 import java.io.File;
 import java.util.Collection;

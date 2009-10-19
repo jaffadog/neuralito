@@ -16,12 +16,12 @@ public interface ForecastDAO {
 	 * @param forecaster
 	 * @return
 	 */
-	Integer save(WW3Forecaster forecaster);
+	public Integer save(WW3Forecaster forecaster);
 
 	/**
 	 * @param forecasterId
 	 * @return
 	 */
-	Forecaster getForecasterById(Integer forecasterId);
+	public Forecaster getForecasterById(Integer forecasterId);
 
 }

@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArch;
 
 /**
  * Wave Watch Model abstraction. Each Wave Watch model is responsible for
@@ -26,7 +26,7 @@ public interface WaveWatchModel {
 	 * @param gridPoint
 	 * @return
 	 */
-	public List<ForecastArch> getLatestForecast(Point gridPoint);
+	public List<Forecast> getLatestForecast(Point gridPoint);
 
 	/**
 	 * Obtain the model forecast for the given point in the given time range.
@@ -36,7 +36,7 @@ public interface WaveWatchModel {
 	 * @param to
 	 * @return
 	 */
-	public List<ForecastArch> getArchivedForecasts(Point gridPoint,
+	public List<Forecast> getArchivedForecasts(Point gridPoint,
 			GregorianCalendar from, GregorianCalendar to);
 
 	/**

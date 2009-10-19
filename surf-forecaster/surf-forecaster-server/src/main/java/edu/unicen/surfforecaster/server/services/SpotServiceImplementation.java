@@ -52,8 +52,8 @@ public class SpotServiceImplementation implements SpotService {
 	 *      double, double, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
-	public Integer addSpot(final String spotName, final double longitude,
-			final double latitude, final Integer zoneId, final Integer userId,
+	public Integer addSpot(final String spotName, final float latitude,
+			final float longitude, final Integer zoneId, final Integer userId,
 			final boolean publik, final String timeZone)
 			throws NeuralitoException {
 		validate(spotName, longitude, latitude, zoneId, userId, publik,
@@ -61,7 +61,13 @@ public class SpotServiceImplementation implements SpotService {
 		final User user = userDAO.getUserByUserId(userId);
 		final Zone zone = spotDAO.getZoneById(zoneId);
 		final Spot spot = new Spot();
-		spot.setLocation(new Point(latitude, longitude));
+		Point point = spotDAO.getPoint(new Float(latitude),
+				new Float(longitude));
+		if (point == null) {
+			point = new Point(latitude, longitude);
+			spotDAO.save(point);
+		}
+		spot.setLocation(point);
 		spot.setName(spotName);
 		spot.setPublik(publik);
 		spot.setZone(zone);
@@ -106,6 +112,7 @@ public class SpotServiceImplementation implements SpotService {
 		try {
 			spotDAO.removeSpot(spotDAO.getSpotById(spotId));
 		} catch (final DataAccessException e) {
+			e.printStackTrace();
 			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
 		}
 	}
@@ -339,8 +346,8 @@ public class SpotServiceImplementation implements SpotService {
 	@Override
 	public Integer addZoneAndSpot(final String zoneName,
 			final Integer countryId, final String spotName,
-			final double longitude, final double latitude,
-			final Integer userId, final boolean publik, final String timeZone)
+			final float latitude, final float longitude, final Integer userId,
+			final boolean publik, final String timeZone)
 			throws NeuralitoException {
 		validateCountryId(countryId);
 		validateUserId(userId);

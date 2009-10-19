@@ -61,7 +61,7 @@ public class ForecastParameter {
 	 */
 	@Enumerated(EnumType.STRING)
 	private Unit unit;
-	private float fValue;
+	private Float fValue;
 
 	/**
 	 * 
@@ -159,6 +159,8 @@ public class ForecastParameter {
 			return dValue.toString();
 		if (sValue != null)
 			return sValue.toString();
+		if (fValue != null)
+			return fValue.toString();
 		throw new IllegalStateException(
 				"At least some of the three variables should be instantiated.");
 	}

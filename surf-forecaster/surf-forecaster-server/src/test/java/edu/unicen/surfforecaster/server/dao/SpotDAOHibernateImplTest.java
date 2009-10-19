@@ -53,8 +53,8 @@ public class SpotDAOHibernateImplTest {
 		final int initialAreas = spotDAO.getAllAreas().size();
 		final String zoneName = "westCoast";
 		final String spotName = "biologia";
-		final double latitude = 2L;
-		final double longitude = 1L;
+		final float latitude = 2L;
+		final float longitude = 1L;
 
 		Area area = new Area();
 		Country country = new Country();
@@ -62,7 +62,12 @@ public class SpotDAOHibernateImplTest {
 		Zone zone = new Zone(zoneName);
 		zone.setCountry(country);
 		Spot spot = new Spot();
-		spot.setLocation(new Point(latitude, longitude));
+		Point point = spotDAO.getPoint(latitude, longitude);
+		if (point == null) {
+			point = new Point(latitude, longitude);
+			spotDAO.save(point);
+		}
+		spot.setLocation(point);
 		spot.setName(spotName);
 		spot.setZone(zone);
 		spot.setTimeZone("UTC");
