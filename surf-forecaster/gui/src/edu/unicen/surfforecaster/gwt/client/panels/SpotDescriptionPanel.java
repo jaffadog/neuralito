@@ -3,6 +3,8 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
+
 public class SpotDescriptionPanel extends VerticalPanel {
 
 	private LocalizationPanel localizationPanel;
@@ -12,6 +14,7 @@ public class SpotDescriptionPanel extends VerticalPanel {
 	public SpotDescriptionPanel() {
 		{
 			localizationPanel = new LocalizationPanel();
+			LocalizationUtils.getInstance().addObserver(localizationPanel);
 			localizationPanel.setBasePanel(this);
 			add(localizationPanel);
 		}

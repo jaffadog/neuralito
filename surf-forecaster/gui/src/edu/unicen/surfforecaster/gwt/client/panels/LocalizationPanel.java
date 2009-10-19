@@ -1,15 +1,11 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -20,14 +16,14 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.unicen.surfforecaster.gwt.client.Area;
-import edu.unicen.surfforecaster.gwt.client.Country;
-import edu.unicen.surfforecaster.gwt.client.Spot;
-import edu.unicen.surfforecaster.gwt.client.SpotServices;
-import edu.unicen.surfforecaster.gwt.client.Zone;
+import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
+import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.Observable;
+import edu.unicen.surfforecaster.gwt.client.utils.Observer;
 
-public class LocalizationPanel extends Composite implements ISurfForecasterBasePanel {
+public class LocalizationPanel extends Composite implements ISurfForecasterBasePanel, Observer {
 	
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
@@ -320,5 +316,30 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 
 	public void setBasePanel(Widget basePanel) {
 		this.baseParentPanel = basePanel;
+	}
+
+	public void update(Observable o, Object arg) {
+		if (o == LocalizationUtils.getInstance()) {
+			this.setAreaListItems();
+			this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
+		}
+	}
+	
+	private void setAreaListItems() {
+		Iterator<AreaDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
+		while (i.hasNext()){
+			AreaDTO area = i.next();
+			this.areaBox.addItem(area.getNames().get("en"), area.getId().toString());
+			//TODO sacar la harcodeada de idioma
+		}
+	}
+	
+	private void setCountryListItems(Integer areaId) {
+		Iterator<CountryDTO> i = LocalizationUtils.getInstance().getCountries(areaId).iterator(); 
+		while (i.hasNext()){
+			CountryDTO country = i.next();
+			this.countryBox.addItem(country.getNames().get("en"), country.getId().toString());
+			//TODO sacar la harcodeada de idioma
+		}
 	}
 }

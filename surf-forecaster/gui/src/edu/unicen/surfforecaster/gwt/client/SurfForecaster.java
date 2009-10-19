@@ -1,11 +1,15 @@
 package edu.unicen.surfforecaster.gwt.client;
 
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -13,6 +17,7 @@ import edu.unicen.surfforecaster.gwt.client.panels.ContentPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.LogoPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.UserStatePanel;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -39,6 +44,9 @@ public class SurfForecaster implements EntryPoint {
 		
 		//Set this instance of SurfForecaster
 		SurfForecaster.instance = this;
+		
+		//initialize client necessary data
+		LocalizationUtils.getInstance().initialize();
 		
 		GWTUtils.LOCALE_CONSTANTS = localeConstants;
 		GWTUtils.LOCALE_MESSAGES = localeMessages;
