@@ -1,4 +1,4 @@
-#How to manage the issue tracker.
+#summary How to manage the issue tracker.
 
 = Introduction =
 
