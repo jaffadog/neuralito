@@ -113,7 +113,8 @@ public enum ErrorCode implements Serializable {
 	/**
 	 * The user session expired.
 	 */
-	USER_SESSION_EXPIRED(27);
+	USER_SESSION_EXPIRED(27), FORECASTER_ID_CANNOT_BE_NULL(28), FORECASTER_ID_DOES_NOT_EXISTS(
+			29), FORECASTER_ID_INVALID(30);
 
 	/**
 	 * 

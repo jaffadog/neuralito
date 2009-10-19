@@ -94,13 +94,13 @@ public class SpotServiceImplementationTest {
 
 			// Create 4 Spots
 
-			spot1Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId1,
+			spot1Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId1,
 					userId1, true, "ACT");
-			spot2Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId2,
+			spot2Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId2,
 					userId1, false, "UTC");
-			spot3Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId3,
+			spot3Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId3,
 					userId2, false, "UTC");
-			spot4Id = spotService.addSpot("Guanchaco", 2.0, 1.0, zoneId4,
+			spot4Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId4,
 					userId2, true, "ACT");
 		} catch (final NeuralitoException e) {
 			System.out.println(e.getMessage());

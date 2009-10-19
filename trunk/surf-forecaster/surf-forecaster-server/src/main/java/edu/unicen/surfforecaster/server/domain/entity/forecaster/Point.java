@@ -32,11 +32,11 @@ public class Point {
 	/**
 	 * The latitude.
 	 */
-	private Double latitude;
+	private Float latitude;
 	/**
 	 * The longitude.
 	 */
-	private Double longitude;
+	private Float longitude;
 
 	/**
 	 * 
@@ -49,7 +49,7 @@ public class Point {
 	 * @param latitude
 	 * @param longitude
 	 */
-	public Point(final double latitude, final double longitude) {
+	public Point(final float latitude, final float longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
@@ -57,14 +57,14 @@ public class Point {
 	/**
 	 * @return the latitude
 	 */
-	public Double getLatitude() {
+	public Float getLatitude() {
 		return latitude;
 	}
 
 	/**
 	 * @return the longitude
 	 */
-	public Double getLongitude() {
+	public Float getLongitude() {
 		return longitude;
 	}
 
@@ -101,7 +101,6 @@ public class Point {
 	 */
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "Lat/Lon: " + latitude + ";" + longitude;
 	}
 }

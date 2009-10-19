@@ -10,6 +10,8 @@ import edu.unicen.surfforecaster.server.domain.entity.Country;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * @author esteban
@@ -84,5 +86,19 @@ public interface SpotDAO {
 	 * @return
 	 */
 	public List<Country> getAreaCountries(Area area);
+
+	public void addForecasterToSpot(Forecaster f, Spot s);
+
+	/**
+	 * @param point
+	 */
+	public void save(Point point);
+
+	/**
+	 * @param latitude
+	 * @param longitude
+	 * @return
+	 */
+	public Point getPoint(float latitude, float longitude);
 
 }

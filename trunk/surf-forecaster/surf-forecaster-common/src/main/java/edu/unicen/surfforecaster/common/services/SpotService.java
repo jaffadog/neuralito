@@ -29,7 +29,7 @@ public interface SpotService {
 	 * @param userId
 	 * @return
 	 */
-	public Integer addSpot(String spotName, double longitude, double latitude,
+	public Integer addSpot(String spotName, float latitude, float longitude,
 			Integer zoneId, Integer userId, boolean publik, String timeZone)
 			throws NeuralitoException;
 
@@ -52,7 +52,7 @@ public interface SpotService {
 	 * @return
 	 */
 	public Integer addZoneAndSpot(String zoneName, Integer countryId,
-			String spotName, double longitude, double latitude, Integer userId,
+			String spotName, float latitude, float longitude, Integer userId,
 			boolean publik, String timeZone) throws NeuralitoException;
 
 	/**

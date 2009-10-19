@@ -16,7 +16,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArch;
 
 /**
@@ -103,8 +102,8 @@ public class DBTest {
 		final float lon = 21F;
 		final GregorianCalendar from = null;
 		final GregorianCalendar to = null;
-		final List<ForecastArch> forecasts = dao.getArchivedForecasts(
-				new Point(lat, lon), from, to);
+		// final List<ForecastArch> forecasts = dao.getArchivedForecasts(
+		// new Point(lat, lon), from, to);
 	}
 
 	/**

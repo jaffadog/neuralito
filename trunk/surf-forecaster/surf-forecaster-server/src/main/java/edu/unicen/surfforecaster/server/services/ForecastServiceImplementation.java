@@ -5,6 +5,7 @@ package edu.unicen.surfforecaster.server.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -52,14 +53,19 @@ public class ForecastServiceImplementation implements ForecastService {
 			final PointDTO gridPointDTO) throws NeuralitoException {
 		final String modelName = "GlobalModel";
 		validateSpotExists(spotId);
-		// validateGridPoint(gridPointDTO);
-		final Point gridPoint = new Point(gridPointDTO.getLatitude(),
-				gridPointDTO.getLongitude());
+		validateGridPoint(gridPointDTO);
+		Point point = spotDAO.getPoint(new Float(gridPointDTO.getLatitude()),
+				new Float(gridPointDTO.getLongitude()));
+		if (point == null) {
+			point = new Point(new Float(gridPointDTO.getLatitude()), new Float(
+					gridPointDTO.getLongitude()));
+			spotDAO.save(point);
+		}
 		final Spot spot = spotDAO.getSpotById(spotId);
-		final WW3Forecaster forecaster = new WW3Forecaster(modelName,
-				gridPoint, spot.getLocation());
+		final WW3Forecaster forecaster = new WW3Forecaster(modelName, point,
+				spot.getLocation());
 		final Integer id = forecastDAO.save(forecaster);
-		spot.addForecaster(forecaster);
+		spotDAO.addForecasterToSpot(forecaster, spot);
 		spotDAO.saveSpot(spot);
 
 		return id;
@@ -88,8 +94,8 @@ public class ForecastServiceImplementation implements ForecastService {
 	 *      double)
 	 */
 	@Override
-	public List<PointDTO> getNearbyGridPoints(final double latitude,
-			final double longitude) throws NeuralitoException {
+	public List<PointDTO> getNearbyGridPoints(final float latitude,
+			final float longitude) throws NeuralitoException {
 		final WaveWatchModel model = models.get("GlobalModel");
 		final List<Point> surroundingGridPoints = model
 				.getNearbyGridPoints(new Point(latitude, longitude));
@@ -155,6 +161,45 @@ public class ForecastServiceImplementation implements ForecastService {
 	 */
 	public void setModels(final Map<String, WaveWatchModel> models) {
 		this.models = models;
+	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getArchivedForecasts(java.lang.Integer,
+	 *      edu.unicen.surfforecaster.common.services.dto.PointDTO,
+	 *      java.util.GregorianCalendar, java.util.GregorianCalendar)
+	 */
+	@Override
+	public List<ForecastDTO> getArchivedForecasts(final Integer forecasterId,
+			final GregorianCalendar from, final GregorianCalendar to)
+			throws NeuralitoException {
+		validateForecasterExists(forecasterId);
+		final Forecaster forecaster = forecastDAO
+				.getForecasterById(forecasterId);
+		final List<ForecastDTO> forecastsDTOs = new ArrayList<ForecastDTO>();
+		final Collection<Forecast> forecasts = forecaster.getArchivedForecasts(
+				from.getTime(), to.getTime());
+		for (final Iterator iterator = forecasts.iterator(); iterator.hasNext();) {
+			final Forecast forecast = (Forecast) iterator.next();
+			forecastsDTOs.add(forecast.getDTO());
+		}
+		return forecastsDTOs;
+	}
+
+	/**
+	 * @param forecasterId
+	 * @throws NeuralitoException
+	 */
+	private void validateForecasterExists(final Integer forecasterId)
+			throws NeuralitoException {
+		if (forecasterId == null)
+			throw new NeuralitoException(ErrorCode.FORECASTER_ID_CANNOT_BE_NULL);
+		if (forecasterId <= 0)
+			throw new NeuralitoException(ErrorCode.FORECASTER_ID_INVALID);
+		if (forecastDAO.getForecasterById(forecasterId) == null)
+			throw new NeuralitoException(
+					ErrorCode.FORECASTER_ID_DOES_NOT_EXISTS);
+
 	}
 
 }

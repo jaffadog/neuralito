@@ -42,7 +42,7 @@ public class Spot implements Serializable {
 	/**
 	 * The location of the spot
 	 */
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	private Point location;
 	/**
 	 * If this spots is public or not.

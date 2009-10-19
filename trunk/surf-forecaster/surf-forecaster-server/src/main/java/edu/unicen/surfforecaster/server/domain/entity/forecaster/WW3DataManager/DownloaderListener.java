@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.downloader;
+package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
 
 import java.util.HashMap;
 import java.util.Map;

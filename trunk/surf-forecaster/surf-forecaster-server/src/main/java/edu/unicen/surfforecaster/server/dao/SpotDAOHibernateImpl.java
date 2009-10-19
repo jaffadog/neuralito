@@ -4,7 +4,9 @@
 package edu.unicen.surfforecaster.server.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +21,8 @@ import edu.unicen.surfforecaster.server.domain.entity.Country;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * @author esteban
@@ -173,6 +177,13 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	@Override
 	public void removeSpot(final Spot spot) {
 		Validate.notNull(spot);
+		getHibernateTemplate().update(spot);
+		final Collection<Forecaster> forecasters = spot.getForecasters();
+		for (final Iterator iterator = forecasters.iterator(); iterator
+				.hasNext();) {
+			final Forecaster forecaster = (Forecaster) iterator.next();
+			getHibernateTemplate().delete(forecaster);
+		}
 		getHibernateTemplate().delete(spot);
 	}
 
@@ -245,5 +256,35 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 		final DetachedCriteria criteria = DetachedCriteria.forClass(
 				Country.class).add(Restrictions.eq("area", area));
 		return getHibernateTemplate().findByCriteria(criteria);
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#addForecasterToSpot(edu.unicen.surfforecaster.server.domain.entity.forecasters.Forecaster,
+	 *      edu.unicen.surfforecaster.server.domain.entity.Spot)
+	 */
+	@Override
+	public void addForecasterToSpot(final Forecaster f, final Spot s) {
+		getHibernateTemplate().update(s);
+		s.addForecaster(f);
+		getHibernateTemplate().update(s);
+	}
+
+	@Override
+	public void save(final Point point) {
+		getHibernateTemplate().save(point);
+	}
+
+	@Override
+	public Point getPoint(final float latitude, final float longitude) {
+
+		final DetachedCriteria criteria = DetachedCriteria
+				.forClass(Point.class).add(
+						Restrictions.eq("latitude", latitude));
+		criteria.add(Restrictions.eq("longitude", longitude));
+		final List findByCriteria = getHibernateTemplate().findByCriteria(
+				criteria);
+		if (findByCriteria == null || findByCriteria.isEmpty())
+			return null;
+		return (Point) findByCriteria.get(0);
 	}
 }

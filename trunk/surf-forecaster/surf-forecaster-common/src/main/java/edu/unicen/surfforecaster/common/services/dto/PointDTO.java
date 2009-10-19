@@ -16,8 +16,8 @@ public class PointDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private double longitude;
-	private double latitude;
+	private float longitude;
+	private float latitude;
 
 	/**
 	 * 
@@ -29,7 +29,7 @@ public class PointDTO implements Serializable {
 	/**
 	 * @return
 	 */
-	public double getLatitude() {
+	public float getLatitude() {
 		return latitude;
 	}
 
@@ -37,7 +37,7 @@ public class PointDTO implements Serializable {
 	 * @param longitude
 	 * @param latitude
 	 */
-	public PointDTO(final double longitude, final double latitude) {
+	public PointDTO(final float longitude, final float latitude) {
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
@@ -45,7 +45,7 @@ public class PointDTO implements Serializable {
 	/**
 	 * @return
 	 */
-	public double getLongitude() {
+	public float getLongitude() {
 		return longitude;
 	}
 

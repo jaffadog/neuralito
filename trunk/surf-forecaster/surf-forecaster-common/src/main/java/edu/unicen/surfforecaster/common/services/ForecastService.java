@@ -3,6 +3,7 @@
  */
 package edu.unicen.surfforecaster.common.services;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
@@ -38,7 +39,7 @@ public interface ForecastService {
 	 * @param longitude
 	 * @return
 	 */
-	public List<PointDTO> getNearbyGridPoints(double latitude, double longitude)
+	public List<PointDTO> getNearbyGridPoints(float latitude, float longitude)
 			throws NeuralitoException;
 
 	/**
@@ -49,6 +50,17 @@ public interface ForecastService {
 	 * @return
 	 */
 	public List<ForecastDTO> getForecasts(Integer forecasterId)
+			throws NeuralitoException;
+
+	/**
+	 * @param gridPoint
+	 * @param from
+	 * @param to
+	 * @return
+	 * @throws NeuralitoException
+	 */
+	public List<ForecastDTO> getArchivedForecasts(Integer forecasterId,
+			GregorianCalendar from, GregorianCalendar to)
 			throws NeuralitoException;
 
 }

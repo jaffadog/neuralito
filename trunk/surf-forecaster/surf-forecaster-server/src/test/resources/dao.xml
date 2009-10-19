@@ -72,7 +72,13 @@
 		
 		<bean id="forecastDaoTarget"
 		class="edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl"
-		autowire="byName" /><!--sessionFactory will get autowired-->
+		autowire="byName" >
+		<property name="models" >	
+			<map>
+			<entry key="GlobalModel" value-ref="waveWatchDaoTarget"/>
+			</map>		
+		</property>
+		</bean><!--sessionFactory will get autowired-->
 
 	<bean id="waveWatchDaoTarget"
 		class="edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel"
