@@ -1,0 +1,13 @@
+#How to manage the issue tracker.
+
+= Introduction =
+
+Every day check the issues list ordered by priority.
+
+
+= Details =
+
+Issue priority:
+  * *Critical:* Must be solved now. 
+  * *High:* Try to solve it in the
+  * Automatic links to other wiki pages
