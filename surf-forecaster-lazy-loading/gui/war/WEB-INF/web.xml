@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+  
+   <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    
+  <!-- Servlets -->
+  <servlet>
+  	<servlet-name>UserServices</servlet-name>
+  	<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>UserServices</servlet-name>
+  	<url-pattern>/surfforecaster/UserServices</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>SpotServices</servlet-name>
+  	<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>SpotServices</servlet-name>
+  	<url-pattern>/surfforecaster/SpotServices</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>ForecastServices</servlet-name>
+  	<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ForecastServices</servlet-name>
+  	<url-pattern>/surfforecaster/ForecastServices</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>SurfForecaster.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

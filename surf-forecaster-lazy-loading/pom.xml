@@ -1,0 +1,322 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>edu.unicen.surf-forecaster</groupId>
+	<artifactId>surf-forecaster</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>surf-forecaster</name>
+	
+	<!--  Properties to use among all POM's in the hierarchy. -->
+	
+	<properties>
+		<gwt.version>1.7.0</gwt.version>
+		<!--  tell the compiler we can use 1.5 -->
+		<maven.compiler.source>1.5</maven.compiler.source>
+		<maven.compiler.target>1.5</maven.compiler.target>
+		<gwtLibDirectory>../gui/lib</gwtLibDirectory>
+	</properties>
+	
+	<!--  		Modules -->
+	<!--  			 Modules this project has				  -->
+	
+	<modules>
+		<module>surf-forecaster-common</module>
+		<module>surf-forecaster-server</module>
+		
+	<!--	<module>surf-forecaster-web</module>  -->
+	</modules>
+	
+	<!--  Build -->
+	<!-- Project Structure and Plugins definition	-->
+	<build>
+	    <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-jar-plugin</artifactId>
+        		<configuration>
+        			<outputDirectory>
+        			${gwtLibDirectory}
+        			</outputDirectory>
+        		</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+				<configuration>
+					<!-- configure the plugin here -->
+					<outputDirectory>${gwtLibDirectory}</outputDirectory>
+				</configuration>
+          </execution>
+        </executions>
+      </plugin>
+	   
+    </plugins>
+		<extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.8</version>
+            </extension>
+        </extensions>
+	</build>
+
+	<!--  Dependencies -->
+	<!--  												      -->
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>edu.unicen.surf-forecaster</groupId>
+				<artifactId>web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>edu.unicen.surf-forecaster</groupId>
+				<artifactId>surf-forecaster-server</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>edu.unicen.surf-forecaster</groupId>
+				<artifactId>surf-forecaster-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring</artifactId>
+				<version>2.0.4</version>
+				<exclusions>
+					<exclusion>  <!-- we exclude servlet api - provided by Tomcat -->
+						<groupId>javax.servlet</groupId>
+						<artifactId>servlet-api</artifactId>    
+						</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>2.5</version>
+		</dependency>
+			<dependency>
+				<groupId>opensymphony</groupId>
+				<artifactId>quartz</artifactId>
+				<version>1.6.0</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>5.1.6</version>
+			</dependency>
+			<dependency>
+			  <groupId>essi-unidata</groupId>
+			  <artifactId>netcdf-java</artifactId>
+			  <version>4.0.31</version>
+			</dependency>
+			 <dependency>
+            <!-- required to read Grib-1 or Grib-2 datasets -->
+            <groupId>essi-unidata</groupId>
+				<artifactId>grib</artifactId>
+				<version>6.0.16</version>
+            </dependency>
+			<dependency>
+            <!-- required to read Grib-2 JPEG2000 compressed files -->
+				<groupId>essi-unidata</groupId>
+				<artifactId>jpeg2000</artifactId>
+				<version>1.0</version>
+            </dependency>
+			
+			
+			
+			<dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate</artifactId>
+      <version>3.2.3.ga</version>
+      <exclusions>
+         <exclusion>
+           <groupId>ant</groupId>
+           <artifactId>ant</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>odmg</groupId>
+           <artifactId>odmg</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>c3p0</groupId>
+           <artifactId>c3p0</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>proxool</groupId>
+           <artifactId>proxool</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>opensymphony</groupId>
+           <artifactId>oscache</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>swarmcache</groupId>
+           <artifactId>swarmcache</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>jboss</groupId>
+           <artifactId>jboss-cache</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>javax.security</groupId>
+           <artifactId>jacc</artifactId>
+         </exclusion>
+         <exclusion>
+           <groupId>javax.transaction</groupId>
+           <artifactId>jta</artifactId>
+         </exclusion>
+       </exclusions>
+
+      </dependency>
+     <dependency>
+       <groupId>geronimo-spec</groupId>
+       <artifactId>geronimo-spec-jta</artifactId>
+       <version>1.0-M1</version>
+     </dependency>
+
+   
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-annotations</artifactId>
+      <version>3.2.1.ga</version>
+    </dependency>
+
+    
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.3</version>
+    </dependency>
+	<dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+	<dependency>
+		  <groupId>com.enterprisedt</groupId>
+		  <artifactId>edtFTPj</artifactId>
+		  <version>2.0.4</version>
+	</dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>1.8.0.7</version>
+    </dependency>
+
+			<!--  GWT dependencies (from central repo) -->
+			<!--
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-servlet</artifactId>
+				<version>${gwt.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-user</artifactId>
+				<version>${gwt.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-incubator</artifactId>
+				<version>march-02-2009</version>
+			</dependency>
+			-->
+			<dependency>
+			  <groupId>commons-httpclient</groupId>
+			  <artifactId>commons-httpclient</artifactId>
+			  <version>3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>1.5.6</version>
+			</dependency>
+			<dependency>
+			  <groupId>org.jdom</groupId>
+			  <artifactId>jdom</artifactId>
+			  <version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.15</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.4</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<!--  							     -->
+	<!--  Repositories needed for the project dependencies 	     -->
+	
+	<pluginRepositories>
+		<pluginRepository>
+			<id>gwt-maven-plugins</id>
+			<url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>gwt-maven</id>
+			<url>http://gwt-maven.googlecode.com/svn/trunk/mavenrepo/</url>
+		</repository>
+		<repository>
+			<id>for-gwt-incubator</id>
+			<url>http://dist.codehaus.org/mule/dependencies/maven2/</url>
+		</repository>
+		<repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+		<repository>
+	            <name>Java-NetCDF repository at University of Florence</name>
+	            <snapshots>
+	                <enabled>true</enabled>
+	            </snapshots>
+	            <id>netcdf</id>
+	            <url>http://ulisse.pin.unifi.it:8080/archiva/repository/ext.public.rel</url>
+	        </repository>
+			<repository>
+	            <name>Neuralito Google Code repo</name>
+	            <snapshots>
+	                <enabled>true</enabled>
+	            </snapshots>
+	            <id>neuralito</id>
+	            <url>http://neuralito.googlecode.com/svn/repo</url>
+	        </repository>
+	</repositories>
+		
+	<!-- Distribution Management -->
+	<!-- Manages the distribution of the artifact and supporting files         -->
+	<!-- generated throughout the build process. 			          		   -->
+	
+	<distributionManagement>
+		<!-- specifies the remote repository where this project will be deployed-->
+	     <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>googlecode</id>
+            <url>svn:https://neuralito.googlecode.com/svn/repo</url>
+        </repository>
+    </distributionManagement>
+		
+</project>

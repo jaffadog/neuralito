@@ -1,0 +1,6 @@
+<!-- GWT Module Definition -->
+<module>
+  <source path="services/dto"/>
+  <source path="exceptions"/>
+  
+</module> 
