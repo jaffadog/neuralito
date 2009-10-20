@@ -307,7 +307,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			st
 					.execute("CREATE TABLE "
 							+ gridPointsTableName
-							+ "  (   `latitude` float NOT NULL,  `longitude` float NOT NULL)");
+							+ "  (   `latitude` float NOT NULL,  `longitude` float NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 			st.execute("ALTER TABLE " + gridPointsTableName
 					+ " ADD INDEX location(latitude, longitude)");
 			st.close();
@@ -659,7 +659,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			if (textFile.isFile()) {
 				textFile.delete();
 			}
-		for (int time = 0; time < 1; time++) {
+		for (int time = 0; time < 61; time++) {
 			try {
 				final Collection<ForecastPlain> forecasts = gribDecoder
 						.getForecastForTime(gribFile, time);
