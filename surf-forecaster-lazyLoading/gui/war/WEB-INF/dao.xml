@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.connection.pool_size">1</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">true</prop>
+				<prop key="hibernate.jdbc.batch_size">40</prop>
+				
+				
+
+<!--				HSQL-->
+<!--				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>-->
+<!--				<prop key="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</prop>-->
+<!--				<prop key="hibernate.connection.url">jdbc:hsqldb:mem:z</prop>-->
+<!--				<prop key="hibernate.connection.username">sa</prop>-->
+<!--				<prop key="hibernate.connection.password"></prop>-->
+
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+				<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/test</prop>
+				<prop key="hibernate.connection.username">root</prop>
+				<prop key="hibernate.connection.password">admin</prop>
+				
+<!--				-->
+<!--				## MySQL-->
+<!---->
+<!--hibernate.dialect net.sf.hibernate.dialect.MySQLDialect-->
+<!--hibernate.connection.driver_class org.gjt.mm.mysql.Driver-->
+<!--hibernate.connection.driver_class com.mysql.jdbc.Driver-->
+<!--hibernate.connection.url jdbc:mysql:///test-->
+<!--hibernate.connection.username cesar-->
+<!--hibernate.connection.password -->
+
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Area</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Country</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Zone</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Spot</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.I18n</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Comparation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.User</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Forecast</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Point</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.ForecastParameter</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservation</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="hibernateInterceptor" class="org.springframework.orm.hibernate3.HibernateInterceptor"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+
+
+	<bean id="spotDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.SpotDAOHibernateImpl"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+	
+	<bean id="userDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.UserDAOHibernateImpl"
+		autowire="byName" /><!--sessionFactory will get autowired-->
+		
+		<bean id="forecastDaoTarget"
+		class="edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl"
+		autowire="byName" >
+		<property name="models" >	
+			<map>
+			<entry key="GlobalModel" value-ref="waveWatchDaoTarget"/>
+			</map>		
+		</property>
+		</bean><!--sessionFactory will get autowired-->
+
+	<bean id="waveWatchDaoTarget"
+		class="edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel"
+		init-method="init" autowire="byName" >
+		<constructor-arg value="GlobalModel" />
+		<constructor-arg value="src/test/resources/multi_1.glo_30m.all.grb2" />
+		<property name="gribDecoder" ref="gribDecoder" />
+	</bean><!--sessionFactory will get autowired-->
+
+	<bean id="gribDecoder"
+		class="edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf">
+	</bean>
+
+	<bean id="spotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.SpotDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>spotDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="userDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.UserDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>userDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="forecastDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.ForecastDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>forecastDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="waveWatchDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.domain.WaveWatchModel</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>waveWatchDaoTarget</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>
