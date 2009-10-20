@@ -106,4 +106,22 @@ public interface SpotDAO {
 	 */
 	public List<Country> getAllCountries();
 
+	/**
+	 * @param user
+	 * @param zone
+	 */
+	public List<Spot> getSpotForUserAndZone(User user, Zone zone);
+
+	/**
+	 * @param zone
+	 * @return
+	 */
+	public List<Spot> getPublicSpots(Zone zone);
+
+	/**
+	 * @param country
+	 * @return
+	 */
+	public List<Zone> getPublicZones(Country country);
+
 }

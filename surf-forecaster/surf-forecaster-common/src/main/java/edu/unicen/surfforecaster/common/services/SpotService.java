@@ -143,7 +143,38 @@ public interface SpotService {
 	 */
 	public List<CountryDTO> getCountries() throws NeuralitoException;
 
+	/**
+	 * 
+	 * @param idCountry
+	 * @param idUser
+	 * @return
+	 * @throws NeuralitoException
+	 */
 	public List<ZoneDTO> getZones(Integer idCountry, Integer idUser)
 			throws NeuralitoException;
+
+	/**
+	 * 
+	 * @return ->retrieve only zones of public spots
+	 */
+	public List<ZoneDTO> getZones(Integer idcountry) throws NeuralitoException;
+
+	/**
+	 * 
+	 * @param idZone
+	 * @param idUser
+	 * @return -> retrieve spots both public and private of the zone for the
+	 *         given user.
+	 * @throws NeuralitoException
+	 */
+	public List<SpotDTO> getSpots(Integer idZone, Integer idUser)
+			throws NeuralitoException;
+
+	/**
+	 * 
+	 * @return -> retrieve just public spots
+	 * @throws NeuralitoException
+	 */
+	public List<SpotDTO> getSpots(Integer idZone) throws NeuralitoException;
 
 }

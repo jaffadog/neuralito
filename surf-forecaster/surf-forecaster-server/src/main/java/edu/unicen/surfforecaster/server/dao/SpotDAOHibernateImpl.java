@@ -13,7 +13,6 @@ import java.util.Set;
 import org.apache.commons.lang.Validate;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
@@ -37,7 +36,6 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	 */
 	@SuppressWarnings("unchecked")
 	public Set<Spot> getAllSpots() {
-		// TODO Auto-generated method stub
 		return new HashSet<Spot>(getHibernateTemplate().loadAll(Spot.class));
 	}
 
@@ -225,17 +223,20 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 			final Country country) {
 		Validate.notEmpty(zoneName);
 		Validate.notNull(country);
+		getHibernateTemplate().clear();
 		final DetachedCriteria criteria = DetachedCriteria.forClass(Zone.class)
-				.add(Restrictions.eq("name", zoneName));
-		criteria.add(Restrictions.eq("country", country));
+				.add(
+						Restrictions.and(Restrictions.eq("name", zoneName),
+								Restrictions.eq("country", country)));
 		final List<Zone> zones = getHibernateTemplate()
 				.findByCriteria(criteria);
-		if (zones.size() > 1)
-			throw new DataIntegrityViolationException(
-					"zone name is not unique for a given Country");
+		// if (zones.size() > 1)
+		// throw new DataIntegrityViolationException(
+		// "zone name is not unique for a given Country");
 		if (zones.size() == 0)
 			return null;
-		return zones.get(0);
+		else
+			return zones.get(0);
 	}
 
 	/**
@@ -294,5 +295,77 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	@Override
 	public List<Country> getAllCountries() {
 		return getHibernateTemplate().loadAll(Country.class);
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getSpotForUserAndZone(edu.unicen.surfforecaster.server.domain.entity.User,
+	 *      edu.unicen.surfforecaster.server.domain.entity.Zone)
+	 */
+	@Override
+	public List<Spot> getSpotForUserAndZone(final User user, final Zone zone) {
+		// Find all public spots in the system which doesnt belong to the user.
+		final DetachedCriteria criteria = DetachedCriteria.forClass(Spot.class)
+				.add(Restrictions.eq("publik", true));
+		criteria.add(Restrictions.ne("user", user));
+		criteria.add(Restrictions.eq("zone", zone));
+		final List publicSpots = getHibernateTemplate()
+				.findByCriteria(criteria);
+		// Find all the spots from the user.(Publics and privates).
+		final DetachedCriteria criteria2 = DetachedCriteria
+				.forClass(Spot.class).add(Restrictions.eq("user", user));
+		criteria2.add(Restrictions.eq("zone", zone));
+		final List userSpecificSpots = getHibernateTemplate().findByCriteria(
+				criteria2);
+		// Return a list containing the results of both queries.
+		final List allVisibleSpots = new ArrayList();
+		allVisibleSpots.addAll(publicSpots);
+		allVisibleSpots.addAll(userSpecificSpots);
+
+		return allVisibleSpots;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getPublicSpots(edu.unicen.surfforecaster.server.domain.entity.Zone)
+	 */
+	@Override
+	public List<Spot> getPublicSpots(final Zone zone) {
+		final Set<Spot> spots = zone.getSpots();
+		final List<Spot> publicSpots = new ArrayList<Spot>();
+		for (final Iterator iterator = spots.iterator(); iterator.hasNext();) {
+			final Spot spot = (Spot) iterator.next();
+			if (spot.isPublik()) {
+				publicSpots.add(spot);
+			}
+		}
+		return publicSpots;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getPublicZones(edu.unicen.surfforecaster.server.domain.entity.Country)
+	 */
+	@Override
+	public List<Zone> getPublicZones(final Country country) {
+		// Obtain all zones that belongs to the country
+		final DetachedCriteria criteria = DetachedCriteria.forClass(Zone.class)
+				.add(Restrictions.eq("country", country));
+		final List<Zone> countryZones = getHibernateTemplate().findByCriteria(
+				criteria);
+		final Set<Zone> publicZones = new HashSet<Zone>();
+		// For each zone determine if zone is public.
+		for (final Iterator zoneIter = countryZones.iterator(); zoneIter
+				.hasNext();) {
+			final Zone zone = (Zone) zoneIter.next();
+			final Set<Spot> spots = zone.getSpots();
+			// If any of the spots in the zone is publik then the zone is
+			// publik.
+			for (final Iterator spotIter = spots.iterator(); spotIter.hasNext();) {
+				final Spot spot = (Spot) spotIter.next();
+				if (spot.isPublik()) {
+					publicZones.add(zone);
+				}
+				break;
+			}
+		}
+		return new ArrayList<Zone>(publicZones);
 	}
 }
