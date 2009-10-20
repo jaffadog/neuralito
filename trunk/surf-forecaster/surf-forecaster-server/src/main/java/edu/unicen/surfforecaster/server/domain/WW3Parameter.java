@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.entity.forecaster;
+package edu.unicen.surfforecaster.server.domain;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 

@@ -1,16 +1,19 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
+package edu.unicen.surfforecaster.server.domain;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
+ * This class is used to hold the grib decoded data.As the grib decoder decodes
+ * many forecasts at a time a simple object to hold this data was needed.
+ * 
  * @author esteban
  * 
  */
-public class ForecastArch {
+public class ForecastPlain {
 	// date
 	private final Calendar issuedDate;
 	private final int validTime;
@@ -51,7 +54,7 @@ public class ForecastArch {
 	 * @param windU
 	 * @param windV
 	 */
-	public ForecastArch(final GregorianCalendar issuedDate,
+	public ForecastPlain(final GregorianCalendar issuedDate,
 			final int validTime, final Float latitude, final Float longitude,
 			final Float windWaveHeight, final Float windWavePeriod,
 			final Float windWaveDirection, final Float swellWaveHeight,

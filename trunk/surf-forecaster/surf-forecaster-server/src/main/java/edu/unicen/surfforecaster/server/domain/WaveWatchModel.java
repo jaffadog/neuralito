@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
  * Wave Watch Model abstraction. Each Wave Watch model is responsible for

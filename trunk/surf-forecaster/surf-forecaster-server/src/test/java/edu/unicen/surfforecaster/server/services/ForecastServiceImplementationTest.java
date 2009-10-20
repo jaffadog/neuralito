@@ -164,7 +164,7 @@ public class ForecastServiceImplementationTest {
 			final int forecasterId = forecastService.createWW3Forecaster(
 					spot1Id, new PointDTO(75.0F, 0.5F));
 			final List<ForecastDTO> forecasts = forecastService
-					.getForecasts(forecasterId);
+					.getLatestForecasts(forecasterId);
 			System.out.println(forecasts.size());
 			Assert.assertTrue(forecasts.size() > 0);
 		} catch (final NeuralitoException e) {

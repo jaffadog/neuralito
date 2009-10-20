@@ -3,8 +3,8 @@
  */
 package edu.unicen.surfforecaster.server.dao;
 
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster;
 
 /**
  * @author esteban

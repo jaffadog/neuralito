@@ -114,7 +114,7 @@ public class Zone {
 	 * @return
 	 */
 	public ZoneDTO getDTO() {
-		final ZoneDTO dto = new ZoneDTO(id, name);
+		final ZoneDTO dto = new ZoneDTO(id, name, country.getDTO());
 		return dto;
 	}
 

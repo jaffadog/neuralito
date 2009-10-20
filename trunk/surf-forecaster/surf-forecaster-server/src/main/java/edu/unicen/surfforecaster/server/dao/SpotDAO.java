@@ -7,11 +7,11 @@ import java.util.List;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
 import edu.unicen.surfforecaster.server.domain.entity.Country;
+import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * @author esteban
@@ -100,5 +100,10 @@ public interface SpotDAO {
 	 * @return
 	 */
 	public Point getPoint(float latitude, float longitude);
+
+	/**
+	 * 
+	 */
+	public List<Country> getAllCountries();
 
 }

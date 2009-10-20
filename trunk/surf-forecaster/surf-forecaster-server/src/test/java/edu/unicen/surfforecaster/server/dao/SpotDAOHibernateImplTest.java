@@ -11,9 +11,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
 import edu.unicen.surfforecaster.server.domain.entity.Country;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 public class SpotDAOHibernateImplTest {
 	private SpotDAO spotDAO;

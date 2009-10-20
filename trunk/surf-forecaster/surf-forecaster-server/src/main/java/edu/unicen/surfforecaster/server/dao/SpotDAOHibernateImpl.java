@@ -18,11 +18,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
 import edu.unicen.surfforecaster.server.domain.entity.Country;
+import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * @author esteban
@@ -286,5 +286,13 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 		if (findByCriteria == null || findByCriteria.isEmpty())
 			return null;
 		return (Point) findByCriteria.get(0);
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.SpotDAO#getAllCountries()
+	 */
+	@Override
+	public List<Country> getAllCountries() {
+		return getHibernateTemplate().loadAll(Country.class);
 	}
 }

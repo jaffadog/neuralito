@@ -11,8 +11,8 @@ import java.util.Iterator;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoderNetcdf;
+import edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
  * @author esteban

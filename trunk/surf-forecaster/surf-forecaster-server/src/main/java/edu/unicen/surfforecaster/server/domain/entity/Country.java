@@ -76,8 +76,8 @@ public class Country {
 		for (final Iterator<Entry<String, String>> iterator = keyValues
 				.iterator(); iterator.hasNext();) {
 			final Entry<String, String> entry = iterator.next();
-			names.put(entry.getKey(), new I18n(entry.getKey(), entry
-					.getValue()));
+			names.put(entry.getKey(),
+					new I18n(entry.getKey(), entry.getValue()));
 
 		}
 	}
@@ -143,7 +143,7 @@ public class Country {
 			final I18n i18nKeyValue = iterator.next();
 			names.put(i18nKeyValue.getLanguague(), i18nKeyValue.getText());
 		}
-		final CountryDTO dto = new CountryDTO(id, names);
+		final CountryDTO dto = new CountryDTO(id, names, area.getDTO());
 		return dto;
 	}
 
