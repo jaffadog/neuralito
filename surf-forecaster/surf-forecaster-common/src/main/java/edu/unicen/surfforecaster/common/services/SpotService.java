@@ -137,6 +137,12 @@ public interface SpotService {
 	public List<CountryDTO> getCountries(Integer idArea)
 			throws NeuralitoException;
 
+	/**
+	 * @return List<CountryDTO> -> with all the countries in the country table.
+	 * @throws NeuralitoException
+	 */
+	public List<CountryDTO> getCountries() throws NeuralitoException;
+
 	public List<ZoneDTO> getZones(Integer idCountry, Integer idUser)
 			throws NeuralitoException;
 

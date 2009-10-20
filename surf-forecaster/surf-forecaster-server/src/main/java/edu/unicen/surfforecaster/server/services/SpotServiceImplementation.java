@@ -25,11 +25,11 @@ import edu.unicen.surfforecaster.server.dao.SpotDAO;
 import edu.unicen.surfforecaster.server.dao.UserDAO;
 import edu.unicen.surfforecaster.server.domain.entity.Area;
 import edu.unicen.surfforecaster.server.domain.entity.Country;
+import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * 
@@ -507,4 +507,22 @@ public class SpotServiceImplementation implements SpotService {
 		return new ArrayList<ZoneDTO>(zonesDtos);
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getCountries()
+	 */
+	@Override
+	public List<CountryDTO> getCountries() throws NeuralitoException {
+		try {
+			final List<Country> allCountries = spotDAO.getAllCountries();
+			final List<CountryDTO> dtos = new ArrayList<CountryDTO>();
+			for (final Iterator iterator = allCountries.iterator(); iterator
+					.hasNext();) {
+				final Country country = (Country) iterator.next();
+				dtos.add(country.getDTO());
+			}
+			return dtos;
+		} catch (final DataAccessException e) {
+			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
+		}
+	}
 }

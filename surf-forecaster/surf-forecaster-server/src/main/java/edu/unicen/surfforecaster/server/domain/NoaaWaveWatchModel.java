@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager;
+package edu.unicen.surfforecaster.server.domain;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -32,12 +32,12 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
-import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Parameter;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoder;
+import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
+import edu.unicen.surfforecaster.server.domain.download.DownloaderJob;
+import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.ForecastParameter;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
  * This class provides the latest forecasts issued by the NOAA and also archived
@@ -285,12 +285,12 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 */
 	private List<Point> getValidGridPoints(final String gridFile)
 			throws IOException {
-		final Collection<ForecastArch> forecastForTime = gribDecoder
+		final Collection<ForecastPlain> forecastForTime = gribDecoder
 				.getForecastForTime(new File(gridFile), 0);
 		final List<Point> points = new ArrayList<Point>();
 		for (final Iterator iterator = forecastForTime.iterator(); iterator
 				.hasNext();) {
-			final ForecastArch forecastArch = (ForecastArch) iterator.next();
+			final ForecastPlain forecastArch = (ForecastPlain) iterator.next();
 			points.add(new Point(forecastArch.getLatitude(), forecastArch
 					.getLongitude()));
 		}
@@ -376,7 +376,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		final long init = System.currentTimeMillis();
 		final float lat = new Float(point.getLatitude());
 		final float lon = new Float(point.getLongitude());
-		final List<ForecastArch> forecasts = new ArrayList<ForecastArch>();
+		final List<ForecastPlain> forecasts = new ArrayList<ForecastPlain>();
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
@@ -419,7 +419,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				final float windDirection = result.getFloat("windDirection");
 				final float windU = result.getFloat("windU");
 				final float windV = result.getFloat("windV");
-				final ForecastArch arch = new ForecastArch(issuedDate,
+				final ForecastPlain arch = new ForecastPlain(issuedDate,
 						validTime, latitude, longitude, windWaveHeight,
 						windWavePeriod, windWaveDirection, swellWaveHeight,
 						swellWavePeriod, swellWaveDirection,
@@ -445,7 +445,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	public List<Forecast> getLatestForecast(final Point gridPoint) {
 		System.out.println("Retrieving latest forecast for: " + gridPoint);
 		final long init = System.currentTimeMillis();
-		final List<ForecastArch> forecasts = new ArrayList<ForecastArch>();
+		final List<ForecastPlain> forecasts = new ArrayList<ForecastPlain>();
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
@@ -480,7 +480,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				final float windDirection = result.getFloat("windDirection");
 				final float windU = result.getFloat("windU");
 				final float windV = result.getFloat("windV");
-				final ForecastArch arch = new ForecastArch(issuedDate,
+				final ForecastPlain arch = new ForecastPlain(issuedDate,
 						validTime, latitude, longitude, windWaveHeight,
 						windWavePeriod, windWaveDirection, swellWaveHeight,
 						swellWavePeriod, swellWaveDirection,
@@ -514,7 +514,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		} catch (final Exception e1) {
 		}
 		Date date = null;
-		final List<ForecastArch> forecasts = new ArrayList<ForecastArch>();
+		final List<ForecastPlain> forecasts = new ArrayList<ForecastPlain>();
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
@@ -661,7 +661,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			}
 		for (int time = 0; time < 1; time++) {
 			try {
-				final Collection<ForecastArch> forecasts = gribDecoder
+				final Collection<ForecastPlain> forecasts = gribDecoder
 						.getForecastForTime(gribFile, time);
 				appendForecastsToFile(textFile, forecasts);
 			} catch (final IOException e) {
@@ -737,7 +737,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 
 			for (final Iterator iterator = forecasts.iterator(); iterator
 					.hasNext();) {
-				final ForecastArch forecast = (ForecastArch) iterator.next();
+				final ForecastPlain forecast = (ForecastPlain) iterator.next();
 				final float windWaveHeight = forecast.getWindWaveHeight()
 						.isNaN() ? -1F : forecast.getWindWaveHeight();
 				final float windWavePeriod = forecast.getWindWavePeriod()
@@ -839,10 +839,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		}
 	}
 
-	private List<Forecast> translate(final List<ForecastArch> forecasts) {
+	private List<Forecast> translate(final List<ForecastPlain> forecasts) {
 		final List<Forecast> translatedForecasts = new ArrayList<Forecast>();
 		for (final Iterator iterator = forecasts.iterator(); iterator.hasNext();) {
-			final ForecastArch forecastArch = (ForecastArch) iterator.next();
+			final ForecastPlain forecastArch = (ForecastPlain) iterator.next();
 			final Map<String, ForecastParameter> parameters = new HashMap<String, ForecastParameter>();
 			parameters.put(WW3Parameter.WIND_WAVE_HEIGHT.toString(),
 					new ForecastParameter(WW3Parameter.WIND_WAVE_HEIGHT

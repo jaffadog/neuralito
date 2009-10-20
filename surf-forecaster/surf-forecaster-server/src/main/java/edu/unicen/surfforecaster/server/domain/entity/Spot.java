@@ -19,8 +19,6 @@ import org.apache.commons.lang.Validate;
 
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
 
 /**
  * A surf spot.

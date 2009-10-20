@@ -49,7 +49,7 @@ public interface ForecastService {
 	 *            the id of the forecaster who will provide the forecast.
 	 * @return
 	 */
-	public List<ForecastDTO> getForecasts(Integer forecasterId)
+	public List<ForecastDTO> getLatestForecasts(Integer forecasterId)
 			throws NeuralitoException;
 
 	/**

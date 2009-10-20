@@ -15,11 +15,11 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel;
 import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.DownloaderJobListener;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.NoaaWaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
  * @author esteban

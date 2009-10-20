@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.entity.forecaster;
+package edu.unicen.surfforecaster.server.domain.entity;
 
 import java.util.Collection;
 import java.util.Date;

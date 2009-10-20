@@ -48,12 +48,12 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.Comparation</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.User</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.Point</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.ForecastParameter</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.forecaster.VisualObservation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Forecast</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Point</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.ForecastParameter</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservation</value>
 			</list>
 		</property>
 	</bean>
@@ -89,7 +89,7 @@
 	</bean><!--sessionFactory will get autowired-->
 
 	<bean id="gribDecoder"
-		class="edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.decoder.GribDecoderNetcdf">
+		class="edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf">
 	</bean>
 
 	<bean id="spotDAO" class="org.springframework.aop.framework.ProxyFactoryBean">

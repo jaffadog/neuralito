@@ -15,8 +15,8 @@ import java.util.Random;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.unicen.surfforecaster.server.domain.ForecastPlain;
 import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3DataManager.ForecastArch;
 
 /**
  * @author esteban
@@ -65,7 +65,7 @@ public class DBTest {
 
 			for (final Iterator iterator = forecasts.iterator(); iterator
 					.hasNext();) {
-				final ForecastArch forecast = (ForecastArch) iterator.next();
+				final ForecastPlain forecast = (ForecastPlain) iterator.next();
 				final String line = "x2009-02-03" + ","
 						+ forecast.getValidTime() + ","
 						+ forecast.getLatitude() + ","
@@ -134,7 +134,7 @@ public class DBTest {
 			final int year = 2009;
 			final int month = 02;
 			final int day = 03;
-			forecasts.add(new ForecastArch(new GregorianCalendar(year, month,
+			forecasts.add(new ForecastPlain(new GregorianCalendar(year, month,
 					day), time, new Float(lat), new Float(lon), Float.NaN,
 					new Float(random.nextInt(5000)), new Float(random
 							.nextInt(5000)), new Float(random.nextInt(5000)),

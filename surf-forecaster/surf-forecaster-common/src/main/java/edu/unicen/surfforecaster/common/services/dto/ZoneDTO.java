@@ -27,15 +27,21 @@ public class ZoneDTO implements Serializable {
 	 * Zone name.
 	 */
 	private String name;
+	/**
+	 * The Country this zone belongs.
+	 */
+	private CountryDTO countryDTO;
 
 	/**
 	 * @param id
 	 * @param name
 	 */
-	public ZoneDTO(final Integer id, final String name) {
+	public ZoneDTO(final Integer id, final String name,
+			final CountryDTO countryDTO) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.countryDTO = countryDTO;
 	}
 
 	/**
@@ -58,10 +64,18 @@ public class ZoneDTO implements Serializable {
 	@Override
 	public boolean equals(final Object obj) {
 		final ZoneDTO dto2 = (ZoneDTO) obj;
-		if (getId().equals(dto2.getId()) && getName().equals(dto2.getName()))
+		if (getId().equals(dto2.getId()) && getName().equals(dto2.getName())
+				&& countryDTO.getId().equals(dto2.getCountryDTO().getId()))
 			return true;
 		else
 			return false;
+	}
+
+	/**
+	 * @return
+	 */
+	private CountryDTO getCountryDTO() {
+		return countryDTO;
 	}
 
 	/**
@@ -72,6 +86,7 @@ public class ZoneDTO implements Serializable {
 		int hash = 7;
 		hash = 31 * hash + (null == id ? 0 : id);
 		hash = 31 * hash + (null == name ? 0 : name.hashCode());
+		hash = 31 * hash + (null == countryDTO ? 0 : countryDTO.hashCode());
 		return hash;
 
 	}

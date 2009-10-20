@@ -18,11 +18,11 @@ import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAO;
 import edu.unicen.surfforecaster.server.dao.SpotDAO;
 import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecast;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.Point;
-import edu.unicen.surfforecaster.server.domain.entity.forecaster.WW3Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster;
 
 /**
  * @author esteban
@@ -72,10 +72,10 @@ public class ForecastServiceImplementation implements ForecastService {
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getForecasts(java.lang.Integer)
+	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getLatestForecasts(java.lang.Integer)
 	 */
 	@Override
-	public List<ForecastDTO> getForecasts(final Integer forecasterId)
+	public List<ForecastDTO> getLatestForecasts(final Integer forecasterId)
 			throws NeuralitoException {
 		final Forecaster forecaster = forecastDAO
 				.getForecasterById(forecasterId);

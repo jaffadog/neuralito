@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.entity.forecaster;
+package edu.unicen.surfforecaster.server.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

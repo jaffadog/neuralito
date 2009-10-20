@@ -1,14 +1,11 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.entity.forecaster;
+package edu.unicen.surfforecaster.server.domain.entity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -85,8 +82,6 @@ public class WW3Forecaster extends Forecaster {
 	 */
 	@Override
 	public Collection<Forecast> getLatestForecasts() {
-		final Collection<Forecast> forecasts = new ArrayList<Forecast>();
-		final Map<String, ForecastParameter> attributes = new HashMap<String, ForecastParameter>();
 		return model.getLatestForecast(gridPoint);
 	}
 
