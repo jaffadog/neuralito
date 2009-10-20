@@ -1,0 +1,10 @@
+com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException, true
+edu.unicen.surfforecaster.common.services.dto.HelloDTO, true
+edu.unicen.surfforecaster.gwt.client.SessionData, true
+edu.unicen.surfforecaster.gwt.client.User, true
+java.lang.Exception, false
+java.lang.Integer, true
+java.lang.Number, false
+java.lang.RuntimeException, false
+java.lang.String, true
+java.lang.Throwable, false
