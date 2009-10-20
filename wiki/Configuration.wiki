@@ -1,6 +1,8 @@
 #summary This page is intended to contain all necessary steps in order to install the application.
-
-== DB SETUP ==
+== Maven  ==
+Configure environment variable:
+*MAVEN_OPTS=-Xmx900m*
+== DB  ==
 
   # Download and Install Mysql version 5.1.
   # Configure db.properties located in:(?) with port, schema, user and pass.
