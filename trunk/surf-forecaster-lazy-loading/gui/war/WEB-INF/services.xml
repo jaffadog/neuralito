@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<import resource="dao.xml" />
+
+	<bean id="userService"
+		class="edu.unicen.surfforecaster.server.services.UserServiceImplementation">
+		<property name="userDAO" ref="userDAO"></property>
+	</bean>
+	<bean id="spotService"
+		class="edu.unicen.surfforecaster.server.services.SpotServiceImplementation">
+		<property name="userDAO" ref="userDAO"></property>
+		<property name="spotDAO" ref="spotDAO"></property>
+	</bean>
+	<bean id="forecastService"
+		class="edu.unicen.surfforecaster.server.services.ForecastServiceImplementation">
+		<property name="forecastDAO" ref="forecastDAO"></property>
+		<property name="spotDAO" ref="spotDAO"></property>	
+		<property name="models" >	
+			<map>
+			<entry key="GlobalModel" value-ref="waveWatchDaoTarget"/>
+			</map>		
+		</property>
+	</bean>
+
+</beans>
