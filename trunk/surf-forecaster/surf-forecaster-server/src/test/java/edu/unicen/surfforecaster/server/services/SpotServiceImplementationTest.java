@@ -6,6 +6,7 @@ package edu.unicen.surfforecaster.server.services;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
@@ -60,6 +61,12 @@ public class SpotServiceImplementationTest {
 
 	private Integer countryId;
 	private Integer areaId;
+	/**
+	 * Id of a zone with no spots.
+	 */
+	private Integer emptyZoneId;
+	private Integer spot5Id;
+	private Integer spot6Id;
 
 	@Before
 	public void createTestData() {
@@ -80,6 +87,7 @@ public class SpotServiceImplementationTest {
 			zoneId2 = spotService.addZone(zoneName2, countryId);
 			zoneId3 = spotService.addZone(zoneName3, countryId);
 			zoneId4 = spotService.addZone(zoneName4, countryId);
+			emptyZoneId = spotService.addZone(zoneName4 + "one", countryId);
 
 			// Create 2 Users
 
@@ -92,7 +100,7 @@ public class SpotServiceImplementationTest {
 					+ "@.com", System.currentTimeMillis() + "user", "pass",
 					UserType.ADMINISTRATOR);
 
-			// Create 4 Spots
+			// Create 6 Spots
 
 			spot1Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId1,
 					userId1, true, "ACT");
@@ -102,6 +110,10 @@ public class SpotServiceImplementationTest {
 					userId2, false, "UTC");
 			spot4Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId4,
 					userId2, true, "ACT");
+			spot5Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId1,
+					userId2, true, "ACT");
+			spot6Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId1,
+					userId2, false, "ACT");
 		} catch (final NeuralitoException e) {
 			System.out.println(e.getMessage());
 			Assert.fail(e.toString());
@@ -115,11 +127,14 @@ public class SpotServiceImplementationTest {
 			spotService.removeSpot(spot2Id);
 			spotService.removeSpot(spot3Id);
 			spotService.removeSpot(spot4Id);
+			spotService.removeSpot(spot5Id);
+			spotService.removeSpot(spot6Id);
 
 			spotService.removeZone(zoneId1);
 			spotService.removeZone(zoneId2);
 			spotService.removeZone(zoneId3);
 			spotService.removeZone(zoneId4);
+			spotService.removeZone(emptyZoneId);
 
 			spotService.removeCountry(countryId);
 
@@ -336,6 +351,42 @@ public class SpotServiceImplementationTest {
 			spotService.removeZone(spot.getZone().getId());
 			zones = spotService.getZones(countryId, userId1);
 			Assert.assertEquals(initialZones, zones.size());
+		} catch (final NeuralitoException e) {
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void getZonesByCountry() {
+		try {
+			final List<ZoneDTO> zones = spotService.getZones(countryId);
+			for (final Iterator iterator = zones.iterator(); iterator.hasNext();) {
+				final ZoneDTO zoneDTO = (ZoneDTO) iterator.next();
+				System.out.println(zoneDTO.getId());
+			}
+		} catch (final NeuralitoException e) {
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void getSpotsByZoneAndUser() {
+		try {
+			final List<SpotDTO> spots = spotService.getSpots(zoneId1, userId1);
+			Assert.assertEquals(2, spots.size());
+		} catch (final NeuralitoException e) {
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void getSpotsByZone() {
+		try {
+			List<SpotDTO> spots = spotService.getSpots(zoneId1);
+			Assert.assertEquals(2, spots.size());
+			spots = spotService.getSpots(emptyZoneId);
+			Assert.assertEquals(0, spots.size());
+
 		} catch (final NeuralitoException e) {
 			Assert.fail();
 		}

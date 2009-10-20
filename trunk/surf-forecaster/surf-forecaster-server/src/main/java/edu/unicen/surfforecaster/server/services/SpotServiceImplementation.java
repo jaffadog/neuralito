@@ -525,4 +525,85 @@ public class SpotServiceImplementation implements SpotService {
 			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
 		}
 	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpots(java.lang.Integer,
+	 *      java.lang.Integer)
+	 */
+	@Override
+	public List<SpotDTO> getSpots(final Integer idZone, final Integer idUser)
+			throws NeuralitoException {
+		validateZoneId(idZone);
+		validateUserId(idUser);
+		try {
+			final User user = userDAO.getUserByUserId(idUser);
+			final Zone zone = spotDAO.getZoneById(idZone);
+			final List<Spot> userSpots = spotDAO.getSpotForUserAndZone(user,
+					zone);
+			// Create spots DTOs.
+			final List<SpotDTO> userSpotsDTOs = new ArrayList<SpotDTO>();
+			for (final Iterator<Spot> iterator = userSpots.iterator(); iterator
+					.hasNext();) {
+				final Spot spot = iterator.next();
+				userSpotsDTOs.add(spot.getDTO(spot));
+			}
+			return userSpotsDTOs;
+		} catch (final DataAccessException e) {
+			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
+
+		}
+	}
+
+	/**
+	 * Retrieve public spots of zone.
+	 * 
+	 * @throws NeuralitoException
+	 * 
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpots(java.lang.Integer)
+	 */
+	@Override
+	public List<SpotDTO> getSpots(final Integer zoneId)
+			throws NeuralitoException {
+		validateZoneId(zoneId);
+		try {
+			final Zone zone = spotDAO.getZoneById(zoneId);
+			final List<Spot> spots = spotDAO.getPublicSpots(zone);
+			// Create spots DTOs.
+			final List<SpotDTO> spotsDTOs = new ArrayList<SpotDTO>();
+			for (final Iterator<Spot> iterator = spots.iterator(); iterator
+					.hasNext();) {
+				final Spot spot = iterator.next();
+				spotsDTOs.add(spot.getDTO(spot));
+			}
+			return spotsDTOs;
+		} catch (final DataAccessException e) {
+			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
+
+		}
+	}
+
+	/**
+	 * Retrieve public zones of country.
+	 * 
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getZones(java.lang.Integer)
+	 */
+	@Override
+	public List<ZoneDTO> getZones(final Integer countryId)
+			throws NeuralitoException {
+		validateCountryId(countryId);
+		try {
+			final Country country = spotDAO.getCountryById(countryId);
+			final List<Zone> spots = spotDAO.getPublicZones(country);
+			final Set<ZoneDTO> zonesDtos = new HashSet<ZoneDTO>();
+			for (final Iterator<Zone> iterator = spots.iterator(); iterator
+					.hasNext();) {
+				final Zone zone = iterator.next();
+				zonesDtos.add(zone.getDTO());
+			}
+			return new ArrayList<ZoneDTO>(zonesDtos);
+		} catch (final DataAccessException e) {
+			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
+		}
+	}
 }
