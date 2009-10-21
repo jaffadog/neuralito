@@ -18,6 +18,12 @@ public class ServicesImpl extends SpringGWTServlet {
 	Logger logger = Logger.getLogger(ServicesImpl.class);
 	
 	/**
+	 * The max inactive interval between an action in the current session
+	 * A negative value sets this value as infinite
+	 */
+	private final int MAX_INACTIVE_INTERVAL = 2000; //2000 seconds
+	
+	/**
 	 * Return a sessionData object with all the values stored in the current
 	 * session
 	 * 
@@ -45,6 +51,8 @@ public class ServicesImpl extends SpringGWTServlet {
 	protected HttpSession getSession() {
 		final HttpServletRequest request = getThreadLocalRequest();
 		final HttpSession session = request.getSession();
+		if (session.getMaxInactiveInterval() != MAX_INACTIVE_INTERVAL)
+			session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL); 
 		return session;
 	}
 

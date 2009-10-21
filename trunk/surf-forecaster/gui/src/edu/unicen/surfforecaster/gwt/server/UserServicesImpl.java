@@ -44,10 +44,6 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 		logger.log(Level.INFO,"UserServicesImpl - login - Finding User: '" + userName + "'...");
 		UserDTO userDTO = userService.loginUser(userName, password);
 		final HttpSession session = this.getSession();
-		session.setMaxInactiveInterval(1200); // 120seg
-		session.setAttribute("gwtForecast-UserName", userDTO.getUsername());
-		session.setAttribute("gwtForecast-UserType", userDTO.getType());
-		session.setAttribute("gwtForecast-UserId", userDTO.getId());
 		session.setAttribute("gwtForecast-User", userDTO);
 		logger.log(Level.INFO,"UserServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
 		return userDTO;

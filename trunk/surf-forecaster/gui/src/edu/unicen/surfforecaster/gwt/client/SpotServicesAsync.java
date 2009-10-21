@@ -9,7 +9,7 @@ import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface SpotServicesAsync {
-	void addSpot(String spotName, String spotLongitude, String spotLatitude, String buoyLongitude, String buoyLatitude, Integer zoneId, Integer countryId, 
+	void addSpot(String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
 			String zoneName, boolean public_, String timezone, AsyncCallback<Integer> callback);
 
 //	Map<String, List> getAreas() throws NeuralitoException;
@@ -24,7 +24,7 @@ public interface SpotServicesAsync {
 	
 	void getCountries(AsyncCallback<List<CountryDTO>> callback);
 	
-	void getZones(String country, AsyncCallback<List<ZoneDTO>> callback);
+	void getZones(Integer country, AsyncCallback<List<ZoneDTO>> callback);
 
-	void getSpots(String spot, AsyncCallback<List<SpotDTO>> callback);
+	void getSpots(Integer zone, AsyncCallback<List<SpotDTO>> callback);
 }
