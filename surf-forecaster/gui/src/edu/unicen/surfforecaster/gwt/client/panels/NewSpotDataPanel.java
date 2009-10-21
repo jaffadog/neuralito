@@ -210,8 +210,8 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 				messages.addAll(validateForm());
 				if (messages.isEmpty()){
 					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
-					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLong(), mapPanel.getSpotLat(),
-							mapPanel.getBuoyLong(), mapPanel.getBuoyLat(), 
+					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
+							mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
 							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
 							timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
 						public void onSuccess(Integer result){

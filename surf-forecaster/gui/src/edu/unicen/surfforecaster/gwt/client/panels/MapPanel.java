@@ -75,8 +75,8 @@ public class MapPanel extends VerticalPanel {
 			            info.setMaximizeEnabled(false);
 			            InfoWindowContent content = new InfoWindowContent("Boya seleccionada: <br> - Latitud: <b>" + marker.getLatLng().getLatitude() + "</b><br> - Longitud: <b>" + marker.getLatLng().getLongitude() + "</b>");
 			            info.open(marker, content);
-			            txtBuoyLong.setText(("" + marker.getLatLng().getLongitude()).substring(0, 10));
-			            txtBuoyLat.setText(("" + marker.getLatLng().getLatitude()).substring(0, 10));
+			            txtBuoyLong.setText(("" + marker.getLatLng().getLongitude()));
+			            txtBuoyLat.setText(("" + marker.getLatLng().getLatitude()));
 	        		}
 	        	}
 	        	
@@ -159,7 +159,7 @@ public class MapPanel extends VerticalPanel {
 	}
 	
 	private void showWW3Buoys(final MapWidget map, LatLng point){
-		ForecastServices.Util.getInstance().getNearbyGridPoints(point.getLatitude(), point.getLongitude(), new AsyncCallback<List<PointDTO>>(){
+		ForecastServices.Util.getInstance().getNearbyGridPoints(new Float(point.getLatitude()), new Float(point.getLongitude()), new AsyncCallback<List<PointDTO>>(){
 			public void onSuccess(List<PointDTO> result) {
 				if (result != null) {
 					MarkerOptions options = MarkerOptions.newInstance();
@@ -169,7 +169,7 @@ public class MapPanel extends VerticalPanel {
 					Marker marker = null;
 					while (i.hasNext()) {
 						PointDTO point = i.next();
-						marker = new Marker(LatLng.newInstance(point.getLatitude(), point.getLongitude()), options);
+						marker = new Marker(LatLng.newInstance(new Double(point.getLatitude()), new Double(point.getLongitude())), options);
 				    	marker.getIcon().setImageURL("images/buoy.png");
 				    	map.addOverlay(marker);
 					}
