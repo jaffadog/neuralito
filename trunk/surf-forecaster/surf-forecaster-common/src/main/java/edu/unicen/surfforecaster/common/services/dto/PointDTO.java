@@ -37,9 +37,10 @@ public class PointDTO implements Serializable {
 	 * @param longitude
 	 * @param latitude
 	 */
-	public PointDTO(final float longitude, final float latitude) {
-		this.longitude = longitude;
+	public PointDTO(final float latitude, final float longitude) {
 		this.latitude = latitude;
+		this.longitude = longitude;
+		
 	}
 
 	/**
