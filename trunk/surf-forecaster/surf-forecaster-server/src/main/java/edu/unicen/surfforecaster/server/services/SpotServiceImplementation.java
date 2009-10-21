@@ -365,7 +365,7 @@ public class SpotServiceImplementation implements SpotService {
 			// Zone exist so we add the spot to the zone.
 			zoneId = zone.getId();
 		}
-		return addSpot(spotName, longitude, latitude, zoneId, userId, publik,
+		return addSpot(spotName, latitude, longitude, zoneId, userId, publik,
 				timeZone);
 	}
 
