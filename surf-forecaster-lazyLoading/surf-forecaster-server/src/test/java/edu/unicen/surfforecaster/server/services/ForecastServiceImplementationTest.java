@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -34,6 +34,7 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/services.xml" })
 public class ForecastServiceImplementationTest {
+	Logger log = Logger.getLogger(this.getClass());
 	@Autowired
 	private ForecastService forecastService;
 	@Autowired
@@ -99,7 +100,7 @@ public class ForecastServiceImplementationTest {
 			spot4Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId4,
 					userId2, true, "ACT");
 		} catch (final NeuralitoException e) {
-			System.out.println(e.getMessage());
+			log.error(e);
 			Assert.fail(e.toString());
 		}
 	}
@@ -143,13 +144,14 @@ public class ForecastServiceImplementationTest {
 	}
 
 	@Test
+	@Ignore
 	public void getForecaster() {
 		try {
 			final int forecasterId = forecastService.createWW3Forecaster(
 					spot1Id, new PointDTO(75.0F, 0.5F));
 			final List<ForecastDTO> forecasts = forecastService
 					.getLatestForecasts(forecasterId);
-			System.out.println(forecasts.size());
+			log.info("Number of forecasts retrieved:"+forecasts.size());
 			Assert.assertTrue(forecasts.size() > 0);
 		} catch (final NeuralitoException e) {
 			// TODO Auto-generated catch block
@@ -171,6 +173,7 @@ public class ForecastServiceImplementationTest {
 	}
 
 	@Test
+	@Ignore
 	public void getArchivedForecasts() {
 		try {
 			final int forecasterId = forecastService.createWW3Forecaster(

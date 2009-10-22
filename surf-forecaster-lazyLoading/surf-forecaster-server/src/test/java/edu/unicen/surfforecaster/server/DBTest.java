@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class DBTest {
 	// protected ApplicationContext context = new
 	// ClassPathXmlApplicationContext(
 	// "/dao.xml");
-
+Logger log = Logger.getLogger(this.getClass());
 	/**
 	 * 
 	 */
@@ -92,8 +93,8 @@ public class DBTest {
 			e.printStackTrace();
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Writing forecasts to file");
-		System.out.println("Elapsed time: " + (end - init) / 1000);
+		log.info("Writing forecasts to file");
+		log.info("Elapsed time: " + (end - init) / 1000);
 	}
 
 	@Test
@@ -147,8 +148,13 @@ public class DBTest {
 							.nextInt(5000)), new Float(random.nextInt(5000))));
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Time to generate " + i + " forecasts: "
+		log.info("Time to generate " + i + " forecasts: "
 				+ (end - init) / 1000);
 		return forecasts;
+	}
+	@Test
+	public void test(){
+		
+		System.out.println(System.getProperty("file.encoding"));
 	}
 }

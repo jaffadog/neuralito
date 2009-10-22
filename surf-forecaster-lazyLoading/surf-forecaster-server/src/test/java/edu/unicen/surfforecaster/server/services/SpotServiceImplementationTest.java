@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,8 +17,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -38,6 +37,7 @@ import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/services.xml" })
 public class SpotServiceImplementationTest {
+	private Logger log = Logger.getLogger(this.getClass());
 	@Autowired
 	protected SpotService spotService;
 	@Autowired
@@ -112,7 +112,7 @@ public class SpotServiceImplementationTest {
 			spot6Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId1,
 					userId2, false, "ACT");
 		} catch (final NeuralitoException e) {
-			System.out.println(e.getMessage());
+			log.info(e.getMessage());
 			Assert.fail(e.toString());
 		}
 	}
@@ -360,7 +360,7 @@ public class SpotServiceImplementationTest {
 			final List<ZoneDTO> zones = spotService.getZones(countryId);
 			for (final Iterator iterator = zones.iterator(); iterator.hasNext();) {
 				final ZoneDTO zoneDTO = (ZoneDTO) iterator.next();
-				System.out.println(zoneDTO.getId());
+				log.info(zoneDTO.getId());
 			}
 		} catch (final NeuralitoException e) {
 			Assert.fail();

@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.InvalidParameterException;
 import java.sql.Connection;
@@ -29,7 +30,6 @@ import java.util.Observer;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -116,7 +116,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	}
 
 	public void init() throws IOException, DataAccessResourceFailureException,
-			HibernateException, IllegalStateException, SQLException {
+			HibernateException, IllegalStateException, SQLException, URISyntaxException {
 		// Init valid grid points table.
 		if (!tableExists(gridPointsTableName)) {
 			if (validPointsFilePath==null){
@@ -284,7 +284,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			st.close();
 			connection.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -323,7 +323,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			st.close();
 			connection.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 
 	}
@@ -351,7 +351,8 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			st.close();
 			connection.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
+			
 		}
 
 	}
@@ -440,11 +441,11 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 
 			st.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
-		}
+			log.error(e);
+			}
 		final long end = System.currentTimeMillis();
-		System.out.println("Readed: " + forecasts.size() + " forecasts.");
-		System.out.println("Elapsed Time: " + (end - init) / 1000);
+		log.info("Readed: " + forecasts.size() + " forecasts.");
+		log.info("Elapsed Time: " + (end - init) / 1000);
 		return translate(forecasts);
 	}
 
@@ -453,7 +454,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 */
 	@Override
 	public List<Forecast> getLatestForecast(final Point gridPoint) {
-		System.out.println("Retrieving latest forecast for: " + gridPoint);
+		log.info("Retrieving latest forecast for: " + gridPoint);
 		final long init = System.currentTimeMillis();
 		final List<ForecastPlain> forecasts = new ArrayList<ForecastPlain>();
 		try {
@@ -499,10 +500,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				forecasts.add(arch);
 			}
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time To retrieve latest forecast : "
+		log.info("Elapsed Time To retrieve latest forecast : "
 				+ (end - init) / 1000);
 		return translate(forecasts);
 	}
@@ -516,7 +517,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 * @throws DataAccessResourceFailureException
 	 */
 	public Date getLatestForecastTime() {
-		System.out.println("Retrieving latest forecast issued date for: ");
+		log.info("Retrieving latest forecast issued date for: ");
 		final long init = System.currentTimeMillis();
 		try {
 			if (!tableExists(latestForecastTableName))
@@ -534,11 +535,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				date = result.getDate("issuedDate");
 			}
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		System.out
-				.println("Elapsed Time To retrieve latest forecast issued date : "
+		log.info("Elapsed Time To retrieve latest forecast issued date : "
 						+ (end - init) / 1000);
 		return date;
 	}
@@ -569,7 +569,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 * @return
 	 */
 	private List<Point> getValidGridPointsFromDB() {
-		System.out.println("Retrieving valid grid points from DB");
+		log.info("Retrieving valid grid points from DB");
 		final long init = System.currentTimeMillis();
 		final List<Point> points = new ArrayList<Point>();
 		try {
@@ -583,11 +583,11 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			}
 			st.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Found " + points.size() + " grid points");
-		System.out.println("Elapsed Time To retrieve valid grid points : "
+		log.info("Found " + points.size() + " grid points");
+		log.info("Elapsed Time To retrieve valid grid points : "
 				+ (end - init) / 1000);
 		return points;
 	}
@@ -633,12 +633,12 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 
 		final long end = System.currentTimeMillis();
 
-		System.out.println("Elapsed Time To update forecasts: " + (end - init)
+		log.info("Elapsed Time To update forecasts: " + (end - init)
 				/ 1000);
 	}
 
 	private void archiveLatestForecasts() {
-		System.out.println("Archiving Forecasts");
+		log.info("Archiving Forecasts");
 		final long init = System.currentTimeMillis();
 		try {
 			final Connection connection = this.getSession().connection();
@@ -649,10 +649,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 					+ " where validTime=3 OR validTime=0;");
 			st.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time To archive forecast : " + (end - init)
+		log.info("Elapsed Time To archive forecast : " + (end - init)
 				/ 1000);
 
 	}
@@ -675,7 +675,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 						.getForecastForTime(csvFile, time);
 				appendForecastsToFile(textFile, forecasts);
 			} catch (final IOException e) {
-				e.printStackTrace();
+				log.error(e);
 			}
 		}
 		massiveInsertLatestForecast(textFile);
@@ -707,7 +707,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			throw new DataAccessResourceFailureException(e.toString(),e) ;
 		}
 		final long end = System.currentTimeMillis();
-		log.info(gridPointsTableName +" created and data inserted in: "+ (end - init) / 1000  +" sec.");
+		log.info(gridPointsTableName +" data inserted in: "+ (end - init) / 1000  +" sec.");
 
 	}
 	/**
@@ -715,8 +715,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 */
 
 	private void massiveInsertLatestForecast(final File textFile) {
-		System.out
-				.println("Inserting data from: " + textFile.getAbsolutePath());
+		log.info("Inserting data from: " + textFile.getAbsolutePath());
 		final long init = System.currentTimeMillis();
 		try {
 			final Connection connection = this.getSession().connection();
@@ -737,10 +736,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 					+ " ADD INDEX location(latitude, longitude)");
 			st.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time To insert data from file: "
+		log.info("Elapsed Time To insert data from file: "
 				+ (end - init) / 1000);
 
 	}
@@ -757,7 +756,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			st.close();
 			connection.close();
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -839,11 +838,11 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			}
 			output.close();
 		} catch (final Exception e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		System.out.println("Writing forecasts to file");
-		System.out.println("Elapsed time: " + (end - init) / 1000);
+		log.info("Writing forecasts to file");
+		log.info("Elapsed time: " + (end - init) / 1000);
 	}
 
 	/**
@@ -867,13 +866,12 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			st.close();
 			connection.close();
 			final long end = System.currentTimeMillis();
-			System.out
-					.println("Elapsed Time To find point in grid points table"
+			log.info("Elapsed Time To find point in grid points table"
 							+ (end - init) / 1000);
 
 			return found;
 		} catch (final SQLException e) {
-			e.printStackTrace();
+			log.error(e);
 			return false;
 		}
 	}

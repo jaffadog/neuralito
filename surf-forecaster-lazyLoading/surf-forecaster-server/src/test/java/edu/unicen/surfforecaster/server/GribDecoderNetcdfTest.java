@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
  */
 
 public class GribDecoderNetcdfTest {
-
+	Logger log = Logger.getLogger(this.getClass());
 	/**
 	 * Test obtaining all points which contains values differents of NaN.
 	 */
@@ -32,11 +33,11 @@ public class GribDecoderNetcdfTest {
 
 		final GribDecoderNetcdf dec = new GribDecoderNetcdf();
 		final Collection<Point> validPoints = dec.getValidPoints(file);
-		System.out.println("Points founded:" + validPoints.size());
+		log.info("Points founded:" + validPoints.size());
 		for (final Iterator iterator = validPoints.iterator(); iterator
 				.hasNext();) {
 			final Point point = (Point) iterator.next();
-			System.out.println("Point. Lat: " + point.getLatitude() + " Lon: "
+			log.info("Point. Lat: " + point.getLatitude() + " Lon: "
 					+ point.getLongitude());
 		}
 	}
@@ -49,7 +50,7 @@ public class GribDecoderNetcdfTest {
 			dec.getForecastForTime(new File(
 					"src/test/resources/multi_1.glo_30m.all.grb2"), 1);
 		} catch (final IOException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 }
