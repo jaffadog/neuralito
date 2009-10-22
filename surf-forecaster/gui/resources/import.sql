@@ -47,9 +47,3 @@ insert  into `country_i18n`(`Country_id`,`names_id`) values (2,8);
 
 insert  into `user`(`id`,`name`,`lastName`,`email`,`password`,`userName`,`userType`) values (1,'Administrador','Administrador','admin@gmail.com','admin','admin','ADMINISTRATOR');
 insert  into `user`(`id`,`name`,`lastName`,`email`,`password`,`userName`,`userType`) values (2,'maxi','maxi','maxi@gmail.com','maxii','maxi','REGISTERED_USER');
-
-/*Data for the table `zone` */
-
-insert  into `zone`(`id`,`name`,`country_id`) values (1,'Mar del Plata - Sur',1);
-insert  into `zone`(`id`,`name`,`country_id`) values (2,'Mar del Plata - Centro',1);
-
