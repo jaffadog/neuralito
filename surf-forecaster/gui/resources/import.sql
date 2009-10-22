@@ -1,9 +1,17 @@
-USE `test`;
-
-/*Data for the table `area` */
-
 insert  into `area`(`id`) values (1);
 insert  into `area`(`id`) values (2);
+
+
+/*Data for the table `i18n` */
+
+insert  into `i18n`(`id`,`language`,`text`) values (1,'es','América del Sur');
+insert  into `i18n`(`id`,`language`,`text`) values (2,'en','South America');
+insert  into `i18n`(`id`,`language`,`text`) values (3,'es','América del Norte');
+insert  into `i18n`(`id`,`language`,`text`) values (4,'en','North America');
+insert  into `i18n`(`id`,`language`,`text`) values (5,'es','Argentina');
+insert  into `i18n`(`id`,`language`,`text`) values (6,'en','Argentine');
+insert  into `i18n`(`id`,`language`,`text`) values (7,'en','Brazil');
+insert  into `i18n`(`id`,`language`,`text`) values (8,'es','Brasil');
 
 /*Data for the table `area_i18n` */
 
@@ -32,16 +40,6 @@ insert  into `country_i18n`(`Country_id`,`names_id`) values (2,8);
 
 /*Data for the table `description_i18n` */
 
-/*Data for the table `i18n` */
-
-insert  into `i18n`(`id`,`language`,`text`) values (1,'es','América del Sur');
-insert  into `i18n`(`id`,`language`,`text`) values (2,'en','South America');
-insert  into `i18n`(`id`,`language`,`text`) values (3,'es','América del Norte');
-insert  into `i18n`(`id`,`language`,`text`) values (4,'en','North America');
-insert  into `i18n`(`id`,`language`,`text`) values (5,'es','Argentina');
-insert  into `i18n`(`id`,`language`,`text`) values (6,'en','Argentine');
-insert  into `i18n`(`id`,`language`,`text`) values (7,'en','Brazil');
-insert  into `i18n`(`id`,`language`,`text`) values (8,'es','Brasil');
 
 /*Data for the table `spot` */
 
