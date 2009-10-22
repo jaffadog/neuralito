@@ -33,6 +33,7 @@ public class UserServiceImplementation implements UserService {
 	 *      java.lang.String, java.lang.String)
 	 */
 	@Override
+	
 	public Integer addUser(final String name, final String lastName,
 			final String email, final String username, final String password,
 			final UserType userType) throws NeuralitoException {

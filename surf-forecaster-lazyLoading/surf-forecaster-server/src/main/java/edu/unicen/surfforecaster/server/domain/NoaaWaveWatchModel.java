@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -28,6 +29,7 @@ import java.util.Observer;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -89,10 +91,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	/**
 	 * Delimiter characters of massive insert file.
 	 */
-	private final String lineStart = "e";
-	private final String fieldSeparator = ",";
-	private final String lineEnd = "x";
-	private final String gridFile;
+	public final static String lineStart = "e";
+	public final static String fieldSeparator = ",";
+	public final static String lineEnd = "x";
+	private String validPointsFilePath;
 
 	/**
 	 * Creates a new Model with the specified name. Tables to store model data
@@ -104,29 +106,37 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 * @throws HibernateException
 	 * @throws DataAccessResourceFailureException
 	 */
-	public NoaaWaveWatchModel(final String modelName, final String gridFile) {
+	public NoaaWaveWatchModel(final String modelName) {
 		Validate.notEmpty(modelName);
 		this.modelName = modelName;
 		archiveTableName = "waveWatchArchive_" + modelName;
 		latestForecastTableName = "waveWatchLatestForecast_" + modelName;
 		gridPointsTableName = "waveWatchGridPoints_" + modelName;
 		massiveInsertsTempFile = "c:\\waveWatch_" + modelName + ".csv";
-		this.gridFile = gridFile;
 	}
 
 	public void init() throws IOException, DataAccessResourceFailureException,
 			HibernateException, IllegalStateException, SQLException {
+		// Init valid grid points table.
 		if (!tableExists(gridPointsTableName)) {
-			createGridPointTable();
-			final List<Point> points = getValidGridPoints(gridFile);
-			insertGridPoints(points);
+			if (validPointsFilePath==null){
+				validPointsFilePath="validGridPoints_"+modelName;
+			}
+			URL resource = ClassLoader.getSystemClassLoader().getResource("validGridPoints_"+modelName+".csv");
+			massiveInsertValidGridPoints(new File(resource.getFile()));
 		}
+		//Init archive table
 		if (!tableExists(archiveTableName)) {
 			createArchiveTable();
 		}
+		//Init latest forecast table
 		if (!tableExists(latestForecastTableName)) {
 			createLatestForecastTable();
 		}
+	}
+
+	public void setValidPointsFilePath(String validPointsFilePath) {
+		this.validPointsFilePath = validPointsFilePath;
 	}
 
 	/**
@@ -652,7 +662,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 * 
 	 * @param file
 	 */
-	private void updateLatestForecasts(final File gribFile) {
+	private void updateLatestForecasts(final File csvFile) {
 		// Decode downloaded NOAA grib files to obtain latest forecasts.
 		final File textFile = new File(massiveInsertsTempFile);
 		if (textFile.exists())
@@ -662,7 +672,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		for (int time = 0; time < 61; time++) {
 			try {
 				final Collection<ForecastPlain> forecasts = gribDecoder
-						.getForecastForTime(gribFile, time);
+						.getForecastForTime(csvFile, time);
 				appendForecastsToFile(textFile, forecasts);
 			} catch (final IOException e) {
 				e.printStackTrace();
@@ -670,7 +680,36 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		}
 		massiveInsertLatestForecast(textFile);
 	}
+	private void massiveInsertValidGridPoints(final File csvFile) {
+		log.info("Using valid grid point data from: " + csvFile.getAbsolutePath());
+		final long init = System.currentTimeMillis();
+		try {
+			final Connection connection = this.getSession().connection();
+			final Statement st = connection.createStatement();
+			//Create Table Grid Points
+			st
+			.execute("CREATE TABLE "
+					+ gridPointsTableName
+					+ "  (   `latitude` float NOT NULL,  `longitude` float NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+			//Insert into table CSV data.
+			final String query = "LOAD DATA INFILE '"
+					+ csvFile.getAbsolutePath().replace('\\', '/')
+					+ "' INTO TABLE " + gridPointsTableName
+					+ " FIELDS TERMINATED BY '" + fieldSeparator
+					+ "'  LINES STARTING BY '" + lineStart
+					+ "' TERMINATED BY '" + lineEnd + "'";
+			st.execute(query);
+			//Add indexes to table.
+			st.execute("ALTER TABLE " + gridPointsTableName
+					+ " ADD INDEX location(latitude, longitude)");
+			st.close();
+		} catch (final SQLException e) {
+			throw new DataAccessResourceFailureException(e.toString(),e) ;
+		}
+		final long end = System.currentTimeMillis();
+		log.info(gridPointsTableName +" created and data inserted in: "+ (end - init) / 1000  +" sec.");
 
+	}
 	/**
 	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#insertIntoLatestForecastFromFile(java.io.File)
 	 */

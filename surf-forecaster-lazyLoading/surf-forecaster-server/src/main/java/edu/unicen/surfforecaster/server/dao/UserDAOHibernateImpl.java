@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.server.domain.entity.User;
@@ -27,10 +28,10 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements
 	public User getUserByUserName(final String userName) {
 		final DetachedCriteria criteria = DetachedCriteria.forClass(User.class)
 				.add(Restrictions.eq("userName", userName));
-		final List<User> user = getHibernateTemplate().findByCriteria(criteria);
-		if (user.size() > 0)
-			return user.get(0);
-		return null;
+		User user = (User) DataAccessUtils
+				.singleResult(getHibernateTemplate().findByCriteria(
+						criteria));
+		return user;
 	}
 
 	/**
@@ -50,16 +51,8 @@ public class UserDAOHibernateImpl extends HibernateDaoSupport implements
 	public User getUserByEmail(final String email) {
 		final DetachedCriteria criteria = DetachedCriteria.forClass(User.class)
 				.add(Restrictions.eq("email", email));
-		final List<User> user = getHibernateTemplate().findByCriteria(criteria);
-		if (user.size() > 0) {
-			if (user.size() == 1)
-				return user.get(0);
-			else
-				throw new DataIntegrityViolationException(
-						"Found more than one user for the given email:'"
-								+ email + "'.");
-		}
-		return null;
+		User user = (User)DataAccessUtils.singleResult(getHibernateTemplate().findByCriteria(criteria));
+		return user;
 	}
 
 	/**

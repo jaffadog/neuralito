@@ -44,14 +44,14 @@ public class Country {
 	/**
 	 * the country name.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@MapKey(name = "language")
 	private final Map<String, I18n> names = new HashMap<String, I18n>();
 
 	/**
 	 * the zones this country contains.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "country")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "country")
 	private final Set<Zone> zones = new HashSet<Zone>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
