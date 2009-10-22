@@ -268,10 +268,18 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.getFlexCellFormatter().setColSpan(8, 0, 3);
 		
-		//Make this panel an observer for LocalizationUtils object
+		/**
+		 * Make this panel an observer for LocalizationUtils object
+		 */
 		LocalizationUtils.getInstance().addObserver(this);
 		
-		//this.setAreaListItems();
+		/**
+		 * Also, If all localization calls finished, force update (observer impl. method) to avoid the possibility that
+		 * the observable class notify before this class adds himself as an observer 
+		 */
+		if (LocalizationUtils.getInstance().getCallsQueue().allFinished())
+			update(LocalizationUtils.getInstance(), null);
+		
 		this.setTimeZoneItems();
 		
 		return container;

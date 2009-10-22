@@ -8,8 +8,6 @@ import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
-
 public class ForecastPanel extends LazyPanel {
 	
 	private LocalizationPanel localizationPanel;
@@ -25,7 +23,6 @@ public class ForecastPanel extends LazyPanel {
 		VerticalPanel container = new VerticalPanel();
 		{
 			localizationPanel = new LocalizationPanel();
-			LocalizationUtils.getInstance().addObserver(localizationPanel);
 			localizationPanel.setBasePanel(this);
 			container.add(localizationPanel);
 		}

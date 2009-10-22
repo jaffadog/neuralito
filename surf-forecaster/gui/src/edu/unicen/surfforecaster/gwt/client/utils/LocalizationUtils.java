@@ -17,6 +17,14 @@ public class LocalizationUtils extends Observable{
 	private List<CountryDTO> countries = null;
 	private AsyncCallsQueue callsQueue = null;
 	
+	public AsyncCallsQueue getCallsQueue() {
+		return callsQueue;
+	}
+
+	public void setCallsQueue(AsyncCallsQueue callsQueue) {
+		this.callsQueue = callsQueue;
+	}
+
 	public static LocalizationUtils getInstance() {
         if (instance == null) {
             instance = new LocalizationUtils();
