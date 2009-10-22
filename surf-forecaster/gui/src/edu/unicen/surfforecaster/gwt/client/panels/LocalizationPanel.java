@@ -1,11 +1,13 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Iterator;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -18,6 +20,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
+import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
+import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.Observable;
@@ -59,7 +64,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 						areaBox = new ListBox();
 						areaBox.addChangeHandler(new ChangeHandler() {
 							public void onChange(ChangeEvent event) {
-								//setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
+								setCountryListItems(new Integer(areaBox.getValue(areaBox.getSelectedIndex())));
 							}
 						});
 						localizationForm.setWidget(0, 1, areaBox);
@@ -74,7 +79,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 						countryBox = new ListBox();
 						countryBox.addChangeHandler(new ChangeHandler() {
 							public void onChange(ChangeEvent event) {
-								//setZoneListItems(countryBox.getValue(countryBox.getSelectedIndex()));
+								setZoneListItems(new Integer(countryBox.getValue(countryBox.getSelectedIndex())));
 							}
 						});
 						localizationForm.setWidget(0, 3, countryBox);
@@ -89,7 +94,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 						zoneBox = new ListBox();
 						zoneBox.addChangeHandler(new ChangeHandler() {
 							public void onChange(ChangeEvent event) {
-								//setSpotListItems(zoneBox.getValue(zoneBox.getSelectedIndex()));
+								setSpotListItems(new Integer(zoneBox.getValue(zoneBox.getSelectedIndex())));
 							}
 						});
 						localizationForm.setWidget(1, 1, zoneBox);
@@ -129,59 +134,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 				}
 			}
 		}
-		
-		//this.setAreaListItems();
 	}
-	
-//	private void setAreaListItems(){
-//		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, List>>(){
-//			public void onSuccess(Map<String, List> result) {
-//				if (result == null) {
-//				} else {
-//					Iterator i = null;
-//					if (result.containsKey("areas")){
-//						i = result.get("areas").iterator();
-//						while (i.hasNext()){
-//							Area area = (Area)i.next();
-//							areaBox.addItem(area.getName(), area.getId());
-//						}
-//					}
-//					
-//					if (result.containsKey("countries")){
-//						i = result.get("countries").iterator();
-//						while (i.hasNext()){
-//							Country country = (Country)i.next();
-//							countryBox.addItem(country.getName(), country.getId());
-//						}
-//					}
-//					
-//					if (result.containsKey("zones")){
-//						i = result.get("zones").iterator();
-//						while (i.hasNext()){
-//							Zone zone = (Zone)i.next();
-//							zoneBox.addItem(zone.getName(), zone.getId());
-//						}
-//					}
-//					
-//					if (result.containsKey("spots")) {
-//						i = result.get("spots").iterator();
-//						while (i.hasNext()){
-//							Spot spot = (Spot)i.next();
-//							spotBox.addItem(spot.getName(), spot.getId());
-//						}
-//					}
-//				}
-//				setForecastButtonState();
-//				//Show the forecastTabPanel after
-//				if (spotBox.getItemCount() > 0 && new Integer(spotBox.getValue(spotBox.getSelectedIndex())) > 0 )
-//					renderSpotInfo();
-//			}
-//				
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//		});
-//	}
 	
 	private void renderSpotInfo() {
 		if (this.baseParentPanel instanceof SpotDescriptionPanel) {
@@ -190,107 +143,6 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 			((ForecastPanel)this.baseParentPanel).showSpotForecast();	
 		}
 	}
-	
-//	private void setCountryListItems(String area){
-//		countryBox.clear();
-//		zoneBox.clear();
-//		spotBox.clear();
-//		setForecastButtonState();
-//		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, List>>(){
-//			public void onSuccess(Map<String, List> result) {
-//				if (result == null) {
-//				} else {
-//					Iterator i = null;
-//					if (result.containsKey("countries")){
-//						i = result.get("countries").iterator();
-//						while (i.hasNext()){
-//							Country country = (Country)i.next();
-//							countryBox.addItem(country.getName(), country.getId());
-//						}
-//					}
-//					
-//					if (result.containsKey("zones")){
-//						i = result.get("zones").iterator();
-//						while (i.hasNext()){
-//							Zone zone = (Zone)i.next();
-//							zoneBox.addItem(zone.getName(), zone.getId());
-//						}
-//					}
-//					
-//					if (result.containsKey("spots")) {
-//						i = result.get("spots").iterator();
-//						while (i.hasNext()){
-//							Spot spot = (Spot)i.next();
-//							spotBox.addItem(spot.getName(), spot.getId());
-//						}
-//					}
-//					
-//				}
-//				setForecastButtonState();
-//			}
-//				
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//		});
-//	}
-//	
-//	private void setZoneListItems(String country){
-//		zoneBox.clear();
-//		spotBox.clear();
-//		setForecastButtonState();
-//		SpotServices.Util.getInstance().getZones(country, new AsyncCallback<Map<String, List>>(){
-//			public void onSuccess(Map<String, List> result) {
-//				if (result == null) {
-//				} else {
-//					Iterator i = null;
-//					if (result.containsKey("zones")){
-//						i = result.get("zones").iterator();
-//						while (i.hasNext()){
-//							Zone zone = (Zone)i.next();
-//							zoneBox.addItem(zone.getName(), zone.getId());
-//						}
-//					}
-//					if (result.containsKey("spots")) {
-//						i = result.get("spots").iterator();
-//						while (i.hasNext()){
-//							Spot spot = (Spot)i.next();
-//							spotBox.addItem(spot.getName(), spot.getId());
-//						}
-//					}
-//				}
-//				setForecastButtonState();
-//			}
-//				
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//		});
-//	}
-//	
-//	private void setSpotListItems(String zone){
-//		spotBox.clear();
-//		setForecastButtonState();
-//		SpotServices.Util.getInstance().getSpots(zone, new AsyncCallback<Map<String, List>>(){
-//			public void onSuccess(Map<String, List> result) {
-//				if (result == null) {
-//				} else {
-//					if (result.containsKey("spots")){
-//						Iterator<Spot> i = result.get("spots").iterator();
-//						while (i.hasNext()){
-//							Spot spot = i.next();
-//							spotBox.addItem(spot.getName(), spot.getId());
-//						}
-//					}
-//				}
-//				setForecastButtonState();
-//			}
-//				
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//		});
-//	}
 	
 	/**
 	 * Set the forecast button enabled or disabled according if the spot listbox has a spot selected or not
@@ -321,7 +173,8 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 	public void update(Observable o, Object arg) {
 		if (o == LocalizationUtils.getInstance()) {
 			this.setAreaListItems();
-			this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
+			if (this.areaBox.getItemCount() > 0)
+				this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
 		}
 	}
 	
@@ -329,17 +182,60 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 		Iterator<AreaDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
 		while (i.hasNext()){
 			AreaDTO area = i.next();
-			this.areaBox.addItem(area.getNames().get("en"), area.getId().toString());
-			//TODO sacar la harcodeada de idioma
+			this.areaBox.addItem(area.getNames().get(GWTUtils.getCurrentLocaleCode()), area.getId().toString());
 		}
 	}
 	
 	private void setCountryListItems(Integer areaId) {
+		this.countryBox.clear();
+		this.zoneBox.clear();
+		this.spotBox.clear();
 		Iterator<CountryDTO> i = LocalizationUtils.getInstance().getCountries(areaId).iterator(); 
 		while (i.hasNext()){
 			CountryDTO country = i.next();
-			this.countryBox.addItem(country.getNames().get("en"), country.getId().toString());
-			//TODO sacar la harcodeada de idioma
+			this.countryBox.addItem(country.getNames().get(GWTUtils.getCurrentLocaleCode()), country.getId().toString());
+			
 		}
+		if (this.countryBox.getItemCount() > 0)
+			this.setZoneListItems(new Integer(this.countryBox.getValue(this.countryBox.getSelectedIndex())));
+	}
+	
+	private void setZoneListItems(Integer countryId){
+		this.zoneBox.clear();
+		this.spotBox.clear();
+		SpotServices.Util.getInstance().getZones(countryId, new AsyncCallback<List<ZoneDTO>>(){
+			public void onSuccess(List<ZoneDTO> result) {
+				Iterator<ZoneDTO> i = result.iterator(); 
+				while (i.hasNext()){
+					ZoneDTO zone = i.next();
+					zoneBox.addItem(zone.getName(), zone.getId().toString());
+				}
+				if (zoneBox.getItemCount() > 0)
+					setSpotListItems(new Integer(zoneBox.getValue(zoneBox.getSelectedIndex())));
+			}
+				
+			public void onFailure(Throwable caught) {
+				//TODO do something when the getzones methos fails
+			}
+		});
+	}
+	
+	private void setSpotListItems(Integer zoneId){
+		this.spotBox.clear();
+		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
+			public void onSuccess(List<SpotDTO> result) {
+				Iterator<SpotDTO> i = result.iterator(); 
+				while (i.hasNext()){
+					SpotDTO spot = i.next();
+					spotBox.addItem(spot.getName(), spot.getId().toString());
+				}
+				
+				setForecastButtonState();
+			}
+				
+			public void onFailure(Throwable caught) {
+				//TODO do something when the getspots methos fails
+			}
+		});
 	}
 }

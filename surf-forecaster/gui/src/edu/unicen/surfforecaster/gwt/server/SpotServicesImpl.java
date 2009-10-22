@@ -24,8 +24,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	private ForecastService forecastService;
 
 	/**
-	 * @param service
-	 *            the service to set
+	 * @param service the service to set
 	 */
 	public void setSpotService(final SpotService service) {
 		spotService = service;
@@ -39,8 +38,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	}
 	
 	/**
-	 * @param service
-	 *            the service to set
+	 * @param service the service to set
 	 */
 	public void setForecastService(final ForecastService service) {
 		forecastService = service;
@@ -59,27 +57,25 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	}
 	
 	public List<CountryDTO> getCountries() throws NeuralitoException {
-		return new ArrayList<CountryDTO>();
-		//TODO descomentar el metodo getcountries() cuando ya este implemetnado en el server
-		//return spotService.getCountries();
+		return spotService.getCountries();
 	}
 	
 	public List<ZoneDTO> getZones(final Integer country) throws NeuralitoException {
 		List<ZoneDTO> zones = new ArrayList<ZoneDTO>();
 		if (this.getUser() != null)
 			zones = spotService.getZones(country, this.getUser().getId());
-		//TODO agregar el else con getzones(idcountry) si no esta logueado el usuario
+		else
+			zones = spotService.getZones(country);
 		
 		return zones;
 	}
 	
-	public List<SpotDTO> getSpots(final Integer zone, final UserDTO user) throws NeuralitoException {
+	public List<SpotDTO> getSpots(Integer zone) throws NeuralitoException {
 		List<SpotDTO> spots = new ArrayList<SpotDTO>();
-		if (this.getUser() != null) {
-			//TODO get spots descomentar la sig linea
-			//spots = spotService.getSpots(zone, user.getId());
-		}
-		//TODO agregar el else con getpots(idzone) si no esta logueado el usuario
+		if (this.getUser() != null) 
+			spots = spotService.getSpots(zone, this.getUser().getId());
+		else
+			spots = spotService.getSpots(zone);
 
 		return spots;
 	}
@@ -105,10 +101,8 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding only the spot: '" + spotName + "'...");
 				result = spotService.addSpot(spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public_, timezone);
 			} else {
-				// result = spotService.addZoneAndSpot(zoneName, countryId,
-				// spotName, longitudeNum, latitudeNum, userId, public_);
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding both zone: '"  + zoneName.trim() + "' and spot: '" + spotName + "'...");	
-				result = spotService.addZoneAndSpot(zoneName.trim(), 1, spotName, spotLatitudeNum, spotLongitudeNum, userId, public_, timezone);
+				result = spotService.addZoneAndSpot(zoneName.trim(), countryId, spotName, spotLatitudeNum, spotLongitudeNum, userId, public_, timezone);
 			}
 			
 			if (result != null) {
@@ -118,12 +112,6 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			
 			return result;
 		}
-	}
-
-	@Override
-	public List<SpotDTO> getSpots(Integer zone) throws NeuralitoException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

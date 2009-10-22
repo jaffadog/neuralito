@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,6 +35,17 @@ public final class GWTUtils {
 	//Valid history tokens
 	public static Vector<String> VALID_HISTORY_TOKENS = new Vector<String>();
 	public final static String DEFAULT_HISTORY_TOKEN = "forecastTab";
+	
+	//Default language
+	private static String DEFAULT_LOCALE = "es"; 
+	
+	public static String getCurrentLocaleCode() {
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+		if (locale.equals("default"))
+			locale = DEFAULT_LOCALE;
+		return locale;
+	}
+	
 	
 	/**
 	 * Set the valid history tokens values in the valid tokens vector

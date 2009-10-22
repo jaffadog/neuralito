@@ -35,7 +35,11 @@ public class LocalizationUtils extends Observable{
 	}
 
 	public List<AreaDTO> getAreas() {
-		return areas;
+		List<AreaDTO> result = new ArrayList<AreaDTO>();
+		if (this.callsQueue.allFinished()) {
+			result = areas;
+		}
+		return result;
 	}
 
 	public void setAreas(List<AreaDTO> areas) {
@@ -54,6 +58,7 @@ public class LocalizationUtils extends Observable{
 			}
 				
 			public void onFailure(Throwable caught) {
+				//TODO maybe want to inform something when the setAreas method fails
 				callsQueue.markAsFinished("getAreas");
 				checkCallsAndNotify();
 			}
@@ -80,6 +85,7 @@ public class LocalizationUtils extends Observable{
 			}
 				
 			public void onFailure(Throwable caught) {
+				//TODO maybe want to inform something when the setCountries method fails
 				callsQueue.markAsFinished("getCountries");
 				checkCallsAndNotify();
 			}
@@ -92,10 +98,9 @@ public class LocalizationUtils extends Observable{
 			Iterator<CountryDTO> i = this.countries.iterator();
 			while (i.hasNext()) {
 				CountryDTO country = i.next();
-				//TODO cuando los countryDTO tengan un AreaDTO dentro descomentar las siguientes lineas
-//				if (country.getAreaDTO().getId().equals(areaId)) {
-//					countries.add(country);
-//				}
+				if (country.getAreaDTO().getId().equals(areaId)) {
+					countries.add(country);
+				}
 			}
 		}
 		return countries;
