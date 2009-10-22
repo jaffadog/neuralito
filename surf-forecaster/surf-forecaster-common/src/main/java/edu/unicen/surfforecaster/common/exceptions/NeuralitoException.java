@@ -14,9 +14,7 @@ public class NeuralitoException extends Exception implements Serializable {
 	/**
 	 * 
 	 */
-	public NeuralitoException() {
-		// TODO Auto-generated constructor stub
-	}
+	public NeuralitoException() {}
 
 	/**
 	 * 
