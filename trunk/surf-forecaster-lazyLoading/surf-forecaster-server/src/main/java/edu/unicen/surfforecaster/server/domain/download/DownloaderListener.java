@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.enterprisedt.net.ftp.EventListener;
+import com.enterprisedt.util.debug.Logger;
 
 /**
  * 
@@ -18,7 +19,7 @@ import com.enterprisedt.net.ftp.EventListener;
 public class DownloaderListener implements EventListener {
 
 	private final Map<String, Long> map = new HashMap<String, Long>();
-
+	private Logger log = Logger.getLogger(DownloaderListener.class);
 	/**
 	 * @see com.enterprisedt.net.ftp.EventListener#bytesTransferred(java.lang.String,
 	 *      java.lang.String, long)
@@ -26,7 +27,7 @@ public class DownloaderListener implements EventListener {
 	@Override
 	public void bytesTransferred(final String connId,
 			final String remoteFileName, final long transfered) {
-		System.out.println("Transfered(Kb)  : " + transfered / 1024 + "/"
+		log.info("Transfered(Kb)  : " + transfered / 1024 + "/"
 				+ map.get(remoteFileName) / 1024);
 
 	}

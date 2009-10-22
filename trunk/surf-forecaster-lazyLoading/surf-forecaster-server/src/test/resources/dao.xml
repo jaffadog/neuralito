@@ -37,7 +37,7 @@
 				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.connection.autocommit">true</prop>
 				<prop key="hibernate.jdbc.batch_size">40</prop>
-				<!--				## MySQL-->
+					<!--				## MySQL-->
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<!--
 					<prop
