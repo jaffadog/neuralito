@@ -3,8 +3,17 @@
 Configure environment variable:
 *MAVEN_OPTS=-Xmx900m*
 == Eclipse  ==
-When running tests which decodes grib files and consume too much memory the following is needed:
-Eclipse->Preferences->Installed JRE(The one used to run the project)->Edit->VM arguments=-Xmx900m.
+*VM arguments:*
+Eclipse->Preferences->Installed JRE(The one used to run the project)->Edit->VM arguments
+  *--Xmx900m  
+  Extra memory is needed when decoding the grib files. 
+  *--Dfile.encoding=utf8  
+  When hibernate hbm2ddlTool inserts data from import.sql the data is inserted using the platform file encoding. So its necessary to config the eclipse virtual machine to use Utf8 encoding.
+     ***Note: When running on tomcat this issue should be considered.*
+
+
+
+
 == DB  ==
 
   # Download and Install Mysql version 5.1.
