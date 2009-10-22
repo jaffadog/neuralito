@@ -55,7 +55,7 @@ public class FTPTransferTest {
 			log.info("Downloading file");
 			((DownloaderListener) listener).setFileSize(filename, ftp
 					.getSize(filename));
-			ftp.downloadFile("e.txt", filename);
+			ftp.downloadFile("latestForecast-Test.grb2", filename);
 			log.info("File downloaded");
 
 			// Shut down client

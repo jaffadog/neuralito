@@ -9,14 +9,16 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel;
-import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
 import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
@@ -25,69 +27,57 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
  * @author esteban
  * 
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "/services.xml" })
 public class NoaaWaveWatchModelTest {
-	private static ApplicationContext context = new ClassPathXmlApplicationContext(
-			"/dao.xml");
-
-	@Test
-	public void init() {
-
-		final WaveWatchModel model = (WaveWatchModel) context
-				.getBean("waveWatchDaoTarget");
-		final Collection<Forecast> latestForecast = model
-				.getLatestForecast(new Point(75.0F, 125.0F));
-		System.out.println(latestForecast.size());
-	}
+	
+	@Autowired
+	NoaaWaveWatchModel model;
+	
+	Logger log = Logger.getLogger(this.getClass());
 
 	@Test
 	@Ignore
 	public void updateLatestForecast() {
 
-		final WaveWatchModel model = (WaveWatchModel) context
-				.getBean("waveWatchDaoTarget");
 		((NoaaWaveWatchModel) model).update(new DownloaderJobListener(),
 				new File("src/test/resources/multi_1.glo_30m.all.grb2"));
 		final Collection<Forecast> latestForecast = model
 				.getLatestForecast(new Point(75.0F, 125.0F));
-		System.out.println(latestForecast.size());
+		log.info(""+latestForecast.size());
 	}
 
 	@Test
 	public void getLatestForecast() {
 
-		final WaveWatchModel model = (WaveWatchModel) context
-				.getBean("waveWatchDaoTarget");
 		final Collection<Forecast> latestForecast = model
 				.getLatestForecast(new Point(77.0F, 0.5F));
-		System.out.println(latestForecast.size());
+		log.info("Number of latest forecasts:"+latestForecast.size());
 	}
 
 	@Test
 	public void nearByGridPoints() {
-		final WaveWatchModel model = (WaveWatchModel) context
-				.getBean("waveWatchDaoTarget");
 		final List<Point> nearbyGridPoints = model
 				.getNearbyGridPoints(new Point(75.0F, 0.6F));
+		String points="";
 		for (final Iterator iterator = nearbyGridPoints.iterator(); iterator
 				.hasNext();) {
 			final Point point = (Point) iterator.next();
-			System.out.println(" sa" + point);
+			points = points +point.toString();
 		}
+		
+		log.info("Nearby grid Points found"+ points);
 	}
 
 	@Test
 	public void isGridPoint() {
-		final WaveWatchModel model = (WaveWatchModel) context
-				.getBean("waveWatchDaoTarget");
-
 		Assert.assertFalse(model.isGridPoint(new Point(75.0F, 0.7F)));
 		Assert.assertTrue(model.isGridPoint(new Point(-75.0F, -102.5F)));
 	}
 
 	@Test
+	@Ignore
 	public void getArchivedForecasts() {
-		final WaveWatchModel model = (WaveWatchModel) context
-				.getBean("waveWatchDaoTarget");
 		List<Forecast> archivedForecasts = model.getArchivedForecasts(
 				new Point(75.0F, 0.5F), new GregorianCalendar(1991, 02, 02),
 				new GregorianCalendar(1992, 02, 02));
@@ -99,10 +89,9 @@ public class NoaaWaveWatchModelTest {
 	}
 
 	@Test
+	@Ignore
 	public void getLatestForecastUpdate() {
-		final WaveWatchModel model = (WaveWatchModel) context
-				.getBean("waveWatchDaoTarget");
-		System.out.println(model.getLatestForecastTime().getDay());
+		log.info("Latest forecast update time: "+model.getLatestForecastTime().getDay());
 	}
 
 }

@@ -8,7 +8,11 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
@@ -22,12 +26,11 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
  * @author esteban
  * 
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "/services.xml" })
 public class UserServiceImplementationTest {
-
-	private final UserService userService;
-
-	protected ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-			"/services.xml");
+	@Autowired
+	private UserService userService;
 
 	private Integer createdUserId;
 	final String name = "Jhon";
@@ -37,9 +40,6 @@ public class UserServiceImplementationTest {
 	final String password = "jhonnieCook";
 	final UserType type = UserType.ADMINISTRATOR;
 
-	public UserServiceImplementationTest() {
-		userService = (UserService) context.getBean("userService");
-	}
 
 	@Before
 	public void createTestUser() {
