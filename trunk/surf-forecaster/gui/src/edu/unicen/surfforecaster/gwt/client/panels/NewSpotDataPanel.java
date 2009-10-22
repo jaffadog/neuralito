@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
+import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
@@ -99,7 +101,7 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		areaBox.setWidth("300");
 		areaBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
-				//setCountryListItems(areaBox.getValue(areaBox.getSelectedIndex()));
+				setCountryListItems(new Integer(areaBox.getValue(areaBox.getSelectedIndex())));
 			}
 		});
 		flexTable.setWidget(1, 2, areaBox);
@@ -110,6 +112,11 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		
 		countryBox = new ListBox();
 		countryBox.setWidth("300");
+		countryBox.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				setZoneListItems(new Integer(countryBox.getValue(countryBox.getSelectedIndex())));
+			}
+		});
 		flexTable.setWidget(2, 2, countryBox);
 		
 		final Label lblZone = new Label("* " + GWTUtils.LOCALE_CONSTANTS.zone() + ":");
@@ -206,7 +213,7 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 				final Vector<String> messages = new Vector<String>();
 				errorPanel.setVisible(false);
 				successPanel.setVisible(false);
-				int countryId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
+				int countryId = countryBox.getItemCount() == 0 ? 0 : new Integer(countryBox.getValue(countryBox.getSelectedIndex()));
 				messages.addAll(validateForm());
 				if (messages.isEmpty()){
 					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
@@ -294,7 +301,8 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 	public void update(Observable o, Object arg) {
 		if (o == LocalizationUtils.getInstance()) {
 			this.setAreaListItems();
-			this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
+			if (this.areaBox.getItemCount() > 0)
+				this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
 		}
 	}
 	
@@ -302,78 +310,36 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		Iterator<AreaDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
 		while (i.hasNext()){
 			AreaDTO area = i.next();
-			this.areaBox.addItem(area.getNames().get("en"), area.getId().toString());
-			//TODO sacar la harcodeada de idioma
+			this.areaBox.addItem(area.getNames().get(GWTUtils.getCurrentLocaleCode()), area.getId().toString());		
 		}
 	}
 	
 	private void setCountryListItems(Integer areaId) {
+		countryBox.clear();
+		zoneBox.clear();
 		Iterator<CountryDTO> i = LocalizationUtils.getInstance().getCountries(areaId).iterator(); 
 		while (i.hasNext()){
 			CountryDTO country = i.next();
-			this.countryBox.addItem(country.getNames().get("en"), country.getId().toString());
-			//TODO sacar la harcodeada de idioma
+			this.countryBox.addItem(country.getNames().get(GWTUtils.getCurrentLocaleCode()), country.getId().toString());
 		}
+		if (this.countryBox.getItemCount() > 0)
+			this.setZoneListItems(new Integer(this.countryBox.getValue(this.countryBox.getSelectedIndex())));
 	}
 	
-//	private void setAreaListItems(){
-//		SpotServices.Util.getInstance().getAreas(new AsyncCallback<Map<String, List>>(){
-//			public void onSuccess(Map<String, List> result) {
-//				if (result != null) {
-////					for (final Iterator iterator = result.iterator(); iterator.hasNext();) {
-////						final AreaDTO area = (AreaDTO) iterator.next();
-////						areaBox.addItem(area.getNames().get("en"), area.getId().toString());
-////					}
-//					
-//					Iterator i = null;
-//					if (result.containsKey("areas")){
-//						i = result.get("areas").iterator();
-//						while (i.hasNext()){
-//							AreaDTO area = (AreaDTO)i.next();
-//							areaBox.addItem(area.getNames().get("en"), area.getId().toString());
-//						}
-//					}
-//					
-//					if (result.containsKey("countries")){
-//						i = result.get("countries").iterator();
-//						while (i.hasNext()){
-//							CountryDTO country = (CountryDTO)i.next();
-//							countryBox.addItem(country.getNames().get("en"), country.getId().toString());
-//						}
-//					}
-//					
-//					
-//				}
-//			}
-//				
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//		});
-//	}
-//	
-//	private void setCountryListItems(String area){
-//		countryBox.clear();
-//		SpotServices.Util.getInstance().getCountries(area, new AsyncCallback<Map<String, List>>(){
-//			public void onSuccess(Map<String, List> result) {
-//				if (result == null) {
-//				} else {
-//					Iterator i = null;
-//					if (result.containsKey("countries")){
-//						i = result.get("countries").iterator();
-//						while (i.hasNext()){
-//							Country country = (Country)i.next();
-//							countryBox.addItem(country.getName(), country.getId());
-//						}
-//					}
-//					
-//				}
-//			}
-//				
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//		});
-//	}
-
+	private void setZoneListItems(Integer countryId){
+		zoneBox.clear();
+		SpotServices.Util.getInstance().getZones(countryId, new AsyncCallback<List<ZoneDTO>>(){
+			public void onSuccess(List<ZoneDTO> result) {
+				Iterator<ZoneDTO> i = result.iterator(); 
+				while (i.hasNext()){
+					ZoneDTO zone = i.next();
+					zoneBox.addItem(zone.getName(), zone.getId().toString());
+				}
+			}
+				
+			public void onFailure(Throwable caught) {
+				//TODO do something when the getspots methos fails
+			}
+		});
+	}
 }
