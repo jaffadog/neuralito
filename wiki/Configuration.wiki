@@ -2,6 +2,9 @@
 == Maven  ==
 Configure environment variable:
 *MAVEN_OPTS=-Xmx900m*
+== Eclipse  ==
+When running tests which decodes grib files and consume too much memory the following is needed:
+Eclipse->Preferences->Installed JRE(The one used to run the project)->Edit->VM arguments=-Xmx900m.
 == DB  ==
 
   # Download and Install Mysql version 5.1.
