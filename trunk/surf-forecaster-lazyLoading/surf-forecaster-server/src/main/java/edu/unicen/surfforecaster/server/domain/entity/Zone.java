@@ -43,8 +43,8 @@ public class Zone {
 	 * The spots this zone contains.
 	 */
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "zone")
-	private Set<Spot> spots;
+	@OneToMany(mappedBy = "zone")
+	private Set<Spot> spots = new HashSet<Spot>();
 	/**
 	 * The country this zone belongs.
 	 */

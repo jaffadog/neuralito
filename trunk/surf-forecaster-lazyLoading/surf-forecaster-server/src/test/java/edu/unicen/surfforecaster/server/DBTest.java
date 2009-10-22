@@ -55,6 +55,7 @@ public class DBTest {
 	// }
 
 	/**
+	 * Generates the
 	 * @param forecasts
 	 */
 	private void generateFile(final File file, final List forecasts) {

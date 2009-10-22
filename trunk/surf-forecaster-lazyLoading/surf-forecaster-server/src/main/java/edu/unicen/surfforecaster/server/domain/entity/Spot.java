@@ -50,18 +50,18 @@ public class Spot implements Serializable {
 	/**
 	 * Spot creator.
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne()
 	private User user;
 
 	/**
 	 * The zone where this spot is located.
 	 */
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne()
 	private Zone zone;
 	/**
 	 * Description of the spot.
 	 */
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Description description;
 
 	/**

@@ -49,7 +49,7 @@ public class Forecast {
 	 * Map with <parameterName, parameterValue> info. Parameters may be:
 	 * waveHeight, wavePeriod, waveDirection, windSpeed.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@MapKey(name = "parameterName")
 	private Map<String, ForecastParameter> parameters;
 
