@@ -44,12 +44,12 @@ public class Area implements Serializable {
 	/**
 	 * The countries this area contains.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "area")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "area")
 	private final Set<Country> countries = new HashSet<Country>();
 	/**
 	 * Map containing language/area-name values.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@MapKey(name = "language")
 	private final Map<String, I18n> names = new HashMap<String, I18n>();
 

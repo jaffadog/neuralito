@@ -38,7 +38,7 @@ public class Comparation {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	List<Spot> spots = new ArrayList<Spot>();
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.ALL)
 	User user;
 
 	/**

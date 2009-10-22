@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
@@ -52,6 +53,7 @@ public class SpotServiceImplementation implements SpotService {
 	 *      double, double, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public Integer addSpot(final String spotName, final float latitude,
 			final float longitude, final Integer zoneId, final Integer userId,
 			final boolean publik, final String timeZone)
@@ -87,6 +89,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpotsForUser(java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<SpotDTO> getSpotsForUser(final Integer userId)
 			throws NeuralitoException {
 		validateUserId(userId);
@@ -107,6 +110,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#removeSpot(java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public void removeSpot(final Integer spotId) throws NeuralitoException {
 		validateSpotExists(spotId);
 		try {
@@ -121,6 +125,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @param spotId
 	 * @throws NeuralitoException
 	 */
+	
 	private void validateSpotExists(final Integer spotId)
 			throws NeuralitoException {
 		if (spotId == null)
@@ -178,6 +183,7 @@ public class SpotServiceImplementation implements SpotService {
 	 *      java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public Integer addZone(final String name, final Integer countryId)
 			throws NeuralitoException {
 		validateCountryId(countryId);
@@ -214,6 +220,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#addArea(java.util.Map)
 	 */
 	@Override
+	@Transactional
 	public Integer addArea(final Map<String, String> areaNamesMap)
 			throws NeuralitoException {
 		try {
@@ -230,6 +237,7 @@ public class SpotServiceImplementation implements SpotService {
 	 *      java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public Integer addCountry(final Map<String, String> countryNamesMap,
 			final Integer areaId) throws NeuralitoException {
 		validate(countryNamesMap, areaId);
@@ -258,6 +266,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#removeZone(java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public void removeZone(final Integer zoneId) throws NeuralitoException {
 		validateZoneId(zoneId);
 		try {
@@ -286,6 +295,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#removeCountry(java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public void removeCountry(final Integer countryId)
 			throws NeuralitoException {
 		validateCountryId(countryId);
@@ -316,13 +326,10 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#removeArea(java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public void removeArea(final Integer areaId) throws NeuralitoException {
 		validateAreaId(areaId);
-		try {
-			spotDAO.removeArea(spotDAO.getAreaById(areaId));
-		} catch (final DataAccessException e) {
-			throw new NeuralitoException(ErrorCode.DATABASE_ERROR);
-		}
+		spotDAO.removeArea(spotDAO.getAreaById(areaId));
 	}
 
 	/**
@@ -344,6 +351,7 @@ public class SpotServiceImplementation implements SpotService {
 	 *      java.lang.Integer, boolean)
 	 */
 	@Override
+	@Transactional
 	public Integer addZoneAndSpot(final String zoneName,
 			final Integer countryId, final String spotName,
 			final float latitude, final float longitude, final Integer userId,
@@ -381,9 +389,11 @@ public class SpotServiceImplementation implements SpotService {
 	 * @param latitude
 	 * @param longitude
 	 */
-	private void validateLatAndLong(final double latitude,
-			final double longitude) {
-		// TODO Auto-generated method stub
+	private void validateLatAndLong(final Float latitude,
+			final Float longitude) {
+		if (latitude==null){
+			
+		}
 
 	}
 
@@ -402,6 +412,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpotById(java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public SpotDTO getSpotById(final Integer spotId) throws NeuralitoException {
 		validateSpotId(spotId);
 		final Spot spot = spotDAO.getSpotById(spotId);
@@ -420,6 +431,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getPublicSpots()
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<SpotDTO> getPublicSpots() throws NeuralitoException {
 		try {
 			final List<Spot> userSpots = spotDAO.getPublicSpots();
@@ -440,6 +452,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpotForecasters(java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<ForecasterDTO> getSpotForecasters(final Integer spotId)
 			throws NeuralitoException {
 		validateSpotExists(spotId);
@@ -458,6 +471,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getAreas()
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<AreaDTO> getAreas() throws NeuralitoException {
 		final List<Area> allAreas = spotDAO.getAllAreas();
 		final List<AreaDTO> areasDTOs = new ArrayList<AreaDTO>();
@@ -472,6 +486,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getCountries(java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<CountryDTO> getCountries(final Integer areaId)
 			throws NeuralitoException {
 		validateAreaId(areaId);
@@ -492,6 +507,7 @@ public class SpotServiceImplementation implements SpotService {
 	 *      java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<ZoneDTO> getZones(final Integer idCountry, final Integer idUser)
 			throws NeuralitoException {
 		final User user = userDAO.getUserByUserId(idUser);
@@ -511,6 +527,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getCountries()
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<CountryDTO> getCountries() throws NeuralitoException {
 		try {
 			final List<Country> allCountries = spotDAO.getAllCountries();
@@ -532,6 +549,7 @@ public class SpotServiceImplementation implements SpotService {
 	 *      java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<SpotDTO> getSpots(final Integer idZone, final Integer idUser)
 			throws NeuralitoException {
 		validateZoneId(idZone);
@@ -563,6 +581,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getSpots(java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<SpotDTO> getSpots(final Integer zoneId)
 			throws NeuralitoException {
 		validateZoneId(zoneId);
@@ -589,6 +608,7 @@ public class SpotServiceImplementation implements SpotService {
 	 * @see edu.unicen.surfforecaster.common.services.SpotService#getZones(java.lang.Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public List<ZoneDTO> getZones(final Integer countryId)
 			throws NeuralitoException {
 		validateCountryId(countryId);

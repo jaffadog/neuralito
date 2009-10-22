@@ -5,13 +5,18 @@ package edu.unicen.surfforecaster.server.domain.decoder;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
+
+import com.enterprisedt.util.debug.Logger;
 
 import ucar.ma2.Array;
 import ucar.nc2.dt.GridCoordSystem;
@@ -31,7 +36,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
  * 
  */
 public class GribDecoderNetcdf implements GribDecoder {
-
+	private Logger log = Logger.getLogger(GribDecoderNetcdf.class);
 	/**
 	 * @see edu.unicen.surfforecaster.server.domain.entity.forecasters.WW3DataManager.decoder.GribDecoder#getValidPoints(java.io.File)
 	 */
@@ -70,10 +75,13 @@ public class GribDecoderNetcdf implements GribDecoder {
 	@Override
 	public Collection<ForecastPlain> getForecastForTime(final File file,
 			final int time) throws IOException {
-		System.out.println("Decoding and creating forecasts for time: " + time);
+		log.info("Decoding forecasts from file: "+file.getAbsolutePath());
 		final long init = System.currentTimeMillis();
 		final GridDataset gridDataSet = GridDataset
 				.open(file.getAbsolutePath());
+		DateFormat formatter  = SimpleDateFormat.getInstance();
+		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		log.info("Forecasts for: " + formatter.format(gridDataSet.getStartDate())+ "+ "+time+"hs." );
 		final List<GridDatatype> grids = gridDataSet.getGrids();
 		GridCoordSystem pwdGcs = null;
 		final HashMap<String, float[][]> arrays = new HashMap<String, float[][]>();
@@ -83,8 +91,8 @@ public class GribDecoderNetcdf implements GribDecoder {
 		for (final Iterator iterator = grids.iterator(); iterator.hasNext();) {
 			final GridDatatype pwd = (GridDatatype) iterator.next();
 			pwdGcs = pwd.getCoordinateSystem();
-			System.out.println("Reading: " + pwd.getName());
 			final Array array = pwd.readDataSlice(time, -1, -1, -1);
+			log.info("Read parameter: " + pwd.getName());
 			final float[][] data = (float[][]) array.copyToNDJavaArray();
 			arrays.put(pwd.getName(), data);
 			imax = array.getShape()[0];
@@ -147,9 +155,9 @@ public class GribDecoderNetcdf implements GribDecoder {
 		}
 
 		final long end = System.currentTimeMillis();
-		System.out.println("Decoded and created: " + forecasts.size()
+		log.info("Decoded and created: " + forecasts.size()
 				+ " forecasts.");
-		System.out.println("Elapsed Time: " + (end - init) / 1000);
+		log.info("Elapsed Time: " + (end - init) / 1000);
 		return forecasts;
 	}
 

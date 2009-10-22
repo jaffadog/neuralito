@@ -6,23 +6,35 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
 import edu.unicen.surfforecaster.server.domain.entity.Country;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
-
+@RunWith(SpringJUnit4ClassRunner.class)
+//ApplicationContext will be loaded from "/applicationContext.xml" and "/applicationContext-test.xml"
+//in the root of the classpath
+@ContextConfiguration(locations={"/services.xml"})
+//@TransactionConfiguration
 public class SpotDAOHibernateImplTest {
-	private SpotDAO spotDAO;
+	
+	@Autowired
+	private SpotDAOHibernateImpl spotDAO;
 
 	@Before
 	public void setUp() throws Exception {
-		final ApplicationContext context = new ClassPathXmlApplicationContext(
-				"/dao.xml");
-		spotDAO = (SpotDAO) context.getBean("spotDAO");
+//		final ApplicationContext context = new ClassPathXmlApplicationContext(
+//				"/dao.xml");
+//		spotDAO = (SpotDAO) context.getBean("spotDAO");
 	}
 
 	// /**
@@ -48,6 +60,7 @@ public class SpotDAOHibernateImplTest {
 	 * reload them.
 	 */
 	@Test
+	@Transactional
 	public void saveAndLoad() {
 		// number of areas in the DB before adding a new entity
 		final int initialAreas = spotDAO.getAllAreas().size();

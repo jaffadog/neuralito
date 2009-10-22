@@ -76,7 +76,7 @@ public class User {
 	/**
 	 * the spots comparations this user have created and saved.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
 	private final Set<Comparation> comparations = new HashSet<Comparation>();;
 
 	// /**
@@ -88,7 +88,7 @@ public class User {
 	/**
 	 * the spots this user have created and saved.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private Set<Spot> spots;
 
 	/**

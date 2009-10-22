@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.Validate;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.server.domain.entity.Area;
@@ -96,7 +99,8 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Area> getAllAreas() {
-		return getHibernateTemplate().loadAll(Area.class);
+		Set set = new HashSet(getHibernateTemplate().loadAll(Area.class));
+		return new ArrayList(set);
 	}
 
 	/*
@@ -128,12 +132,12 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 				.add(Restrictions.eq("publik", true));
 		criteria.add(Restrictions.ne("user", user));
 		final List publicSpots = getHibernateTemplate()
-				.findByCriteria(criteria);
+				.findByCriteria(criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY));
 		// Find all the spots from the user.(Publics and privates).
 		final DetachedCriteria criteria2 = DetachedCriteria
 				.forClass(Spot.class).add(Restrictions.eq("user", user));
 		final List userSpecificSpots = getHibernateTemplate().findByCriteria(
-				criteria2);
+				criteria2.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY));
 		// Return a list containing the results of both queries.
 		final List allVisibleSpots = new ArrayList();
 		allVisibleSpots.addAll(publicSpots);
@@ -229,14 +233,8 @@ public class SpotDAOHibernateImpl extends HibernateDaoSupport implements
 						Restrictions.and(Restrictions.eq("name", zoneName),
 								Restrictions.eq("country", country)));
 		final List<Zone> zones = getHibernateTemplate()
-				.findByCriteria(criteria);
-		// if (zones.size() > 1)
-		// throw new DataIntegrityViolationException(
-		// "zone name is not unique for a given Country");
-		if (zones.size() == 0)
-			return null;
-		else
-			return zones.get(0);
+				.findByCriteria(criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY));
+		 return (Zone)DataAccessUtils.singleResult(zones);
 	}
 
 	/**
