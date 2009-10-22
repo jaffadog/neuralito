@@ -134,6 +134,18 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 				}
 			}
 		}
+		
+		/**
+		 * Make this panel an observer for LocalizationUtils object
+		 */
+		LocalizationUtils.getInstance().addObserver(this);
+		
+		/**
+		 * Also, If all localization calls finished, force update (observer impl. method) to avoid the possibility that
+		 * the observable class notify before this class adds himself as an observer 
+		 */
+		if (LocalizationUtils.getInstance().getCallsQueue().allFinished())
+			update(LocalizationUtils.getInstance(), null);
 	}
 	
 	private void renderSpotInfo() {

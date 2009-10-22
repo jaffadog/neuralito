@@ -14,7 +14,6 @@ public class SpotDescriptionPanel extends VerticalPanel {
 	public SpotDescriptionPanel() {
 		{
 			localizationPanel = new LocalizationPanel();
-			LocalizationUtils.getInstance().addObserver(localizationPanel);
 			localizationPanel.setBasePanel(this);
 			add(localizationPanel);
 		}
