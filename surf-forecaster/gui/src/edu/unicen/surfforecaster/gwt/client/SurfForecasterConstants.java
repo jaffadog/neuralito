@@ -1,10 +1,17 @@
 package edu.unicen.surfforecaster.gwt.client;
 
 import com.google.gwt.i18n.client.Constants;
-
+/**
+ * This interface set translations GWT methods organizated by panel name.
+ * Mantain this file ordered alphabeticaly by panel class name 
+ * @author MAXI
+ *
+ */
 public interface SurfForecasterConstants extends Constants {
 	
 	/**
+	 * Character html entities
+	 * 
 	 * á = \u00E1
 	 * é = 
 	 * í = \u00ED
@@ -13,7 +20,45 @@ public interface SurfForecasterConstants extends Constants {
 	 * ñ = \u00F1
 	 */
 	
-	//Commons
+	/**
+	 * ErrorMessages
+	 */
+	@DefaultStringValue("Los cambios se guardaron exitosamente !!!")
+	String CHANGES_SAVED_SUCCESFULLY();
+	
+	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
+	String MANDATORY_FIELDS();
+	
+	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a.")
+	String INVALID_LOGIN();
+	
+	@DefaultStringValue("El campo zona es obligatorio.")
+	String MANDATORY_ZONE_NAME();
+	
+	@DefaultStringValue("El campo ola es obligatorio.")
+	String MANDATORY_SPOT_NAME();
+	
+	@DefaultStringValue("Debe clickear en algun punto del mapa para poder configurar correctamente la longitud y latitud de la ola.")
+	String MANDATORY_SPOT_LAT_LONG();
+	
+	@DefaultStringValue("Debe seleccionar alguna de las boyas que rodean a la playa de donde se obtendr\u00E1n pron\u00F3sticos.")
+	String MANDATORY_BUOY_LAT_LONG();
+	
+	@DefaultStringValue("Fall\u00F3 la conexi\u00F3n con la base de datos, intentelo nuevamente m\u00E1s tarde...")
+	String DATABASE_ERROR();
+	
+	@DefaultStringValue("El nombre de usuario especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
+	String DUPLICATED_USER_USERNAME();
+	
+	@DefaultStringValue("El email especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
+	String DUPLICATED_USER_EMAIL();
+	
+	@DefaultStringValue("El password no puede ser vacio o igual al nombre de usuario, por favor ingrese uno distinto.")
+	String INVALID_PASSWORD();
+	
+	/**
+	 * Commons translates for more than one panel
+	 */
 	@DefaultStringValue("Iniciar sesi\u00F3n")
 	String signIn();
 	
@@ -47,44 +92,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Grabar")
 	String save();
 	
-	//UserStatePanel
-	@DefaultStringValue("Idioma")
-	String language();
-	
-	@DefaultStringValue("Ayuda")
-	String help();
-	
-	@DefaultStringValue("Cerrar sesi\u00F3n")
-	String signOut();
-	
-	@DefaultStringValue("Configuraci\u00F3n")
-	String settings();
-	
-	//LoginBox
-	@DefaultStringValue("Espere por favor")
-	String waitPlease();
-	
-	//LocalizationPanel
-	@DefaultStringValue("Seleccione una ola")
-	String selectSpot();
-	
-	//RegisterNewUserPanel
-	@DefaultStringValue("Registrarse como nuevo usuario")
-	String registerSectionTitle();
-	
-	@DefaultStringValue("Nombre")
-	String name();
-	
-	@DefaultStringValue("Apellido")
-	String lastName();
-	
-	@DefaultStringValue("Correo electr\u00F3nico")
-	String email();
-	
-	@DefaultStringValue("Administrador")
-	String administrator();
-	
-	//ForecastTabPanel
+	/**
+	 * ForecastTabPanel
+	 */
 	@DefaultStringValue("Descripci\u00F3n de ola")
 	String spotDescription();
 	
@@ -94,7 +104,42 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Nueva ola")
 	String newSpot();
 	
-	//NewSpotPanel
+	/**
+	 * LocalizationPanel
+	 */
+	@DefaultStringValue("Seleccione una ola")
+	String selectSpot();
+	
+	/**
+	 * LoginBox
+	 */
+	@DefaultStringValue("Espere por favor")
+	String waitPlease();
+	
+	/**
+	 * MapPanel
+	 */
+	@DefaultStringValue("Clickee en el mapa para ubicar geogr\u00E1ficamente la ola que desea pronosticar.")
+	String mapHelpTip();
+	
+	@DefaultStringValue("Latitud")
+	String latitude();
+	
+	@DefaultStringValue("Longitud")
+	String longitude();
+	
+	@DefaultStringValue("Pronosticador(WW3GridPoint)")
+	String ww3GridPoint();
+	
+	@DefaultStringValue("Localizaci\u00F3n de la ola")
+	String spotLocation();
+	
+	@DefaultStringValue("Pronosticador seleccionado")
+	String selectedForecaster();
+	
+	/**
+	 * NewSpotPanel
+	 */
 	@DefaultStringValue("Registre una nueva ola")
 	String newSpotSectionTitle();
 	
@@ -116,40 +161,36 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Visibilidad de ola")
 	String spotVisibility();
 	
-	//ErrorMessages
+	/**
+	 * RegisterNewUserPanel
+	 */
+	@DefaultStringValue("Registrarse como nuevo usuario")
+	String registerSectionTitle();
 	
-	@DefaultStringValue("Los cambios se guardaron exitosamente !!!")
-	String CHANGES_SAVED_SUCCESFULLY();
+	@DefaultStringValue("Nombre")
+	String name();
 	
-	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
-	String MANDATORY_FIELDS();
+	@DefaultStringValue("Apellido")
+	String lastName();
 	
-	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a.")
-	String INVALID_LOGIN();
+	@DefaultStringValue("Correo electr\u00F3nico")
+	String email();
 	
-	@DefaultStringValue("El campo zona es obligatorio.")
-	String MANDATORY_ZONE_NAME();
+	@DefaultStringValue("Administrador")
+	String administrator();
 	
-	@DefaultStringValue("El campo ola es obligatorio.")
-	String MANDATORY_SPOT_NAME();
+	/**
+	 * UserStatePanel
+	 */
+	@DefaultStringValue("Idioma")
+	String language();
 	
-	@DefaultStringValue("Debe clickear en algun punto mapa para poder configurar correctamente la longitud y latitud de la ola.")
-	String MANDATORY_SPOT_LAT_LONG();
+	@DefaultStringValue("Ayuda")
+	String help();
 	
-	@DefaultStringValue("Debe seleccionar alguna de las boyas que rodean a la playa de donde se obtendr\u00E1n pron\u00F3sticos.")
-	String MANDATORY_BUOY_LAT_LONG();
+	@DefaultStringValue("Cerrar sesi\u00F3n")
+	String signOut();
 	
-	@DefaultStringValue("Fall\u00F3 la conexi\u00F3n con la base de datos, intentelo nuevamente m\u00E1s tarde...")
-	String DATABASE_ERROR();
-	
-	@DefaultStringValue("El nombre de usuario especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
-	String DUPLICATED_USER_USERNAME();
-	
-	@DefaultStringValue("El email especificado ya a sido utilizado por otra persona, por favor ingrese uno distinto.")
-	String DUPLICATED_USER_EMAIL();
-	
-	@DefaultStringValue("El password no puede ser vacio o igual al nombre de usuario, por favor ingrese uno distinto.")
-	String INVALID_PASSWORD();
-	
-	
+	@DefaultStringValue("Configuraci\u00F3n")
+	String settings();
 }

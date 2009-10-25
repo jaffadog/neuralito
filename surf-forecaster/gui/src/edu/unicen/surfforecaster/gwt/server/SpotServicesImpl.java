@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 
-import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.SpotService;
@@ -13,11 +12,10 @@ import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
-import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
-import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
+@SuppressWarnings("serial")
 public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	
 	private SpotService spotService;
@@ -62,8 +60,8 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	
 	public List<ZoneDTO> getZones(final Integer country) throws NeuralitoException {
 		List<ZoneDTO> zones = new ArrayList<ZoneDTO>();
-		if (this.getUser() != null)
-			zones = spotService.getZones(country, this.getUser().getId());
+		if (this.getLoggedUser() != null)
+			zones = spotService.getZones(country, this.getLoggedUser().getId());
 		else
 			zones = spotService.getZones(country);
 		
@@ -72,8 +70,8 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	
 	public List<SpotDTO> getSpots(Integer zone) throws NeuralitoException {
 		List<SpotDTO> spots = new ArrayList<SpotDTO>();
-		if (this.getUser() != null) 
-			spots = spotService.getSpots(zone, this.getUser().getId());
+		if (this.getLoggedUser() != null) 
+			spots = spotService.getSpots(zone, this.getLoggedUser().getId());
 		else
 			spots = spotService.getSpots(zone);
 
@@ -87,15 +85,12 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		
 		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Trying to add a new spot: '" + spotName + "'...");
 		
-		final SessionData sessionData = this.getSessionData();
-		if (sessionData == null)
-			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
-		else {
+		if (super.hasAccessTo("addSpot")){
 			final float spotLongitudeNum = new Float(spotLongitude);
 			final float spotLatitudeNum = new Float(spotLatitude);
 			final float buoyLongitudeNum = new Float(buoyLongitude);
 			final float buoyLatitudeNum = new Float(buoyLatitude);
-			final Integer userId = new Integer(((UserDTO)sessionData.getUserDTO()).getId());
+			final Integer userId = super.getLoggedUser().getId();
 			Integer result = null;
 			if (zoneName.trim().equals("")) {
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding only the spot: '" + spotName + "'...");
@@ -112,6 +107,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			
 			return result;
 		}
+		return null;
 	}
 
 }

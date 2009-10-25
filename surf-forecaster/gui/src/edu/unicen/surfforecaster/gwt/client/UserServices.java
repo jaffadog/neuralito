@@ -7,7 +7,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
-import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 @RemoteServiceRelativePath("UserServices")
 public interface UserServices extends RemoteService {
@@ -28,9 +27,11 @@ public interface UserServices extends RemoteService {
 	UserDTO login(String userName, String password) throws NeuralitoException;
 	
 	Integer addUser(String name, String lastname, String email, String username, String password, UserType userType) throws NeuralitoException;
-
-	SessionData getSessionData();
+	
+	boolean hasAccessTo(String action) throws NeuralitoException;
 
 	void closeSession();
+	
+	UserDTO getLoggedUser();
 
 }

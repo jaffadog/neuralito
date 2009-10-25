@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.ListBox;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
-import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 
 public class UserStatePanel extends Composite {
@@ -139,8 +138,8 @@ public class UserStatePanel extends Composite {
 	}
 	
 	private void getSessionData(){
-		UserServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
-			public void onSuccess(SessionData result) {
+		UserServices.Util.getInstance().getLoggedUser(new AsyncCallback<UserDTO>(){
+			public void onSuccess(UserDTO result) {
 				if (result == null) {
 					horizontalPanel.insert(lnkLogin, 1);
 				
@@ -149,7 +148,7 @@ public class UserStatePanel extends Composite {
 					
 					horizontalPanel.add(lnkRegister);
 				} else {
-					lblUserName = new Label(((UserDTO)result.getUserDTO()).getUsername());
+					lblUserName = new Label(result.getUsername());
 					lblUserName.addStyleName("gwt-Label-Username");
 					horizontalPanel.insert(lblUserName, 1);
 					

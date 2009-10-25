@@ -4,12 +4,16 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Level;
 
+import com.google.gwt.user.client.Cookies;
+
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
+@SuppressWarnings("serial")
 public class UserServicesImpl extends ServicesImpl implements UserServices {
 
 	/**
@@ -31,8 +35,6 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 		return userService;
 	}
 	
-	
-
 	/**
 	 * Check if exists any user with the username and password passed as parameters
 	 * 
@@ -43,8 +45,12 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 	public UserDTO login(final String userName, final String password) throws NeuralitoException{
 		logger.log(Level.INFO,"UserServicesImpl - login - Finding User: '" + userName + "'...");
 		UserDTO userDTO = userService.loginUser(userName, password);
+		//Set the user for this session
 		final HttpSession session = this.getSession();
-		session.setAttribute("gwtForecast-User", userDTO);
+		session.setAttribute("surfForecaster-User", userDTO);
+		//Set a cookie with the username to difference a null session from a expired session (to show the login box again).
+		Cookies.setCookie("surfForecaster-Username", userDTO.getUsername(), GWTUtils.getExpirityDate());
+		
 		logger.log(Level.INFO,"UserServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
 		return userDTO;
 	}

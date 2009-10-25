@@ -217,6 +217,7 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 				messages.addAll(validateForm());
 				if (messages.isEmpty()){
 					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
+					
 					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
 							mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
 							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
@@ -226,6 +227,8 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 							successPanel.setVisible(true);
 			            }
 			            public void onFailure(Throwable caught){
+			            	//TODO manejar la expecion que llega correctamente, puede ser de sesion expirada, de permisos denegados
+			            	//o de campos mal llenados
 			            	messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
 							errorPanel.setMessages(messages);
 							errorPanel.setVisible(true);
@@ -233,7 +236,6 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 						});
 				}
 				else{
-					//messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
 					errorPanel.setMessages(messages);
 					errorPanel.setVisible(true);
 				}
