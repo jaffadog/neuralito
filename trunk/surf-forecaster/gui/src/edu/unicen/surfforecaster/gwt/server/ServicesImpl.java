@@ -32,19 +32,14 @@ public class ServicesImpl extends SpringGWTServlet {
 	/**
 	 * Return a sessionData object with all the values stored in the current session
 	 * 
-	 * @return SessionData or null if not exists any session values
-	 * @throws NeuralitoException if the session is expired 
+	 * @return SessionData if not exists any session values
+	 * @throws NeuralitoException if the session is expired or empty
 	 */
 	public SessionData getSessionData() throws NeuralitoException {
 		final HttpSession session = getSession();
 		if ((UserDTO)session.getAttribute("surfForecaster-User") == null) {
-			if (Cookies.getCookie("surfForecaster-User") != null && !Cookies.getCookie("surfForecaster-User").isEmpty()) {
-				logger.log(Level.INFO, "ServicesImpl - getSessionData - Session is expired.");
-				throw new NeuralitoException(ErrorCode.USER_SESSION_EXPIRED);
-			} else {
-				logger.log(Level.INFO, "ServicesImpl - getSessionData - Session is empty.");
-				return null;
-			}
+			logger.log(Level.INFO, "ServicesImpl - getSessionData - Session is expired or empty.");
+			throw new NeuralitoException(ErrorCode.USER_SESSION_EXPIRED);
 		} else {
 			final SessionData sessionData = new SessionData();
 			sessionData.setUserDTO((UserDTO)session.getAttribute("surfForecaster-User"));
@@ -75,7 +70,6 @@ public class ServicesImpl extends SpringGWTServlet {
 		final HttpSession session = getSession();
 		logger.log(Level.INFO, "ServicesImpl - closeSession - Closing the current session...");
 		session.removeAttribute("surfForecaster-User");
-		Cookies.removeCookie("surfForecaster-User");
 		logger.log(Level.INFO, "ServicesImpl - closeSession - Session closed.");
 	}
 	
@@ -97,9 +91,9 @@ public class ServicesImpl extends SpringGWTServlet {
 	}
 	
 	/**
-	 * @param action
-	 * @return True or false depending if the current user has access to the specific action
-	 * @throws NeuralitoException .Could return an USER_SESSION_EXPIRED exception or an USER_ROLE_INSUFFICIENT 
+	 * @param action represents the action to perform by the current user
+	 * @return Boolean depending if the current user has access to the specific action
+	 * @throws NeuralitoException Could return an USER_SESSION_EXPIRED exception or an USER_ROLE_INSUFFICIENT 
 	 */
 	public boolean hasAccessTo(String action) throws NeuralitoException {
 		SessionData sessionData = this.getSessionData();

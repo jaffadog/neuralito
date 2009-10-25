@@ -77,7 +77,10 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 
 		return spots;
 	}
-
+	
+	/**
+	 * 
+	 */
 	public Integer addSpot(final String spotName, final String spotLatitude, final String spotLongitude,
 			final String buoyLatitude, final String buoyLongitude, final Integer zoneId,
 			final Integer countryId, final String zoneName,
