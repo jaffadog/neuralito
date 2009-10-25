@@ -27,7 +27,7 @@ public class ServicesImpl extends SpringGWTServlet {
 	 * The max inactive interval between an action in the current session
 	 * A negative value sets this value as infinite
 	 */
-	private final int MAX_INACTIVE_INTERVAL = 2000; //2000 seconds
+	private final int MAX_INACTIVE_INTERVAL = 20; //2000 seconds
 	
 	/**
 	 * Return a sessionData object with all the values stored in the current session
