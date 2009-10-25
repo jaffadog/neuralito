@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -124,6 +125,7 @@ public class UserStatePanel extends Composite {
 				UserServices.Util.getInstance().closeSession(new AsyncCallback<Void>(){
 					
 					public void onSuccess(Void result){
+						Cookies.removeCookie("surfForecaster-Username");
 						Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
 					}
 					

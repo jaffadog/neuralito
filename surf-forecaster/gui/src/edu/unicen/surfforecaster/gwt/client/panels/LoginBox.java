@@ -3,6 +3,7 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -105,6 +106,8 @@ public class LoginBox extends DialogBox{
 				else{
 					UserServices.Util.getInstance().login(loginUserName.getText().trim(), loginPassword.getText().trim(), new AsyncCallback<UserDTO>(){
 						public void onSuccess(UserDTO result) {
+							//Set a cookie with the username to difference a null session from a expired session (to show the login box again).
+							Cookies.setCookie("surfForecaster-Username", result.getUsername(), GWTUtils.getExpirityDate());
 							Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
 						}
 							

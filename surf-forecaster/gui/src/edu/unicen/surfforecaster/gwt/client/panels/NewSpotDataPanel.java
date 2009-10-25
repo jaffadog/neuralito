@@ -227,8 +227,9 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 							successPanel.setVisible(true);
 			            }
 			            public void onFailure(Throwable caught){
-			            	//TODO manejar la expecion que llega correctamente, puede ser de sesion expirada, de permisos denegados
-			            	//o de campos mal llenados
+			            	//TODO 2 posibilidades: que tire la exepcion de que la sesion expiro o que no tiene permisos
+							//Quedaria chequear si fue que expiro (si la cockie existe o si nunca se inicio)
+			            	//si no tiene permisos mostrar el mensaje correspondiente
 			            	messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
 							errorPanel.setMessages(messages);
 							errorPanel.setVisible(true);
