@@ -8,6 +8,7 @@ import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 
+@SuppressWarnings("serial")
 public class ForecastServicesImpl extends ServicesImpl implements ForecastServices {
 	
 	private ForecastService forecastService;
@@ -36,19 +37,7 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 	 */
 	public List<PointDTO> getNearbyGridPoints(float spotLatitude, float spotLongitude) throws NeuralitoException  {
 		List<PointDTO> result = new ArrayList<PointDTO>();
-		
 		result = forecastService.getNearbyGridPoints(spotLatitude, spotLongitude);
-		
-		
-//		PointDTO point = new PointDTO(spotLongitude - 1, spotLatitude - 1);
-//		result.add(point);
-//		point = new PointDTO(spotLongitude - 1, spotLatitude + 1);
-//		result.add(point);
-//		point = new PointDTO(spotLongitude + 1, spotLatitude - 1);
-//		result.add(point);
-//		point = new PointDTO(spotLongitude + 1, spotLatitude + 1);
-//		result.add(point);
-		
 		return result;
 	}
 }

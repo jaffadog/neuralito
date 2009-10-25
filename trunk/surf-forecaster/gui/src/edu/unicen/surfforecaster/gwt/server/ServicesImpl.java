@@ -6,10 +6,16 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import com.google.gwt.user.client.Cookies;
+
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.server.util.SpringGWTServlet;
+import edu.unicen.surfforecaster.gwt.server.util.UserRoles;
 
+@SuppressWarnings("serial")
 public class ServicesImpl extends SpringGWTServlet {
 	
 	/**
@@ -24,19 +30,24 @@ public class ServicesImpl extends SpringGWTServlet {
 	private final int MAX_INACTIVE_INTERVAL = 2000; //2000 seconds
 	
 	/**
-	 * Return a sessionData object with all the values stored in the current
-	 * session
+	 * Return a sessionData object with all the values stored in the current session
 	 * 
 	 * @return SessionData or null if not exists any session values
+	 * @throws NeuralitoException if the session is expired 
 	 */
-	public SessionData getSessionData() {
+	public SessionData getSessionData() throws NeuralitoException {
 		final HttpSession session = getSession();
-		if ((UserDTO)session.getAttribute("gwtForecast-User") == null) {
-			logger.log(Level.INFO, "ServicesImpl - getSessionData - The session is null or empty.");
-			return null;
+		if ((UserDTO)session.getAttribute("surfForecaster-User") == null) {
+			if (Cookies.getCookie("surfForecaster-User") != null && !Cookies.getCookie("surfForecaster-User").isEmpty()) {
+				logger.log(Level.INFO, "ServicesImpl - getSessionData - Session is expired.");
+				throw new NeuralitoException(ErrorCode.USER_SESSION_EXPIRED);
+			} else {
+				logger.log(Level.INFO, "ServicesImpl - getSessionData - Session is empty.");
+				return null;
+			}
 		} else {
 			final SessionData sessionData = new SessionData();
-			sessionData.setUserDTO((UserDTO)session.getAttribute("gwtForecast-User"));
+			sessionData.setUserDTO((UserDTO)session.getAttribute("surfForecaster-User"));
 			logger.log(Level.INFO, "ServicesImpl - getSessionData - The session is open for user:" + sessionData.getUserDTO().getUsername());
 			return sessionData;
 		}
@@ -58,11 +69,13 @@ public class ServicesImpl extends SpringGWTServlet {
 
 	/**
 	 * Removes all the session values stored in the current session
+	 * Remove the username cookie
 	 */
 	public void closeSession() {
 		final HttpSession session = getSession();
 		logger.log(Level.INFO, "ServicesImpl - closeSession - Closing the current session...");
-		session.removeAttribute("gwtForecast-User");
+		session.removeAttribute("surfForecaster-User");
+		Cookies.removeCookie("surfForecaster-User");
 		logger.log(Level.INFO, "ServicesImpl - closeSession - Session closed.");
 	}
 	
@@ -70,11 +83,29 @@ public class ServicesImpl extends SpringGWTServlet {
 	 * Returns null or a userDTO object depending the session status
 	 * @return UserDTO, the logged in user
 	 */
-	public UserDTO getUser() {
-		final SessionData sessionData = this.getSessionData();
-		if (sessionData == null)
+	public UserDTO getLoggedUser() {
+		SessionData sessionData;
+		try {
+			sessionData = this.getSessionData();
+			if (sessionData != null)
+				return sessionData.getUserDTO();
+			else
+				return null;
+		} catch (NeuralitoException e) {
 			return null;
-		else
-			return sessionData.getUserDTO();
+		}
+	}
+	
+	/**
+	 * @param action
+	 * @return True or false depending if the current user has access to the specific action
+	 * @throws NeuralitoException .Could return an USER_SESSION_EXPIRED exception or an USER_ROLE_INSUFFICIENT 
+	 */
+	public boolean hasAccessTo(String action) throws NeuralitoException {
+		SessionData sessionData = this.getSessionData();
+		if (sessionData != null)
+			return UserRoles.getInstance().hasPermission(sessionData.getUserDTO().getType(), action);
+		
+		return false;
 	}
 }

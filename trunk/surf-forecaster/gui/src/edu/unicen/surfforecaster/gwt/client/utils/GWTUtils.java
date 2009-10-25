@@ -1,10 +1,12 @@
 package edu.unicen.surfforecaster.gwt.client.utils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -23,6 +25,8 @@ public final class GWTUtils {
 	
 	//PATH TO IMAGES
 	public final static String IMAGE_LOGO = "images/logo2.PNG";
+	public final static String IMAGE_SPOT = "images/wave.png";
+	public final static String IMAGE_BUOY = "images/buoy.png";
 	public final static String IMAGE_BLUE_BAR_LOADER = "images/blue-bar-loader.gif";
 	public final static String IMAGE_BLUE_CIRCLE_LOADER = "images/blue-circle-loader.gif";
 	public final static String IMAGE_ERROR_ICON = "images/Error.png";
@@ -38,6 +42,24 @@ public final class GWTUtils {
 	
 	//Default language
 	private static String DEFAULT_LOCALE = "es"; 
+	
+	//Cookie expiration date
+	public static Date getExpirityDate() {
+		Date now = new Date();
+		long nowLong = now.getTime();
+		nowLong = nowLong + (1000 * 60 * 60 * 24 * 1);//one day
+		now.setTime(nowLong);
+		
+		return now;
+	}
+	
+//	public static void setCookie(String name, String value) {
+//		Cookies.setCookie(name, value, getExpirityDate());
+//	}
+//	
+//	public static String getCookie(String name) {
+//		return Cookies.getCookie(name);
+//	}
 	
 	public static String getCurrentLocaleCode() {
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();

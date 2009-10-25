@@ -2,17 +2,15 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Vector;
 
-
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 
-import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
+import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
-import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 
 public class ForecastTabPanel extends DecoratedTabPanel {
 	
@@ -49,14 +47,16 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 			}
 		});
 		
-		//Check if exist any opened session
-		this.getSessionData();
+		/**
+		 * Check if the current user has access more authorized panels
+		 */
+		this.showAuthorizadTabs();
 	}
 	
-	private void getSessionData(){
-		UserServices.Util.getInstance().getSessionData(new AsyncCallback<SessionData>(){
-			public void onSuccess(SessionData result) {
-				if (result != null) {
+	private void showAuthorizadTabs(){
+		UserServices.Util.getInstance().hasAccessTo("addSpot", new AsyncCallback<Boolean>(){
+			public void onSuccess(Boolean result) {
+				if (result) {
 					NewSpotPanel newSpotPanel = new NewSpotPanel();
 					add(newSpotPanel, GWTUtils.LOCALE_CONSTANTS.newSpot());					
 					historyTokens.add("newSpotTab");
@@ -65,7 +65,9 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 			}
 
 			public void onFailure(Throwable caught) {
-				
+				//TODO 2 posibilidades que tire la exepcion de que la sesion expiro o que tire la excepcion de queno tiene permisos para esta ventana
+				//en el segundo caso no pasa nada
+				SurfForecaster.getInstance().gotoHistoryToken();
 			}
 		});
 	}
