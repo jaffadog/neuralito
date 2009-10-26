@@ -32,6 +32,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Usuario y/o contrase\u00F1a inv\u00E1lido/a.")
 	String INVALID_LOGIN();
 	
+	@DefaultStringValue("La \u00FAltima sesi\u00F3n de usuario iniciada ha expirado. Desea iniciarla nuevamente?")
+	String USER_SESSION_EXPIRED();
+	
 	@DefaultStringValue("El campo zona es obligatorio.")
 	String MANDATORY_ZONE_NAME();
 	

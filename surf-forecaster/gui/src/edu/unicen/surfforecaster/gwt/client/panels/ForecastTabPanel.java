@@ -6,7 +6,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 
@@ -69,12 +68,9 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 			}
 
 			public void onFailure(Throwable caught) {
-				//TODO 2 posibilidades: que tire la exepcion de que la sesion expiro o que no tiene permisos de ver esto 
-				//Quedaria chequear si fue que expiro (si la cockie existe o si nunca se inicio)
 				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EXPIRED) && 
 						Cookies.getCookie("surfForecaster-Username") != null) {
-					//TODO aca mandar la fruta de que se le perdio la session
-					Window.alert("La sesion expiro");
+					GWTUtils.showSessionExpiredLoginBox();
 				}
 				SurfForecaster.getInstance().gotoHistoryToken();
 			}

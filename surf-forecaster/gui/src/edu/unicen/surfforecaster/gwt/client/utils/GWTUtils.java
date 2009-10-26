@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 import edu.unicen.surfforecaster.gwt.client.SurfForecasterMessages;
+import edu.unicen.surfforecaster.gwt.client.panels.LoginBox;
 
 /**
  * GWTUtils is a set of helper classes to make it easier to work with GWT
@@ -42,6 +43,12 @@ public final class GWTUtils {
 	
 	//Default language
 	private static String DEFAULT_LOCALE = "es"; 
+	
+	public static void showSessionExpiredLoginBox() {
+		LoginBox loginBox = LoginBox.getInstance();
+		loginBox.setLoginFailedMessage(GWTUtils.LOCALE_CONSTANTS.USER_SESSION_EXPIRED());
+		loginBox.center();
+	}
 	
 	//Cookie expiration date
 	public static Date getExpirityDate() {

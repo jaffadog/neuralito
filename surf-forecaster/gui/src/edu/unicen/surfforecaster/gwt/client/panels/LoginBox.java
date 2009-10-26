@@ -28,12 +28,20 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class LoginBox extends DialogBox{
 	
+	private static LoginBox instance = null;
 	private final Label label_loginMessage;
 	private SimplePanel loadingPanel = null;
 	private HorizontalPanel horizontalPanel = null;
 	private final String crossIconHTML = "<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\">X</a></div>";
 	
-	public LoginBox() {
+	public static LoginBox getInstance() {
+        if (instance == null) {
+            instance = new LoginBox();
+        }
+        return instance;
+    }
+	
+	private LoginBox() {
 		
 		super(false, false);
 		setAnimationEnabled(true);
@@ -62,6 +70,7 @@ public class LoginBox extends DialogBox{
 		label_loginMessage.addStyleName("gwt-Label-error");
 		label_loginMessage.setVisible(false);
 		label_loginMessage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		label_loginMessage.setWidth("250");
 		
 		final FlexTable flexTable = new FlexTable();
 		verticalPanel.add(flexTable);
@@ -130,6 +139,7 @@ public class LoginBox extends DialogBox{
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		registerLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				removeUsernameCookie();
 				hide();
 			}
 		});
@@ -151,12 +161,22 @@ public class LoginBox extends DialogBox{
 		label_loginMessage.setVisible(state);
 	}
 	
+	public void removeUsernameCookie() {
+		Cookies.removeCookie("surfForecaster-Username");
+	}
+	
 	// Define closeDialog using JSNI
 	private native void redefineClose(LoginBox loginBox) /*-{
 		$wnd['closeDialog'] = function () {
 			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::loginFailedMsgState(Z)(false);
 			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::hide()();
+			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::removeUsernameCookie()();
 		}
 	}-*/;
+	
+	public void setLoginFailedMessage(String text) {
+		label_loginMessage.setText(text);
+		label_loginMessage.setVisible(true);
+	}
 
 }

@@ -49,6 +49,17 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 		logger.log(Level.INFO,"UserServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
 		return userDTO;
 	}
+	
+	/**
+	 * Removes all the session values stored in the current session
+	 * Remove the username cookie
+	 */
+	public void closeSession() {
+		final HttpSession session = getSession();
+		logger.log(Level.INFO, "ServicesImpl - closeSession - Closing the current session...");
+		session.removeAttribute("surfForecaster-User");
+		logger.log(Level.INFO, "ServicesImpl - closeSession - Session closed.");
+	}
 
 	public Integer addUser(String name, String lastname, String email,
 			String username, String password, UserType userType) throws NeuralitoException {
