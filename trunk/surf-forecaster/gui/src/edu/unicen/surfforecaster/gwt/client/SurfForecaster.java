@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.gwt.client.panels.ContentPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.LogoPanel;
-import edu.unicen.surfforecaster.gwt.client.panels.TransparentPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.UserStatePanel;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
@@ -93,11 +92,11 @@ public class SurfForecaster implements EntryPoint {
 		History.addValueChangeHandler(historyHandler);
 		
 		
-		Window.addCloseHandler(new CloseHandler<Window>() { 
-			public void onClose(CloseEvent<Window> event) {
-				Cookies.removeCookie("surfForecaster-Username");
-			}
-		});
+//		Window.addCloseHandler(new CloseHandler<Window>() { 
+//			public void onClose(CloseEvent<Window> event) {
+//				Cookies.removeCookie("surfForecaster-Username");
+//			}
+//		});
 	}
 	
 	/**

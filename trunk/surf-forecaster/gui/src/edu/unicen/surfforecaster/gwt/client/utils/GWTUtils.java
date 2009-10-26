@@ -60,14 +60,6 @@ public final class GWTUtils {
 		return now;
 	}
 	
-//	public static void setCookie(String name, String value) {
-//		Cookies.setCookie(name, value, getExpirityDate());
-//	}
-//	
-//	public static String getCookie(String name) {
-//		return Cookies.getCookie(name);
-//	}
-	
 	public static String getCurrentLocaleCode() {
 		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		if (locale.equals("default"))
