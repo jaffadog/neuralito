@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 import edu.unicen.surfforecaster.gwt.client.SurfForecasterMessages;
 import edu.unicen.surfforecaster.gwt.client.panels.LoginBox;
+import edu.unicen.surfforecaster.gwt.client.panels.TransparentPanel;
 
 /**
  * GWTUtils is a set of helper classes to make it easier to work with GWT
@@ -44,6 +45,7 @@ public final class GWTUtils {
 	private static String DEFAULT_LOCALE = "es"; 
 	
 	public static void showSessionExpiredLoginBox() {
+		TransparentPanel.getInstance().show();
 		LoginBox.getInstance().showExpiredSessionState();
 		LoginBox.getInstance().center();
 	}
