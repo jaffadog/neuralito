@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.gwt.client.panels.ContentPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.LogoPanel;
+import edu.unicen.surfforecaster.gwt.client.panels.TransparentPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.UserStatePanel;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;

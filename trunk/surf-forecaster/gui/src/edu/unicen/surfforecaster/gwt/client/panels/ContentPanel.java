@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class ContentPanel extends SimplePanel {
@@ -20,7 +21,7 @@ public class ContentPanel extends SimplePanel {
 
 	private ContentPanel() {
 		this.showMainVerticalPanel();
-		this.setHeight(PANEL_HEIGHT);
+		this.setHeight(Window.getClientHeight() + "");
 	}
 	
 	public void showRegisterUserPanel(){

@@ -48,7 +48,7 @@ public class LoginBox extends DialogBox{
 		setAnimationEnabled(true);
 		this.setHTML(this.crossIconHTML);
 		this.redefineClose(this);
-		this.addStyleName("gwt-LoginBox-Title");
+		this.addStyleName("gwt-LoginBox");
 		
 		//Loading panel
 		loadingPanel = new SimplePanel();
@@ -141,7 +141,6 @@ public class LoginBox extends DialogBox{
 			public void onClick(ClickEvent event) {
 				hide();
 				removeUsernameCookie();
-				reloadSite();
 			}
 		});
 		
