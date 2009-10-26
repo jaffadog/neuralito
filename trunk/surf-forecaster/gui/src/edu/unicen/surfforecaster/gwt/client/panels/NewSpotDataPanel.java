@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -22,6 +23,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
@@ -230,9 +232,14 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 			            	//TODO 2 posibilidades: que tire la exepcion de que la sesion expiro o que no tiene permisos
 							//Quedaria chequear si fue que expiro (si la cockie existe o si nunca se inicio)
 			            	//si no tiene permisos mostrar el mensaje correspondiente
-			            	messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
-							errorPanel.setMessages(messages);
-							errorPanel.setVisible(true);
+			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EXPIRED) && 
+									Cookies.getCookie("surfForecaster-Username") != null) {
+								GWTUtils.showSessionExpiredLoginBox();
+							} else {
+								messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+								errorPanel.setMessages(messages);
+								errorPanel.setVisible(true);
+							}
 			            }
 						});
 				}
