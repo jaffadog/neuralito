@@ -6,8 +6,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.google.gwt.user.client.Cookies;
-
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
@@ -61,17 +59,6 @@ public class ServicesImpl extends SpringGWTServlet {
 			session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL); 
 		return session;
 	}
-
-	/**
-	 * Removes all the session values stored in the current session
-	 * Remove the username cookie
-	 */
-	public void closeSession() {
-		final HttpSession session = getSession();
-		logger.log(Level.INFO, "ServicesImpl - closeSession - Closing the current session...");
-		session.removeAttribute("surfForecaster-User");
-		logger.log(Level.INFO, "ServicesImpl - closeSession - Session closed.");
-	}
 	
 	/**
 	 * Returns null or a userDTO object depending the session status
@@ -91,6 +78,7 @@ public class ServicesImpl extends SpringGWTServlet {
 	}
 	
 	/**
+	 * Checks if the session is opened or not expired and if the user role has privilege to perform that action
 	 * @param action represents the action to perform by the current user
 	 * @return Boolean depending if the current user has access to the specific action
 	 * @throws NeuralitoException Could return an USER_SESSION_EXPIRED exception or an USER_ROLE_INSUFFICIENT 

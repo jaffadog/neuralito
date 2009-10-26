@@ -18,7 +18,7 @@ public class ContentPanel extends SimplePanel {
         return instance;
     }
 
-	public ContentPanel() {
+	private ContentPanel() {
 		this.showMainVerticalPanel();
 		this.setHeight(PANEL_HEIGHT);
 	}

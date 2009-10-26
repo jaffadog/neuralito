@@ -51,7 +51,7 @@ public class UserStatePanel extends Composite {
 		horizontalPanel.add(emptyLabel);
 		emptyLabel.setWidth("600");
 	
-		loginPanel = new LoginBox();
+		loginPanel = LoginBox.getInstance();
 		loginPanel.hide();
 		
 		
@@ -60,6 +60,7 @@ public class UserStatePanel extends Composite {
 		lnkLogin.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (loginPanel.isShowing()){
+					Cookies.removeCookie("surfForecaster-Username");
 					loginPanel.loginFailedMsgState(false);
 					loginPanel.hide();
 					
