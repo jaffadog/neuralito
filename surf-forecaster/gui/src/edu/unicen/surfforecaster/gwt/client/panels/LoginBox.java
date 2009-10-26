@@ -194,6 +194,7 @@ public class LoginBox extends DialogBox{
 			this.setModal(false);
 			registerLink.setVisible(true);
 			label_loginMessage.setText("");
+			TransparentPanel.getInstance().hide();
 		}
 	}
 
