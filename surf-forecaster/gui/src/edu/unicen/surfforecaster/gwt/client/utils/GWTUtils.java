@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -45,9 +44,8 @@ public final class GWTUtils {
 	private static String DEFAULT_LOCALE = "es"; 
 	
 	public static void showSessionExpiredLoginBox() {
-		LoginBox loginBox = LoginBox.getInstance();
-		loginBox.setLoginFailedMessage(GWTUtils.LOCALE_CONSTANTS.USER_SESSION_EXPIRED());
-		loginBox.center();
+		LoginBox.getInstance().showExpiredSessionState();
+		LoginBox.getInstance().center();
 	}
 	
 	//Cookie expiration date

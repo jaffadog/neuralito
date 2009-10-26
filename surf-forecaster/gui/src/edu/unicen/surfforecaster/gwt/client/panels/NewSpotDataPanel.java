@@ -232,7 +232,7 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 			            	//TODO 2 posibilidades: que tire la exepcion de que la sesion expiro o que no tiene permisos
 							//Quedaria chequear si fue que expiro (si la cockie existe o si nunca se inicio)
 			            	//si no tiene permisos mostrar el mensaje correspondiente
-			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EXPIRED) && 
+			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 									Cookies.getCookie("surfForecaster-Username") != null) {
 								GWTUtils.showSessionExpiredLoginBox();
 							} else {

@@ -37,7 +37,7 @@ public class ServicesImpl extends SpringGWTServlet {
 		final HttpSession session = getSession();
 		if ((UserDTO)session.getAttribute("surfForecaster-User") == null) {
 			logger.log(Level.INFO, "ServicesImpl - getSessionData - Session is expired or empty.");
-			throw new NeuralitoException(ErrorCode.USER_SESSION_EXPIRED);
+			throw new NeuralitoException(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED);
 		} else {
 			final SessionData sessionData = new SessionData();
 			sessionData.setUserDTO((UserDTO)session.getAttribute("surfForecaster-User"));

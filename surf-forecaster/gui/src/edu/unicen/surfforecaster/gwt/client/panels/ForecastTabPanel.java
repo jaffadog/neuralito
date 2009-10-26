@@ -68,7 +68,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 			}
 
 			public void onFailure(Throwable caught) {
-				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EXPIRED) && 
+				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 						Cookies.getCookie("surfForecaster-Username") != null) {
 					GWTUtils.showSessionExpiredLoginBox();
 				}
