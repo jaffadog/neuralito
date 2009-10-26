@@ -67,6 +67,10 @@ div div#loadingTxtDiv {
      font-weight:bold;
 }
 
+gwt-LoginBox{
+	z-index:99;
+}
+
 /** Cross button login box */
 div#closeLoginBoxDiv{
 	width: 250px;
@@ -126,6 +130,26 @@ div#closeLoginBoxDiv a{
 .gwt-RootVPanel{
     background-color:#FFF;
     padding: 0 10px 0 10px;
+}
+
+/*****************************************************************************/
+/*********************** TransparentPanel ***************************************/
+/*****************************************************************************/
+.gwt-PopupPanel-Transparent{
+	/* Override glass panel color to be `green` */
+    background-color: black !important;
+
+    /* Override glass panel to 10% opacity (= 90% transparency) */
+    filter: alpha(opacity = 60) !important; /* IE */
+    opacity: 0.6 !important; /* non-IE */
+	
+    /*
+      NOTE: Please do NOT use either CSS 'width' or 'height' here, as
+      this would defeat much of the effort that went into GlassPanel
+      in order to get it to work consistently in a variety of
+      circumstances. Specifically, please resist the urge to use
+      'width/height: 100%' or similar constructs.
+    */
 }
 
 /*****************************************************************************/
