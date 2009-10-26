@@ -45,10 +45,8 @@ public class UserRoles {
 		Vector<String> actions = userRoles.get(userType);
 		if (actions.contains(action))
 			return true;
-		else {
-			//TODO change this exception code to user_role_insufficient
-			throw new NeuralitoException(ErrorCode.USER_ID_INVALID);
-		}
+		else
+			throw new NeuralitoException(ErrorCode.USER_ROLE_INSUFFICIENT);
 	}
 	
 	

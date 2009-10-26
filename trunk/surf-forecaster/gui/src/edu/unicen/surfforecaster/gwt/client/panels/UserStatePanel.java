@@ -24,6 +24,8 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class UserStatePanel extends Composite {
 
+	private static UserStatePanel instance = null;
+	
 	private LoginBox loginPanel = null;
 	
 	//LoggedIn username label
@@ -39,7 +41,14 @@ public class UserStatePanel extends Composite {
 	//Root items structure
 	private HorizontalPanel horizontalPanel = null;
 	
-	public UserStatePanel() {
+	public static UserStatePanel getInstance() {
+        if (instance == null) {
+            instance = new UserStatePanel();
+        }
+        return instance;
+    }
+	
+	private UserStatePanel() {
 		
 		horizontalPanel = new HorizontalPanel();
 		horizontalPanel.setSpacing(2);
@@ -172,5 +181,11 @@ public class UserStatePanel extends Composite {
 			}
 		});
 	}
+
+	public Label getLblUserName() {
+		return this.lblUserName;
+	}
+	
+	
 
 }

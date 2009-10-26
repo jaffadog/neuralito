@@ -33,6 +33,7 @@ public class LoginBox extends DialogBox{
 	private SimplePanel loadingPanel = null;
 	private HorizontalPanel horizontalPanel = null;
 	private final String crossIconHTML = "<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\">X</a></div>";
+	private Hyperlink registerLink;
 	
 	public static LoginBox getInstance() {
         if (instance == null) {
@@ -48,7 +49,6 @@ public class LoginBox extends DialogBox{
 		this.setHTML(this.crossIconHTML);
 		this.redefineClose(this);
 		this.addStyleName("gwt-LoginBox-Title");
-		
 		
 		//Loading panel
 		loadingPanel = new SimplePanel();
@@ -132,15 +132,16 @@ public class LoginBox extends DialogBox{
 			}
 		});
 
-		final Hyperlink registerLink = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.register(), "registerNewUser");
+		registerLink = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.register(), "registerNewUser");
 		horizontalPanel_1.add(registerLink);
 		horizontalPanel_1.setCellVerticalAlignment(registerLink, HasVerticalAlignment.ALIGN_MIDDLE);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		registerLink.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				removeUsernameCookie();
 				hide();
+				removeUsernameCookie();
+				reloadSite();
 			}
 		});
 		
@@ -171,12 +172,30 @@ public class LoginBox extends DialogBox{
 			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::loginFailedMsgState(Z)(false);
 			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::hide()();
 			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::removeUsernameCookie()();
+			loginBox.@edu.unicen.surfforecaster.gwt.client.panels.LoginBox::reloadSite()();
 		}
 	}-*/;
 	
-	public void setLoginFailedMessage(String text) {
-		label_loginMessage.setText(text);
+	public void showExpiredSessionState() {
+		label_loginMessage.setText(GWTUtils.LOCALE_CONSTANTS.USER_SESSION_EXPIRED());
 		label_loginMessage.setVisible(true);
+		registerLink.setVisible(false);
+		this.setModal(true);
+	}
+	
+	/**
+	 * This method must be called when the user close this panel after his session expired.
+	 * If the label for the username in UserStatePanel displays a name, the site must be refreshed
+	 * to change to the unregistered user view.
+	 */
+	public void reloadSite() {
+		if (UserStatePanel.getInstance().getLblUserName() != null)
+			Window.open(GWTUtils.getHostPageLocation(true, false), "_self", "");
+		else {
+			this.setModal(false);
+			registerLink.setVisible(true);
+			label_loginMessage.setText("");
+		}
 	}
 
 }

@@ -5,7 +5,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -58,7 +57,7 @@ public class SurfForecaster implements EntryPoint {
 		rootVPanel.setWidth(GWTUtils.APLICATION_WIDTH);
 		rootVPanel.addStyleName("gwt-RootVPanel");
 
-		final UserStatePanel userStatePanel = new UserStatePanel();
+		final UserStatePanel userStatePanel = UserStatePanel.getInstance();
 		rootVPanel.add(userStatePanel);
 
 		final LogoPanel logoPanel = new LogoPanel();
