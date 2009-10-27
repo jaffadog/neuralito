@@ -35,7 +35,13 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("La \u00FAltima sesi\u00F3n de usuario iniciada ha expirado. Desea iniciarla nuevamente?")
 	String USER_SESSION_EXPIRED();
 	
-	@DefaultStringValue("El campo zona es obligatorio.")
+	@DefaultStringValue("El campo \u00E1rea es obligatorio.")
+	String MANDATORY_AREA_VALUE();
+	
+	@DefaultStringValue("El campo pa\u00EDs es obligatorio.")
+	String MANDATORY_COUNTRY_VALUE();
+	
+	@DefaultStringValue("Debe seleccionar una zona de la lista o crear una.")
 	String MANDATORY_ZONE_NAME();
 	
 	@DefaultStringValue("El campo ola es obligatorio.")

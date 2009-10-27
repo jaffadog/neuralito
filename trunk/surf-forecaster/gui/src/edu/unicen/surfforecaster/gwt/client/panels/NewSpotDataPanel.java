@@ -229,9 +229,6 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 							successPanel.setVisible(true);
 			            }
 			            public void onFailure(Throwable caught){
-			            	//TODO 2 posibilidades: que tire la exepcion de que la sesion expiro o que no tiene permisos
-							//Quedaria chequear si fue que expiro (si la cockie existe o si nunca se inicio)
-			            	//si no tiene permisos mostrar el mensaje correspondiente
 			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 									Cookies.getCookie("surfForecaster-Username") != null) {
 								GWTUtils.showSessionExpiredLoginBox();
@@ -297,12 +294,22 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 	
 	private Vector<String> validateForm() {
 		Vector<String> messages = new Vector<String>();
-		if (this.zoneTxt.isVisible() && this.zoneTxt.getText().trim().equals(""))
+		if (this.areaBox.getSelectedIndex() == -1)
+			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_AREA_VALUE());
+		
+		if (this.countryBox.getSelectedIndex() == -1)
+			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_COUNTRY_VALUE());
+		
+		if ((!this.zoneTxt.isVisible() && this.zoneBox.getSelectedIndex() == -1) || 
+				(this.zoneTxt.isVisible() && this.zoneTxt.getText().trim().equals("")))
 			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_ZONE_NAME());
+		
 		if (this.spotTxt.getText().trim().equals(""))
 			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_SPOT_NAME());
+		
 		if (this.mapPanel.getSpotLat().trim().equals("") || this.mapPanel.getSpotLong().trim().equals(""))
 			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_SPOT_LAT_LONG());
+		
 		if (this.mapPanel.getBuoyLat().trim().equals("") || this.mapPanel.getBuoyLong().trim().equals(""))
 			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_BUOY_LAT_LONG());
 		return messages;
