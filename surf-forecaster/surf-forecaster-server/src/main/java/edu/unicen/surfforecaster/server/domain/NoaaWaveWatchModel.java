@@ -34,6 +34,7 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.download.DownloaderJob;
 import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
