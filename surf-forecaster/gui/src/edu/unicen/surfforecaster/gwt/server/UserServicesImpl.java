@@ -45,7 +45,7 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 		//Set the user for this session
 		final HttpSession session = this.getSession();
 		session.setAttribute("surfForecaster-User", userDTO);
-		
+		session.setMaxInactiveInterval(super.MAX_INACTIVE_INTERVAL); 
 		logger.log(Level.INFO,"UserServicesImpl - login - User: '" + userDTO.getUsername() + "' retrieved.");
 		return userDTO;
 	}

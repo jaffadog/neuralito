@@ -152,7 +152,7 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 		if (this.baseParentPanel instanceof SpotDescriptionPanel) {
 			((SpotDescriptionPanel)this.baseParentPanel).showSpotDescription();
 		} else if (this.baseParentPanel instanceof ForecastPanel) {
-			((ForecastPanel)this.baseParentPanel).showSpotForecast();	
+			((ForecastPanel)this.baseParentPanel).getSpotLastestForecast();	
 		}
 	}
 	
@@ -166,12 +166,16 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 			this.forecastButton.setEnabled(false);
 	}
 	
-	public String getZoneBoxDisplayValue(){
+	public String getZoneBoxDisplayText(){
 		return this.zoneBox.getItemText(this.zoneBox.getSelectedIndex());
 	}
 	
-	public String getSpotBoxDisplayValue(){
+	public String getSpotBoxDisplayText(){
 		return this.spotBox.getItemText(this.spotBox.getSelectedIndex());
+	}
+	
+	public String getSpotBoxDisplayValue() {
+		return this.spotBox.getValue(this.spotBox.getSelectedIndex());
 	}
 
 	public Widget getBasePanel() {
