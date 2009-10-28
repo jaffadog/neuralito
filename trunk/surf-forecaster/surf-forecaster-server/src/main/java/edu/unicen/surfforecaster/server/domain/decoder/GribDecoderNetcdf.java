@@ -23,8 +23,8 @@ import ucar.nc2.dt.GridCoordSystem;
 import ucar.nc2.dt.GridDatatype;
 import ucar.nc2.dt.grid.GridDataset;
 import ucar.unidata.geoloc.LatLonPoint;
+import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.ForecastPlain;
-import edu.unicen.surfforecaster.server.domain.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
