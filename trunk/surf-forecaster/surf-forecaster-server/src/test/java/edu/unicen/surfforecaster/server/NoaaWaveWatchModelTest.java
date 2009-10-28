@@ -19,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
@@ -37,21 +38,25 @@ public class NoaaWaveWatchModelTest {
 	Logger log = Logger.getLogger(this.getClass());
 
 	@Test
-	@Ignore
+	
 	public void updateLatestForecast() {
 
 		((NoaaWaveWatchModel) model).update(new DownloaderJobListener(),
 				new File("src/test/resources/multi_1.glo_30m.all.grb2"));
 		final Collection<Forecast> latestForecast = model
 				.getLatestForecast(new Point(75.0F, 125.0F));
+		
 		log.info(""+latestForecast.size());
 	}
 
 	@Test
 	public void getLatestForecast() {
 
-		final Collection<Forecast> latestForecast = model
-				.getLatestForecast(new Point(77.0F, 0.5F));
+		final List<Forecast> latestForecast = model
+				.getLatestForecast(new Point(-38.5F, -57.5F));
+		Forecast forecast = latestForecast.get(0);
+		log.info(forecast.getParameter(WW3Parameter.WIND_SPEED.toString()));
+		log.info(forecast.getDTO().getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue());
 		log.info("Number of latest forecasts:"+latestForecast.size());
 	}
 
