@@ -16,6 +16,7 @@
     
     <bean id="ForecastServices" class="edu.unicen.surfforecaster.gwt.server.ForecastServicesImpl">
 	    <property name="forecastService" ref="forecastService"></property>
+	    <property name="spotService" ref="spotService"></property>
     </bean>
 
 </beans>
