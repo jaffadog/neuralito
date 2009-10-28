@@ -6,22 +6,29 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
+import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+
+
 public class CurrentForecastPanel extends FlexTable {
 
 	public CurrentForecastPanel(){}
 	
-	public CurrentForecastPanel(String title){
+	public CurrentForecastPanel(String title, ForecastDTO forecast){
 		{
 			Label lblTitle = new Label(title);
 			getFlexCellFormatter().setColSpan(0, 0, 2);
 			getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 			setWidget(0,0, lblTitle);
-			
-			setCellSpacing(50);	
-			setWidget(1, 0, this.createTableItem("Viento", "17 Km/h", "Este", "images/arrow.gif"));
-			setWidget(1, 1, this.createTableItem("Dir. de la ola", "", "Sudoeste", "images/arrow.gif"));
-			setWidget(2, 0, this.createTableItem("Altura de la ola", "14 Mts", "", "images/waves/wave1.png"));
-			setWidget(2, 1, this.createTableItem("Período de ola", "9 Seg", "", "images/arrow.gif"));
+			setCellSpacing(50);
+			if (forecast != null) {
+				setWidget(1, 0, this.createTableItem("Viento", forecast.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue() + " " + forecast.getMap().get(WW3Parameter.WIND_SPEED.toString()).getUnit().toString(), "Este", "images/arrow.gif"));
+				setWidget(1, 1, this.createTableItem("Dir. de la ola", forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue() + " " + forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getUnit().toString(), "Sudoeste", "images/arrow.gif"));
+				setWidget(2, 0, this.createTableItem("Altura de la ola", forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue() + " " + forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getUnit().toString(), "", "images/waves/wave1.png"));
+				setWidget(2, 1, this.createTableItem("Período de ola", forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue() + " " + forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getUnit().toString(), "", "images/arrow.gif"));
+			} else {
+				lblTitle.setText(title + " - No disponible");
+			}
 		}
 	}
 	

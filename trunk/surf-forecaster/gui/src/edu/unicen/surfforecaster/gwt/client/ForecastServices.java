@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 
 @RemoteServiceRelativePath("ForecastServices")
@@ -26,4 +27,6 @@ public interface ForecastServices extends RemoteService {
 	}
 	
 	List<PointDTO> getNearbyGridPoints(float spotLatitude, float spotLongitude) throws NeuralitoException;
+	
+	List<ForecastDTO> getWW3LatestForecasts(Integer spotId) throws NeuralitoException;
 }
