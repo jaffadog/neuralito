@@ -12,7 +12,7 @@ import java.io.Serializable;
  * 
  */
 public enum Unit implements Serializable{
-	KilometersPerHour, Meters, Seconds, Degrees, Meterspersecond;
+	KilometersPerHour, Meters, Seconds, Degrees, Meterspersecond, Feets, MilesPerHour, Knots;
 	
 	Unit() {
 		// GWT purpose.
