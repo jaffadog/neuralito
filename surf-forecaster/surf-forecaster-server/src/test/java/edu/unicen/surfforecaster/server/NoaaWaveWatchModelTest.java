@@ -18,8 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel;
-import edu.unicen.surfforecaster.server.domain.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
