@@ -6,7 +6,8 @@ import com.google.gwt.user.client.ui.Image;
 public final class Waves50PxFactory {
 	
 	private final static WavesImageBundle wavesImageBundle = (WavesImageBundle) GWT.create(WavesImageBundle.class);
-	
+	//TODO este metodo tendria que ver en que unidad esta la medida pasada y traducirla a metros porque el metodo analiza que 
+	//imagen devolver en metros.
 	public static Image getWaveIcon(String waveHeight) {
 		
 		float height = new Float(waveHeight);

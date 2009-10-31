@@ -3,14 +3,14 @@ package edu.unicen.surfforecaster.gwt.client.utils;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 
-public class UnitConverter {
+public final class UnitConverter {
 
-	public double convertValue(String value, Unit source, Unit target) throws NeuralitoException {
+	public static double convertValue(String value, Unit source, Unit target) throws NeuralitoException {
 		double numValue = new Double(value);
-		return this.convertValue(numValue, source,target);
+		return convertValue(numValue, source,target);
 	}
 	
-	public double convertValue(double value, Unit source, Unit target) throws NeuralitoException {
+	public static double convertValue(double value, Unit source, Unit target) throws NeuralitoException {
 		
 		
 		double result = 0;
@@ -37,7 +37,7 @@ public class UnitConverter {
 		
 	}
 	
-	private double convertMetersTo(double value, Unit target) throws NeuralitoException {
+	private static double convertMetersTo(double value, Unit target) throws NeuralitoException {
 		
 		switch (target) {
 		case Feets:
@@ -49,7 +49,7 @@ public class UnitConverter {
 		}
 	}
 	
-	private double convertKilometersPerHourTo(double value, Unit target) throws NeuralitoException {
+	private static double convertKilometersPerHourTo(double value, Unit target) throws NeuralitoException {
 		
 		switch (target) {
 		case Knots:
