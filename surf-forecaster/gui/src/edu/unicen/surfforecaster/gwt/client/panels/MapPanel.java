@@ -13,13 +13,12 @@ import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.Overlay;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.TextBoxBase.TextAlignConstant;
 
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
