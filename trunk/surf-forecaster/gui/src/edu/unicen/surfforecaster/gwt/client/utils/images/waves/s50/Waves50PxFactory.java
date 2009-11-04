@@ -9,7 +9,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 
 public final class Waves50PxFactory {
 	
-	private final static WavesImageBundle wavesImageBundle = (WavesImageBundle) GWT.create(WavesImageBundle.class);
+	private final static Waves50pxImageBundle wavesImageBundle = (Waves50pxImageBundle) GWT.create(Waves50pxImageBundle.class);
 	
 	
 	public static Image getWaveIcon(String waveHeight, Unit unit) {

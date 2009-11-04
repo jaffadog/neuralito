@@ -3,7 +3,7 @@ package edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ImageBundle;
 
-public interface WavesImageBundle extends ImageBundle {
+public interface Waves50pxImageBundle extends ImageBundle {
 	
 	public AbstractImagePrototype wave_0_0d74();
 	
