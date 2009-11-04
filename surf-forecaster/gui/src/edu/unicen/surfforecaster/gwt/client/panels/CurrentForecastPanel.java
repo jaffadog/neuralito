@@ -14,7 +14,7 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50.Waves50PxFactory;
-import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50.WavesImageBundle;
+import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50.Waves50pxImageBundle;
 
 
 public class CurrentForecastPanel extends FlexTable {
@@ -28,7 +28,7 @@ public class CurrentForecastPanel extends FlexTable {
 			getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 			setWidget(0,0, lblTitle);
 			setCellSpacing(50);
-			WavesImageBundle wavesImageBundle = (WavesImageBundle) GWT.create(WavesImageBundle.class);
+			Waves50pxImageBundle wavesImageBundle = (Waves50pxImageBundle) GWT.create(Waves50pxImageBundle.class);
 			if (forecast != null) {
 				String waveHeight = forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
 				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
