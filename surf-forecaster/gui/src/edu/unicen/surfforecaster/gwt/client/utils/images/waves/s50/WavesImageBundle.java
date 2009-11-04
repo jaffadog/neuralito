@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.gwt.client.utils.images.waves;
+package edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50;
 
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ImageBundle;
