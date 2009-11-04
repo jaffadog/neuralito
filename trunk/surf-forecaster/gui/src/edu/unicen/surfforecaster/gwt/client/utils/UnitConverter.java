@@ -23,6 +23,10 @@ public final class UnitConverter {
 				result = convertMetersTo(value, target);
 				break;
 			
+			case Feets:
+				result = convertFeetsTo(value, target);
+				break;
+			
 			case KilometersPerHour:
 				result = convertKilometersPerHourTo(value, target);
 				break;
@@ -42,6 +46,18 @@ public final class UnitConverter {
 		switch (target) {
 		case Feets:
 			return value / 0.3048;
+
+		default:
+			//TODO crear una excepcion de conversion invalida
+			throw new NeuralitoException();
+		}
+	}
+	
+	private static double convertFeetsTo(double value, Unit target) throws NeuralitoException {
+		
+		switch (target) {
+		case Meters:
+			return value * 0.3048;
 
 		default:
 			//TODO crear una excepcion de conversion invalida

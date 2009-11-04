@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -64,10 +63,11 @@ public class ForecastPanel extends LazyPanel {
 		lblTitle.setText(localizationPanel.getZoneBoxDisplayText() + " > " + localizationPanel.getSpotBoxDisplayText());
 		
 		CurrentForecastPanel current = new CurrentForecastPanel("Ahora", forecasts.size() > 0 ? forecasts.get(0) : null);
-		CurrentForecastPanel nextHours = new CurrentForecastPanel("+3 horas", forecasts.size() > 1 ? forecasts.get(1) : null);
 		flexTable.setWidget(0, 0, current);
+		CurrentForecastPanel nextHours = new CurrentForecastPanel("+3 horas", forecasts.size() > 1 ? forecasts.get(1) : null);
 		flexTable.setWidget(0, 1, nextHours);
-		flexTable.setWidget(1, 0, new Image("images/windguru.PNG"));
+		
+		flexTable.setWidget(1, 0, new ForecastTable(forecasts));
 		
 		flexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
