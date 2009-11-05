@@ -30,6 +30,10 @@ public final class UnitConverter {
 			case KilometersPerHour:
 				result = convertKilometersPerHourTo(value, target);
 				break;
+			
+			case Knots:
+				result = convertKnotsTo(value, target);
+				break;
 				
 			default:
 				//TODO crear una excepcion de conversion invalida
@@ -77,6 +81,18 @@ public final class UnitConverter {
 		case MilesPerHour:
 			return value / 1.6093487;
 
+		default:
+			//TODO crear una excepcion de conversion invalida
+			throw new NeuralitoException();
+		}
+	}
+	
+	private static double convertKnotsTo(double value, Unit target) throws NeuralitoException {
+		
+		switch (target) {
+		case KilometersPerHour:
+			return value * 1.852;
+			
 		default:
 			//TODO crear una excepcion de conversion invalida
 			throw new NeuralitoException();
