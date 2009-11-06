@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s50;
+package edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s30;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
@@ -7,17 +7,17 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 
-public final class Arrows50PxFactory {
+public final class Arrows30PxFactory {
 	
-	private final static Arrows50PxImageBundle arrowsImageBundle = (Arrows50PxImageBundle) GWT.create(Arrows50PxImageBundle.class);
+	private final static Arrows30PxImageBundle arrowsImageBundle = (Arrows30PxImageBundle) GWT.create(Arrows30PxImageBundle.class);
 	
 	/**
-	 * Method used to obtain an arrow icon regarding direction and speed of the variable
+	 * Obtain an arrow icon depending on the direction and speed as parameters(util for winds)
 	 * @param direction
 	 * @param speed
 	 * @param unitDirection
 	 * @param unitSpeed
-	 * @return Image
+	 * @return
 	 */
 	public static Image getArrowIcon(String direction, String speed, Unit unitDirection, Unit unitSpeed) {
 		
@@ -567,4 +567,5 @@ public final class Arrows50PxFactory {
 		
 		return arrowsImageBundle.medium_3_n().createImage();
 	}
+
 }
