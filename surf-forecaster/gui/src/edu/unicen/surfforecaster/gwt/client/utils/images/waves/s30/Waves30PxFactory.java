@@ -2,14 +2,13 @@ package edu.unicen.surfforecaster.gwt.client.utils.images.waves.s30;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
-
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 
 public final class Waves30PxFactory {
 	
-	private final static Waves30pxImageBundle wavesImageBundle = (Waves30pxImageBundle) GWT.create(Waves30pxImageBundle.class);
+	private final static Waves30pxImageBundle wavesImageBundle = (Waves30pxImageBundle) GWT.create(Waves30pxImageBundle.class);	
 	
 	public static Image getWaveIcon(String waveHeight, Unit unit) {
 		

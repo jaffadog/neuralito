@@ -1,10 +1,10 @@
 package edu.unicen.surfforecaster.gwt.server;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Map;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
@@ -63,12 +63,15 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 		return result;
 	}
 	
-	public List<ForecastDTO> getWW3LatestForecasts(Integer spotId) throws NeuralitoException {
+	public Map<String, List<ForecastDTO>> getLatestForecasts(Integer spotId) throws NeuralitoException {
 		
+		Map<String, List<ForecastDTO>> result = new HashMap<String, List<ForecastDTO>>();
 		List<ForecasterDTO> forecasters = spotService.getSpotForecasters(spotId);
-		ForecasterDTO ww3Forecaster = forecasters.get(0);
-		
-		List<ForecastDTO> result = forecastService.getLatestForecasts(ww3Forecaster.getId());
+		Iterator<ForecasterDTO> i = forecasters.iterator();
+		while (i.hasNext()) {
+			ForecasterDTO forecaster = i.next();
+			result.put(forecaster.getName(), forecastService.getLatestForecasts(forecaster.getId()));
+		}
 		
 		return result;
 	}
