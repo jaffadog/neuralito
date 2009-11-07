@@ -4,17 +4,17 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class RenderDetailedForecastContext {
 	
-	private RenderDetailedForecastStrategy renderStrategy = null;
+	private IRenderDetailedForecastStrategy renderStrategy = null;
 	
-	public RenderDetailedForecastContext(RenderDetailedForecastStrategy strategy) {
+	public RenderDetailedForecastContext(IRenderDetailedForecastStrategy strategy) {
 		this.renderStrategy = strategy;
 	}
 	
-	public RenderDetailedForecastStrategy getRenderStrategy() {
+	public IRenderDetailedForecastStrategy getRenderStrategy() {
 		return renderStrategy;
 	}
 
-	public void setRenderStrategy(RenderDetailedForecastStrategy renderStrategy) {
+	public void setRenderStrategy(IRenderDetailedForecastStrategy renderStrategy) {
 		this.renderStrategy = renderStrategy;
 	}
 	
