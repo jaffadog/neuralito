@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.gwt.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;

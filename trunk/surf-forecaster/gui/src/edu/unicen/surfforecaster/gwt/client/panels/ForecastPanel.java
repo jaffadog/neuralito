@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
+import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.ForecastTable;
 
 public class ForecastPanel extends LazyPanel {
 	
@@ -70,13 +71,14 @@ public class ForecastPanel extends LazyPanel {
 		CurrentForecastPanel nextHours = new CurrentForecastPanel("+3 horas", ww3Forecaster.size() > 1 ? ww3Forecaster.get(1) : null);
 		flexTable.setWidget(0, 1, nextHours);
 		
-		flexTable.setWidget(1, 0, new ForecastTable(forecasters, 0, 23));
-		flexTable.setWidget(2, 0, new ForecastTable(forecasters, 23, 46));
-		flexTable.setWidget(3, 0, new ForecastTable(forecasters, 46, null));
+		flexTable.setWidget(1, 0, new ForecastTable(forecasters, 0, 5));
+		//flexTable.setWidget(2, 0, new ForecastTable(forecasters, 23, 46));
+		//flexTable.setWidget(3, 0, new ForecastTable(forecasters, 46, null));
 		
 		flexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 		flexTable.getFlexCellFormatter().setColSpan(2, 0, 2);
 		flexTable.getFlexCellFormatter().setColSpan(3, 0, 2);
+		
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_LEFT);

@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.gwt.client.panels;
+package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast;
 
 import java.util.Iterator;
 import java.util.List;
