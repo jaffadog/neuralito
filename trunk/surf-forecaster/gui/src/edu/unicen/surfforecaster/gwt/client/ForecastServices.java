@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -28,5 +29,5 @@ public interface ForecastServices extends RemoteService {
 	
 	List<PointDTO> getNearbyGridPoints(float spotLatitude, float spotLongitude) throws NeuralitoException;
 	
-	List<ForecastDTO> getWW3LatestForecasts(Integer spotId) throws NeuralitoException;
+	Map<String, List<ForecastDTO>> getLatestForecasts(Integer spotId) throws NeuralitoException;
 }

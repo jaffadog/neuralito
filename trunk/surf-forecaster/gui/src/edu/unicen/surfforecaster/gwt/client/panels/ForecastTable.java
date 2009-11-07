@@ -2,9 +2,15 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -26,20 +32,27 @@ public class ForecastTable extends FlexTable {
 	
 	//Horizontal panel for dates
 	HorizontalPanel datesHPanel = null;
-	//Horizontal panel for miniForecasts
-	HorizontalPanel miniForecastHPanel = null;
-	//FlexTable for detailed spot forecast
-	FlexTable detailedForecastPanel = null;
+	Integer from = null;
+	Integer to = null;
 	
-	public ForecastTable(List<ForecastDTO> forecasts) {
-		detailedForecastPanel = new FlexTable();
-		miniForecastHPanel = new HorizontalPanel();
+	
+	/**
+	 * Generates the complete forecaster table for al the forecasters assigned to the selected spot
+	 * @param forecasters The list of forecasters assigned to the selected spot
+	 * @param from - Represents the forecast position in the forecasts list to start in the table 
+	 * @param to - Represents the last forecast to show, if null, goes to the end of the list of forecasts
+	 */
+	public ForecastTable(Map<String, List<ForecastDTO>> forecasters, Integer from, Integer to) {
+		
+		this.from = from;
+		this.to = to;
+		//detailedForecastPanel = new FlexTable();
+		//miniForecastHPanel = new HorizontalPanel();
 		datesHPanel = new HorizontalPanel();
 		
-		miniForecastHPanel.setVisible(false);
-		miniForecastHPanel.setSpacing(7);
+		
 		datesHPanel.setSpacing(7);
-		detailedForecastPanel.setCellSpacing(5);
+		
 		
 		//First cell
 		this.setWidget(0, 0, new Label("*"));
@@ -48,10 +61,56 @@ public class ForecastTable extends FlexTable {
 		//Dates panel
 		this.setWidget(0, 1, datesHPanel);
 		
-		//Forecaster name
+		/*******************************************************************/
+		/****************** WW3 FORECASTS **********************************/
+		/*******************************************************************/
+		List<ForecastDTO> forecasts = forecasters.get("WW3 Noaa Forecaster");
+		this.generateAllForecastersTable("WW3 Noaa Forecaster", forecasts, 0, true);
+		
+		
+		
+		/*******************************************************************/
+		/****************** OTHER FORECASTERS ******************************/
+		/*******************************************************************/
+		Set<String> keys = forecasters.keySet();
+		Iterator<String> i = keys.iterator();
+		int forecasterIndex = 1;
+		while (i.hasNext()) {
+			String key = i.next();
+			//if (!key.equals("WW3 Noaa Forecaster")) 
+			{
+				forecasts = forecasters.get(key);
+				this.generateAllForecastersTable(key, forecasts, forecasterIndex, false);
+				forecasterIndex++;
+			}
+		}
+		
+		
+	}
+	
+	/**
+	 * This method generates the external flextable for an specific forecast.
+	 * @param forecasts - List of forecasts for a specific forecaster
+	 * @param fillDatesPanel - If true adds dates to the date panel, this must be true once.
+	 * @param forecasterIndex - The index row where the detailed forecaster flexTable will be located
+	 */
+	private void generateAllForecastersTable(String forecasterName, List<ForecastDTO> forecasts, int forecasterIndex, boolean fillDatesPanel) {
+		
+		//Horizontal panel for ww3 miniForecasts
+		final HorizontalPanel miniForecastHPanel = new HorizontalPanel();
+		miniForecastHPanel.setVisible(false);
+		miniForecastHPanel.setSpacing(7);
+		this.setWidget(1 + (forecasterIndex * 2), 1, miniForecastHPanel);
+		
+		//FlexTable for detailed ww3 forecast
+		final FlexTable detailedForecastPanel = new FlexTable();
+		detailedForecastPanel.setCellSpacing(5);
+		
+		//Forecaster name and + link HPanel
 		HorizontalPanel forecastHPanel = new HorizontalPanel();
-		forecastHPanel.add(new Label("WW3"));
-		final Hyperlink lnkForecaster = new Hyperlink("(-)", "");
+		this.setWidget(1 + (forecasterIndex * 2), 0, forecastHPanel);
+		forecastHPanel.add(new Label(forecasterName));
+		final Hyperlink lnkForecaster = new Hyperlink(" (-)", "");
 		lnkForecaster.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (miniForecastHPanel.isVisible()) {
@@ -67,39 +126,51 @@ public class ForecastTable extends FlexTable {
 		});
 		forecastHPanel.add(lnkForecaster);
 		forecastHPanel.setSpacing(5);
-		this.setWidget(1, 0, forecastHPanel);
-		this.getCellFormatter().setWidth(1, 0, "145");
+		this.getCellFormatter().setWidth(1 + (forecasterIndex * 2), 0, "145");
 		
-		//Mini forecaster panel
-		this.setWidget(1, 1, miniForecastHPanel);
+		//Print forecasts from WW3 forecaster
+		this.printForecast(forecasts, detailedForecastPanel, miniForecastHPanel, fillDatesPanel, forecasterIndex);
 		
-		//Detailed forecaster panel
-		this.setWidget(2, 0, detailedForecastPanel);
-		this.getFlexCellFormatter().setColSpan(2, 0, 2);
 		
-		this.printForecast(forecasts);
+
 	}
 	
-	private void printForecast(List<ForecastDTO> forecasts) {
+	/**
+	 * This method generates the flexTable with detailed forecasts for a specific forecaster
+	 * @param forecasts - List of forecasts for a specific forecaster
+	 * @param detaildedForecastPanel - The table which contains all the forecasts for the list of forecasts as parameter
+	 * @param miniForecastHPanel - The table which contains the forecasts represantation as a wave icon
+	 * @param fillDatesPanel - If true adds dates to the date panel, this must be true once.
+	 * @param forecasterIndex - The index row where the detailed forecaster flexTable will be located
+	 */
+	private void printForecast(List<ForecastDTO> forecasts, FlexTable detailedForecastPanel, HorizontalPanel miniForecastHPanel, 
+			boolean fillDatesPanel, int forecasterIndex) {
+		
+		
 		//Table left labels
-		this.setDetailedLabels();
+		this.setDetailedLabels(detailedForecastPanel);
 		
-		
-		
-		
-		Iterator<ForecastDTO> i = forecasts.iterator();
+//		Iterator<ForecastDTO> i = forecasts.iterator();
 		int forecastIndex = 0;
-		while (i.hasNext() && forecastIndex < 23) {
-			ForecastDTO forecastDTO = i.next();
-			datesHPanel.add(this.getDateVPanel(forecastDTO));
+//		while (i.hasNext() && forecastIndex < 23) {
+//			ForecastDTO forecastDTO = i.next();
+		int max = (this.to != null) ? this.to : forecasts.size();
+		for (int i = this.from; i < max; i++) {
+			ForecastDTO forecastDTO = forecasts.get(i);
+			if (fillDatesPanel)
+				datesHPanel.add(this.getDateVPanel(forecastDTO));
 			miniForecastHPanel.add(this.getWaveIcon(forecastDTO));
-			this.setDetailedForecast(forecastDTO, forecastIndex + 1);
+			this.setDetailedForecast(detailedForecastPanel, forecastDTO, forecastIndex + 1);
 			forecastIndex++;
 		}
-		//this.setWidget(1, forecastIndex, this.getMiniForecastPanel(forecastDTO));
+		
+		//Detailed forecaster panel
+		this.setWidget(2 + (forecasterIndex * 2), 0, detailedForecastPanel);
+		this.getFlexCellFormatter().setColSpan(2 + (forecasterIndex * 2), 0, 2);
 	}
 	
-	private void setDetailedLabels() {
+	private void setDetailedLabels(FlexTable detailedForecastPanel) {
+		
 		Label waveHeight = new Label("Altura ola"); 
 		detailedForecastPanel.setWidget(0, 0, waveHeight);
 		detailedForecastPanel.getCellFormatter().setHeight(0, 0, "30");
@@ -120,7 +191,6 @@ public class ForecastTable extends FlexTable {
 		detailedForecastPanel.getCellFormatter().setVerticalAlignment(4, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		detailedForecastPanel.setWidget(5, 0, new Label("Vel. viento(Km/s)"));
-		
 		//This width fix the width of all the cells, due that is the widest cell
 		detailedForecastPanel.getCellFormatter().setWidth(5, 0, "130");
 	}
@@ -136,7 +206,8 @@ public class ForecastTable extends FlexTable {
 		return datePanel;
 	}
 	
-	private Image getWaveIcon(ForecastDTO forecastDTO) {
+	private Image getWaveIcon(final ForecastDTO forecastDTO) {
+		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height
 		String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
@@ -147,10 +218,24 @@ public class ForecastTable extends FlexTable {
 			e.printStackTrace();
 		}
 		
-		return Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget);
+		final Image icon = Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget);
+		final MiniForecastPopup popup = new MiniForecastPopup(forecastDTO);
+		icon.addMouseOverHandler(new MouseOverHandler(){
+			public void onMouseOver(MouseOverEvent event) {
+				popup.showRelativeTo(icon);
+			}
+			
+		});
+		icon.addMouseOutHandler(new MouseOutHandler(){
+			public void onMouseOut(MouseOutEvent event) {
+				popup.hide();
+			}
+			
+		});
+		return icon;
 	}
 	
-	private void setDetailedForecast(ForecastDTO forecastDTO, int index) {
+	private void setDetailedForecast(FlexTable detailedForecastPanel, ForecastDTO forecastDTO, int index) {
 		Unit heightUnitTarget = Unit.Meters;
 		Unit speedUnitTarget = Unit.KilometersPerHour;
 		Unit directionUnitTarget = Unit.Degrees;
