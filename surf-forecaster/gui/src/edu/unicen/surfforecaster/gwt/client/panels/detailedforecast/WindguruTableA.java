@@ -28,7 +28,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s30.Arrows30PxFactory;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s30.Waves30PxFactory;
 
-public class DetailedForecastWindguruTableA extends FlexTable {
+public class WindguruTableA extends FlexTable {
 	
 	//Horizontal panel for dates
 	HorizontalPanel datesHPanel = null;
@@ -42,7 +42,7 @@ public class DetailedForecastWindguruTableA extends FlexTable {
 	 * @param from - Represents the forecast position in the forecasts list to start in the table 
 	 * @param to - Represents the last forecast to show, if null, goes to the end of the list of forecasts
 	 */
-	public DetailedForecastWindguruTableA(Map<String, List<ForecastDTO>> forecasters, Integer from, Integer to) {
+	public WindguruTableA(Map<String, List<ForecastDTO>> forecasters, Integer from, Integer to) {
 		
 		this.from = from;
 		this.to = to;
