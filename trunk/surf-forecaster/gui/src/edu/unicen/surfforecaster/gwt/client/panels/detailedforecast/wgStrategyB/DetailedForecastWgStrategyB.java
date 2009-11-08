@@ -20,9 +20,9 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 
 	@Override
 	public Widget renderDetailedForecast() {
-		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 5));
-		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 5, 10));
-		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 10, 15));
+		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 10));
+		//completeDetailedForecastVPanel.add(new WgTableB(forecasters, 5, 10));
+		//completeDetailedForecastVPanel.add(new WgTableB(forecasters, 10, 15));
 		return completeDetailedForecastVPanel;
 	}
 }
