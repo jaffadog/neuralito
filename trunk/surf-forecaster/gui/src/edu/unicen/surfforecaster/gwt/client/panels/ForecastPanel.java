@@ -13,8 +13,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
-import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.DetailedForecastWgStrategyA;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
+import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyA.DetailedForecastWgStrategyA;
 
 public class ForecastPanel extends LazyPanel {
 	
