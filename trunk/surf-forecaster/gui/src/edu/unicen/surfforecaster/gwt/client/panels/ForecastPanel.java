@@ -13,7 +13,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
-import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.DetailedForecastWindguruStrategyA;
+import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.DetailedForecastWgStrategyA;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
 
 public class ForecastPanel extends LazyPanel {
@@ -72,7 +72,7 @@ public class ForecastPanel extends LazyPanel {
 		CurrentForecastPanel nextHours = new CurrentForecastPanel("+3 horas", ww3Forecaster.size() > 1 ? ww3Forecaster.get(1) : null);
 		flexTable.setWidget(0, 1, nextHours);
 		
-		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWindguruStrategyA(forecasters));
+		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyA(forecasters));
 
 		flexTable.setWidget(1, 0, renderContext.executeRenderStrategy());
 		//flexTable.setWidget(2, 0, new ForecastTable(forecasters, 23, 46));
