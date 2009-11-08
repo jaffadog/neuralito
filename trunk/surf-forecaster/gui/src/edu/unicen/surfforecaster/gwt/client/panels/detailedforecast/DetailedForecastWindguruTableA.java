@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
@@ -29,15 +28,13 @@ import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s30.Arrows30PxFactory;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s30.Waves30PxFactory;
 
-public class DetailedForecastWindguruTableA implements IRenderDetailedForecastStrategy {
+public class DetailedForecastWindguruTableA extends FlexTable {
 	
 	//Horizontal panel for dates
 	HorizontalPanel datesHPanel = null;
 	Integer from = null;
 	Integer to = null;
 	Map<String, List<ForecastDTO>> forecasters = null;
-	FlexTable forecastersTable = null;
-	
 	
 	/**
 	 * Generates the complete forecaster table for al the forecasters assigned to the selected spot
@@ -50,20 +47,17 @@ public class DetailedForecastWindguruTableA implements IRenderDetailedForecastSt
 		this.from = from;
 		this.to = to;
 		this.forecasters = forecasters;
-		this.forecastersTable = new FlexTable();
-	}
-	
-	public Widget renderDetailedForecast() {
+		
 		//Generate the dates panel
 		datesHPanel = new HorizontalPanel();
 		datesHPanel.setSpacing(7);
 		
 		//First cell
-		forecastersTable.setWidget(0, 0, new Label("*"));
-		forecastersTable.getCellFormatter().setWidth(0, 0, "145");
+		this.setWidget(0, 0, new Label("*"));
+		this.getCellFormatter().setWidth(0, 0, "145");
 		
 		//Dates panel
-		forecastersTable.setWidget(0, 1, datesHPanel);
+		this.setWidget(0, 1, datesHPanel);
 		
 		/*******************************************************************/
 		/****************** WW3 FORECASTS **********************************/
@@ -86,8 +80,6 @@ public class DetailedForecastWindguruTableA implements IRenderDetailedForecastSt
 				forecasterIndex++;
 			}
 		}
-		
-		return this.forecastersTable;
 	}
 	
 	/**
@@ -102,7 +94,7 @@ public class DetailedForecastWindguruTableA implements IRenderDetailedForecastSt
 		final HorizontalPanel miniForecastHPanel = new HorizontalPanel();
 		miniForecastHPanel.setVisible(false);
 		miniForecastHPanel.setSpacing(7);
-		forecastersTable.setWidget(1 + (forecasterIndex * 2), 1, miniForecastHPanel);
+		this.setWidget(1 + (forecasterIndex * 2), 1, miniForecastHPanel);
 		
 		//FlexTable for detailed ww3 forecast
 		final FlexTable detailedForecastPanel = new FlexTable();
@@ -110,7 +102,7 @@ public class DetailedForecastWindguruTableA implements IRenderDetailedForecastSt
 		
 		//Forecaster name and + link HPanel
 		HorizontalPanel forecastHPanel = new HorizontalPanel();
-		forecastersTable.setWidget(1 + (forecasterIndex * 2), 0, forecastHPanel);
+		this.setWidget(1 + (forecasterIndex * 2), 0, forecastHPanel);
 		forecastHPanel.add(new Label(forecasterName));
 		final Hyperlink lnkForecaster = new Hyperlink(" (-)", "");
 		lnkForecaster.addClickHandler(new ClickHandler() {
@@ -128,7 +120,7 @@ public class DetailedForecastWindguruTableA implements IRenderDetailedForecastSt
 		});
 		forecastHPanel.add(lnkForecaster);
 		forecastHPanel.setSpacing(5);
-		forecastersTable.getCellFormatter().setWidth(1 + (forecasterIndex * 2), 0, "145");
+		this.getCellFormatter().setWidth(1 + (forecasterIndex * 2), 0, "145");
 		
 		//Print forecasts from WW3 forecaster
 		this.printForecast(forecasts, detailedForecastPanel, miniForecastHPanel, fillDatesPanel, forecasterIndex);
@@ -167,8 +159,8 @@ public class DetailedForecastWindguruTableA implements IRenderDetailedForecastSt
 		}
 		
 		//Detailed forecaster panel
-		forecastersTable.setWidget(2 + (forecasterIndex * 2), 0, detailedForecastPanel);
-		forecastersTable.getFlexCellFormatter().setColSpan(2 + (forecasterIndex * 2), 0, 2);
+		this.setWidget(2 + (forecasterIndex * 2), 0, detailedForecastPanel);
+		this.getFlexCellFormatter().setColSpan(2 + (forecasterIndex * 2), 0, 2);
 	}
 	
 	private void setDetailedLabels(FlexTable detailedForecastPanel) {
