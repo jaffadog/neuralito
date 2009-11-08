@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast;
+package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyA;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
+import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
 
 public class DetailedForecastWgStrategyA implements IRenderDetailedForecastStrategy {
 	
