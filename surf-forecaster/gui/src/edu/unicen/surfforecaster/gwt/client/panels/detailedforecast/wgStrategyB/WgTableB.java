@@ -53,6 +53,9 @@ public class WgTableB extends FlexTable {
 		datesHPanel = new HorizontalPanel();
 		datesHPanel.setSpacing(7);
 		
+		//FirstRow style
+		this.getRowFormatter().addStyleName(0, "gwt-FlexTable-FirstRow");
+		
 		//First cell
 		this.setWidget(0, 0, new Label("*"));
 		this.getCellFormatter().setWidth(0, 0, "145");
@@ -109,8 +112,12 @@ public class WgTableB extends FlexTable {
 		HorizontalPanel forecastHPanel = new HorizontalPanel();
 		this.setWidget(1 + (forecasterIndex * 2), 0, forecastHPanel);
 		this.getFlexCellFormatter().setColSpan(1 + (forecasterIndex * 2), 0, 2);
-		forecastHPanel.add(new Label(forecasterName));
+		this.getFlexCellFormatter().addStyleName(1 + (forecasterIndex * 2), 0, "gwt-ForecasterName-Row");
+		Label lblForecasterName = new Label(forecasterName);
+		lblForecasterName.addStyleName("gwt-Label-Forecaster-Name");
+		forecastHPanel.add(lblForecasterName);
 		final Hyperlink lnkForecaster = new Hyperlink(" (-)", "");
+		lnkForecaster.addStyleName("gwt-HyperLink-showMoreLess");
 		lnkForecaster.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				if (miniForecastPanel.isVisible()) {
@@ -168,29 +175,44 @@ public class WgTableB extends FlexTable {
 	
 	private void setDetailedLabels(FlexTable detailedForecastPanel, FlexTable miniForecastPanel) {
 		
-		detailedForecastPanel.setWidget(0, 0, new Label("Altura ola"));
+		Label waveHeight = new Label("Altura ola");
+		waveHeight.addStyleName("gwt-Label-TableLabels");
+		detailedForecastPanel.setWidget(0, 0, waveHeight);
 		detailedForecastPanel.getCellFormatter().setHeight(0, 0, "30");
 		detailedForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-		miniForecastPanel.setWidget(0, 0, new Label("Altura ola"));
+		
+		Label waveHeight2 = new Label("Altura ola");
+		waveHeight2.addStyleName("gwt-Label-TableLabels");
+		miniForecastPanel.setWidget(0, 0, waveHeight2);
 		miniForecastPanel.getCellFormatter().setHeight(0, 0, "30");
 		miniForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		
-		detailedForecastPanel.setWidget(1, 0, new Label("(mts)"));
-		miniForecastPanel.setWidget(1, 0, new Label("(mts)"));
+		Label heightUnit = new Label("(mts)");
+		heightUnit.addStyleName("gwt-Label-TableLabels");
+		detailedForecastPanel.setWidget(1, 0, heightUnit);
+		Label heightUnit2 = new Label("(mts)");
+		heightUnit2.addStyleName("gwt-Label-TableLabels");
+		miniForecastPanel.setWidget(1, 0, heightUnit2);
 		
 		Label waveDirection = new Label("Direccion olas");
+		waveDirection.addStyleName("gwt-Label-TableLabels");
 		detailedForecastPanel.setWidget(2, 0, waveDirection);
 		detailedForecastPanel.getCellFormatter().setHeight(2, 0, "30");
 		detailedForecastPanel.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		
-		detailedForecastPanel.setWidget(3, 0, new Label("Periodo(s)"));
+		Label period = new Label("Periodo (s)");
+		period.addStyleName("gwt-Label-TableLabels");
+		detailedForecastPanel.setWidget(3, 0, period);
 		
-		Label windDirection = new Label("Direccion viento"); 
+		Label windDirection = new Label("Direccion viento");
+		windDirection.addStyleName("gwt-Label-TableLabels");
 		detailedForecastPanel.setWidget(4, 0, windDirection);
 		detailedForecastPanel.getCellFormatter().setHeight(4, 0, "30");
 		detailedForecastPanel.getCellFormatter().setVerticalAlignment(4, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		
-		detailedForecastPanel.setWidget(5, 0, new Label("Vel. viento(Km/s)"));
+		Label windSpeed = new Label("Vel. viento(Km/s)");
+		windSpeed.addStyleName("gwt-Label-TableLabels");
+		detailedForecastPanel.setWidget(5, 0, windSpeed);
 		//This width fix the width of all the cells, due that is the widest cell
 		detailedForecastPanel.getCellFormatter().setWidth(5, 0, "130");
 		miniForecastPanel.getCellFormatter().setWidth(0, 0, "130");
