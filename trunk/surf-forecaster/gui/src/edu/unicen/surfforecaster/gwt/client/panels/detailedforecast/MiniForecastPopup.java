@@ -51,6 +51,7 @@ public class MiniForecastPopup extends PopupPanel {
 					forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getUnit().toString()));
 			
 			this.setWidget(table);
+			this.addStyleName("gwt-Popup-MiniForecast");
 		}
 	}
 	
