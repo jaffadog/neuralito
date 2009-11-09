@@ -100,6 +100,13 @@ div#closeLoginBoxDiv a{
 }
 
 /*****************************************************************************/
+/*********************** MiniForecastPopup ***************************************/
+/*****************************************************************************/
+.gwt-Popup-MiniForecast{
+    border:solid 2px blue;
+}
+
+/*****************************************************************************/
 /*********************** RegisterUserPanel ***************************************/
 /*****************************************************************************/
 
@@ -164,4 +171,33 @@ div#closeLoginBoxDiv a{
 /** Link register */
 .gwt-HyperLink-register{
     font-weight:bold;
+}
+
+/*****************************************************************************/
+/*********************** WgTableB ***************************************/
+/*****************************************************************************/
+.gwt-Label-Forecaster-Name{
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    font-weight:bold;
+    font-size:10pt;
+}
+
+.gwt-Label-TableLabels{
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    font-weight:bold;
+    font-size:9pt;
+}
+
+.gwt-HyperLink-showMoreLess{
+    font-weight:bold;
+    font-size:10pt;
+    text-decoration:none;
+}
+
+.gwt-FlexTable-FirstRow{
+    background:url("/images/gray-grad-forecast-table-dates-62px.png") repeat-x;
+}
+
+.gwt-ForecasterName-Row{
+    background-color:silver;
 }
