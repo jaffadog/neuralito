@@ -20,6 +20,7 @@ public class ForecastPanel extends LazyPanel {
 	
 	private LocalizationPanel localizationPanel;
 	private Label lblTitle;
+	private Label lblSubTitle;
 	private FlexTable flexTable;
 	
 	public ForecastPanel() {
@@ -38,6 +39,11 @@ public class ForecastPanel extends LazyPanel {
 			lblTitle = new Label();
 			lblTitle.addStyleName("gwt-Label-SectionTitle");
 			container.add(lblTitle);
+		}
+		{
+			lblSubTitle = new Label();
+			//lblSubTitle.addStyleName("gwt-Label-SubTitle");
+			container.add(lblSubTitle);
 		}
 		{
 			
@@ -64,6 +70,7 @@ public class ForecastPanel extends LazyPanel {
 	
 	private void showSpotLatestForecast(Map<String, List<ForecastDTO>> forecasters) {
 		lblTitle.setText(localizationPanel.getZoneBoxDisplayText() + " > " + localizationPanel.getSpotBoxDisplayText());
+		lblSubTitle.setText("04-10-09 > [UTC-10] Pacific/Rarotonga, CKT");
 		
 		//TODO decidir como elijo y cual elijo de los forecasters del spot para mostrar los currentpanels, por ahora harcodeo para recuperar el ww3
 		List<ForecastDTO> ww3Forecaster = forecasters.get("WW3 Noaa Forecaster");
