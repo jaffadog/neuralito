@@ -3,6 +3,7 @@ package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgStrategyB
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -20,9 +21,11 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 
 	@Override
 	public Widget renderDetailedForecast() {
-		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 10));
-		//completeDetailedForecastVPanel.add(new WgTableB(forecasters, 5, 10));
-		//completeDetailedForecastVPanel.add(new WgTableB(forecasters, 10, 15));
+		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 5));
+		completeDetailedForecastVPanel.add(new Label("Cont."));
+//		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 23, 46));
+//		completeDetailedForecastVPanel.add(new Label("Cont."));
+//		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 46, null));
 		return completeDetailedForecastVPanel;
 	}
 }
