@@ -18,16 +18,21 @@ import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50.Waves50PxFact
 
 public class CurrentForecastPanel extends FlexTable {
 
+	private static final String ICON_SIZE = "50";
+	
 	public CurrentForecastPanel(){}
 	
 	public CurrentForecastPanel(String title, ForecastDTO forecast){
 		{
+			//Panel stylename
+			this.addStyleName("gwt-FlexTable-CurrentForecast");
+			
 			Label lblTitle = new Label(title);
-			getFlexCellFormatter().setColSpan(0, 0, 2);
-			getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-			setWidget(0,0, lblTitle);
-			setCellSpacing(50);
-
+			lblTitle.addStyleName("gwt-Label-CurrentForecast-Title");
+			this.setWidget(0,0, lblTitle);
+			this.getFlexCellFormatter().setColSpan(0, 0, 2);
+			this.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			
 			if (forecast != null) {
 				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
 				Unit heightUnitTarget = Unit.Meters;
@@ -49,10 +54,10 @@ public class CurrentForecastPanel extends FlexTable {
 					e.printStackTrace();
 				}
 				
-				setWidget(1, 0, this.createTableItem("Viento", windSpeed + " " + forecast.getMap().get(WW3Parameter.WIND_SPEED.toString()).getUnit().toString(), "SSO", Arrows50PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
-				setWidget(1, 1, this.createTableItem("Dir. de la ola", waveDirection + " " + forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getUnit().toString(), "Sudoeste", Arrows50PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
-				setWidget(2, 0, this.createTableItem("Altura de la ola", waveHeight + " " + forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getUnit().toString(), "", Waves50PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
-				setWidget(2, 1, this.createTableItem("Período de ola", forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue() + " " + forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getUnit().toString(), "", "images/arrow.gif"));
+				this.setWidget(1, 0, this.createTableItem("Viento", windSpeed + " " + forecast.getMap().get(WW3Parameter.WIND_SPEED.toString()).getUnit().toString(), "SSO", Arrows50PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
+				this.setWidget(1, 1, this.createTableItem("Dir. de la ola", waveDirection + " " + forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getUnit().toString(), "Sudoeste", Arrows50PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
+				this.setWidget(2, 0, this.createTableItem("Altura de la ola", waveHeight + " " + forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getUnit().toString(), "", Waves50PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
+				this.setWidget(2, 1, this.createTableItem("Período de ola", forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue() + " " + forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getUnit().toString(), "", "images/arrow.gif"));
 			} else {
 				lblTitle.setText(title + " - No disponible");
 			}
@@ -61,13 +66,18 @@ public class CurrentForecastPanel extends FlexTable {
 	//TODO cuando todas la imagenes se levanten del factory eliminar este metodo que quedaria obsoleto
 	private VerticalPanel createTableItem(String title, String value, String imageTitle, String imageUrl){
 		VerticalPanel tableItem = new VerticalPanel();
-		
-		tableItem.setSpacing(10);
+		tableItem.addStyleName("gwt-VerticalPanel-ForecastItem");
 		tableItem.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
 		Label tableItemValue = new Label(value);
+		
 		Image image = new Image(imageUrl);
 		image.setTitle(imageTitle);
+		image.setSize(CurrentForecastPanel.ICON_SIZE, CurrentForecastPanel.ICON_SIZE);
+		
 		Label tableItemTitle = new Label(title);
+		tableItemTitle.addStyleName("gwt-Label-ForecastItem-Title");
+		
 		tableItem.add(tableItemValue);
 		tableItem.add(image);
 		tableItem.add(tableItemTitle);
@@ -77,13 +87,17 @@ public class CurrentForecastPanel extends FlexTable {
 	
 	private VerticalPanel createTableItem(String title, String value, String imageTitle, Image image){
 		VerticalPanel tableItem = new VerticalPanel();
-		
-		tableItem.setSpacing(10);
+		tableItem.addStyleName("gwt-VerticalPanel-ForecastItem");
 		tableItem.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
 		Label tableItemValue = new Label(value);
+		
 		image.setTitle(imageTitle);
-		image.setStyleName("gwt-image-wave");
+		image.setSize(CurrentForecastPanel.ICON_SIZE, CurrentForecastPanel.ICON_SIZE);
+		
 		Label tableItemTitle = new Label(title);
+		tableItemTitle.addStyleName("gwt-Label-ForecastItem-Title");
+		
 		tableItem.add(tableItemValue);
 		tableItem.add(image);
 		tableItem.add(tableItemTitle);

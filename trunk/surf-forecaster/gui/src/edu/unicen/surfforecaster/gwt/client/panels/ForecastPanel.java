@@ -15,6 +15,7 @@ import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgStrategyB.DetailedForecastWgStrategyB;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class ForecastPanel extends LazyPanel {
 	
@@ -22,6 +23,7 @@ public class ForecastPanel extends LazyPanel {
 	private Label lblTitle;
 	private Label lblSubTitle;
 	private FlexTable flexTable;
+	private VerticalPanel container;
 	
 	public ForecastPanel() {
 	}
@@ -29,7 +31,8 @@ public class ForecastPanel extends LazyPanel {
 	@Override
 	protected Widget createWidget() {
 		
-		VerticalPanel container = new VerticalPanel();
+		container = new VerticalPanel();
+		
 		{
 			localizationPanel = new LocalizationPanel();
 			localizationPanel.setBasePanel(this);
@@ -46,10 +49,9 @@ public class ForecastPanel extends LazyPanel {
 			container.add(lblSubTitle);
 		}
 		{
-			
-			
 			flexTable = new FlexTable();
 			container.add(flexTable);
+			container.setCellHorizontalAlignment(flexTable, HasHorizontalAlignment.ALIGN_CENTER);
 		}
 		return container;
 	}
@@ -80,20 +82,14 @@ public class ForecastPanel extends LazyPanel {
 		flexTable.setWidget(0, 1, nextHours);
 		
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters));
-
-		flexTable.setWidget(1, 0, renderContext.executeRenderStrategy());
-		//flexTable.setWidget(2, 0, new ForecastTable(forecasters, 23, 46));
-		//flexTable.setWidget(3, 0, new ForecastTable(forecasters, 46, null));
+		Widget detailedForecast = renderContext.executeRenderStrategy(); 
+		container.add(detailedForecast);
 		
-		flexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
-		flexTable.getFlexCellFormatter().setColSpan(2, 0, 2);
-		flexTable.getFlexCellFormatter().setColSpan(3, 0, 2);
+		//flexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 		
-		flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
-		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_LEFT);
-		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_LEFT);
-		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_LEFT);
+		//flexTable.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		//flexTable.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER);
+		container.setCellHorizontalAlignment(detailedForecast, HasHorizontalAlignment.ALIGN_LEFT);
 	}
 
 }
