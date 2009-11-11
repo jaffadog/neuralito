@@ -49,6 +49,31 @@ div div#loadingTxtDiv {
 }
 
 /*****************************************************************************/
+/*********************** CurrentForecastPanel ***************************************/
+/*****************************************************************************/
+.gwt-FlexTable-CurrentForecast {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.gwt-Label-CurrentForecast-Title{
+	background:url("./images/gray-grad-currentforecast-title-26px.png") repeat-x;
+	font-weight:bold;
+    color: #FFF;
+    height: 26px;
+	padding-top: 5px;
+}
+
+.gwt-VerticalPanel-ForecastItem{
+	margin: 10px;
+	width: 100px;
+}
+
+.gwt-Label-ForecastItem-Title{
+	font-weight:bold;
+}
+
+/*****************************************************************************/
 /*********************** ErrorPanel ***************************************/
 /*****************************************************************************/
 
@@ -176,6 +201,10 @@ div#closeLoginBoxDiv a{
 /*****************************************************************************/
 /*********************** WgTableB ***************************************/
 /*****************************************************************************/
+.gwt-FlexTable-WgTableB{
+	margin-bottom: 35px;
+}
+
 .gwt-Label-Forecaster-Name{
     font-family: 'Trebuchet MS', Helvetica, sans-serif;
     font-weight:bold;
@@ -188,16 +217,25 @@ div#closeLoginBoxDiv a{
     font-size:9pt;
 }
 
-.gwt-HyperLink-showMoreLess{
+.gwt-HyperLink-showMoreLess a{
     font-weight:bold;
     font-size:10pt;
     text-decoration:none;
 }
 
-.gwt-FlexTable-FirstRow{
-    background:url("/images/gray-grad-forecast-table-dates-62px.png") repeat-x;
+.gwt-FlexTable-datesTable{
+    background:url("./images/gray-grad-forecast-table-dates-62px.png") repeat-x;
+}
+
+.gwt-FlexTable-datesTable .gwt-Label{
+    font-weight:bold;
+    color: #FFF;
 }
 
 .gwt-ForecasterName-Row{
     background-color:silver;
+}
+
+.gwt-flextable-detailedForecast-col{
+    overflow:hidden;
 }
