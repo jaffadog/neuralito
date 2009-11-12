@@ -76,7 +76,7 @@ public class WgTableB extends FlexTable {
 		/****************** WW3 FORECASTS **********************************/
 		/*******************************************************************/
 		List<ForecastDTO> forecasts = forecasters.get("WW3 Noaa Forecaster");
-		this.generateAllForecastersTable("WW3 Noaa Forecaster", forecasts, 0, true);
+		this.generateAllForecastersTable("WW3 Noaa Forecaster", forecasts, 0, true, true);
 		
 		/*******************************************************************/
 		/****************** OTHER FORECASTERS ******************************/
@@ -89,7 +89,7 @@ public class WgTableB extends FlexTable {
 			//if (!key.equals("WW3 Noaa Forecaster")) 
 			{
 				forecasts = forecasters.get(key);
-				this.generateAllForecastersTable(key, forecasts, forecasterIndex, false);
+				this.generateAllForecastersTable(key, forecasts, forecasterIndex, false, false);
 				forecasterIndex++;
 			}
 		}
@@ -100,8 +100,10 @@ public class WgTableB extends FlexTable {
 	 * @param forecasts - List of forecasts for a specific forecaster
 	 * @param fillDatesPanel - If true adds dates to the date panel, this must be true once.
 	 * @param forecasterIndex - The index row where the detailed forecaster flexTable will be located
+	 * @param Generate detailedForecastPanel?
 	 */
-	private void generateAllForecastersTable(String forecasterName, List<ForecastDTO> forecasts, final int forecasterIndex, boolean fillDatesPanel) {
+	private void generateAllForecastersTable(String forecasterName, List<ForecastDTO> forecasts, final int forecasterIndex, 
+			boolean fillDatesPanel, boolean generateDetailed) {
 		
 		//Horizontal panel for ww3 miniForecasts
 		final FlexTable miniForecastPanel = new FlexTable();
@@ -109,11 +111,16 @@ public class WgTableB extends FlexTable {
 
 		//this.setWidget(1 + (forecasterIndex * 2), 1, miniForecastHPanel);
 		
-		//FlexTable for detailed ww3 forecast
-		final FlexTable detailedForecastPanel = new FlexTable();
-		//detailedForecastPanel.setCellSpacing(0);
-
-		this.setWidget(2 + (forecasterIndex * 2), 0, detailedForecastPanel);
+		//FlexTable for detailed forecast
+		final FlexTable detailedForecastPanel;
+		if (generateDetailed) {
+			detailedForecastPanel = new FlexTable();
+			this.setWidget(2 + (forecasterIndex * 2), 0, detailedForecastPanel);
+		} else {
+			detailedForecastPanel = null;
+			miniForecastPanel.setVisible(true);
+			this.setWidget(2 + (forecasterIndex * 2), 0, miniForecastPanel);
+		}
 		
 		//ColSpan for the detailed and mini forecast flexTable
 		this.getFlexCellFormatter().setColSpan(2 + (forecasterIndex * 2), 0, 2);
@@ -126,24 +133,27 @@ public class WgTableB extends FlexTable {
 		Label lblForecasterName = new Label(forecasterName);
 		lblForecasterName.addStyleName("gwt-Label-Forecaster-Name");
 		forecastHPanel.add(lblForecasterName);
-		final Hyperlink lnkForecaster = new Hyperlink(" (-)", "");
-		lnkForecaster.addStyleName("gwt-HyperLink-showMoreLess");
-		lnkForecaster.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if (miniForecastPanel.isVisible()) {
-					miniForecastPanel.setVisible(false);
-					setWidget(2 + (forecasterIndex * 2), 0, detailedForecastPanel);
-					detailedForecastPanel.setVisible(true);
-					lnkForecaster.setText("(-)");
-				} else {
-					miniForecastPanel.setVisible(true);
-					setWidget(2 + (forecasterIndex * 2), 0, miniForecastPanel);
-					detailedForecastPanel.setVisible(false);
-					lnkForecaster.setText("(+)");
+		
+		if (generateDetailed) {
+			final Hyperlink lnkForecaster = new Hyperlink(" (-)", "");
+			lnkForecaster.addStyleName("gwt-HyperLink-showMoreLess");
+			lnkForecaster.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					if (miniForecastPanel.isVisible()) {
+						miniForecastPanel.setVisible(false);
+						setWidget(2 + (forecasterIndex * 2), 0, detailedForecastPanel);
+						detailedForecastPanel.setVisible(true);
+						lnkForecaster.setText("(-)");
+					} else {
+						miniForecastPanel.setVisible(true);
+						setWidget(2 + (forecasterIndex * 2), 0, miniForecastPanel);
+						detailedForecastPanel.setVisible(false);
+						lnkForecaster.setText("(+)");
+					}
 				}
-			}
-		});
-		forecastHPanel.add(lnkForecaster);
+			});
+			forecastHPanel.add(lnkForecaster);
+		}
 		forecastHPanel.setSpacing(5);
 		//this.getCellFormatter().setWidth(1 + (forecasterIndex * 2), 0, "145");
 		
@@ -186,12 +196,47 @@ public class WgTableB extends FlexTable {
 	}
 	
 	private void setDetailedLabels(FlexTable detailedForecastPanel, FlexTable miniForecastPanel) {
-		
-		Label waveHeight = new Label("Altura ola");
-		waveHeight.addStyleName("gwt-Label-TableLabels");
-		detailedForecastPanel.setWidget(0, 0, waveHeight);
-		detailedForecastPanel.getCellFormatter().setHeight(0, 0, "30");
-		detailedForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+		if (detailedForecastPanel != null) {
+			Label waveHeight = new Label("Altura ola");
+			waveHeight.addStyleName("gwt-Label-TableLabels");
+			detailedForecastPanel.setWidget(0, 0, waveHeight);
+			detailedForecastPanel.getCellFormatter().setHeight(0, 0, "30");
+			detailedForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+			
+			
+			
+			Label heightUnit = new Label("(mts)");
+			heightUnit.addStyleName("gwt-Label-TableLabels");
+			detailedForecastPanel.setWidget(1, 0, heightUnit);
+			
+			
+			
+			Label waveDirection = new Label("Direccion olas");
+			waveDirection.addStyleName("gwt-Label-TableLabels");
+			detailedForecastPanel.setWidget(2, 0, waveDirection);
+			detailedForecastPanel.getCellFormatter().setHeight(2, 0, "30");
+			detailedForecastPanel.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+			
+			Label period = new Label("Periodo (s)");
+			period.addStyleName("gwt-Label-TableLabels");
+			detailedForecastPanel.setWidget(3, 0, period);
+			
+			Label windDirection = new Label("Direccion viento");
+			windDirection.addStyleName("gwt-Label-TableLabels");
+			detailedForecastPanel.setWidget(4, 0, windDirection);
+			detailedForecastPanel.getCellFormatter().setHeight(4, 0, "30");
+			detailedForecastPanel.getCellFormatter().setVerticalAlignment(4, 0, HasVerticalAlignment.ALIGN_MIDDLE);
+			
+			Label windSpeed = new Label("Vel. viento(Km/s)");
+			windSpeed.addStyleName("gwt-Label-TableLabels");
+			detailedForecastPanel.setWidget(5, 0, windSpeed);
+			
+			//Cols format
+			detailedForecastPanel.getColumnFormatter().setWidth(0, WgTableB.LABELS_COL_WIDTH);
+			
+			//Cols style
+			detailedForecastPanel.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
+		}
 		
 		Label waveHeight2 = new Label("Altura ola");
 		waveHeight2.addStyleName("gwt-Label-TableLabels");
@@ -199,40 +244,12 @@ public class WgTableB extends FlexTable {
 		miniForecastPanel.getCellFormatter().setHeight(0, 0, "30");
 		miniForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		
-		Label heightUnit = new Label("(mts)");
-		heightUnit.addStyleName("gwt-Label-TableLabels");
-		detailedForecastPanel.setWidget(1, 0, heightUnit);
 		Label heightUnit2 = new Label("(mts)");
 		heightUnit2.addStyleName("gwt-Label-TableLabels");
 		miniForecastPanel.setWidget(1, 0, heightUnit2);
 		
-		Label waveDirection = new Label("Direccion olas");
-		waveDirection.addStyleName("gwt-Label-TableLabels");
-		detailedForecastPanel.setWidget(2, 0, waveDirection);
-		detailedForecastPanel.getCellFormatter().setHeight(2, 0, "30");
-		detailedForecastPanel.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-		
-		Label period = new Label("Periodo (s)");
-		period.addStyleName("gwt-Label-TableLabels");
-		detailedForecastPanel.setWidget(3, 0, period);
-		
-		Label windDirection = new Label("Direccion viento");
-		windDirection.addStyleName("gwt-Label-TableLabels");
-		detailedForecastPanel.setWidget(4, 0, windDirection);
-		detailedForecastPanel.getCellFormatter().setHeight(4, 0, "30");
-		detailedForecastPanel.getCellFormatter().setVerticalAlignment(4, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-		
-		Label windSpeed = new Label("Vel. viento(Km/s)");
-		windSpeed.addStyleName("gwt-Label-TableLabels");
-		detailedForecastPanel.setWidget(5, 0, windSpeed);
-		
-		//Cols format
-		detailedForecastPanel.getColumnFormatter().setWidth(0, WgTableB.LABELS_COL_WIDTH);
 		miniForecastPanel.getColumnFormatter().setWidth(0, WgTableB.LABELS_COL_WIDTH);
-		
-		//Cols style
 		miniForecastPanel.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
-		detailedForecastPanel.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
 	}
 	
 	private VerticalPanel getDateVPanel(ForecastDTO forecastDTO) {
@@ -246,7 +263,7 @@ public class WgTableB extends FlexTable {
 		return datePanel;
 	}
 	
-	private Image getWaveIcon(final ForecastDTO forecastDTO) {
+	private Image getWaveIcon(final ForecastDTO forecastDTO, boolean showPopup) {
 		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height
@@ -259,19 +276,22 @@ public class WgTableB extends FlexTable {
 		}
 		
 		final Image icon = Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget);
-		final MiniForecastPopup popup = new MiniForecastPopup(forecastDTO);
-		icon.addMouseOverHandler(new MouseOverHandler(){
-			public void onMouseOver(MouseOverEvent event) {
-				popup.showRelativeTo(icon);
-			}
-			
-		});
-		icon.addMouseOutHandler(new MouseOutHandler(){
-			public void onMouseOut(MouseOutEvent event) {
-				popup.hide();
-			}
-			
-		});
+		if (showPopup) {
+			final MiniForecastPopup popup = new MiniForecastPopup(forecastDTO);
+			icon.addMouseOverHandler(new MouseOverHandler(){
+				public void onMouseOver(MouseOverEvent event) {
+					popup.showRelativeTo(icon);
+				}
+				
+			});
+			icon.addMouseOutHandler(new MouseOutHandler(){
+				public void onMouseOut(MouseOutEvent event) {
+					popup.hide();
+				}
+				
+			});
+		}
+		
 		return icon;
 	}
 	
@@ -298,24 +318,29 @@ public class WgTableB extends FlexTable {
 			// TODO ver como manejar esta exvepcion de conversion de unidades
 			e.printStackTrace();
 		}
-		//mini forecast table
-		miniForecastPanel.setWidget(0, index, this.getWaveIcon(forecastDTO));
-		miniForecastPanel.setWidget(1, index, new Label(waveHeight));
+		
 		
 		//detailed Forecast table
-		detailedForecastPanel.setWidget(0, index, Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget));
-		detailedForecastPanel.setWidget(1, index, new Label(waveHeight));
-		detailedForecastPanel.setWidget(2, index, Arrows30PxFactory.getArrowIcon(waveDirection, directionUnitTarget));
-		detailedForecastPanel.setWidget(3, index, new Label(wavePeriod));
-		detailedForecastPanel.setWidget(4, index, Arrows30PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget));
-		detailedForecastPanel.setWidget(5, index, new Label(windSpeed));
+		if (detailedForecastPanel != null) {
+			detailedForecastPanel.setWidget(0, index, Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget));
+			detailedForecastPanel.setWidget(1, index, new Label(waveHeight));
+			detailedForecastPanel.setWidget(2, index, Arrows30PxFactory.getArrowIcon(waveDirection, directionUnitTarget));
+			detailedForecastPanel.setWidget(3, index, new Label(wavePeriod));
+			detailedForecastPanel.setWidget(4, index, Arrows30PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget));
+			detailedForecastPanel.setWidget(5, index, new Label(windSpeed));
+			
+			//cols format
+			detailedForecastPanel.getColumnFormatter().setWidth(index, WgTableB.DETAILED_FORECAST_COL_WIDTH);
+			
+			//cols style
+			detailedForecastPanel.getColumnFormatter().addStyleName(index, "gwt-flextable-detailedForecast-col");
+		}
 		
-		//cols format
+		//mini forecast table
+		miniForecastPanel.setWidget(0, index, this.getWaveIcon(forecastDTO, detailedForecastPanel != null ? true : false));
+		miniForecastPanel.setWidget(1, index, new Label(waveHeight));
+		
 		miniForecastPanel.getColumnFormatter().setWidth(index, WgTableB.DETAILED_FORECAST_COL_WIDTH);
-		detailedForecastPanel.getColumnFormatter().setWidth(index, WgTableB.DETAILED_FORECAST_COL_WIDTH);
-		
-		//cols style
 		miniForecastPanel.getColumnFormatter().addStyleName(index, "gwt-flextable-detailedForecast-col");
-		detailedForecastPanel.getColumnFormatter().addStyleName(index, "gwt-flextable-detailedForecast-col");
 	}
 }
