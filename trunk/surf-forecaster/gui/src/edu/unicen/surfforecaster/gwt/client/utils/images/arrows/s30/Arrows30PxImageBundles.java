@@ -3,7 +3,12 @@ package edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s30;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.ImageBundle;
 
-public interface Arrows30PxImageBundlessssssssss extends ImageBundle {
+/**
+ * @deprecated
+ * @author MAXI
+ *
+ */
+public interface Arrows30PxImageBundles extends ImageBundle {
 	
 	public AbstractImagePrototype big_20_e();
 	

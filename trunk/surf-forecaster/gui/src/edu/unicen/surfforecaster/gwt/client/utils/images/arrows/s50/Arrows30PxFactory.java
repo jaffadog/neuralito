@@ -7,17 +7,20 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 
-public final class Arrows50PxFactory {
+public final class Arrows30PxFactory {
 	
-	private final static Arrows50PxImageBundle arrowsImageBundle = (Arrows50PxImageBundle) GWT.create(Arrows50PxImageBundle.class);
+	private final static ArrowsSmall50PxImageBundle arrowsSmallImageBundle = (ArrowsSmall50PxImageBundle) GWT.create(ArrowsSmall50PxImageBundle.class);
+	private final static ArrowsMedium50PxImageBundle arrowsMediumImageBundle = (ArrowsMedium50PxImageBundle) GWT.create(ArrowsMedium50PxImageBundle.class);
+	private final static ArrowsMediumBig50PxImageBundle arrowsMediumBigImageBundle = (ArrowsMediumBig50PxImageBundle) GWT.create(ArrowsMediumBig50PxImageBundle.class);
+	private final static ArrowsBig50PxImageBundle arrowsBigImageBundle = (ArrowsBig50PxImageBundle) GWT.create(ArrowsBig50PxImageBundle.class);
 	
 	/**
-	 * Method used to obtain an arrow icon regarding direction and speed of the variable
+	 * Obtain an arrow icon depending on the direction and speed as parameters(util for winds)
 	 * @param direction
 	 * @param speed
 	 * @param unitDirection
 	 * @param unitSpeed
-	 * @return Image
+	 * @return
 	 */
 	public static Image getArrowIcon(String direction, String speed, Unit unitDirection, Unit unitSpeed) {
 		
@@ -40,464 +43,454 @@ public final class Arrows50PxFactory {
 		if (speedValue <= 5) {
 			
 			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.small_1_s().createImage();
+				return arrowsSmallImageBundle.small_1_s().createImage();
 			
 			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.small_1_ssw().createImage();
+				return arrowsSmallImageBundle.small_1_ssw().createImage();
 			
 			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.small_1_sw().createImage();
+				return arrowsSmallImageBundle.small_1_sw().createImage();
 			
 			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.small_1_wsw().createImage();
+				return arrowsSmallImageBundle.small_1_wsw().createImage();
 			
 			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.small_1_w().createImage();
+				return arrowsSmallImageBundle.small_1_w().createImage();
 			
 			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.small_1_wnw().createImage();
+				return arrowsSmallImageBundle.small_1_wnw().createImage();
 			
 			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.small_1_nw().createImage();
+				return arrowsSmallImageBundle.small_1_nw().createImage();
 			
 			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.small_1_nnw().createImage();
+				return arrowsSmallImageBundle.small_1_nnw().createImage();
 			
 			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.small_1_n().createImage();
+				return arrowsSmallImageBundle.small_1_n().createImage();
 			
 			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.small_1_nne().createImage();
+				return arrowsSmallImageBundle.small_1_nne().createImage();
 			
 			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.small_1_ne().createImage();
+				return arrowsSmallImageBundle.small_1_ne().createImage();
 			
 			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.small_1_ene().createImage();
+				return arrowsSmallImageBundle.small_1_ene().createImage();
 			
 			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.small_1_e().createImage();
+				return arrowsSmallImageBundle.small_1_e().createImage();
 			
 			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.small_1_ese().createImage();
+				return arrowsSmallImageBundle.small_1_ese().createImage();
 			
 			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.small_1_se().createImage();
+				return arrowsSmallImageBundle.small_1_se().createImage();
 			
 			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.small_1_sse().createImage();
-		}
+				return arrowsSmallImageBundle.small_1_sse().createImage();
+		} else if (speedValue > 5 && speedValue <= 10) {
+			
+			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
+				return arrowsSmallImageBundle.small_2_s().createImage();
+			
+			if (directionValue > 11.25 && directionValue <= 33.75)
+				return arrowsSmallImageBundle.small_2_ssw().createImage();
+			
+			if (directionValue > 33.75 && directionValue <= 56.25)
+				return arrowsSmallImageBundle.small_2_sw().createImage();
+			
+			if (directionValue > 56.25 && directionValue <= 78.75)
+				return arrowsSmallImageBundle.small_2_wsw().createImage();
+			
+			if (directionValue > 78.75 && directionValue <= 101.25)
+				return arrowsSmallImageBundle.small_2_w().createImage();
+			
+			if (directionValue > 101.25 && directionValue <= 123.75)
+				return arrowsSmallImageBundle.small_2_wnw().createImage();
+			
+			if (directionValue > 123.75 && directionValue <= 146.25)
+				return arrowsSmallImageBundle.small_2_nw().createImage();
+			
+			if (directionValue > 146.25 && directionValue <= 168.75)
+				return arrowsSmallImageBundle.small_2_nnw().createImage();
+			
+			if (directionValue > 168.75 && directionValue <= 191.25)
+				return arrowsSmallImageBundle.small_2_n().createImage();
+			
+			if (directionValue > 191.25 && directionValue <= 213.75)
+				return arrowsSmallImageBundle.small_2_nne().createImage();
+			
+			if (directionValue > 213.75 && directionValue <= 236.25)
+				return arrowsSmallImageBundle.small_2_ne().createImage();
+			
+			if (directionValue > 236.25 && directionValue <= 258.75)
+				return arrowsSmallImageBundle.small_2_ene().createImage();
+			
+			if (directionValue > 258.75 && directionValue <= 281.25)
+				return arrowsSmallImageBundle.small_2_e().createImage();
+			
+			if (directionValue > 281.25 && directionValue <= 303.75)
+				return arrowsSmallImageBundle.small_2_ese().createImage();
+			
+			if (directionValue > 303.75 && directionValue <= 326.25)
+				return arrowsSmallImageBundle.small_2_se().createImage();
+			
+			if (directionValue > 326.25 && directionValue <= 348.75)
+				return arrowsSmallImageBundle.small_2_sse().createImage();
 		
-		if (speedValue > 5 && speedValue <= 10) {
+		} else if (speedValue > 10 && speedValue <= 13) {
 			
 			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.small_2_s().createImage();
+				return arrowsMediumImageBundle.medium_3_s().createImage();
 			
 			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.small_2_ssw().createImage();
+				return arrowsMediumImageBundle.medium_3_ssw().createImage();
 			
 			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.small_2_sw().createImage();
+				return arrowsMediumImageBundle.medium_3_sw().createImage();
 			
 			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.small_2_wsw().createImage();
+				return arrowsMediumImageBundle.medium_3_wsw().createImage();
 			
 			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.small_2_w().createImage();
+				return arrowsMediumImageBundle.medium_3_w().createImage();
 			
 			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.small_2_wnw().createImage();
+				return arrowsMediumImageBundle.medium_3_wnw().createImage();
 			
 			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.small_2_nw().createImage();
+				return arrowsMediumImageBundle.medium_3_nw().createImage();
 			
 			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.small_2_nnw().createImage();
+				return arrowsMediumImageBundle.medium_3_nnw().createImage();
 			
 			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.small_2_n().createImage();
+				return arrowsMediumImageBundle.medium_3_n().createImage();
 			
 			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.small_2_nne().createImage();
+				return arrowsMediumImageBundle.medium_3_nne().createImage();
 			
 			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.small_2_ne().createImage();
+				return arrowsMediumImageBundle.medium_3_ne().createImage();
 			
 			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.small_2_ene().createImage();
+				return arrowsMediumImageBundle.medium_3_ene().createImage();
 			
 			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.small_2_e().createImage();
+				return arrowsMediumImageBundle.medium_3_e().createImage();
 			
 			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.small_2_ese().createImage();
+				return arrowsMediumImageBundle.medium_3_ese().createImage();
 			
 			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.small_2_se().createImage();
+				return arrowsMediumImageBundle.medium_3_se().createImage();
 			
 			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.small_2_sse().createImage();
-		}
-			
-		if (speedValue > 10 && speedValue <= 13) {
-			
-			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.medium_3_s().createImage();
-			
-			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.medium_3_ssw().createImage();
-			
-			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.medium_3_sw().createImage();
-			
-			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.medium_3_wsw().createImage();
-			
-			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.medium_3_w().createImage();
-			
-			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.medium_3_wnw().createImage();
-			
-			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.medium_3_nw().createImage();
-			
-			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.medium_3_nnw().createImage();
-			
-			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.medium_3_n().createImage();
-			
-			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.medium_3_nne().createImage();
-			
-			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.medium_3_ne().createImage();
-			
-			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.medium_3_ene().createImage();
-			
-			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.medium_3_e().createImage();
-			
-			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.medium_3_ese().createImage();
-			
-			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.medium_3_se().createImage();
-			
-			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.medium_3_sse().createImage();
-		}
+				return arrowsMediumImageBundle.medium_3_sse().createImage();
 		
-		if (speedValue > 13 && speedValue <= 17) {
+		} else if (speedValue > 13 && speedValue <= 17) {
 			
 			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.medium_4_s().createImage();
+				return arrowsMediumImageBundle.medium_4_s().createImage();
 			
 			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.medium_4_ssw().createImage();
+				return arrowsMediumImageBundle.medium_4_ssw().createImage();
 			
 			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.medium_4_sw().createImage();
+				return arrowsMediumImageBundle.medium_4_sw().createImage();
 			
 			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.medium_4_wsw().createImage();
+				return arrowsMediumImageBundle.medium_4_wsw().createImage();
 			
 			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.medium_4_w().createImage();
+				return arrowsMediumImageBundle.medium_4_w().createImage();
 			
 			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.medium_4_wnw().createImage();
+				return arrowsMediumImageBundle.medium_4_wnw().createImage();
 			
 			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.medium_4_nw().createImage();
+				return arrowsMediumImageBundle.medium_4_nw().createImage();
 			
 			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.medium_4_nnw().createImage();
+				return arrowsMediumImageBundle.medium_4_nnw().createImage();
 			
 			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.medium_4_n().createImage();
+				return arrowsMediumImageBundle.medium_4_n().createImage();
 			
 			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.medium_4_nne().createImage();
+				return arrowsMediumImageBundle.medium_4_nne().createImage();
 			
 			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.medium_4_ne().createImage();
+				return arrowsMediumImageBundle.medium_4_ne().createImage();
 			
 			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.medium_4_ene().createImage();
+				return arrowsMediumImageBundle.medium_4_ene().createImage();
 			
 			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.medium_4_e().createImage();
+				return arrowsMediumImageBundle.medium_4_e().createImage();
 			
 			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.medium_4_ese().createImage();
+				return arrowsMediumImageBundle.medium_4_ese().createImage();
 			
 			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.medium_4_se().createImage();
+				return arrowsMediumImageBundle.medium_4_se().createImage();
 			
 			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.medium_4_sse().createImage();
-		}
+				return arrowsMediumImageBundle.medium_4_sse().createImage();
 		
-		if (speedValue > 17 && speedValue <= 21) {
+		} else if (speedValue > 17 && speedValue <= 21) {
 			
 			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.medium_5_s().createImage();
+				return arrowsMediumImageBundle.medium_5_s().createImage();
 			
 			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.medium_5_ssw().createImage();
+				return arrowsMediumImageBundle.medium_5_ssw().createImage();
 			
 			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.medium_5_sw().createImage();
+				return arrowsMediumImageBundle.medium_5_sw().createImage();
 			
 			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.medium_5_wsw().createImage();
+				return arrowsMediumImageBundle.medium_5_wsw().createImage();
 			
 			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.medium_5_w().createImage();
+				return arrowsMediumImageBundle.medium_5_w().createImage();
 			
 			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.medium_5_wnw().createImage();
+				return arrowsMediumImageBundle.medium_5_wnw().createImage();
 			
 			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.medium_5_nw().createImage();
+				return arrowsMediumImageBundle.medium_5_nw().createImage();
 			
 			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.medium_5_nnw().createImage();
+				return arrowsMediumImageBundle.medium_5_nnw().createImage();
 			
 			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.medium_5_n().createImage();
+				return arrowsMediumImageBundle.medium_5_n().createImage();
 			
 			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.medium_5_nne().createImage();
+				return arrowsMediumImageBundle.medium_5_nne().createImage();
 			
 			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.medium_5_ne().createImage();
+				return arrowsMediumImageBundle.medium_5_ne().createImage();
 			
 			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.medium_5_ene().createImage();
+				return arrowsMediumImageBundle.medium_5_ene().createImage();
 			
 			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.medium_5_e().createImage();
+				return arrowsMediumImageBundle.medium_5_e().createImage();
 			
 			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.medium_5_ese().createImage();
+				return arrowsMediumImageBundle.medium_5_ese().createImage();
 			
 			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.medium_5_se().createImage();
+				return arrowsMediumImageBundle.medium_5_se().createImage();
 			
 			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.medium_5_sse().createImage();
-		}
+				return arrowsMediumImageBundle.medium_5_sse().createImage();
 		
-		if (speedValue > 21 && speedValue <= 25) {
+		} else if (speedValue > 21 && speedValue <= 25) {
 			
 			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.medium_6_s().createImage();
+				return arrowsMediumImageBundle.medium_6_s().createImage();
 			
 			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.medium_6_ssw().createImage();
+				return arrowsMediumImageBundle.medium_6_ssw().createImage();
 			
 			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.medium_6_sw().createImage();
+				return arrowsMediumImageBundle.medium_6_sw().createImage();
 			
 			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.medium_6_wsw().createImage();
+				return arrowsMediumImageBundle.medium_6_wsw().createImage();
 			
 			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.medium_6_w().createImage();
+				return arrowsMediumImageBundle.medium_6_w().createImage();
 			
 			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.medium_6_wnw().createImage();
+				return arrowsMediumImageBundle.medium_6_wnw().createImage();
 			
 			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.medium_6_nw().createImage();
+				return arrowsMediumImageBundle.medium_6_nw().createImage();
 			
 			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.medium_6_nnw().createImage();
+				return arrowsMediumImageBundle.medium_6_nnw().createImage();
 			
 			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.medium_6_n().createImage();
+				return arrowsMediumImageBundle.medium_6_n().createImage();
 			
 			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.medium_6_nne().createImage();
+				return arrowsMediumImageBundle.medium_6_nne().createImage();
 			
 			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.medium_6_ne().createImage();
+				return arrowsMediumImageBundle.medium_6_ne().createImage();
 			
 			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.medium_6_ene().createImage();
+				return arrowsMediumImageBundle.medium_6_ene().createImage();
 			
 			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.medium_6_e().createImage();
+				return arrowsMediumImageBundle.medium_6_e().createImage();
 			
 			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.medium_6_ese().createImage();
+				return arrowsMediumImageBundle.medium_6_ese().createImage();
 			
 			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.medium_6_se().createImage();
+				return arrowsMediumImageBundle.medium_6_se().createImage();
 			
 			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.medium_6_sse().createImage();
-		}
+				return arrowsMediumImageBundle.medium_6_sse().createImage();
+		} else if (speedValue > 25 && speedValue <= 29) {
+			
+			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
+				return arrowsMediumBigImageBundle.mediumbig_7_s().createImage();
+			
+			if (directionValue > 11.25 && directionValue <= 33.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_ssw().createImage();
+			
+			if (directionValue > 33.75 && directionValue <= 56.25)
+				return arrowsMediumBigImageBundle.mediumbig_7_sw().createImage();
+			
+			if (directionValue > 56.25 && directionValue <= 78.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_wsw().createImage();
+			
+			if (directionValue > 78.75 && directionValue <= 101.25)
+				return arrowsMediumBigImageBundle.mediumbig_7_w().createImage();
+			
+			if (directionValue > 101.25 && directionValue <= 123.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_wnw().createImage();
+			
+			if (directionValue > 123.75 && directionValue <= 146.25)
+				return arrowsMediumBigImageBundle.mediumbig_7_nw().createImage();
+			
+			if (directionValue > 146.25 && directionValue <= 168.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_nnw().createImage();
+			
+			if (directionValue > 168.75 && directionValue <= 191.25)
+				return arrowsMediumBigImageBundle.mediumbig_7_n().createImage();
+			
+			if (directionValue > 191.25 && directionValue <= 213.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_nne().createImage();
+			
+			if (directionValue > 213.75 && directionValue <= 236.25)
+				return arrowsMediumBigImageBundle.mediumbig_7_ne().createImage();
+			
+			if (directionValue > 236.25 && directionValue <= 258.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_ene().createImage();
+			
+			if (directionValue > 258.75 && directionValue <= 281.25)
+				return arrowsMediumBigImageBundle.mediumbig_7_e().createImage();
+			
+			if (directionValue > 281.25 && directionValue <= 303.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_ese().createImage();
+			
+			if (directionValue > 303.75 && directionValue <= 326.25)
+				return arrowsMediumBigImageBundle.mediumbig_7_se().createImage();
+			
+			if (directionValue > 326.25 && directionValue <= 348.75)
+				return arrowsMediumBigImageBundle.mediumbig_7_sse().createImage();
 		
-		if (speedValue > 25 && speedValue <= 29) {
+		} else if (speedValue > 29 && speedValue <= /*34*/95) {
 			
 			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.mediumbig_7_s().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_s().createImage();
 			
 			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.mediumbig_7_ssw().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_ssw().createImage();
 			
 			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.mediumbig_7_sw().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_sw().createImage();
 			
 			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.mediumbig_7_wsw().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_wsw().createImage();
 			
 			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.mediumbig_7_w().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_w().createImage();
 			
 			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.mediumbig_7_wnw().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_wnw().createImage();
 			
 			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.mediumbig_7_nw().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_nw().createImage();
 			
 			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.mediumbig_7_nnw().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_nnw().createImage();
 			
 			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.mediumbig_7_n().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_n().createImage();
 			
 			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.mediumbig_7_nne().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_nne().createImage();
 			
 			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.mediumbig_7_ne().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_ne().createImage();
 			
 			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.mediumbig_7_ene().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_ene().createImage();
 			
 			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.mediumbig_7_e().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_e().createImage();
 			
 			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.mediumbig_7_ese().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_ese().createImage();
 			
 			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.mediumbig_7_se().createImage();
+				return arrowsMediumBigImageBundle.mediumbig_8_se().createImage();
 			
 			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.mediumbig_7_sse().createImage();
-		}
+				return arrowsMediumBigImageBundle.mediumbig_8_sse().createImage();
 		
-		if (speedValue > 29 && speedValue <= /*34*/95) {
+		} else if (speedValue > 95) {
 			
 			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.mediumbig_8_s().createImage();
+				return arrowsBigImageBundle.big_20_s().createImage();
 			
 			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.mediumbig_8_ssw().createImage();
+				return arrowsBigImageBundle.big_20_ssw().createImage();
 			
 			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.mediumbig_8_sw().createImage();
+				return arrowsBigImageBundle.big_20_sw().createImage();
 			
 			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.mediumbig_8_wsw().createImage();
+				return arrowsBigImageBundle.big_20_wsw().createImage();
 			
 			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.mediumbig_8_w().createImage();
+				return arrowsBigImageBundle.big_20_w().createImage();
 			
 			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.mediumbig_8_wnw().createImage();
+				return arrowsBigImageBundle.big_20_wnw().createImage();
 			
 			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.mediumbig_8_nw().createImage();
+				return arrowsBigImageBundle.big_20_nw().createImage();
 			
 			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.mediumbig_8_nnw().createImage();
+				return arrowsBigImageBundle.big_20_nnw().createImage();
 			
 			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.mediumbig_8_n().createImage();
+				return arrowsBigImageBundle.big_20_n().createImage();
 			
 			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.mediumbig_8_nne().createImage();
+				return arrowsBigImageBundle.big_20_nne().createImage();
 			
 			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.mediumbig_8_ne().createImage();
+				return arrowsBigImageBundle.big_20_ne().createImage();
 			
 			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.mediumbig_8_ene().createImage();
+				return arrowsBigImageBundle.big_20_ene().createImage();
 			
 			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.mediumbig_8_e().createImage();
+				return arrowsBigImageBundle.big_20_e().createImage();
 			
 			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.mediumbig_8_ese().createImage();
+				return arrowsBigImageBundle.big_20_ese().createImage();
 			
 			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.mediumbig_8_se().createImage();
+				return arrowsBigImageBundle.big_20_se().createImage();
 			
 			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.mediumbig_8_sse().createImage();
-		}
-		
-		if (speedValue > 95) {
-			
-			if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-				return arrowsImageBundle.big_20_s().createImage();
-			
-			if (directionValue > 11.25 && directionValue <= 33.75)
-				return arrowsImageBundle.big_20_ssw().createImage();
-			
-			if (directionValue > 33.75 && directionValue <= 56.25)
-				return arrowsImageBundle.big_20_sw().createImage();
-			
-			if (directionValue > 56.25 && directionValue <= 78.75)
-				return arrowsImageBundle.big_20_wsw().createImage();
-			
-			if (directionValue > 78.75 && directionValue <= 101.25)
-				return arrowsImageBundle.big_20_w().createImage();
-			
-			if (directionValue > 101.25 && directionValue <= 123.75)
-				return arrowsImageBundle.big_20_wnw().createImage();
-			
-			if (directionValue > 123.75 && directionValue <= 146.25)
-				return arrowsImageBundle.big_20_nw().createImage();
-			
-			if (directionValue > 146.25 && directionValue <= 168.75)
-				return arrowsImageBundle.big_20_nnw().createImage();
-			
-			if (directionValue > 168.75 && directionValue <= 191.25)
-				return arrowsImageBundle.big_20_n().createImage();
-			
-			if (directionValue > 191.25 && directionValue <= 213.75)
-				return arrowsImageBundle.big_20_nne().createImage();
-			
-			if (directionValue > 213.75 && directionValue <= 236.25)
-				return arrowsImageBundle.big_20_ne().createImage();
-			
-			if (directionValue > 236.25 && directionValue <= 258.75)
-				return arrowsImageBundle.big_20_ene().createImage();
-			
-			if (directionValue > 258.75 && directionValue <= 281.25)
-				return arrowsImageBundle.big_20_e().createImage();
-			
-			if (directionValue > 281.25 && directionValue <= 303.75)
-				return arrowsImageBundle.big_20_ese().createImage();
-			
-			if (directionValue > 303.75 && directionValue <= 326.25)
-				return arrowsImageBundle.big_20_se().createImage();
-			
-			if (directionValue > 326.25 && directionValue <= 348.75)
-				return arrowsImageBundle.big_20_sse().createImage();
+				return arrowsBigImageBundle.big_20_sse().createImage();
 		}
 		
 		//by default
-		return arrowsImageBundle.small_1_s().createImage();
+		return arrowsSmallImageBundle.small_1_s().createImage();
 	}
 	
 	/**
@@ -518,53 +511,54 @@ public final class Arrows50PxFactory {
 		}
 		
 		if ((directionValue >= 0 && directionValue <= 11.25) || (directionValue > 348.75 && directionValue <= 360))
-			return arrowsImageBundle.medium_3_s().createImage();
+			return arrowsMediumImageBundle.medium_3_s().createImage();
 		
 		if (directionValue > 11.25 && directionValue <= 33.75)
-			return arrowsImageBundle.medium_3_ssw().createImage();
+			return arrowsMediumImageBundle.medium_3_ssw().createImage();
 		
 		if (directionValue > 33.75 && directionValue <= 56.25)
-			return arrowsImageBundle.medium_3_sw().createImage();
+			return arrowsMediumImageBundle.medium_3_sw().createImage();
 		
 		if (directionValue > 56.25 && directionValue <= 78.75)
-			return arrowsImageBundle.medium_3_wsw().createImage();
+			return arrowsMediumImageBundle.medium_3_wsw().createImage();
 		
 		if (directionValue > 78.75 && directionValue <= 101.25)
-			return arrowsImageBundle.medium_3_w().createImage();
+			return arrowsMediumImageBundle.medium_3_w().createImage();
 		
 		if (directionValue > 101.25 && directionValue <= 123.75)
-			return arrowsImageBundle.medium_3_wnw().createImage();
+			return arrowsMediumImageBundle.medium_3_wnw().createImage();
 		
 		if (directionValue > 123.75 && directionValue <= 146.25)
-			return arrowsImageBundle.medium_3_nw().createImage();
+			return arrowsMediumImageBundle.medium_3_nw().createImage();
 		
 		if (directionValue > 146.25 && directionValue <= 168.75)
-			return arrowsImageBundle.medium_3_nnw().createImage();
+			return arrowsMediumImageBundle.medium_3_nnw().createImage();
 		
 		if (directionValue > 168.75 && directionValue <= 191.25)
-			return arrowsImageBundle.medium_3_n().createImage();
+			return arrowsMediumImageBundle.medium_3_n().createImage();
 		
 		if (directionValue > 191.25 && directionValue <= 213.75)
-			return arrowsImageBundle.medium_3_nne().createImage();
+			return arrowsMediumImageBundle.medium_3_nne().createImage();
 		
 		if (directionValue > 213.75 && directionValue <= 236.25)
-			return arrowsImageBundle.medium_3_ne().createImage();
+			return arrowsMediumImageBundle.medium_3_ne().createImage();
 		
 		if (directionValue > 236.25 && directionValue <= 258.75)
-			return arrowsImageBundle.medium_3_ene().createImage();
+			return arrowsMediumImageBundle.medium_3_ene().createImage();
 		
 		if (directionValue > 258.75 && directionValue <= 281.25)
-			return arrowsImageBundle.medium_3_e().createImage();
+			return arrowsMediumImageBundle.medium_3_e().createImage();
 		
 		if (directionValue > 281.25 && directionValue <= 303.75)
-			return arrowsImageBundle.medium_3_ese().createImage();
+			return arrowsMediumImageBundle.medium_3_ese().createImage();
 		
 		if (directionValue > 303.75 && directionValue <= 326.25)
-			return arrowsImageBundle.medium_3_se().createImage();
+			return arrowsMediumImageBundle.medium_3_se().createImage();
 		
 		if (directionValue > 326.25 && directionValue <= 348.75)
-			return arrowsImageBundle.medium_3_sse().createImage();
+			return arrowsMediumImageBundle.medium_3_sse().createImage();
 		
-		return arrowsImageBundle.medium_3_n().createImage();
+		return arrowsMediumImageBundle.medium_3_n().createImage();
 	}
+
 }
