@@ -10,10 +10,10 @@ import com.google.gwt.i18n.client.Constants;
 public interface SurfForecasterConstants extends Constants {
 	
 	/**
-	 * Character html entities
+	 * Unicode character
 	 * 
 	 * á = \u00E1
-	 * é = 
+	 * é = \u00E9
 	 * í = \u00ED
 	 * ó = \u00F3
 	 * ú = \u00FA
@@ -100,6 +100,146 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Grabar")
 	String save();
+	
+	@DefaultStringValue("Viento")
+	String wind();
+	
+	@DefaultStringValue("Dir. viento")
+	String wind_direction();
+	
+	@DefaultStringValue("Dir. ola")
+	String wave_direction();
+	
+	@DefaultStringValue("Altura ola")
+	String wave_height();
+	
+	@DefaultStringValue("Per\u00EDodo")
+	String wave_period();
+	
+	@DefaultStringValue("Vel. viento")
+	String wind_speed();
+	
+	@DefaultStringValue("mts.")
+	String meters_abbr();
+	
+	@DefaultStringValue("km/h")
+	String kilometers_per_hour_abbr();
+	
+	@DefaultStringValue("seg.")
+	String seconds_abbr();
+	
+	@DefaultStringValue("grad.")
+	String degrees_abbr();
+	
+	@DefaultStringValue("m/s")
+	String meters_per_second__abbr();
+	
+	@DefaultStringValue("pi\u00E9s")
+	String feets_abbr();
+	
+	@DefaultStringValue("mph")
+	String miles_per_hour__abbr();
+	
+	@DefaultStringValue("nudos")
+	String knots();
+	
+	@DefaultStringValue("N")
+	String north();
+	
+	@DefaultStringValue("S")
+	String south();
+	
+	@DefaultStringValue("E")
+	String east();
+	
+	@DefaultStringValue("O")
+	String west();
+	
+	@DefaultStringValue("NE")
+	String northeast();
+	
+	@DefaultStringValue("NO")
+	String northwest();
+	
+	@DefaultStringValue("NNE")
+	String north_northeast();
+	
+	@DefaultStringValue("NNO")
+	String north_northwest();
+	
+	@DefaultStringValue("SE")
+	String southeast();
+	
+	@DefaultStringValue("SO")
+	String southwest();
+	
+	@DefaultStringValue("SSE")
+	String south_southeast();
+	
+	@DefaultStringValue("SSO")
+	String south_southwest();
+	
+	@DefaultStringValue("ENE")
+	String east_northeast();
+	
+	@DefaultStringValue("ESE")
+	String east_southeast();
+	
+	@DefaultStringValue("ONO")
+	String west_northwest();
+	
+	@DefaultStringValue("OSO")
+	String west_southwest();
+	
+	@DefaultStringValue("1")
+	String num_1();
+	
+	@DefaultStringValue("2")
+	String num_2();
+	
+	@DefaultStringValue("3")
+	String num_3();
+	
+	@DefaultStringValue("4")
+	String num_4();
+	
+	@DefaultStringValue("5")
+	String num_5();
+	
+	@DefaultStringValue("6")
+	String num_6();
+	
+	@DefaultStringValue("7")
+	String num_7();
+	
+	@DefaultStringValue("8")
+	String num_8();
+	
+	@DefaultStringValue("9")
+	String num_9();
+	
+	@DefaultStringValue("0")
+	String num_0();
+	
+	
+	
+	/**
+	 * CurrentForecastPanel
+	 */
+	@DefaultStringValue("No disponible")
+	String not_available();
+	
+	@DefaultStringValue("Ahora")
+	String now();
+	
+	@DefaultStringValue("horas")
+	String hours();
+	
+	/**
+	 * DetailedForecastWgStrategyB
+	 */
+	@DefaultStringValue("Continuaci\u00F3n")
+	String continue_();
 	
 	/**
 	 * ForecastTabPanel
@@ -202,4 +342,31 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Configuraci\u00F3n")
 	String settings();
+	
+	/**
+	 * WgTableB
+	 */
+	@DefaultStringValue("Lun")
+	String monday_abbr();
+	
+	@DefaultStringValue("Mar")
+	String tuesday_abbr();
+	
+	@DefaultStringValue("Mie")
+	String wednesday_abbr();
+	
+	@DefaultStringValue("Jue")
+	String thursday_abbr();
+	
+	@DefaultStringValue("Vie")
+	String friday_abbr();
+	
+	@DefaultStringValue("Sab")
+	String saturday_abbr();
+	
+	@DefaultStringValue("Dom")
+	String sunday_abbr();
+	
+	@DefaultStringValue("h")
+	String hour_abbr();
 }

@@ -25,6 +25,7 @@ import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.MiniForecastPopup;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s30.Arrows30PxFactory;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s30.Waves30PxFactory;
@@ -197,7 +198,7 @@ public class WgTableB extends FlexTable {
 	
 	private void setDetailedLabels(FlexTable detailedForecastPanel, FlexTable miniForecastPanel) {
 		if (detailedForecastPanel != null) {
-			Label waveHeight = new Label("Altura ola");
+			Label waveHeight = new Label(GWTUtils.LOCALE_CONSTANTS.wave_height());
 			waveHeight.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(0, 0, waveHeight);
 			detailedForecastPanel.getCellFormatter().setHeight(0, 0, "30");
@@ -205,29 +206,29 @@ public class WgTableB extends FlexTable {
 			
 			
 			
-			Label heightUnit = new Label("(mts)");
+			Label heightUnit = new Label(GWTUtils.LOCALE_CONSTANTS.meters_abbr());
 			heightUnit.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(1, 0, heightUnit);
 			
 			
 			
-			Label waveDirection = new Label("Direccion olas");
+			Label waveDirection = new Label(GWTUtils.LOCALE_CONSTANTS.wave_direction());
 			waveDirection.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(2, 0, waveDirection);
 			detailedForecastPanel.getCellFormatter().setHeight(2, 0, "30");
 			detailedForecastPanel.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
-			Label period = new Label("Periodo (s)");
+			Label period = new Label(GWTUtils.LOCALE_CONSTANTS.wave_period() + "(" + GWTUtils.LOCALE_CONSTANTS.seconds_abbr() + ")");
 			period.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(3, 0, period);
 			
-			Label windDirection = new Label("Direccion viento");
+			Label windDirection = new Label(GWTUtils.LOCALE_CONSTANTS.wind_direction());
 			windDirection.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(4, 0, windDirection);
 			detailedForecastPanel.getCellFormatter().setHeight(4, 0, "30");
 			detailedForecastPanel.getCellFormatter().setVerticalAlignment(4, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
-			Label windSpeed = new Label("Vel. viento(Km/s)");
+			Label windSpeed = new Label(GWTUtils.LOCALE_CONSTANTS.wind_speed() + "(" + GWTUtils.LOCALE_CONSTANTS.kilometers_per_hour_abbr() + ")");
 			windSpeed.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(5, 0, windSpeed);
 			
@@ -238,13 +239,13 @@ public class WgTableB extends FlexTable {
 			detailedForecastPanel.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
 		}
 		
-		Label waveHeight2 = new Label("Altura ola");
+		Label waveHeight2 = new Label(GWTUtils.LOCALE_CONSTANTS.wave_height());
 		waveHeight2.addStyleName("gwt-Label-TableLabels");
 		miniForecastPanel.setWidget(0, 0, waveHeight2);
 		miniForecastPanel.getCellFormatter().setHeight(0, 0, "30");
 		miniForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		
-		Label heightUnit2 = new Label("(mts)");
+		Label heightUnit2 = new Label("(" + GWTUtils.LOCALE_CONSTANTS.meters_abbr() + ")");
 		heightUnit2.addStyleName("gwt-Label-TableLabels");
 		miniForecastPanel.setWidget(1, 0, heightUnit2);
 		
@@ -254,9 +255,9 @@ public class WgTableB extends FlexTable {
 	
 	private VerticalPanel getDateVPanel(ForecastDTO forecastDTO) {
 		VerticalPanel datePanel = new VerticalPanel();
-		datePanel.add(new Label("Lu"));
+		datePanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.monday_abbr()));
 		datePanel.add(new Label("02"));
-		datePanel.add(new Label("16h"));
+		datePanel.add(new Label("16" + GWTUtils.LOCALE_CONSTANTS.hour_abbr()));
 		
 		datePanel.setWidth("30");
 		
