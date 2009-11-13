@@ -132,13 +132,13 @@ public interface SurfForecasterConstants extends Constants {
 	String degrees_abbr();
 	
 	@DefaultStringValue("m/s")
-	String meters_per_second__abbr();
+	String meters_per_second_abbr();
 	
 	@DefaultStringValue("pi\u00E9s")
 	String feets_abbr();
 	
 	@DefaultStringValue("mph")
-	String miles_per_hour__abbr();
+	String miles_per_hour_abbr();
 	
 	@DefaultStringValue("nudos")
 	String knots();

@@ -13,6 +13,7 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -206,7 +207,7 @@ public class WgTableB extends FlexTable {
 			
 			
 			
-			Label heightUnit = new Label(GWTUtils.LOCALE_CONSTANTS.meters_abbr());
+			Label heightUnit = new Label("(" + GWTUtils.LOCALE_CONSTANTS.meters_abbr() + ")");
 			heightUnit.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(1, 0, heightUnit);
 			
@@ -218,7 +219,7 @@ public class WgTableB extends FlexTable {
 			detailedForecastPanel.getCellFormatter().setHeight(2, 0, "30");
 			detailedForecastPanel.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
-			Label period = new Label(GWTUtils.LOCALE_CONSTANTS.wave_period() + "(" + GWTUtils.LOCALE_CONSTANTS.seconds_abbr() + ")");
+			Label period = new Label(GWTUtils.LOCALE_CONSTANTS.wave_period() + " (" + GWTUtils.LOCALE_CONSTANTS.seconds_abbr() + ")");
 			period.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(3, 0, period);
 			
@@ -228,7 +229,7 @@ public class WgTableB extends FlexTable {
 			detailedForecastPanel.getCellFormatter().setHeight(4, 0, "30");
 			detailedForecastPanel.getCellFormatter().setVerticalAlignment(4, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
-			Label windSpeed = new Label(GWTUtils.LOCALE_CONSTANTS.wind_speed() + "(" + GWTUtils.LOCALE_CONSTANTS.kilometers_per_hour_abbr() + ")");
+			Label windSpeed = new Label(GWTUtils.LOCALE_CONSTANTS.wind_speed() + " (" + GWTUtils.LOCALE_CONSTANTS.kilometers_per_hour_abbr() + ")");
 			windSpeed.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(5, 0, windSpeed);
 			
@@ -335,6 +336,14 @@ public class WgTableB extends FlexTable {
 			
 			//cols style
 			detailedForecastPanel.getColumnFormatter().addStyleName(index, "gwt-flextable-detailedForecast-col");
+			
+			//cell align
+			detailedForecastPanel.getFlexCellFormatter().setHorizontalAlignment(0, index, HasHorizontalAlignment.ALIGN_CENTER);
+			detailedForecastPanel.getFlexCellFormatter().setHorizontalAlignment(1, index, HasHorizontalAlignment.ALIGN_CENTER);
+			detailedForecastPanel.getFlexCellFormatter().setHorizontalAlignment(2, index, HasHorizontalAlignment.ALIGN_CENTER);
+			detailedForecastPanel.getFlexCellFormatter().setHorizontalAlignment(3, index, HasHorizontalAlignment.ALIGN_CENTER);
+			detailedForecastPanel.getFlexCellFormatter().setHorizontalAlignment(4, index, HasHorizontalAlignment.ALIGN_CENTER);
+			detailedForecastPanel.getFlexCellFormatter().setHorizontalAlignment(5, index, HasHorizontalAlignment.ALIGN_CENTER);
 		}
 		
 		//mini forecast table

@@ -15,6 +15,7 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
+import edu.unicen.surfforecaster.gwt.client.utils.UnitTranslator;
 import edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s30.Arrows30PxFactory;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s30.Waves30PxFactory;
 
@@ -34,7 +35,8 @@ public class MiniForecastPopup extends PopupPanel {
 			table.getFlexCellFormatter().setColSpan(0, 0, 2);
 			table.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
 			
-			//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
+			//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y poner esos dato del lado derecho te las sig
+			//igualdades
 			Unit heightUnitTarget = Unit.Meters;
 			Unit speedUnitTarget = Unit.KilometersPerHour;
 			Unit directionUnitTarget = Unit.Degrees;
@@ -49,6 +51,7 @@ public class MiniForecastPopup extends PopupPanel {
 			//Wave period
 			String wavePeriod = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
 			try {
+				// The origin units is hardcoded because we knows which units types retrieve the service latestForecast
 				windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
 				waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 				waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
@@ -58,13 +61,13 @@ public class MiniForecastPopup extends PopupPanel {
 				e.printStackTrace();
 			}
 			
-			table.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.toString()).getUnit().toString(), 
+			table.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + UnitTranslator.getUnitAbbrTranlation(speedUnitTarget), 
 					"SSO", Arrows30PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
-			table.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), waveDirection + " " + forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getUnit().toString(), 
+			table.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), " ", 
 					"SW", Arrows30PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
-			table.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getUnit().toString(), 
+			table.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + UnitTranslator.getUnitAbbrTranlation(heightUnitTarget), 
 					"", Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
-			table.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, "", periodUnitTarget.toString()));
+			table.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, "", UnitTranslator.getUnitAbbrTranlation(periodUnitTarget)));
 			
 			table.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
 			table.getCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_CENTER);
