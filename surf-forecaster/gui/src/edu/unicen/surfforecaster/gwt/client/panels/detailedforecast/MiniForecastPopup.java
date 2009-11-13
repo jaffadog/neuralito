@@ -62,12 +62,12 @@ public class MiniForecastPopup extends PopupPanel {
 			}
 			
 			table.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + UnitTranslator.getUnitAbbrTranlation(speedUnitTarget), 
-					"SSO", Arrows30PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
-			table.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), " ", 
-					"SW", Arrows30PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
+					Arrows30PxFactory.getArrowIcon("132", windSpeed, directionUnitTarget, speedUnitTarget)));
+			table.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), "", 
+					Arrows30PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
 			table.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + UnitTranslator.getUnitAbbrTranlation(heightUnitTarget), 
-					"", Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
-			table.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, "", UnitTranslator.getUnitAbbrTranlation(periodUnitTarget)));
+					Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
+			table.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, UnitTranslator.getUnitAbbrTranlation(periodUnitTarget)));
 			
 			table.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
 			table.getCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_CENTER);
@@ -78,26 +78,7 @@ public class MiniForecastPopup extends PopupPanel {
 		}
 	}
 	
-	private VerticalPanel createTableItem(String title, String value, String imageTitle, Image image){
-		VerticalPanel tableItem = new VerticalPanel();
-		tableItem.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		
-		Label tableItemValue = new Label(value);
-		
-		image.setTitle(imageTitle);
-		image.setSize(MiniForecastPopup.ICON_SIZE, MiniForecastPopup.ICON_SIZE);
-		
-		Label tableItemTitle = new Label(title);
-		tableItemTitle.addStyleName("gwt-Label-ForecastItem-Title");
-
-		tableItem.add(tableItemTitle);
-		tableItem.add(image);
-		tableItem.add(tableItemValue);
-		
-		return tableItem;
-	}
-	
-	private VerticalPanel createTableItem(String title, String value, String imageTitle, String unit){
+	private VerticalPanel createTableItem(String title, String value, String unit){
 		VerticalPanel tableItem = new VerticalPanel();
 		tableItem.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
@@ -113,6 +94,24 @@ public class MiniForecastPopup extends PopupPanel {
 		
 		Label tableItemUnit = new Label(unit);
 		tableItem.add(tableItemUnit);
+		
+		return tableItem;
+	}
+	
+	private VerticalPanel createTableItem(String title, String value, Image image){
+		VerticalPanel tableItem = new VerticalPanel();
+		tableItem.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
+		Label tableItemValue = new Label(value == "" ? image.getTitle() : value);
+		
+		image.setSize(MiniForecastPopup.ICON_SIZE, MiniForecastPopup.ICON_SIZE);
+		
+		Label tableItemTitle = new Label(title);
+		tableItemTitle.addStyleName("gwt-Label-ForecastItem-Title");
+
+		tableItem.add(tableItemTitle);
+		tableItem.add(image);
+		tableItem.add(tableItemValue);
 		
 		return tableItem;
 	}
