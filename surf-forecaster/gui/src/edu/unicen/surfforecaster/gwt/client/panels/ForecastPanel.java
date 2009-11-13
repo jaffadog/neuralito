@@ -76,9 +76,9 @@ public class ForecastPanel extends LazyPanel {
 		
 		//TODO decidir como elijo y cual elijo de los forecasters del spot para mostrar los currentpanels, por ahora harcodeo para recuperar el ww3
 		List<ForecastDTO> ww3Forecaster = forecasters.get("WW3 Noaa Forecaster");
-		CurrentForecastPanel current = new CurrentForecastPanel("Ahora", ww3Forecaster.size() > 0 ? ww3Forecaster.get(0) : null);
+		CurrentForecastPanel current = new CurrentForecastPanel(GWTUtils.LOCALE_CONSTANTS.now(), ww3Forecaster.size() > 0 ? ww3Forecaster.get(0) : null);
 		flexTable.setWidget(0, 0, current);
-		CurrentForecastPanel nextHours = new CurrentForecastPanel("+3 horas", ww3Forecaster.size() > 1 ? ww3Forecaster.get(1) : null);
+		CurrentForecastPanel nextHours = new CurrentForecastPanel("+" + GWTUtils.LOCALE_CONSTANTS.num_3() + " " + GWTUtils.LOCALE_CONSTANTS.hours(), ww3Forecaster.size() > 1 ? ww3Forecaster.get(1) : null);
 		flexTable.setWidget(0, 1, nextHours);
 		
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters));

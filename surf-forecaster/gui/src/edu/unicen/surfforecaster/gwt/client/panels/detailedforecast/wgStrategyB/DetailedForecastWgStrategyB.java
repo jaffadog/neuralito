@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrategy {
 	
@@ -22,9 +23,9 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	@Override
 	public Widget renderDetailedForecast() {
 		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 1));
-		completeDetailedForecastVPanel.add(new Label("Cont."));
+		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
 //		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 23, 46));
-//		completeDetailedForecastVPanel.add(new Label("Cont."));
+//		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
 //		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 46, null));
 		return completeDetailedForecastVPanel;
 	}
