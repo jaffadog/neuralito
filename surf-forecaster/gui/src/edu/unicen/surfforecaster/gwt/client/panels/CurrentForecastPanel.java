@@ -14,6 +14,7 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
+import edu.unicen.surfforecaster.gwt.client.utils.UnitTranslator;
 import edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s50.Arrows50PxFactory;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50.Waves50PxFactory;
 
@@ -60,10 +61,10 @@ public class CurrentForecastPanel extends FlexTable {
 					e.printStackTrace();
 				}
 				
-				this.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + GWTUtils.LOCALE_CONSTANTS.kilometers_per_hour_abbr(), "SSO", Arrows50PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
-				this.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), waveDirection + " " + forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getUnit().toString(), "Sudoeste", Arrows50PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
-				this.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getUnit().toString(), "", Waves50PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
-				this.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, "", forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getUnit().toString()));
+				this.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + UnitTranslator.getUnitAbbrTranlation(speedUnitTarget), "SSO", Arrows50PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
+				this.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), " ", "SO", Arrows50PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
+				this.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + UnitTranslator.getUnitAbbrTranlation(heightUnitTarget), "", Waves50PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
+				this.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, "", UnitTranslator.getUnitAbbrTranlation(periodUnitTarget)));
 			} else {
 				this.setWidget(1, 0, new Label(GWTUtils.LOCALE_CONSTANTS.not_available()));
 				this.getFlexCellFormatter().setColSpan(1, 0, 2);
