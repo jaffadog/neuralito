@@ -61,10 +61,10 @@ public class CurrentForecastPanel extends FlexTable {
 					e.printStackTrace();
 				}
 				
-				this.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + UnitTranslator.getUnitAbbrTranlation(speedUnitTarget), "SSO", Arrows50PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
-				this.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), " ", "SO", Arrows50PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
-				this.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + UnitTranslator.getUnitAbbrTranlation(heightUnitTarget), "", Waves50PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
-				this.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, "", UnitTranslator.getUnitAbbrTranlation(periodUnitTarget)));
+				this.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + UnitTranslator.getUnitAbbrTranlation(speedUnitTarget), Arrows50PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
+				this.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), "", Arrows50PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
+				this.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + UnitTranslator.getUnitAbbrTranlation(heightUnitTarget), Waves50PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
+				this.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, UnitTranslator.getUnitAbbrTranlation(periodUnitTarget)));
 			} else {
 				this.setWidget(1, 0, new Label(GWTUtils.LOCALE_CONSTANTS.not_available()));
 				this.getFlexCellFormatter().setColSpan(1, 0, 2);
@@ -72,7 +72,7 @@ public class CurrentForecastPanel extends FlexTable {
 		}
 	}
 	//TODO cuando todas la imagenes se levanten del factory eliminar este metodo que quedaria obsoleto
-	private VerticalPanel createTableItem(String title, String value, String imageTitle, String unit){
+	private VerticalPanel createTableItem(String title, String value, String unit){
 		VerticalPanel tableItem = new VerticalPanel();
 		tableItem.addStyleName("gwt-VerticalPanel-ForecastItem");
 		tableItem.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -94,14 +94,13 @@ public class CurrentForecastPanel extends FlexTable {
 		return tableItem;
 	}
 	
-	private VerticalPanel createTableItem(String title, String value, String imageTitle, Image image){
+	private VerticalPanel createTableItem(String title, String value, Image image){
 		VerticalPanel tableItem = new VerticalPanel();
 		tableItem.addStyleName("gwt-VerticalPanel-ForecastItem");
 		tableItem.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
-		Label tableItemValue = new Label(value);
+		Label tableItemValue = new Label(value == "" ? image.getTitle() : value);
 		
-		image.setTitle(imageTitle);
 		image.setSize(CurrentForecastPanel.ICON_SIZE, CurrentForecastPanel.ICON_SIZE);
 		
 		Label tableItemTitle = new Label(title);

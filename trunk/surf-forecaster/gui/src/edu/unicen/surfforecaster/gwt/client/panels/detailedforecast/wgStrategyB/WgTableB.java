@@ -350,6 +350,9 @@ public class WgTableB extends FlexTable {
 		miniForecastPanel.setWidget(0, index, this.getWaveIcon(forecastDTO, detailedForecastPanel != null ? true : false));
 		miniForecastPanel.setWidget(1, index, new Label(waveHeight));
 		
+		miniForecastPanel.getFlexCellFormatter().setHorizontalAlignment(0, index, HasHorizontalAlignment.ALIGN_CENTER);
+		miniForecastPanel.getFlexCellFormatter().setHorizontalAlignment(1, index, HasHorizontalAlignment.ALIGN_CENTER);
+		
 		miniForecastPanel.getColumnFormatter().setWidth(index, WgTableB.DETAILED_FORECAST_COL_WIDTH);
 		miniForecastPanel.getColumnFormatter().addStyleName(index, "gwt-flextable-detailedForecast-col");
 	}
