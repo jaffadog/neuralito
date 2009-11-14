@@ -30,9 +30,23 @@ div div#loadingTxtDiv {
     font-size:9pt;
 }
 
+/** The main title of a section */
 .gwt-Label-SectionTitle{
     font-weight:bold;
     font-size:11pt;
+    margin-bottom:20px;
+    color:#3366CC;
+}
+
+/** A simple title of a section*/
+.gwt-Label-Title{
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+/** Label to describe a section */
+.gwt-Label-SectionDescription{
+    text-align:justify;
     margin-bottom:20px;
 }
 
@@ -46,11 +60,6 @@ div div#loadingTxtDiv {
 .gwt-Label-success {
     color: #088A08;
     font-weight: bold;
-}
-
-/** Label to describe a section */
-.gwt-Label-SectionDescription{
-    text-align:justify;
 }
 
 /*****************************************************************************/
