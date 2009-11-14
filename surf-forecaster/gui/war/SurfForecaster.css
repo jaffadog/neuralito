@@ -48,12 +48,16 @@ div div#loadingTxtDiv {
     font-weight: bold;
 }
 
+/** Label to describe a section */
+.gwt-Label-SectionDescription{
+    text-align:justify;
+}
+
 /*****************************************************************************/
 /*********************** CurrentForecastPanel ***************************************/
 /*****************************************************************************/
 .gwt-FlexTable-CurrentForecast {
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin: 20px 40px 20px 0
 }
 
 .gwt-Label-CurrentForecast-Title{
@@ -71,6 +75,12 @@ div div#loadingTxtDiv {
 
 .gwt-Label-ForecastItem-Title{
 	font-weight:bold;
+}
+
+.gwt-Label-ForecastItem-Value{
+	font-weight:bold;
+	font-size:22pt;
+	color:#3366CC;
 }
 
 /*****************************************************************************/
@@ -126,19 +136,26 @@ div#closeLoginBoxDiv a{
 
 /*****************************************************************************/
 /*********************** MiniForecastPopup ***************************************/
-/*****************************************************************************/
-.gwt-Popup-MiniForecast{
-    border:solid 2px blue;
+/****************************************************************************/
+.gwt-Label-MiniForecast-Title{
+	background:url("./images/gray-grad-currentforecast-title-26px.png") repeat-x;
+	font-weight:bold;
+    color: #FFF;
+    height: 13px;
+	padding-top: 2px;
+}
+
+.gwt-Label-MiniForecastItem-Value{
+	font-weight:bold;
+	font-size:16pt;
+	color:#3366CC;
 }
 
 /*****************************************************************************/
 /*********************** RegisterUserPanel ***************************************/
 /*****************************************************************************/
 
-/** Label Register User description */
-.gwt-Label-RegisterSectionDescription{
-    text-align:justify;
-}
+
 
 /*****************************************************************************/
 /*********************** SuccessPanel ***************************************/
