@@ -21,8 +21,8 @@ import edu.unicen.surfforecaster.gwt.client.panels.TransparentPanel;
 public final class GWTUtils {
 	
 	//WIDGETS SETTINGS
-	public final static String APLICATION_WIDTH = "1000";
-	public final static String PUSHBUTTON_HEIGHT = "20";
+	public final static String APLICATION_WIDTH = "1000px";
+	public final static String PUSHBUTTON_HEIGHT = "20px";
 	
 	//PATH TO IMAGES
 	public final static String IMAGE_LOGO = "images/logo2.PNG";
