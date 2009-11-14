@@ -50,6 +50,11 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 	private RadioButton radioPublicButton;
 	private TextBox spotTxt;
 	
+	private static final String INPUTS_WIDTH = "300px";
+	private static final String TABLE_COL_0 = "133px";
+	private static final String TABLE_COL_1 = "310px";
+	private static final String TABLE_COL_2 = "522px";
+	
 	public NewSpotDataPanel() {
 	}
 	
@@ -57,9 +62,6 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 	protected Widget createWidget() {
 		
 		VerticalPanel container = new VerticalPanel();
-		
-		container.setSpacing(10);
-		container.setWidth(GWTUtils.APLICATION_WIDTH);
 		
 		final MessagePanel errorPanel = new ErrorMsgPanel();
 		errorPanel.setVisible(false);
@@ -81,12 +83,12 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 				"survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s " +
 				"with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including " +
 				"versions of Lorem Ipsum.");
-		lblNewSpotDescription.addStyleName("gwt-Label-RegisterSectionDescription");
+		lblNewSpotDescription.addStyleName("gwt-Label-SectionDescription");
 		container.add(lblNewSpotDescription);
 		
 		final FlexTable flexTable = new FlexTable();
+		flexTable.setWidth("100%");
 		container.add(flexTable);
-		flexTable.setCellSpacing(5);
 
 		errorlabel = new Label(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
 		errorlabel.setStylePrimaryName("gwt-Label-error");
@@ -100,29 +102,30 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		areaBox = new ListBox();
-		areaBox.setWidth("300");
+		areaBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
 		areaBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
 				setCountryListItems(new Integer(areaBox.getValue(areaBox.getSelectedIndex())));
 			}
 		});
-		flexTable.setWidget(1, 2, areaBox);
+		flexTable.setWidget(1, 1, areaBox);
 
 		final Label lblCountry = new Label(GWTUtils.LOCALE_CONSTANTS.country() + ":");
 		flexTable.setWidget(2, 0, lblCountry);
 		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		countryBox = new ListBox();
-		countryBox.setWidth("300");
+		countryBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
 		countryBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
 				setZoneListItems(new Integer(countryBox.getValue(countryBox.getSelectedIndex())));
 			}
 		});
-		flexTable.setWidget(2, 2, countryBox);
+		flexTable.setWidget(2, 1, countryBox);
 		
 		final Label lblZone = new Label("* " + GWTUtils.LOCALE_CONSTANTS.zone() + ":");
 		flexTable.setWidget(3, 0, lblZone);
+		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		final Label lblSpot = new Label("* " + GWTUtils.LOCALE_CONSTANTS.spot() + ":");
 		flexTable.setWidget(5, 0, lblSpot);
@@ -133,14 +136,14 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		flexTable.getCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		zoneBox = new ListBox();
-		zoneBox.setWidth("300");
-		flexTable.setWidget(3, 2, zoneBox);
+		zoneBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		flexTable.setWidget(3, 1, zoneBox);
 		
 		zoneTxt = new TextBox();
 		zoneTxt.setMaxLength(50);
-		zoneTxt.setWidth("300");
+		zoneTxt.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
 		zoneTxt.setVisible(false);
-		flexTable.setWidget(4, 2, zoneTxt);
+		flexTable.setWidget(4, 1, zoneTxt);
 		
 		createZoneBtn = new PushButton();
 		createZoneBtn.addClickHandler(new ClickHandler() {
@@ -153,7 +156,8 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		});
 		createZoneBtn.setSize("100", GWTUtils.PUSHBUTTON_HEIGHT);
 		createZoneBtn.setText("Create a Zone");
-		flexTable.setWidget(3, 3, createZoneBtn);
+		flexTable.setWidget(3, 2, createZoneBtn);
+		flexTable.getCellFormatter().setHorizontalAlignment(3, 2, HasHorizontalAlignment.ALIGN_LEFT);
 		
 		chooseZoneBtn = new PushButton();
 		chooseZoneBtn.addClickHandler(new ClickHandler() {
@@ -168,44 +172,51 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		chooseZoneBtn.setSize("100", GWTUtils.PUSHBUTTON_HEIGHT);
 		chooseZoneBtn.setText("Choose a Zone");
 		chooseZoneBtn.setVisible(false);
-		flexTable.setWidget(4, 3, chooseZoneBtn);
-		flexTable.getCellFormatter().setHorizontalAlignment(4, 3, HasHorizontalAlignment.ALIGN_LEFT);
+		flexTable.setWidget(4, 2, chooseZoneBtn);
+		flexTable.getCellFormatter().setHorizontalAlignment(4, 2, HasHorizontalAlignment.ALIGN_LEFT);
 
 		spotTxt = new TextBox();
 		spotTxt.setMaxLength(50);
-		flexTable.setWidget(5, 2, spotTxt);
-		spotTxt.setWidth("300");
+		flexTable.setWidget(5, 1, spotTxt);
+		spotTxt.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
 		
 		timeZoneBox = new ListBox();
-		timeZoneBox.setWidth("300");
-		flexTable.setWidget(6, 2, timeZoneBox);
+		timeZoneBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		flexTable.setWidget(6, 1, timeZoneBox);
 		
 		Label lblSpotVisibility = new Label(GWTUtils.LOCALE_CONSTANTS.spotVisibility() + ":");
 		flexTable.setWidget(7, 0, lblSpotVisibility);
+		flexTable.getCellFormatter().setHorizontalAlignment(7, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		HorizontalPanel radioPanel = new HorizontalPanel();
 		radioPanel.setSpacing(5);
-		flexTable.setWidget(7, 2, radioPanel);
+		flexTable.setWidget(7, 1, radioPanel);
 		
 		RadioButton radioPrivateButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.private_());
 		radioPrivateButton.setValue(true);
 		radioPanel.add(radioPrivateButton);
-		
 		
 		radioPublicButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.public_());
 		radioPanel.add(radioPublicButton);
 		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
 		flexTable.setWidget(8, 0, lblLocalization);
+		flexTable.getFlexCellFormatter().setColSpan(8, 0, 3);
 		
 		mapPanel = new MapPanel();
-		flexTable.setWidget(9, 2, mapPanel);
+		flexTable.setWidget(9, 0, mapPanel);
+		flexTable.getCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		flexTable.getFlexCellFormatter().setColSpan(9, 0, 3);
 
 		final HorizontalPanel btnsPanel = new HorizontalPanel();
 		flexTable.setWidget(10, 0, btnsPanel);
 		btnsPanel.setSpacing(5);
 		flexTable.getCellFormatter().setHorizontalAlignment(10, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getFlexCellFormatter().setColSpan(10, 0, 3);
+		
+		flexTable.getColumnFormatter().setWidth(0, NewSpotDataPanel.TABLE_COL_0);
+		flexTable.getColumnFormatter().setWidth(1, NewSpotDataPanel.TABLE_COL_1);
+		flexTable.getColumnFormatter().setWidth(2, NewSpotDataPanel.TABLE_COL_2);
 
 		final PushButton saveBtn = new PushButton();
 		btnsPanel.add(saveBtn);
@@ -271,9 +282,6 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		cancelBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
 		cancelBtn.setText(GWTUtils.LOCALE_CONSTANTS.goBack());
 		btnsPanel.add(cancelBtn);
-
-		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-		flexTable.getFlexCellFormatter().setColSpan(8, 0, 3);
 		
 		/**
 		 * Make this panel an observer for LocalizationUtils object
