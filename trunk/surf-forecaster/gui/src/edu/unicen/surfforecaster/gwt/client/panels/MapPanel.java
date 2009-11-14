@@ -31,9 +31,10 @@ public class MapPanel extends VerticalPanel {
 	private TextBox txtSpotLat = null;
 	private TextBox txtBuoyLong = null;
 	private TextBox txtBuoyLat = null;
-	private final String MAP_HEIGHT = "540";
-	private final String MAP_WIDTH = "720";
-	private final String MAP_COORDINATE_FORMAT = "##0.0#";
+	private static final String MAP_HEIGHT = "600px";
+	private static final String MAP_WIDTH = "870px";
+	private static final String MAP_COORDINATE_FORMAT = "##0.0#";
+	private static final String INPUT_WIDTH = "70px";
 	
 	
 	public MapPanel() {
@@ -48,7 +49,7 @@ public class MapPanel extends VerticalPanel {
 	    // Open a map centered on Cawker City, KS USA
 
 	    map = new MapWidget(cawkerCity, 2);
-	    map.setSize(MAP_WIDTH, MAP_HEIGHT);
+	    map.setSize(MapPanel.MAP_WIDTH, MapPanel.MAP_HEIGHT);
 	    
 	    // Add some controls for the zoom level
 	    //map.addControl(new LargeMapControl());
@@ -81,8 +82,8 @@ public class MapPanel extends VerticalPanel {
 			            info.setMaximizeEnabled(false);
 			            InfoWindowContent content = new InfoWindowContent(getInfoWindowContent(GWTUtils.LOCALE_CONSTANTS.selectedForecaster(), marker.getLatLng()));
 			            info.open(marker, content);
-			            txtBuoyLong.setText(("" + NumberFormat.getFormat(MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude())));
-			            txtBuoyLat.setText(("" + NumberFormat.getFormat(MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude())));
+			            txtBuoyLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude())));
+			            txtBuoyLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude())));
 	        		}
 	        	}
 	        	
@@ -99,8 +100,8 @@ public class MapPanel extends VerticalPanel {
 	            //content.setMaxContent("Hello Maps - more content");
 	            //content.setMaxTitle("Hello Maps");
 	            info.open(marker, content);
-	            txtSpotLong.setText(("" + NumberFormat.getFormat(MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude())));
-	            txtSpotLat.setText(("" + NumberFormat.getFormat(MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude())));
+	            txtSpotLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude())));
+	            txtSpotLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude())));
 	            txtBuoyLong.setText("");
 	            txtBuoyLat.setText("");
 	            showWW3Buoys(sender, point);
@@ -128,7 +129,7 @@ public class MapPanel extends VerticalPanel {
 	    txtSpotLat.setMaxLength(10);
 	    txtSpotLat.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(2, 0, txtSpotLat);
-	    txtSpotLat.setWidth("70");
+	    txtSpotLat.setWidth(MapPanel.INPUT_WIDTH);
 	    
 	    Label lblSpotLong = new Label(GWTUtils.LOCALE_CONSTANTS.longitude());
 	    flexTable.setWidget(3, 0, lblSpotLong);
@@ -138,7 +139,7 @@ public class MapPanel extends VerticalPanel {
 	    txtSpotLong.setMaxLength(10);
 	    txtSpotLong.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(4, 0, txtSpotLong);
-	    txtSpotLong.setWidth("70");
+	    txtSpotLong.setWidth(MapPanel.INPUT_WIDTH);
 	    
 	    Label lblSpace = new Label("");
 	    lblSpace.setHeight("50");
@@ -155,7 +156,7 @@ public class MapPanel extends VerticalPanel {
 	    txtBuoyLat.setMaxLength(10);
 	    txtBuoyLat.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(8, 0, txtBuoyLat);
-	    txtBuoyLat.setWidth("70");
+	    txtBuoyLat.setWidth(MapPanel.INPUT_WIDTH);
 	    
 	    Label lblBuoyLong = new Label(GWTUtils.LOCALE_CONSTANTS.longitude());
 	    flexTable.setWidget(9, 0, lblBuoyLong);
@@ -165,7 +166,7 @@ public class MapPanel extends VerticalPanel {
 	    txtBuoyLong.setMaxLength(10);
 	    txtBuoyLong.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(10, 0, txtBuoyLong);
-	    txtBuoyLong.setWidth("70");
+	    txtBuoyLong.setWidth(MapPanel.INPUT_WIDTH);
 	}
 	
 	private void showWW3Buoys(final MapWidget map, LatLng point){
@@ -197,8 +198,8 @@ public class MapPanel extends VerticalPanel {
 		return  "<span class=\"gwt-MapInfoTitle\">" + title +"</span>" +
 				"<span class=\"gwt-MapInfoText\">" +
 					"<ul>" +
-						"<li>" + GWTUtils.LOCALE_CONSTANTS.latitude() + ": <b>" + NumberFormat.getFormat(this.MAP_COORDINATE_FORMAT).format(point.getLatitude()) + "</b></li>" +
-						"<li>" + GWTUtils.LOCALE_CONSTANTS.longitude() + ": <b>" + NumberFormat.getFormat(this.MAP_COORDINATE_FORMAT).format(point.getLongitude()) + "</b></li>" +
+						"<li>" + GWTUtils.LOCALE_CONSTANTS.latitude() + ": <b>" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLatitude()) + "</b></li>" +
+						"<li>" + GWTUtils.LOCALE_CONSTANTS.longitude() + ": <b>" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLongitude()) + "</b></li>" +
 					"</ul>" +
 				"</span>";
 	}

@@ -277,7 +277,7 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Longitud")
 	String longitude();
 	
-	@DefaultStringValue("Pronosticador(WW3GridPoint)")
+	@DefaultStringValue("Pronosticador (WW3GridPoint)")
 	String ww3GridPoint();
 	
 	@DefaultStringValue("Localizaci\u00F3n de la ola")
