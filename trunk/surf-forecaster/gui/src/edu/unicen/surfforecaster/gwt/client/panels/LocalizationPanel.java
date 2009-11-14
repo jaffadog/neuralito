@@ -40,9 +40,9 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 	public LocalizationPanel() {
 		{
 			DisclosurePanel disclosurePanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.selectSpot(), true);
+			disclosurePanel.setWidth("100%");
 			disclosurePanel.setAnimationEnabled(true);
 			initWidget(disclosurePanel);
-			disclosurePanel.setWidth("850");
 			{
 				VerticalPanel verticalPanel = new VerticalPanel();
 				disclosurePanel.setContent(verticalPanel);

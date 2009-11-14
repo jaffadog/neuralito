@@ -6,8 +6,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class ContentPanel extends SimplePanel {
 	
 	private static ContentPanel instance = null;
-	private final String PANEL_HEIGHT = "800";
-	
 	RegisterUserPanel registerUserPanel = null;
 	MainVerticalPanel mainVerticalPanel = null;
 	
