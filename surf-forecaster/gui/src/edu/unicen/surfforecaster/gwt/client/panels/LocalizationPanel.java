@@ -26,9 +26,8 @@ import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.Observable;
-import edu.unicen.surfforecaster.gwt.client.utils.Observer;
 
-public class LocalizationPanel extends Composite implements ISurfForecasterBasePanel, Observer {
+public class LocalizationPanel extends Composite implements ILocalizationPanel, ISurfForecasterBasePanel {
 	
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
@@ -166,26 +165,44 @@ public class LocalizationPanel extends Composite implements ISurfForecasterBaseP
 			this.forecastButton.setEnabled(false);
 	}
 	
+	/**
+	 * @see edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel#getZoneBoxDisplayText()
+	 */
 	public String getZoneBoxDisplayText(){
 		return this.zoneBox.getItemText(this.zoneBox.getSelectedIndex());
 	}
 	
+	/**
+	 * @see edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel#getSpotBoxDisplayText()
+	 */
 	public String getSpotBoxDisplayText(){
 		return this.spotBox.getItemText(this.spotBox.getSelectedIndex());
 	}
 	
+	/**
+	 * @see edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel#getSpotBoxDisplayValue()
+	 */
 	public String getSpotBoxDisplayValue() {
 		return this.spotBox.getValue(this.spotBox.getSelectedIndex());
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel#getBasePanel()
+	 */
 	public Widget getBasePanel() {
 		return this.baseParentPanel;
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel#setBasePanel(com.google.gwt.user.client.ui.Widget)
+	 */
 	public void setBasePanel(Widget basePanel) {
 		this.baseParentPanel = basePanel;
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel#update(edu.unicen.surfforecaster.gwt.client.utils.Observable, java.lang.Object)
+	 */
 	public void update(Observable o, Object arg) {
 		if (o == LocalizationUtils.getInstance()) {
 			this.setAreaListItems();

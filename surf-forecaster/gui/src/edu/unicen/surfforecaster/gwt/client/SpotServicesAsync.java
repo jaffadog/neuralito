@@ -11,14 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface SpotServicesAsync {
 	void addSpot(String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
 			String zoneName, boolean public_, String timezone, AsyncCallback<Integer> callback);
-
-//	Map<String, List> getAreas() throws NeuralitoException;
-//
-//	Map<String, List> getCountries(String area);
-//
-//	Map<String, List> getZones(String country);
-//
-//	Map<String, List> getSpots(String spot);
 	
 	void getAreas(AsyncCallback<List<AreaDTO>> callback);
 	

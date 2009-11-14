@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.CurrentForecastPanel;
-import edu.unicen.surfforecaster.gwt.client.panels.LocalizationPanel;
+import edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
@@ -19,9 +19,15 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	
 	private VerticalPanel completeDetailedForecastVPanel = null;
 	private Map<String, List<ForecastDTO>> forecasters = null;
-	private LocalizationPanel localizationPanel = null;
+	private ILocalizationPanel localizationPanel = null;
 	
-	public DetailedForecastWgStrategyB(Map<String, List<ForecastDTO>> forecasters, LocalizationPanel localizationPanel) {
+	/**
+	 * This Strategy shows 2 panels with the following two forecasts (now and +3 hours), and shows below a detalied forecast
+	 * table in wg format. 
+	 * @param forecasters
+	 * @param localizationPanel
+	 */
+	public DetailedForecastWgStrategyB(Map<String, List<ForecastDTO>> forecasters, ILocalizationPanel localizationPanel) {
 		this.forecasters = forecasters;
 		this.localizationPanel = localizationPanel;
 		this.completeDetailedForecastVPanel = new VerticalPanel();

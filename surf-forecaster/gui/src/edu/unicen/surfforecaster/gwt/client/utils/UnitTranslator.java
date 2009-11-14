@@ -1,7 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client.utils;
 
-import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
-import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 
 public final class UnitTranslator {
