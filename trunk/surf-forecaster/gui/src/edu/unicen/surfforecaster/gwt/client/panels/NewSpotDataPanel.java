@@ -195,6 +195,7 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		radioPanel.add(radioPublicButton);
 		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
+		lblLocalization.addStyleName("gwt-Label-Title");
 		flexTable.setWidget(11, 0, lblLocalization);
 		flexTable.getFlexCellFormatter().setColSpan(11, 0, 3);
 		
