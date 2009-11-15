@@ -13,6 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -37,16 +38,23 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 	private Hyperlink countryLink = null;
 	private ListBox zoneBox = null;
 	private Hyperlink zoneLink = null;
-	private ListBox spotBox = null;
+	//Guaranty initialize spotBox even if showSpots is false, the widget is used by many methods
+	private ListBox spotBox = new ListBox();
 	private Hyperlink spotLink = null;
-	private PushButton button = null;
+	private PushButton actionButton = null;
 	private Widget baseParentPanel = null;
+	private FlexTable localizationForm;
+	private boolean showSpots = true;
+	private boolean showActionButton = true;
 	
 	private final static String INPUT_WIDTH = "200px";
-	private FlexTable localizationForm;
 	
-	public LinksLocalizationPanel() {
+	
+	public LinksLocalizationPanel(boolean showSpots, boolean showActionButton) {
 		{
+			this.showActionButton = showActionButton;
+			this.showSpots = showSpots;
+			
 			DisclosurePanel disclosurePanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.selectSpot(), true);
 			disclosurePanel.setWidth("100%");
 			disclosurePanel.setAnimationEnabled(true);
@@ -93,37 +101,33 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 					zoneBox.addBlurHandler(this);
 					zoneBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
 				}
-//				{
-//					Label lblSpot = new Label(GWTUtils.LOCALE_CONSTANTS.spot() + ": ");
-//					localizationForm.setWidget(1, 2, lblSpot);
-//					lblSpot.setWidth("90");
-//				}
-				{
-					spotBox = new ListBox();
-//					spotBox.addChangeHandler(new ChangeHandler() {
-//						public void onChange(ChangeEvent event) {
-//						}
-//					});
-//					localizationForm.setWidget(1, 3, spotBox);
-//					spotBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
+				
+				if (this.showSpots) {
+					{
+						localizationForm.setWidget(0, 5, this.getSeparator());
+					}
+					{
+						spotLink = new Hyperlink("<Choose spot>", "");
+						localizationForm.setWidget(0, 6, spotLink);
+						spotLink.addClickHandler(this);
+					}
+					{
+						spotBox.addChangeHandler(this);
+						spotBox.addBlurHandler(this);
+						spotBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
+					}
+					
+					if (this.showActionButton) {
+						{
+							actionButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
+							actionButton.setSize("90px", GWTUtils.PUSHBUTTON_HEIGHT);
+							actionButton.setEnabled(false);
+							actionButton.addClickHandler(this);
+							localizationForm.setWidget(0, 7, actionButton);
+							localizationForm.getCellFormatter().setHorizontalAlignment(0, 7, HasHorizontalAlignment.ALIGN_CENTER);
+						}
+					}
 				}
-//				{
-//					button = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
-//					button.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
-//					button.setEnabled(false);
-//					button.addClickHandler(new ClickHandler() {
-//						public void onClick(ClickEvent event) {
-//							renderSpotInfo();
-//						}
-//					});
-//					localizationForm.setWidget(2, 0, button);
-//				}
-//				localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);
-//				localizationForm.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);		
-//				localizationForm.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-//				localizationForm.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-//				localizationForm.getCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT);
-//				localizationForm.getCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_RIGHT);
 			}
 		}
 		
@@ -144,29 +148,38 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 		return new Label(" > ");
 	}
 	
-//	private void renderSpotInfo() {
-//		if (this.baseParentPanel instanceof SpotDescriptionPanel) {
-//			((SpotDescriptionPanel)this.baseParentPanel).showSpotDescription();
-//		} else if (this.baseParentPanel instanceof ForecastPanel) {
-//			((ForecastPanel)this.baseParentPanel).getSpotLastestForecast();	
-//		}
-//	}
+	private void executeAction() {
+		if (this.baseParentPanel instanceof SpotDescriptionPanel) {
+			((SpotDescriptionPanel)this.baseParentPanel).showSpotDescription();
+		} else if (this.baseParentPanel instanceof ForecastPanel) {
+			((ForecastPanel)this.baseParentPanel).getSpotLastestForecast();	
+		} else if (this.baseParentPanel instanceof SpotComparatorPanel) {
+			((SpotComparatorPanel)this.baseParentPanel).fillSpotsSelector();	
+		}
+	}
 	
 	/**
-	 * Set the forecast button enabled or disabled according if the spot listbox has a spot selected or not
+	 * Set the Action button enabled or disabled according if the spot listbox has a spot selected or not
 	 */
-//	private void setForecastButtonState() {
-//		if (this.spotBox.getItemCount() > 0 && new Integer(this.spotBox.getValue(this.spotBox.getSelectedIndex())) > 0 )
-//			this.button.setEnabled(true);
-//		else
-//			this.button.setEnabled(false);
-//	}
+	private void setActionButtonState() {
+		if (this.spotBox.getItemCount() > 0 && new Integer(this.spotBox.getValue(this.spotBox.getSelectedIndex())) > 0 )
+			this.actionButton.setEnabled(true);
+		else
+			this.actionButton.setEnabled(false);
+	}
 	
 	/**
 	 * @return String - The Text showed in the Zone listbox widget
 	 */
 	public String getZoneBoxDisplayText(){
 		return this.zoneBox.getItemText(this.zoneBox.getSelectedIndex());
+	}
+	
+	/**
+	 * @return String - The value of the item selected in the zone listbox widget
+	 */
+	public String getZoneBoxDisplayValue() {
+		return this.zoneBox.getValue(this.zoneBox.getSelectedIndex());
 	}
 	
 	/**
@@ -246,7 +259,10 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 				}
 				if (zoneBox.getItemCount() > 0) {
 					zoneLink.setText(zoneBox.getItemText(zoneBox.getSelectedIndex()));
-					setSpotListItems(new Integer(zoneBox.getValue(zoneBox.getSelectedIndex())));
+					if (showSpots)
+						setSpotListItems(new Integer(zoneBox.getValue(zoneBox.getSelectedIndex())));
+					if (!showSpots && !showActionButton)
+						executeAction();
 				}
 			}
 				
@@ -265,8 +281,14 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 					SpotDTO spot = i.next();
 					spotBox.addItem(spot.getName(), spot.getId().toString());
 				}
+				if (spotBox.getItemCount() > 0) {
+					spotLink.setText(spotBox.getItemText(spotBox.getSelectedIndex()));
+				}
 				
-				//setForecastButtonState();
+				if (!showActionButton)
+					executeAction();
+				else
+					setActionButtonState();
 			}
 				
 			public void onFailure(Throwable caught) {
@@ -288,6 +310,11 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 		} else if (sender == zoneLink) {
 			localizationForm.setWidget(0, 4, zoneBox);
 			zoneBox.setFocus(true);
+		} else if (sender == spotLink) {
+			localizationForm.setWidget(0, 6, spotBox);
+			spotBox.setFocus(true);
+		} else if (sender == actionButton) {
+			this.executeAction();
 		}
 	}
 
@@ -304,9 +331,18 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 			countryLink.setText(countryBox.getItemText(countryBox.getSelectedIndex()));
 			localizationForm.setWidget(0, 2, countryLink);
 		} else if (sender == zoneBox) {
-			setSpotListItems(new Integer(zoneBox.getValue(zoneBox.getSelectedIndex())));
+			if (showSpots) 
+				setSpotListItems(new Integer(zoneBox.getValue(zoneBox.getSelectedIndex())));
 			zoneLink.setText(zoneBox.getItemText(zoneBox.getSelectedIndex()));
 			localizationForm.setWidget(0, 4, zoneLink);
+			if (!showSpots && !showActionButton)
+				this.executeAction();
+				
+		} else if (sender == spotBox) {
+			spotLink.setText(spotBox.getItemText(spotBox.getSelectedIndex()));
+			localizationForm.setWidget(0, 6, spotLink);
+			if (!showActionButton)
+				this.executeAction();
 		}
 		
 	}
@@ -324,6 +360,9 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 		} else if (sender == zoneBox) {
 			zoneLink.setText(zoneBox.getItemText(zoneBox.getSelectedIndex()));
 			localizationForm.setWidget(0, 4, zoneLink);
+		} else if (sender == spotBox) {
+			spotLink.setText(spotBox.getItemText(spotBox.getSelectedIndex()));
+			localizationForm.setWidget(0, 6, spotLink);
 		}
 	}
 }
