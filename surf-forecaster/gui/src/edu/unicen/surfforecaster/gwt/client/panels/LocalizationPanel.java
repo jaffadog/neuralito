@@ -271,4 +271,9 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 			}
 		});
 	}
+
+	@Override
+	public String getZoneBoxDisplayValue() {
+		return null;
+	}
 }

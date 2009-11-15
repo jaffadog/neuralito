@@ -6,6 +6,8 @@ import edu.unicen.surfforecaster.gwt.client.utils.Observer;
 public interface ILocalizationPanel extends Observer{
 
 	public abstract String getZoneBoxDisplayText();
+	
+	public abstract String getZoneBoxDisplayValue();
 
 	public abstract String getSpotBoxDisplayText();
 
