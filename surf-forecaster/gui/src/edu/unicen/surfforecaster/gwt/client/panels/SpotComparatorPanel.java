@@ -1,12 +1,9 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DeckPanel;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
@@ -18,11 +15,12 @@ public class SpotComparatorPanel extends VerticalPanel {
 	private DeckPanel deckPanel = null;
 	//private CreateComparationPanel createComparationPanel;
 	private static int CREATE_COMP_PANEL_INDEX = -1;
+	private static int SHOW_COMP_PANEL_INDEX = -1;
 	
 	
 	public SpotComparatorPanel() {
 		{
-			this.setWidth("100%");
+			//this.setWidth("100%");
 			{
 				localizationPanel = new LinksLocalizationPanel(false, false);
 				localizationPanel.setBasePanel(this);
@@ -32,9 +30,15 @@ public class SpotComparatorPanel extends VerticalPanel {
 				deckPanel = new DeckPanel();
 				{
 					CreateComparationPanel createComparationPanel = new CreateComparationPanel();
+					createComparationPanel.setBasePanel(this);
 					deckPanel.add(createComparationPanel);
 					deckPanel.setAnimationEnabled(true);
 					SpotComparatorPanel.CREATE_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(createComparationPanel);
+					
+					ShowComparationPanel showComparationPanel = new ShowComparationPanel();
+					showComparationPanel.setBasePanel(this);
+					deckPanel.add(showComparationPanel);
+					SpotComparatorPanel.SHOW_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(showComparationPanel);
 				}
 				this.add(deckPanel);
 			}
@@ -53,6 +57,15 @@ public class SpotComparatorPanel extends VerticalPanel {
 				//TODO do something when the getspots methos fails
 			}
 		});
+	}
+	
+	public void showShowComparationPanel() {
+		System.out.println(1111);
+		deckPanel.showWidget(SpotComparatorPanel.SHOW_COMP_PANEL_INDEX);
+	}
+	
+	public void showCreateComparationPanel() {
+		deckPanel.showWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX);
 	}
 
 }

@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -26,6 +26,7 @@ import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.Observable;
+import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class LocalizationPanel extends Composite implements ILocalizationPanel, ISurfForecasterBasePanel {
 	
@@ -33,7 +34,7 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 	private ListBox countryBox = null;
 	private ListBox zoneBox = null;
 	private ListBox spotBox = null;
-	private PushButton forecastButton = null;
+	private HTMLButtonGrayGrad forecastButton = null;
 	private Widget baseParentPanel = null;
 	
 	public LocalizationPanel() {
@@ -114,18 +115,20 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 						spotBox.setWidth("300");
 					}
 					{
-						forecastButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
-						forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
-						forecastButton.setEnabled(false);
+						//As button id added at the end the current time in milliseconds to avoid duplicated ids along all of this panels creation in the app.
+						forecastButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LocalizationPanel-Forecast" + (new Date()).getTime() , 150);
+						//forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
+						//forecastButton.setEnabled(false);
 						forecastButton.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
 								renderSpotInfo();
 							}
 						});
 						localizationForm.setWidget(2, 0, forecastButton);
+						localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);
 					}
-					localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);
-					localizationForm.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);		
+					
+					localizationForm.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);		
 					localizationForm.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 					localizationForm.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 					localizationForm.getCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT);
