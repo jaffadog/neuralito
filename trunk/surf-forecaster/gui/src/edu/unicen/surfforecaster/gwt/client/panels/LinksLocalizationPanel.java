@@ -56,7 +56,7 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 			this.showSpots = showSpots;
 			
 			DisclosurePanel disclosurePanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.selectSpot(), true);
-			disclosurePanel.setWidth("100%");
+			//disclosurePanel.setWidth("100%");
 			disclosurePanel.setAnimationEnabled(true);
 			initWidget(disclosurePanel);
 			{
