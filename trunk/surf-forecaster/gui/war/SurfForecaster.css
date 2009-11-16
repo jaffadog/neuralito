@@ -18,6 +18,39 @@ div div#loadingTxtDiv {
 }
 
 /*****************************************************************************/
+/*********************** Button ***************************************/
+/*****************************************************************************/
+.gwt-HTML-gray-grad-btn-left {
+	background:url("./images/gray-grad-button-up-26px-left.gif");
+	float:left;
+	height: 26px;
+	width: 9px;
+	cursor: pointer;
+}
+
+.gwt-HTML-gray-grad-btn-center{
+	background:url("./images/gray-grad-button-up-26px-center.gif") repeat-x;
+	font-family: 'Trebuchet MS', Helvetica, sans-serif;
+	font-size:10pt;
+	font-weight: bold;
+	text-align:center;
+    color: #FFF;
+    height: 22px;
+	*height: 26px; /*IE ALL VERSIONS HACK*/
+	float:left;
+	padding: 4px 0 0;
+	cursor: pointer;
+}
+
+.gwt-HTML-gray-grad-btn-right {
+	background:url("./images/gray-grad-button-up-26px-right.gif");
+	float:left;
+	height: 26px;
+	width: 9px;
+	cursor: pointer;
+}
+
+/*****************************************************************************/
 /*********************** Common styles ***************************************/
 /*****************************************************************************/
 
