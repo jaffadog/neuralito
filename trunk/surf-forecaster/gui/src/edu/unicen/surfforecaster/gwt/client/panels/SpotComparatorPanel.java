@@ -46,10 +46,10 @@ public class SpotComparatorPanel extends VerticalPanel {
 	}
 	
 	public void fillSpotsSelector() {
-		Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
+		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
 		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
 			public void onSuccess(List<SpotDTO> result) {
-				((CreateComparationPanel)deckPanel.getWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX)).fillSpotsListBox(result);
+				((CreateComparationPanel)deckPanel.getWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX)).fillSpotsListBox(result, zoneId);
 				deckPanel.showWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX);
 			}
 				
