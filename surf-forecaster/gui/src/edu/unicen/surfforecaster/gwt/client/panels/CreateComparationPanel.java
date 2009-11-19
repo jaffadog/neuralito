@@ -1,13 +1,18 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
@@ -22,7 +27,6 @@ public class CreateComparationPanel extends FlexTable implements ISurfForecaster
 	private static final String LISTBOX_WIDTH = "200px";
 	private HTMLButtonGrayGrad compareBtn = null;
 	private Widget baseParentPanel = null;
-	private HTMLButtonGrayGrad buttoncito;
 	private HTMLButtonGrayGrad addSpotBtn;
 	private HTMLButtonGrayGrad removeSpotBtn;
 	private HTMLButtonGrayGrad firstBtn;
@@ -30,8 +34,12 @@ public class CreateComparationPanel extends FlexTable implements ISurfForecaster
 	private HTMLButtonGrayGrad downBtn;
 	private HTMLButtonGrayGrad lastBtn;
 	
+	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
+	private Map<Integer, Integer> selectedSpots = new HashMap<Integer, Integer>();
+	private Integer currentSelectedZone = null;
+	
 	public CreateComparationPanel() {
-		this.setBorderWidth(2);
+		//this.setBorderWidth(2);
 		{
 			this.spotBox = new ListBox(true);
 			this.spotBox.setSize(CreateComparationPanel.LISTBOX_WIDTH, CreateComparationPanel.LISTBOX_HEIGHT);
@@ -111,12 +119,17 @@ public class CreateComparationPanel extends FlexTable implements ISurfForecaster
 		this.baseParentPanel = basePanel;
 	}
 	
-	public void fillSpotsListBox(List<SpotDTO> spots) {
+	public void fillSpotsListBox(List<SpotDTO> spots, Integer zoneId) {
 		spotBox.clear();
-		Iterator<SpotDTO> i = spots.iterator(); 
-		while (i.hasNext()){
-			SpotDTO spot = i.next();
-			spotBox.addItem(spot.getName(), spot.getId().toString());
+		this.currentSelectedZone = zoneId;
+		if (spots.size() > 0) {
+			Set<Integer> selectedSpotsIds = (Set<Integer>)selectedSpots.keySet();
+			Iterator<SpotDTO> i = spots.iterator(); 
+			while (i.hasNext()){
+				SpotDTO spot = i.next();
+				if (!selectedSpotsIds.contains(spot.getId()))
+					spotBox.addItem(spot.getName(), spot.getId().toString());
+			}
 		}
 	}
 
@@ -126,13 +139,138 @@ public class CreateComparationPanel extends FlexTable implements ISurfForecaster
 		
 		if (sender == compareBtn)
 			((SpotComparatorPanel)baseParentPanel).showShowComparationPanel();
-		//else if (sender == addSpotBtn)
-			
+		else if (sender == addSpotBtn) 
+			this.addItemsToSelectedSpotsList();
+		else if (sender == removeSpotBtn) 
+			this.removeSelectedSpot();
+		else if (sender == firstBtn) 
+			this.moveSpotToTop();
+		else if (sender == lastBtn) 
+			this.moveSpotToBottom();
+		else if (sender == upBtn) 
+			this.moveSpotUp();
+		else if (sender == downBtn) 
+			this.moveSpotDown();
 		
 	}
 	
-	private void addToSelectedSpotsList() {
+	/**
+	 * Checks if a multiple select ListBox has just one item selected or more than one
+	 * @return true if just one item of the list is selected, false in the other case
+	 */
+	private boolean justOneSpotSelected(ListBox multipleSelectList) {
 		
+		int firstSelected = multipleSelectList.getSelectedIndex();
+		if (firstSelected == -1)
+			return false;
+		
+		boolean result = false;
+		for (int i = firstSelected; i < multipleSelectList.getItemCount(); i++) {
+			if (multipleSelectList.isItemSelected(i) && result == false) //always true in first iteration
+				result = true;
+			else if (multipleSelectList.isItemSelected(i)){
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
+	
+	private void moveSpotUp() {
+		if (this.justOneSpotSelected(selectedSpotsBox)) {
+			int index = selectedSpotsBox.getSelectedIndex();
+			String item = selectedSpotsBox.getItemText(index);
+			String value = selectedSpotsBox.getValue(index);
+			if (index > 0) {
+				selectedSpotsBox.insertItem(item, value, index - 1);
+				selectedSpotsBox.removeItem(index + 1);
+				selectedSpotsBox.setSelectedIndex(index - 1);
+			}
+		} else {
+			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
+			Window.alert("Debe seleccionar un spot para realizar esta accion");
+		}
+	}
+
+	private void moveSpotDown() {
+		if (this.justOneSpotSelected(selectedSpotsBox)) {
+			int index = selectedSpotsBox.getSelectedIndex();
+			String item = selectedSpotsBox.getItemText(index);
+			String value = selectedSpotsBox.getValue(index);
+			if (index < selectedSpotsBox.getItemCount() - 1) {
+				selectedSpotsBox.insertItem(item, value, index + 2);
+				selectedSpotsBox.removeItem(index);
+				selectedSpotsBox.setSelectedIndex(index + 1);
+			}
+		} else {
+			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
+			Window.alert("Debe seleccionar un spot para realizar esta accion");
+		}
+	}
+
+	private void moveSpotToBottom() {
+		if (this.justOneSpotSelected(selectedSpotsBox)) {
+			int index = selectedSpotsBox.getSelectedIndex();
+			String item = selectedSpotsBox.getItemText(index);
+			String value = selectedSpotsBox.getValue(index);
+			selectedSpotsBox.removeItem(index);
+			selectedSpotsBox.insertItem(item, value, selectedSpotsBox.getItemCount());
+			selectedSpotsBox.setSelectedIndex(selectedSpotsBox.getItemCount() - 1);
+		} else {
+			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
+			Window.alert("Debe seleccionar un spot para realizar esta accion");
+		}
+	}
+
+	private void moveSpotToTop() {
+		if (this.justOneSpotSelected(selectedSpotsBox)) {
+			int index = selectedSpotsBox.getSelectedIndex();
+			String item = selectedSpotsBox.getItemText(index);
+			String value = selectedSpotsBox.getValue(index);
+			selectedSpotsBox.removeItem(index);
+			selectedSpotsBox.insertItem(item, value, 0);
+			selectedSpotsBox.setSelectedIndex(0);
+		} else {
+			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
+			Window.alert("Debe seleccionar un spot para realizar esta accion");
+		}
+	}
+
+	private void addItemsToSelectedSpotsList() {
+		
+		ArrayList<Integer> spotBoxSelectedIndexes = new ArrayList<Integer>();
+		//Add spots to selected list
+		for (int i = 0; i < spotBox.getItemCount(); i++) {
+			if (spotBox.isItemSelected(i)) {
+				selectedSpotsBox.addItem(spotBox.getItemText(i), spotBox.getValue(i));
+				spotBoxSelectedIndexes.add(i);
+				selectedSpots.put(new Integer(spotBox.getValue(i)), this.currentSelectedZone );
+			}
+		}
+		
+		//remove from spot list (Inverse order to avoid problems with indexes once an item is deleted and it index is lower than the next item)
+		Collections.sort(spotBoxSelectedIndexes);
+		for (int i = spotBoxSelectedIndexes.size()-1; i >= 0; i--) {
+			spotBox.removeItem(spotBoxSelectedIndexes.get(i));
+		}
+	}
+	
+	private void removeSelectedSpot() {
+		for (int i = selectedSpotsBox.getItemCount() - 1 ; i >= 0; i--) {
+			if (selectedSpotsBox.isItemSelected(i)) {
+				Integer selectedSpotZone = selectedSpots.get(new Integer(selectedSpotsBox.getValue(i)));
+				System.out.println(selectedSpotZone);
+				System.out.println(this.currentSelectedZone);
+				
+				if (selectedSpotZone != null && selectedSpotZone.intValue() == this.currentSelectedZone.intValue())
+					spotBox.addItem(selectedSpotsBox.getItemText(i), selectedSpotsBox.getValue(i));
+				selectedSpots.remove(new Integer(selectedSpotsBox.getValue(i)));
+				selectedSpotsBox.removeItem(i);
+				
+			}
+			//TODO mostrar un message box o algo que indique si que tiene que seleccionar algun alemente antes de apretras este boton (si no lo hizo) idem con demas
+			//botones de este panel
+		}
 	}
 
 }
