@@ -29,7 +29,7 @@ public class SpotComparatorPanel extends VerticalPanel {
 			{
 				deckPanel = new DeckPanel();
 				{
-					CreateComparationPanel createComparationPanel = new CreateComparationPanel();
+					ComparationCreatorPanel createComparationPanel = new ComparationCreatorPanel();
 					createComparationPanel.setBasePanel(this);
 					deckPanel.add(createComparationPanel);
 					deckPanel.setAnimationEnabled(true);
@@ -49,7 +49,7 @@ public class SpotComparatorPanel extends VerticalPanel {
 		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
 		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
 			public void onSuccess(List<SpotDTO> result) {
-				((CreateComparationPanel)deckPanel.getWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX)).fillSpotsListBox(result, zoneId);
+				((ComparationCreatorPanel)deckPanel.getWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX)).fillSpotsListBox(result, zoneId);
 				deckPanel.showWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX);
 			}
 				
@@ -59,12 +59,12 @@ public class SpotComparatorPanel extends VerticalPanel {
 		});
 	}
 	
-	public void showShowComparationPanel() {
+	public void showComparationViewerPanel() {
 		System.out.println(1111);
 		deckPanel.showWidget(SpotComparatorPanel.VIEW_COMP_PANEL_INDEX);
 	}
 	
-	public void showCreateComparationPanel() {
+	public void showComparationCreatorPanel() {
 		deckPanel.showWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX);
 	}
 

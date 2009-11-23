@@ -29,7 +29,7 @@ public class ComparationViewerPanel extends VerticalPanel implements ISurfForeca
 		Widget sender = (Widget) event.getSource();
 		
 		if (sender == backBtn)
-			((SpotComparatorPanel)baseParentPanel).showCreateComparationPanel();		
+			((SpotComparatorPanel)baseParentPanel).showComparationCreatorPanel();		
 	}
 
 	@Override
