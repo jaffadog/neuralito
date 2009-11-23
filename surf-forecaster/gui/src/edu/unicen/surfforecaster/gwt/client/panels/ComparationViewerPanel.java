@@ -7,12 +7,12 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ShowComparationPanel extends VerticalPanel implements ISurfForecasterBasePanel, ClickHandler {
+public class ComparationViewerPanel extends VerticalPanel implements ISurfForecasterBasePanel, ClickHandler {
 	
 	private Widget baseParentPanel = null;
 	private PushButton backBtn = null;
 	
-	public ShowComparationPanel() {
+	public ComparationViewerPanel() {
 		{
 			Label lala = new Label("lalaalal");
 			this.add(lala);
