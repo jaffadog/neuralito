@@ -15,7 +15,7 @@ public class SpotComparatorPanel extends VerticalPanel {
 	private DeckPanel deckPanel = null;
 	//private CreateComparationPanel createComparationPanel;
 	private static int CREATE_COMP_PANEL_INDEX = -1;
-	private static int SHOW_COMP_PANEL_INDEX = -1;
+	private static int VIEW_COMP_PANEL_INDEX = -1;
 	
 	
 	public SpotComparatorPanel() {
@@ -35,10 +35,10 @@ public class SpotComparatorPanel extends VerticalPanel {
 					deckPanel.setAnimationEnabled(true);
 					SpotComparatorPanel.CREATE_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(createComparationPanel);
 					
-					ShowComparationPanel showComparationPanel = new ShowComparationPanel();
-					showComparationPanel.setBasePanel(this);
-					deckPanel.add(showComparationPanel);
-					SpotComparatorPanel.SHOW_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(showComparationPanel);
+					ComparationViewerPanel comparationViewerPanel = new ComparationViewerPanel();
+					comparationViewerPanel.setBasePanel(this);
+					deckPanel.add(comparationViewerPanel);
+					SpotComparatorPanel.VIEW_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(comparationViewerPanel);
 				}
 				this.add(deckPanel);
 			}
@@ -61,7 +61,7 @@ public class SpotComparatorPanel extends VerticalPanel {
 	
 	public void showShowComparationPanel() {
 		System.out.println(1111);
-		deckPanel.showWidget(SpotComparatorPanel.SHOW_COMP_PANEL_INDEX);
+		deckPanel.showWidget(SpotComparatorPanel.VIEW_COMP_PANEL_INDEX);
 	}
 	
 	public void showCreateComparationPanel() {
