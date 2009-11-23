@@ -19,7 +19,7 @@ import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
-public class CreateComparationPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler {
+public class ComparationCreatorPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler {
 	
 	private ListBox spotBox = null;
 	private ListBox selectedSpotsBox = null;
@@ -38,14 +38,14 @@ public class CreateComparationPanel extends FlexTable implements ISurfForecaster
 	private Map<Integer, Integer> selectedSpots = new HashMap<Integer, Integer>();
 	private Integer currentSelectedZone = null;
 	
-	public CreateComparationPanel() {
+	public ComparationCreatorPanel() {
 		//this.setBorderWidth(2);
 		{
 			this.spotBox = new ListBox(true);
-			this.spotBox.setSize(CreateComparationPanel.LISTBOX_WIDTH, CreateComparationPanel.LISTBOX_HEIGHT);
+			this.spotBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
 			this.setWidget(0, 0, this.spotBox);
 			this.getFlexCellFormatter().setRowSpan(0, 0, 4);
-			this.getCellFormatter().setWidth(0, 0, CreateComparationPanel.LISTBOX_WIDTH);
+			this.getCellFormatter().setWidth(0, 0, ComparationCreatorPanel.LISTBOX_WIDTH);
 		}
 		{
 			addSpotBtn = new HTMLButtonGrayGrad(">>", "CreateComparationPanel-add", 60);
@@ -57,10 +57,10 @@ public class CreateComparationPanel extends FlexTable implements ISurfForecaster
 		}
 		{
 			this.selectedSpotsBox = new ListBox(true);
-			this.selectedSpotsBox.setSize(CreateComparationPanel.LISTBOX_WIDTH, CreateComparationPanel.LISTBOX_HEIGHT);
+			this.selectedSpotsBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
 			this.setWidget(0, 2, this.selectedSpotsBox);
 			this.getFlexCellFormatter().setRowSpan(0, 2, 4);
-			this.getFlexCellFormatter().setWidth(0, 2, CreateComparationPanel.LISTBOX_WIDTH);
+			this.getFlexCellFormatter().setWidth(0, 2, ComparationCreatorPanel.LISTBOX_WIDTH);
 		}
 		{
 			removeSpotBtn = new HTMLButtonGrayGrad("<<", "CreateComparationPanel-remove", 60);
@@ -138,7 +138,7 @@ public class CreateComparationPanel extends FlexTable implements ISurfForecaster
 		Widget sender = (Widget) event.getSource();
 		
 		if (sender == compareBtn)
-			((SpotComparatorPanel)baseParentPanel).showShowComparationPanel();
+			((SpotComparatorPanel)baseParentPanel).showComparationViewerPanel();
 		else if (sender == addSpotBtn) 
 			this.addItemsToSelectedSpotsList();
 		else if (sender == removeSpotBtn) 
