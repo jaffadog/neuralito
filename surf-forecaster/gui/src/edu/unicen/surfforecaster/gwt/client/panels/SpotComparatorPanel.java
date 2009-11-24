@@ -1,12 +1,15 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 
 public class SpotComparatorPanel extends VerticalPanel {
@@ -50,7 +53,7 @@ public class SpotComparatorPanel extends VerticalPanel {
 		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
 			public void onSuccess(List<SpotDTO> result) {
 				((ComparationCreatorPanel)deckPanel.getWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX)).fillSpotsListBox(result, zoneId);
-				deckPanel.showWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX);
+				showComparationCreatorPanel();
 			}
 				
 			public void onFailure(Throwable caught) {
@@ -60,12 +63,24 @@ public class SpotComparatorPanel extends VerticalPanel {
 	}
 	
 	public void showComparationViewerPanel() {
-		System.out.println(1111);
 		deckPanel.showWidget(SpotComparatorPanel.VIEW_COMP_PANEL_INDEX);
 	}
 	
 	public void showComparationCreatorPanel() {
 		deckPanel.showWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX);
+	}
+
+	public void generateSpotsComparation(final List<Integer> selectedSpots, final List<String> selectedSpotsNames) {
+		ForecastServices.Util.getInstance().getLatestForecasts(selectedSpots, new AsyncCallback<Map<Integer, Map<String, List<ForecastDTO>>>>(){
+			public void onSuccess(Map<Integer, Map<String, List<ForecastDTO>>> result) {
+				((ComparationViewerPanel)deckPanel.getWidget(SpotComparatorPanel.VIEW_COMP_PANEL_INDEX)).renderComparation(result, selectedSpots, selectedSpotsNames);
+				showComparationViewerPanel();
+			}
+				
+			public void onFailure(Throwable caught) {
+				//TODO do something when the getlastest forecasts methos fails
+			}
+		});
 	}
 
 }

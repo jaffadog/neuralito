@@ -1,6 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,5 +31,5 @@ public interface ForecastServices extends RemoteService {
 	
 	Map<String, List<ForecastDTO>> getLatestForecasts(Integer spotId) throws NeuralitoException;
 	
-	Map<Integer, Map<String, List<ForecastDTO>>> getLatestForecasts(ArrayList<Integer> spotsIds) throws NeuralitoException;
+	Map<Integer, Map<String, List<ForecastDTO>>> getLatestForecasts(List<Integer> spotsIds) throws NeuralitoException;
 }

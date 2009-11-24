@@ -23,8 +23,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	
 	private ListBox spotBox = null;
 	private ListBox selectedSpotsBox = null;
-	private static final String LISTBOX_HEIGHT = "300px";
-	private static final String LISTBOX_WIDTH = "200px";
 	private HTMLButtonGrayGrad compareBtn = null;
 	private Widget baseParentPanel = null;
 	private HTMLButtonGrayGrad addSpotBtn;
@@ -33,6 +31,10 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private HTMLButtonGrayGrad upBtn;
 	private HTMLButtonGrayGrad downBtn;
 	private HTMLButtonGrayGrad lastBtn;
+	
+	private static final String LISTBOX_WIDTH = "200px";
+	private static final String LISTBOX_HEIGHT = "300px";
+	private static final int MAX_SPOTS_TO_COMP = 5;
 	
 	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
 	private Map<Integer, Integer> selectedSpots = new HashMap<Integer, Integer>();
@@ -48,7 +50,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.getCellFormatter().setWidth(0, 0, ComparationCreatorPanel.LISTBOX_WIDTH);
 		}
 		{
-			addSpotBtn = new HTMLButtonGrayGrad(">>", "CreateComparationPanel-add", 60);
+			addSpotBtn = new HTMLButtonGrayGrad(">>", "CreateComparationPanel-add", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
 			this.setWidget(0, 1, addSpotBtn);
 			addSpotBtn.addClickHandler(this);
 			this.getFlexCellFormatter().setWidth(0, 1, addSpotBtn.getWidth());
@@ -63,7 +65,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.getFlexCellFormatter().setWidth(0, 2, ComparationCreatorPanel.LISTBOX_WIDTH);
 		}
 		{
-			removeSpotBtn = new HTMLButtonGrayGrad("<<", "CreateComparationPanel-remove", 60);
+			removeSpotBtn = new HTMLButtonGrayGrad("<<", "CreateComparationPanel-remove", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
 			this.setWidget(1, 0, removeSpotBtn);
 			removeSpotBtn.addClickHandler(this);
 			this.getFlexCellFormatter().setWidth(1, 0, removeSpotBtn.getWidth());
@@ -71,7 +73,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.getFlexCellFormatter().setRowSpan(1, 0, 1);
 		}
 		{
-			firstBtn = new HTMLButtonGrayGrad("First", "CreateComparationPanel-first", 60);
+			firstBtn = new HTMLButtonGrayGrad("First", "CreateComparationPanel-first", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
 			this.setWidget(0, 3, firstBtn);
 			firstBtn.addClickHandler(this);
 			this.getFlexCellFormatter().setWidth(0, 3, firstBtn.getWidth());
@@ -79,7 +81,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.getFlexCellFormatter().setRowSpan(0, 3, 1);
 		}
 		{
-			upBtn = new HTMLButtonGrayGrad("Up", "CreateComparationPanel-up", 60);
+			upBtn = new HTMLButtonGrayGrad("Up", "CreateComparationPanel-up", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
 			this.setWidget(1, 1, upBtn);
 			upBtn.addClickHandler(this);
 			this.getFlexCellFormatter().setWidth(1, 1, upBtn.getWidth());
@@ -87,7 +89,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.getFlexCellFormatter().setRowSpan(1, 1, 1);
 		}
 		{
-			downBtn = new HTMLButtonGrayGrad("Down", "CreateComparationPanel-down", 60);
+			downBtn = new HTMLButtonGrayGrad("Down", "CreateComparationPanel-down", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
 			this.setWidget(2, 1, downBtn);
 			downBtn.addClickHandler(this);
 			this.getFlexCellFormatter().setWidth(2, 1, downBtn.getWidth());
@@ -95,7 +97,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.getFlexCellFormatter().setRowSpan(2, 1, 1);
 		}
 		{
-			lastBtn = new HTMLButtonGrayGrad("Last", "CreateComparationPanel-last", 60);
+			lastBtn = new HTMLButtonGrayGrad("Last", "CreateComparationPanel-last", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
 			this.setWidget(3, 1, lastBtn);
 			lastBtn.addClickHandler(this);
 			this.getFlexCellFormatter().setWidth(3, 1, lastBtn.getWidth());
@@ -138,7 +140,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		Widget sender = (Widget) event.getSource();
 		
 		if (sender == compareBtn)
-			((SpotComparatorPanel)baseParentPanel).showComparationViewerPanel();
+			this.makeComparation();
 		else if (sender == addSpotBtn) 
 			this.addItemsToSelectedSpotsList();
 		else if (sender == removeSpotBtn) 
@@ -154,6 +156,32 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		
 	}
 	
+	private void makeComparation() {
+		List<Integer> selectedSpots = new ArrayList<Integer>();
+		List<String> selectedSpotsNames = new ArrayList<String>();
+		
+		for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
+			selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
+		}
+		
+		if (selectedSpots.size() < 2) {
+			// TODO msgbox tiene para este mensaje
+			Window.alert("Debe seleccionar al menos dos spots a comparar");
+		} else if (selectedSpots.size() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP) {
+			// TODO msgbox tiene para este mensaje
+			Window.alert("Debe seleccionar 5 spots como maximo");
+		} else {
+			for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
+				selectedSpotsNames.add(selectedSpotsBox.getItemText(i));
+			}
+			
+			((SpotComparatorPanel)baseParentPanel).generateSpotsComparation(selectedSpots, selectedSpotsNames);
+		}
+		
+		
+		
+	}
+
 	/**
 	 * Checks if a multiple select ListBox has just one item selected or more than one
 	 * @return true if just one item of the list is selected, false in the other case

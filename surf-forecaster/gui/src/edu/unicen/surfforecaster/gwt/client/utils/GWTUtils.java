@@ -23,7 +23,7 @@ public final class GWTUtils {
 	//WIDGETS MEASURES
 	public final static String APLICATION_WIDTH = "1000px";
 	public final static String PUSHBUTTON_HEIGHT = "20px";
-	public final static int BUTTON_GRAY_GRAD_SHORT = 80;
+	public final static int BUTTON_GRAY_GRAD_SHORT = 60;
 	public final static int BUTTON_GRAY_GRAD_MEDIUM = 130;
 	public final static int BUTTON_GRAY_GRAD_LARGE = 200;
 	
