@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Level;
+
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.ForecasterDTO;
@@ -69,7 +71,7 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 	 * @return Map<String, List<ForecastDTO>>
 	 */
 	public Map<String, List<ForecastDTO>> getLatestForecasts(Integer spotId) throws NeuralitoException {
-		
+		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotId) - Retrieving latest forecasts from spotId = " + spotId + "...");
 		Map<String, List<ForecastDTO>> result = new HashMap<String, List<ForecastDTO>>();
 		List<ForecasterDTO> spotForecasters = spotService.getSpotForecasters(spotId);
 		Iterator<ForecasterDTO> i = spotForecasters.iterator();
@@ -77,7 +79,7 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 			ForecasterDTO forecaster = i.next();
 			result.put(forecaster.getName(), forecastService.getLatestForecasts(forecaster.getId()));
 		}
-		
+		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotId) - Forecasts retrieved successfully.");
 		return result;
 	}
 
@@ -87,15 +89,15 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 	 * @param List<Integer> spotsIds, the list of spots to retrieve forecasts
 	 * @return Map<Integer, Map<String, List<ForecastDTO>>>
 	 */
-	public Map<Integer, Map<String, List<ForecastDTO>>> getLatestForecasts(ArrayList<Integer> spotsIds) throws NeuralitoException {
-		
+	public Map<Integer, Map<String, List<ForecastDTO>>> getLatestForecasts(List<Integer> spotsIds) throws NeuralitoException {
+		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotsList) - Retrieving latest forecasts of multiple spots...");
 		Map<Integer, Map<String, List<ForecastDTO>>> result = new HashMap<Integer, Map<String, List<ForecastDTO>>>();
 		Iterator<Integer> i = spotsIds.iterator();
 		while (i.hasNext()) {
 			Integer spotId = i.next();
 			result.put(spotId, this.getLatestForecasts(spotId));
 		}
-		
+		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotsList) - Forecasts retrieved successfully.");
 		return result;
 	}
 }

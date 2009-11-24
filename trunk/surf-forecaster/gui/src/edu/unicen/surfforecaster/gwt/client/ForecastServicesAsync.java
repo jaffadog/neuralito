@@ -1,6 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,5 +12,5 @@ public interface ForecastServicesAsync {
 	
 	void getLatestForecasts(Integer spotId, AsyncCallback<Map<String, List<ForecastDTO>>> callback);
 	
-	void getLatestForecasts(ArrayList<Integer> spotsIds, AsyncCallback<Map<Integer, Map<String, List<ForecastDTO>>>> callback);
+	void getLatestForecasts(List<Integer> spotsIds, AsyncCallback<Map<Integer, Map<String, List<ForecastDTO>>>> callback);
 }
