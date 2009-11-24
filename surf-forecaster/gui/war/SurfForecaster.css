@@ -96,6 +96,29 @@ div div#loadingTxtDiv {
 }
 
 /*****************************************************************************/
+/*********************** ComparationViewerPanel ***************************************/
+/*****************************************************************************/
+.gwt-Label-SpotColor1 {
+	background-color: #FF0000;
+}
+
+.gwt-Label-SpotColor2 {
+	background-color: #0000FF;
+}
+
+.gwt-Label-SpotColor3 {
+	background-color: #FF6600;
+}
+
+.gwt-Label-SpotColor4 {
+	background-color: #006600;
+}
+
+.gwt-Label-SpotColor5 {
+	background-color: #FF00FF;
+}
+
+/*****************************************************************************/
 /*********************** CurrentForecastPanel ***************************************/
 /*****************************************************************************/
 .gwt-FlexTable-CurrentForecast {
