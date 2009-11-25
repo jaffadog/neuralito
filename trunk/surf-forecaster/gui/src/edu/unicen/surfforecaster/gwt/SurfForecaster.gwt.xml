@@ -16,6 +16,9 @@
   
   <inherits name='edu.unicen.surfforecaster.common.GWTShineCommon' />
   
+  <!-- Google Visualizations                                      -->
+  <inherits name='com.google.gwt.visualization.Visualization'/>
+  
   <!-- Google Maps                                      -->
   <inherits name="com.google.gwt.maps.GoogleMaps" />
   <!-- If you want to deploy this application outside of localhost,
