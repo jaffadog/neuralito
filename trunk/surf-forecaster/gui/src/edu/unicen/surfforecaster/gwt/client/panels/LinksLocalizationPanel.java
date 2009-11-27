@@ -10,14 +10,13 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
@@ -29,7 +28,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.Observable;
 
-public class LinksLocalizationPanel extends Composite implements ILocalizationPanel, ISurfForecasterBasePanel, 
+public class LinksLocalizationPanel extends SimplePanel implements ILocalizationPanel, ISurfForecasterBasePanel, 
 		ClickHandler, ChangeHandler, BlurHandler{
 	
 	private ListBox areaBox = null;
@@ -55,77 +54,72 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 			this.showActionButton = showActionButton;
 			this.showSpots = showSpots;
 			
-			DisclosurePanel disclosurePanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.selectSpot(), true);
-			//disclosurePanel.setWidth("100%");
-			disclosurePanel.setAnimationEnabled(true);
-			initWidget(disclosurePanel);
+			
+			localizationForm = new FlexTable();
+			this.setWidget(localizationForm);
 			{
-				localizationForm = new FlexTable();
-				disclosurePanel.setContent(localizationForm);
+				areaLink = new Hyperlink("<Choose area>", "");
+				localizationForm.setWidget(0, 0, areaLink);
+				areaLink.addClickHandler(this);
+			}
+			{
+				areaBox = new ListBox();
+				areaBox.addChangeHandler(this);
+				areaBox.addBlurHandler(this);
+				areaBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
+			}
+			{
+				localizationForm.setWidget(0, 1, this.getSeparator());
+			}
+			{
+				countryLink = new Hyperlink("<Choose country>", "");
+				localizationForm.setWidget(0, 2, countryLink);
+				countryLink.addClickHandler(this);
+			}
+			{
+				countryBox = new ListBox();
+				countryBox.addChangeHandler(this);
+				countryBox.addBlurHandler(this);
+				countryBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
+			}
+			{
+				localizationForm.setWidget(0, 3, this.getSeparator());
+			}
+			{
+				zoneLink = new Hyperlink("<Choose zone>", "");
+				localizationForm.setWidget(0, 4, zoneLink);
+				zoneLink.addClickHandler(this);
+			}
+			{
+				zoneBox = new ListBox();
+				zoneBox.addChangeHandler(this);
+				zoneBox.addBlurHandler(this);
+				zoneBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
+			}
+			
+			if (this.showSpots) {
 				{
-					areaLink = new Hyperlink("<Choose area>", "");
-					localizationForm.setWidget(0, 0, areaLink);
-					areaLink.addClickHandler(this);
+					localizationForm.setWidget(0, 5, this.getSeparator());
 				}
 				{
-					areaBox = new ListBox();
-					areaBox.addChangeHandler(this);
-					areaBox.addBlurHandler(this);
-					areaBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
+					spotLink = new Hyperlink("<Choose spot>", "");
+					localizationForm.setWidget(0, 6, spotLink);
+					spotLink.addClickHandler(this);
 				}
 				{
-					localizationForm.setWidget(0, 1, this.getSeparator());
-				}
-				{
-					countryLink = new Hyperlink("<Choose country>", "");
-					localizationForm.setWidget(0, 2, countryLink);
-					countryLink.addClickHandler(this);
-				}
-				{
-					countryBox = new ListBox();
-					countryBox.addChangeHandler(this);
-					countryBox.addBlurHandler(this);
-					countryBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
-				}
-				{
-					localizationForm.setWidget(0, 3, this.getSeparator());
-				}
-				{
-					zoneLink = new Hyperlink("<Choose zone>", "");
-					localizationForm.setWidget(0, 4, zoneLink);
-					zoneLink.addClickHandler(this);
-				}
-				{
-					zoneBox = new ListBox();
-					zoneBox.addChangeHandler(this);
-					zoneBox.addBlurHandler(this);
-					zoneBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
+					spotBox.addChangeHandler(this);
+					spotBox.addBlurHandler(this);
+					spotBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
 				}
 				
-				if (this.showSpots) {
+				if (this.showActionButton) {
 					{
-						localizationForm.setWidget(0, 5, this.getSeparator());
-					}
-					{
-						spotLink = new Hyperlink("<Choose spot>", "");
-						localizationForm.setWidget(0, 6, spotLink);
-						spotLink.addClickHandler(this);
-					}
-					{
-						spotBox.addChangeHandler(this);
-						spotBox.addBlurHandler(this);
-						spotBox.setWidth(LinksLocalizationPanel.INPUT_WIDTH);
-					}
-					
-					if (this.showActionButton) {
-						{
-							actionButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
-							actionButton.setSize("90px", GWTUtils.PUSHBUTTON_HEIGHT);
-							actionButton.setEnabled(false);
-							actionButton.addClickHandler(this);
-							localizationForm.setWidget(0, 7, actionButton);
-							localizationForm.getCellFormatter().setHorizontalAlignment(0, 7, HasHorizontalAlignment.ALIGN_CENTER);
-						}
+						actionButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
+						actionButton.setSize("90px", GWTUtils.PUSHBUTTON_HEIGHT);
+						actionButton.setEnabled(false);
+						actionButton.addClickHandler(this);
+						localizationForm.setWidget(0, 7, actionButton);
+						localizationForm.getCellFormatter().setHorizontalAlignment(0, 7, HasHorizontalAlignment.ALIGN_CENTER);
 					}
 				}
 			}
@@ -153,8 +147,8 @@ public class LinksLocalizationPanel extends Composite implements ILocalizationPa
 			((SpotDescriptionPanel)this.baseParentPanel).showSpotDescription();
 		} else if (this.baseParentPanel instanceof ForecastPanel) {
 			((ForecastPanel)this.baseParentPanel).getSpotLastestForecast();	
-		} else if (this.baseParentPanel instanceof SpotComparatorPanel) {
-			((SpotComparatorPanel)this.baseParentPanel).fillSpotsSelector();	
+		} else if (this.baseParentPanel instanceof ComparationCreatorPanel) {
+			((ComparationCreatorPanel)this.baseParentPanel).fillSpotsSelector();	
 		}
 	}
 	

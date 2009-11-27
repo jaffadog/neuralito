@@ -10,12 +10,20 @@ import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.gwt.client.SpotServices;
+import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
+import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
@@ -23,7 +31,9 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	
 	private ListBox spotBox = null;
 	private ListBox selectedSpotsBox = null;
+	private ListBox myCompsBox = null;
 	private HTMLButtonGrayGrad compareBtn = null;
+	private HTMLButtonGrayGrad saveBtn = null;
 	private Widget baseParentPanel = null;
 	private HTMLButtonGrayGrad addSpotBtn;
 	private HTMLButtonGrayGrad removeSpotBtn;
@@ -39,76 +49,146 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
 	private Map<Integer, Integer> selectedSpots = new HashMap<Integer, Integer>();
 	private Integer currentSelectedZone = null;
+	private LinksLocalizationPanel localizationPanel;
+	private DisclosurePanel myComparations;
+	private FlexTable compDefTable;
 	
 	public ComparationCreatorPanel() {
-		//this.setBorderWidth(2);
+		
+		//Define comparations
+		DisclosurePanel comparationDefinition = new DisclosurePanel("Seleccionar olas", true);
+		this.setWidget(1, 0, comparationDefinition);
 		{
-			this.spotBox = new ListBox(true);
-			this.spotBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
-			this.setWidget(0, 0, this.spotBox);
-			this.getFlexCellFormatter().setRowSpan(0, 0, 4);
-			this.getCellFormatter().setWidth(0, 0, ComparationCreatorPanel.LISTBOX_WIDTH);
+			compDefTable = new FlexTable();
+			comparationDefinition.setContent(compDefTable);
+			{
+				localizationPanel = new LinksLocalizationPanel(false, false);			
+				localizationPanel.setBasePanel(this);
+				compDefTable.setWidget(0, 0, localizationPanel);
+				compDefTable.getFlexCellFormatter().setColSpan(0, 0, 4);
+			}
+			{
+				this.spotBox = new ListBox(true);
+				this.spotBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
+				compDefTable.setWidget(1, 0, this.spotBox);
+				compDefTable.getFlexCellFormatter().setRowSpan(1, 0, 4);
+				compDefTable.getFlexCellFormatter().setWidth(1, 0, ComparationCreatorPanel.LISTBOX_WIDTH);
+			}
+			{
+				addSpotBtn = new HTMLButtonGrayGrad(">>", "CreateComparationPanel-add", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				compDefTable.setWidget(1, 1, addSpotBtn);
+				addSpotBtn.addClickHandler(this);
+				compDefTable.getFlexCellFormatter().setWidth(1, 1, addSpotBtn.getWidth());
+				compDefTable.getFlexCellFormatter().setHeight(1, 1, addSpotBtn.getHeight());
+				compDefTable.getFlexCellFormatter().setRowSpan(1, 1, 1);
+			}
+			{
+				this.selectedSpotsBox = new ListBox(true);
+				this.selectedSpotsBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
+				compDefTable.setWidget(1, 2, this.selectedSpotsBox);
+				compDefTable.getFlexCellFormatter().setRowSpan(1, 2, 4);
+				compDefTable.getFlexCellFormatter().setWidth(1, 2, ComparationCreatorPanel.LISTBOX_WIDTH);
+			}
+			{
+				removeSpotBtn = new HTMLButtonGrayGrad("<<", "CreateComparationPanel-remove", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				compDefTable.setWidget(2, 0, removeSpotBtn);
+				removeSpotBtn.addClickHandler(this);
+				compDefTable.getFlexCellFormatter().setWidth(2, 0, removeSpotBtn.getWidth());
+				compDefTable.getFlexCellFormatter().setHeight(2, 0, removeSpotBtn.getHeight());
+				compDefTable.getFlexCellFormatter().setRowSpan(2, 0, 1);
+			}
+			{
+				firstBtn = new HTMLButtonGrayGrad("First", "CreateComparationPanel-first", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				compDefTable.setWidget(1, 3, firstBtn);
+				firstBtn.addClickHandler(this);
+				compDefTable.getFlexCellFormatter().setWidth(1, 3, firstBtn.getWidth());
+				compDefTable.getFlexCellFormatter().setHeight(1, 3, firstBtn.getHeight());
+				compDefTable.getFlexCellFormatter().setRowSpan(1, 3, 1);
+			}
+			{
+				upBtn = new HTMLButtonGrayGrad("Up", "CreateComparationPanel-up", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				compDefTable.setWidget(2, 1, upBtn);
+				upBtn.addClickHandler(this);
+				compDefTable.getFlexCellFormatter().setWidth(2, 1, upBtn.getWidth());
+				compDefTable.getFlexCellFormatter().setHeight(2, 1, upBtn.getHeight());
+				compDefTable.getFlexCellFormatter().setRowSpan(2, 1, 1);
+			}
+			{
+				downBtn = new HTMLButtonGrayGrad("Down", "CreateComparationPanel-down", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				compDefTable.setWidget(3, 1, downBtn);
+				downBtn.addClickHandler(this);
+				compDefTable.getFlexCellFormatter().setWidth(3, 1, downBtn.getWidth());
+				compDefTable.getFlexCellFormatter().setHeight(3, 1, downBtn.getHeight());
+				compDefTable.getFlexCellFormatter().setRowSpan(3, 1, 1);
+			}
+			{
+				lastBtn = new HTMLButtonGrayGrad("Last", "CreateComparationPanel-last", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				compDefTable.setWidget(4, 1, lastBtn);
+				lastBtn.addClickHandler(this);
+				compDefTable.getFlexCellFormatter().setWidth(4, 1, lastBtn.getWidth());
+				compDefTable.getFlexCellFormatter().setHeight(4, 1, lastBtn.getHeight());
+				compDefTable.getFlexCellFormatter().setRowSpan(4, 1, 1);
+			}
+			{
+				compareBtn = new HTMLButtonGrayGrad("Compare", "CreateComparationPanel-Compare", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+				compDefTable.setWidget(5, 2, compareBtn);
+				compareBtn.addClickHandler(this);
+			}
 		}
+		this.showAllowedPanels();
+	}
+	
+	public void fillSpotsSelector() {
+		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
+		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
+			public void onSuccess(List<SpotDTO> result) {
+				fillSpotsListBox(result, zoneId);
+			}
+				
+			public void onFailure(Throwable caught) {
+				//TODO do something when the getspots methos fails
+			}
+		});
+	}
+	
+	private void showAllowedPanels() {
+		UserServices.Util.getInstance().hasAccessTo("addComparation", new AsyncCallback<Boolean>(){
+			public void onSuccess(Boolean result) {
+				if (result) {
+					{
+						saveBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-Save", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+						compDefTable.setWidget(5, 3, saveBtn);	
+					}
+					showMyComparationsPanel();
+				}
+				
+			}
+	
+			public void onFailure(Throwable caught) {
+				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+						Cookies.getCookie("surfForecaster-Username") != null) {
+					GWTUtils.showSessionExpiredLoginBox();
+				}
+				SurfForecaster.getInstance().gotoHistoryToken();
+			}
+		});
+	}
+	
+	private void showMyComparationsPanel() {
+		//My comparations
+		myComparations = new DisclosurePanel("Mis comparaciones", true);
+		this.setWidget(0, 0, myComparations);
 		{
-			addSpotBtn = new HTMLButtonGrayGrad(">>", "CreateComparationPanel-add", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
-			this.setWidget(0, 1, addSpotBtn);
-			addSpotBtn.addClickHandler(this);
-			this.getFlexCellFormatter().setWidth(0, 1, addSpotBtn.getWidth());
-			this.getFlexCellFormatter().setHeight(0, 1, addSpotBtn.getHeight());
-			this.getFlexCellFormatter().setRowSpan(0, 1, 1);
+			FlexTable myCompsTable = new FlexTable();
+			myComparations.setContent(myCompsTable);
+			{
+				myCompsBox = new ListBox();
+				myCompsTable.setWidget(0, 0, myCompsBox);
+			}
 		}
-		{
-			this.selectedSpotsBox = new ListBox(true);
-			this.selectedSpotsBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
-			this.setWidget(0, 2, this.selectedSpotsBox);
-			this.getFlexCellFormatter().setRowSpan(0, 2, 4);
-			this.getFlexCellFormatter().setWidth(0, 2, ComparationCreatorPanel.LISTBOX_WIDTH);
-		}
-		{
-			removeSpotBtn = new HTMLButtonGrayGrad("<<", "CreateComparationPanel-remove", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
-			this.setWidget(1, 0, removeSpotBtn);
-			removeSpotBtn.addClickHandler(this);
-			this.getFlexCellFormatter().setWidth(1, 0, removeSpotBtn.getWidth());
-			this.getFlexCellFormatter().setHeight(1, 0, removeSpotBtn.getHeight());
-			this.getFlexCellFormatter().setRowSpan(1, 0, 1);
-		}
-		{
-			firstBtn = new HTMLButtonGrayGrad("First", "CreateComparationPanel-first", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
-			this.setWidget(0, 3, firstBtn);
-			firstBtn.addClickHandler(this);
-			this.getFlexCellFormatter().setWidth(0, 3, firstBtn.getWidth());
-			this.getFlexCellFormatter().setHeight(0, 3, firstBtn.getHeight());
-			this.getFlexCellFormatter().setRowSpan(0, 3, 1);
-		}
-		{
-			upBtn = new HTMLButtonGrayGrad("Up", "CreateComparationPanel-up", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
-			this.setWidget(1, 1, upBtn);
-			upBtn.addClickHandler(this);
-			this.getFlexCellFormatter().setWidth(1, 1, upBtn.getWidth());
-			this.getFlexCellFormatter().setHeight(1, 1, upBtn.getHeight());
-			this.getFlexCellFormatter().setRowSpan(1, 1, 1);
-		}
-		{
-			downBtn = new HTMLButtonGrayGrad("Down", "CreateComparationPanel-down", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
-			this.setWidget(2, 1, downBtn);
-			downBtn.addClickHandler(this);
-			this.getFlexCellFormatter().setWidth(2, 1, downBtn.getWidth());
-			this.getFlexCellFormatter().setHeight(2, 1, downBtn.getHeight());
-			this.getFlexCellFormatter().setRowSpan(2, 1, 1);
-		}
-		{
-			lastBtn = new HTMLButtonGrayGrad("Last", "CreateComparationPanel-last", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
-			this.setWidget(3, 1, lastBtn);
-			lastBtn.addClickHandler(this);
-			this.getFlexCellFormatter().setWidth(3, 1, lastBtn.getWidth());
-			this.getFlexCellFormatter().setHeight(3, 1, lastBtn.getHeight());
-			this.getFlexCellFormatter().setRowSpan(3, 1, 1);
-		}
-		{
-			compareBtn = new HTMLButtonGrayGrad("Compare", "CreateComparationPanel-Compare", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
-			this.setWidget(4, 3, compareBtn);
-			compareBtn.addClickHandler(this);
-		}
+		
+		//Set save button handler
+		saveBtn.addClickHandler(this);
 	}
 
 	@Override
