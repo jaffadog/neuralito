@@ -33,6 +33,7 @@ public class UserRoles {
 	private void setRegisteredUserActions() {
 		registeredUserActions = new Vector<String>();
 		registeredUserActions.add("addSpot");
+		registeredUserActions.add("addComparation");
 	}
 	
 	private void setAdministratorUserActions() {

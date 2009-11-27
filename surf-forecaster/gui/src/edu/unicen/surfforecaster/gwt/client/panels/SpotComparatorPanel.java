@@ -8,13 +8,10 @@ import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
-import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
-import edu.unicen.surfforecaster.gwt.client.SpotServices;
 
 public class SpotComparatorPanel extends VerticalPanel {
 
-	private LinksLocalizationPanel localizationPanel;
 	private DeckPanel deckPanel = null;
 	//private CreateComparationPanel createComparationPanel;
 	private static int CREATE_COMP_PANEL_INDEX = -1;
@@ -22,44 +19,22 @@ public class SpotComparatorPanel extends VerticalPanel {
 	
 	
 	public SpotComparatorPanel() {
+		deckPanel = new DeckPanel();
 		{
-			//this.setWidth("100%");
-			{
-				localizationPanel = new LinksLocalizationPanel(false, false);
-				localizationPanel.setBasePanel(this);
-				this.add(localizationPanel);
-			}
-			{
-				deckPanel = new DeckPanel();
-				{
-					ComparationCreatorPanel createComparationPanel = new ComparationCreatorPanel();
-					createComparationPanel.setBasePanel(this);
-					deckPanel.add(createComparationPanel);
-					deckPanel.setAnimationEnabled(true);
-					SpotComparatorPanel.CREATE_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(createComparationPanel);
-					
-					ComparationViewerPanel comparationViewerPanel = new ComparationViewerPanel();
-					comparationViewerPanel.setBasePanel(this);
-					deckPanel.add(comparationViewerPanel);
-					SpotComparatorPanel.VIEW_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(comparationViewerPanel);
-				}
-				this.add(deckPanel);
-			}
+			ComparationCreatorPanel createComparationPanel = new ComparationCreatorPanel();
+			createComparationPanel.setBasePanel(this);
+			deckPanel.add(createComparationPanel);
+			deckPanel.setAnimationEnabled(true);
+			SpotComparatorPanel.CREATE_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(createComparationPanel);
 		}
-	}
-	
-	public void fillSpotsSelector() {
-		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
-		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
-			public void onSuccess(List<SpotDTO> result) {
-				((ComparationCreatorPanel)deckPanel.getWidget(SpotComparatorPanel.CREATE_COMP_PANEL_INDEX)).fillSpotsListBox(result, zoneId);
-				showComparationCreatorPanel();
-			}
-				
-			public void onFailure(Throwable caught) {
-				//TODO do something when the getspots methos fails
-			}
-		});
+		{
+			ComparationViewerPanel comparationViewerPanel = new ComparationViewerPanel();
+			comparationViewerPanel.setBasePanel(this);
+			deckPanel.add(comparationViewerPanel);
+			SpotComparatorPanel.VIEW_COMP_PANEL_INDEX = deckPanel.getWidgetIndex(comparationViewerPanel);
+		}
+		this.add(deckPanel);
+		this.showComparationCreatorPanel();
 	}
 	
 	public void showComparationViewerPanel() {
