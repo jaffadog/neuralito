@@ -1,9 +1,11 @@
 package edu.unicen.surfforecaster.gwt.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.List;
 
+import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface UserServicesAsync {
 	void login(String userName, String password, AsyncCallback<UserDTO> callback);
@@ -13,6 +15,8 @@ public interface UserServicesAsync {
 	void hasAccessTo(String action, AsyncCallback<Boolean> callback);
 
 	void closeSession(AsyncCallback<Void> callback);
+	
+	void getSpotsComparations(AsyncCallback<List<ComparationDTO>> callback);
 	
 	void getLoggedUser(AsyncCallback<UserDTO> callback);
 
