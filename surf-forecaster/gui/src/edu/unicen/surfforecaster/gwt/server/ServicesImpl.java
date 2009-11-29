@@ -39,7 +39,7 @@ public class ServicesImpl extends SpringGWTServlet {
 			logger.log(Level.INFO, "ServicesImpl - getSessionData - Session is expired or empty.");
 			throw new NeuralitoException(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED);
 		} else {
-			final SessionData sessionData = new SessionData();
+			final SessionData sessionData = SessionData.getInstance();
 			sessionData.setUserDTO((UserDTO)session.getAttribute("surfForecaster-User"));
 			logger.log(Level.INFO, "ServicesImpl - getSessionData - The session is open for user:" + sessionData.getUserDTO().getUsername());
 			return sessionData;
@@ -65,6 +65,7 @@ public class ServicesImpl extends SpringGWTServlet {
 	 * @return UserDTO, the logged in user
 	 */
 	public UserDTO getLoggedUser() {
+		logger.log(Level.INFO, "ServicesImpl - getLoggedUser - Retrieving session data....");
 		SessionData sessionData;
 		try {
 			sessionData = this.getSessionData();
@@ -84,6 +85,7 @@ public class ServicesImpl extends SpringGWTServlet {
 	 * @throws NeuralitoException Could return an USER_SESSION_EXPIRED exception or an USER_ROLE_INSUFFICIENT 
 	 */
 	public boolean hasAccessTo(String action) throws NeuralitoException {
+		logger.log(Level.INFO, "ServicesImpl - hasAccessTo - Retrieving session data....");
 		SessionData sessionData = this.getSessionData();
 		if (sessionData != null)
 			return UserRoles.getInstance().hasPermission(sessionData.getUserDTO().getType(), action);

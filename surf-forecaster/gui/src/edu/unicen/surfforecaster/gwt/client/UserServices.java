@@ -1,10 +1,13 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
 
@@ -31,6 +34,8 @@ public interface UserServices extends RemoteService {
 	boolean hasAccessTo(String action) throws NeuralitoException;
 
 	void closeSession();
+	
+	List<ComparationDTO> getSpotsComparations() throws NeuralitoException;
 	
 	UserDTO getLoggedUser();
 

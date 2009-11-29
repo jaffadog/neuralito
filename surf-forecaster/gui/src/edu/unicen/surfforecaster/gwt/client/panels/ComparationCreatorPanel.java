@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
@@ -15,16 +17,19 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class ComparationCreatorPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler {
@@ -52,11 +57,13 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private LinksLocalizationPanel localizationPanel;
 	private DisclosurePanel myComparations;
 	private FlexTable compDefTable;
+	private Label lblComparationDescription;
 	
 	public ComparationCreatorPanel() {
 		
 		//Define comparations
 		DisclosurePanel comparationDefinition = new DisclosurePanel("Seleccionar olas", true);
+		comparationDefinition.setAnimationEnabled(true);
 		this.setWidget(1, 0, comparationDefinition);
 		{
 			compDefTable = new FlexTable();
@@ -138,59 +145,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		this.showAllowedPanels();
 	}
 	
-	public void fillSpotsSelector() {
-		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
-		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
-			public void onSuccess(List<SpotDTO> result) {
-				fillSpotsListBox(result, zoneId);
-			}
-				
-			public void onFailure(Throwable caught) {
-				//TODO do something when the getspots methos fails
-			}
-		});
-	}
-	
-	private void showAllowedPanels() {
-		UserServices.Util.getInstance().hasAccessTo("addComparation", new AsyncCallback<Boolean>(){
-			public void onSuccess(Boolean result) {
-				if (result) {
-					{
-						saveBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-Save", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
-						compDefTable.setWidget(5, 3, saveBtn);	
-					}
-					showMyComparationsPanel();
-				}
-				
-			}
-	
-			public void onFailure(Throwable caught) {
-				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
-						Cookies.getCookie("surfForecaster-Username") != null) {
-					GWTUtils.showSessionExpiredLoginBox();
-				}
-				SurfForecaster.getInstance().gotoHistoryToken();
-			}
-		});
-	}
-	
-	private void showMyComparationsPanel() {
-		//My comparations
-		myComparations = new DisclosurePanel("Mis comparaciones", true);
-		this.setWidget(0, 0, myComparations);
-		{
-			FlexTable myCompsTable = new FlexTable();
-			myComparations.setContent(myCompsTable);
-			{
-				myCompsBox = new ListBox();
-				myCompsTable.setWidget(0, 0, myCompsBox);
-			}
-		}
-		
-		//Set save button handler
-		saveBtn.addClickHandler(this);
-	}
-
 	@Override
 	public Widget getBasePanel() {
 		return this.baseParentPanel;
@@ -201,21 +155,9 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		this.baseParentPanel = basePanel;
 	}
 	
-	public void fillSpotsListBox(List<SpotDTO> spots, Integer zoneId) {
-		spotBox.clear();
-		this.currentSelectedZone = zoneId;
-		if (spots.size() > 0) {
-			Set<Integer> selectedSpotsIds = (Set<Integer>)selectedSpots.keySet();
-			Iterator<SpotDTO> i = spots.iterator(); 
-			while (i.hasNext()){
-				SpotDTO spot = i.next();
-				if (!selectedSpotsIds.contains(spot.getId()))
-					spotBox.addItem(spot.getName(), spot.getId().toString());
-			}
-		}
-	}
-
-	@Override
+	/**
+	 * Click event for all components of this panel
+	 */
 	public void onClick(ClickEvent event) {
 		Widget sender = (Widget) event.getSource();
 		
@@ -233,55 +175,44 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.moveSpotUp();
 		else if (sender == downBtn) 
 			this.moveSpotDown();
-		
-	}
-	
-	private void makeComparation() {
-		List<Integer> selectedSpots = new ArrayList<Integer>();
-		List<String> selectedSpotsNames = new ArrayList<String>();
-		
-		for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
-			selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
-		}
-		
-		if (selectedSpots.size() < 2) {
-			// TODO msgbox tiene para este mensaje
-			Window.alert("Debe seleccionar al menos dos spots a comparar");
-		} else if (selectedSpots.size() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP) {
-			// TODO msgbox tiene para este mensaje
-			Window.alert("Debe seleccionar 5 spots como maximo");
-		} else {
-			for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
-				selectedSpotsNames.add(selectedSpotsBox.getItemText(i));
-			}
-			
-			((SpotComparatorPanel)baseParentPanel).generateSpotsComparation(selectedSpots, selectedSpotsNames);
-		}
-		
-		
-		
+		else if (sender == saveBtn) 
+			this.saveComparation();
 	}
 
 	/**
-	 * Checks if a multiple select ListBox has just one item selected or more than one
-	 * @return true if just one item of the list is selected, false in the other case
+	 * Get the spots for the selected zone for this user and
+	 * Fill the spotsSelector once the spots being retrieved
 	 */
-	private boolean justOneSpotSelected(ListBox multipleSelectList) {
-		
-		int firstSelected = multipleSelectList.getSelectedIndex();
-		if (firstSelected == -1)
-			return false;
-		
-		boolean result = false;
-		for (int i = firstSelected; i < multipleSelectList.getItemCount(); i++) {
-			if (multipleSelectList.isItemSelected(i) && result == false) //always true in first iteration
-				result = true;
-			else if (multipleSelectList.isItemSelected(i)){
-				result = false;
-				break;
+	public void getSpotsAndFillSpotsSelector() {
+		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
+		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
+			public void onSuccess(List<SpotDTO> result) {
+				fillSpotsListBox(result, zoneId);
+			}
+				
+			public void onFailure(Throwable caught) {
+				//TODO do something when the getspots methos fails
+			}
+		});
+	}
+	
+	/**
+	 * Fill the spotsSelector listBox
+	 * @param spots
+	 * @param zoneId
+	 */
+	public void fillSpotsListBox(List<SpotDTO> spots, Integer zoneId) {
+		spotBox.clear();
+		this.currentSelectedZone = zoneId;
+		if (spots.size() > 0) {
+			Set<Integer> selectedSpotsIds = (Set<Integer>)selectedSpots.keySet();
+			Iterator<SpotDTO> i = spots.iterator(); 
+			while (i.hasNext()){
+				SpotDTO spot = i.next();
+				if (!selectedSpotsIds.contains(spot.getId()))
+					spotBox.addItem(spot.getName(), spot.getId().toString());
 			}
 		}
-		return result;
 	}
 	
 	private void moveSpotUp() {
@@ -378,6 +309,152 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			}
 			//TODO mostrar un message box o algo que indique si que tiene que seleccionar algun alemente antes de apretras este boton (si no lo hizo) idem con demas
 			//botones de este panel
+		}
+	}
+
+	/**
+	 * Checks if a multiple select ListBox has just one item selected or more than one
+	 * @return true if just one item of the list is selected, false in the other case
+	 */
+	private boolean justOneSpotSelected(ListBox multipleSelectList) {
+		
+		int firstSelected = multipleSelectList.getSelectedIndex();
+		if (firstSelected == -1)
+			return false;
+		
+		boolean result = false;
+		for (int i = firstSelected; i < multipleSelectList.getItemCount(); i++) {
+			if (multipleSelectList.isItemSelected(i) && result == false) //always true in first iteration
+				result = true;
+			else if (multipleSelectList.isItemSelected(i)){
+				result = false;
+				break;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Checks there are between 2 and 5 spots selected and generates the comparation
+	 */
+	private void makeComparation() {
+		List<Integer> selectedSpots = new ArrayList<Integer>();
+		List<String> selectedSpotsNames = new ArrayList<String>();
+		
+		for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
+			selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
+		}
+		
+		if (selectedSpots.size() < 2) {
+			// TODO msgbox tiene para este mensaje
+			Window.alert("Debe seleccionar al menos dos spots a comparar");
+		} else if (selectedSpots.size() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP) {
+			// TODO msgbox tiene para este mensaje
+			Window.alert("Debe seleccionar 5 spots como maximo");
+		} else {
+			for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
+				selectedSpotsNames.add(selectedSpotsBox.getItemText(i));
+			}
+			
+			((SpotComparatorPanel)baseParentPanel).generateSpotsComparation(selectedSpots, selectedSpotsNames);
+		}
+		
+		
+		
+	}
+	
+	/**
+	 * Made a request to the server for the loggedin user comparations.
+	 * If exist a user loggedin shows the comparation components in the view, with the comparations retrieved.
+	 * 
+	 */
+	private void showAllowedPanels() {
+		UserServices.Util.getInstance().getSpotsComparations(new AsyncCallback<List<ComparationDTO>>(){
+			public void onSuccess(List<ComparationDTO> result) {
+				if (result != null) {
+					saveBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-Save", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+					compDefTable.setWidget(5, 3, saveBtn);	
+					showMyComparationsPanel(result);
+				}
+				
+			}
+	
+			public void onFailure(Throwable caught) {
+				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+						Cookies.getCookie("surfForecaster-Username") != null) {
+					GWTUtils.showSessionExpiredLoginBox();
+				}
+				SurfForecaster.getInstance().gotoHistoryToken();
+			}
+		});
+	}
+	
+	private void showMyComparationsPanel(List<ComparationDTO> comparations) {
+		//My comparations
+		myComparations = new DisclosurePanel("Mis comparaciones", true);
+		myComparations.setAnimationEnabled(true);
+		this.setWidget(0, 0, myComparations);
+		{
+			FlexTable myCompsTable = new FlexTable();
+			myComparations.setContent(myCompsTable);
+			{
+				myCompsBox = new ListBox();
+				myCompsBox.setWidth("300px");
+				myCompsTable.setWidget(0, 0, myCompsBox);
+			}
+			{
+				lblComparationDescription = new Label("");
+				myCompsTable.setWidget(1, 0, lblComparationDescription);
+			}
+		}
+		
+		this.fillCompsBox(comparations);
+		//Set save button handler
+		saveBtn.addClickHandler(this);
+	}
+
+	private void fillCompsBox(final List<ComparationDTO> comparations) {
+		myCompsBox.addItem("<Choose a comparation>", "-1");
+		Iterator<ComparationDTO> i = comparations.iterator();
+		while (i.hasNext()) {
+			ComparationDTO comparationDTO = i.next();
+			myCompsBox.addItem(comparationDTO.getName(), comparationDTO.getId().toString());
+		}
+//		//Set first comparation description text to the description label
+//		if (myCompsBox.getItemCount() > 0)
+//			lblComparationDescription.setText(comparations.get(0).getDescription());
+		
+		myCompsBox.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				lblComparationDescription.setText("");
+				for (int j = 0; j < comparations.size(); j++) {
+					if (comparations.get(j).getId().intValue() == new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue()) {
+						lblComparationDescription.setText(comparations.get(j).getDescription());
+						break;
+					}
+				}
+			}
+		});
+		SessionData.getInstance();
+	}
+	
+	/**
+	 * Saves or updates a comparation
+	 */
+	private void saveComparation() {
+		if (selectedSpotsBox.getItemCount() < 2) {
+			// TODO msgbox tiene para este mensaje
+			Window.alert("Debe seleccionar al menos dos spots a comparar");
+		} else if (selectedSpotsBox.getItemCount() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP) {
+			// TODO msgbox tiene para este mensaje
+			Window.alert("Debe seleccionar 5 spots como maximo");
+		} else {
+			List<Integer> selectedSpots = new ArrayList<Integer>();
+			for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
+				selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
+			}
+			
+			
 		}
 	}
 

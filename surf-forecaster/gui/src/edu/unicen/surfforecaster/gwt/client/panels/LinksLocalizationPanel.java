@@ -148,7 +148,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 		} else if (this.baseParentPanel instanceof ForecastPanel) {
 			((ForecastPanel)this.baseParentPanel).getSpotLastestForecast();	
 		} else if (this.baseParentPanel instanceof ComparationCreatorPanel) {
-			((ComparationCreatorPanel)this.baseParentPanel).fillSpotsSelector();	
+			((ComparationCreatorPanel)this.baseParentPanel).getSpotsAndFillSpotsSelector();	
 		}
 	}
 	
