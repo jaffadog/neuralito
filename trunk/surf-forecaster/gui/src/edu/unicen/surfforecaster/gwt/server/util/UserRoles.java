@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
-import edu.unicen.surfforecaster.gwt.server.ServicesImpl;
 
 public class UserRoles {
 	
@@ -42,14 +41,13 @@ public class UserRoles {
 	private void setRegisteredUserActions() {
 		registeredUserActions = new Vector<String>();
 		registeredUserActions.add("addSpot");
-		//registeredUserActions.add("addComparation");
+		registeredUserActions.add("addComparation");
 	}
 	
 	private void setAdministratorUserActions() {
 		administratorUserActions = new Vector<String>();
 		administratorUserActions.addAll(registeredUserActions);
 		administratorUserActions.add("addArea");
-		administratorUserActions.add("addComparation");
 	}
 	
 	/**
