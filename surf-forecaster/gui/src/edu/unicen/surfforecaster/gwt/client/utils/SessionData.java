@@ -13,11 +13,10 @@ import edu.unicen.surfforecaster.common.services.dto.UserDTO;
  * @author MAXI
  *
  */
-//TODO desaser este singleton porque no va ni a gancho, volar el usercomparation property
 public class SessionData implements IsSerializable {
 	
-	private static UserDTO userDTO;
-	private static List<ComparationDTO> userComparations;
+	private UserDTO userDTO;
+	private List<ComparationDTO> userComparations;
 	
 	private static SessionData instance = null;
 	
