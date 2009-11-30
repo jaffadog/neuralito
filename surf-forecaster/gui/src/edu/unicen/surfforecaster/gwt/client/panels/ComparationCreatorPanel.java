@@ -459,13 +459,12 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			ComparationDTO comparationDTO = i.next();
 			myCompsBox.addItem(comparationDTO.getName(), comparationDTO.getId().toString());
 		}
-//		//Set first comparation description text to the description label
-//		if (myCompsBox.getItemCount() > 0)
-//			lblComparationDescription.setText(comparations.get(0).getDescription());
 		
 		myCompsBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
 				lblComparationDescription.setText("");
+				selectedSpotsBox.clear();
+				selectedSpots.clear();
 				for (int j = 0; j < comparations.size(); j++) {
 					if (comparations.get(j).getId().intValue() == new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue()) {
 						lblComparationDescription.setText(comparations.get(j).getDescription());
@@ -551,8 +550,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	 * fill the selected spots listbox with the spots defined in the choosen comparation
 	 */
 	private void showComparationSpots(List<SpotDTO> spots) {
-		selectedSpotsBox.clear();
-		selectedSpots.clear();
 		Iterator<SpotDTO> i = spots.iterator();
 		while (i.hasNext()) {
 			SpotDTO spotDTO = i.next();
