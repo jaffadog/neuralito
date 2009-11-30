@@ -9,49 +9,24 @@ import java.util.List;
  * 
  */
 public class ComparationDTO implements Serializable {
-	/**
-	 * 
-	 */
-	public ComparationDTO() {
-		// gwt purpose
-	}
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
-	/**
-	 * Spot Id.
-	 */
+	
 	private Integer id;
-	/**
-	 * Spot name
-	 */
+	
 	private String name;
 	
-	
 	private Integer userId;
-	
+
 	private String description;
 	
 	private List<SpotDTO> spots;
-
-	public String getDescription() {
-		return description;
+	
+	
+	public ComparationDTO() {
+		// gwt purpose
 	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public List<SpotDTO> getSpots() {
-		return spots;
-	}
-
-	public void setSpots(List<SpotDTO> spots) {
-		this.spots = spots;
-	}
-
+	
 	/**
 	 * @param id
 	 * @param name
@@ -69,24 +44,42 @@ public class ComparationDTO implements Serializable {
 		this.userId = userId;
 	}
 
-	/**
-	 * @return the name
-	 */
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public List<SpotDTO> getSpots() {
+		return spots;
+	}
+
+	public void setSpots(List<SpotDTO> spots) {
+		this.spots = spots;
+	}
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param id
-	 */
 	public Integer getId() {
 		return id;
 	}
 
-	
-	/**
-	 * @return the userId
-	 */
 	public Integer getUserId() {
 		return userId;
 	}
