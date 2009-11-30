@@ -40,11 +40,11 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private ListBox spotBox4 = null;
 	private ListBox spotBox5 = null;
 	
-	private Label spotColor1 = null;
-	private Label spotColor2 = null;
-	private Label spotColor3 = null;
-	private Label spotColor4 = null;
-	private Label spotColor5 = null;
+//	private Label spotColor1 = null;
+//	private Label spotColor2 = null;
+//	private Label spotColor3 = null;
+//	private Label spotColor4 = null;
+//	private Label spotColor5 = null;
 	
 	private Label spotName1 = null;
 	private Label spotName2 = null;
@@ -91,40 +91,40 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			spotName5.setVisible(false);
 		}
 		
-		//Spot color labels
-		{
-			spotColor1 = new Label("");
-			spotColor1.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-			spotColor1.addStyleName("gwt-Label-SpotColor1");
-			this.setWidget(0, 2, spotColor1);
-		}
-		{
-			spotColor2 = new Label("");
-			spotColor2.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-			spotColor2.addStyleName("gwt-Label-SpotColor2");
-			this.setWidget(1, 2, spotColor2);
-		}
-		{
-			spotColor3 = new Label("");
-			spotColor3.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-			spotColor3.addStyleName("gwt-Label-SpotColor3");
-			this.setWidget(2, 2, spotColor3);
-			spotColor3.setVisible(false);
-		}
-		{
-			spotColor4 = new Label("");
-			spotColor4.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-			spotColor4.addStyleName("gwt-Label-SpotColor4");
-			this.setWidget(3, 2, spotColor4);
-			spotColor4.setVisible(false);
-		}
-		{
-			spotColor5 = new Label("");
-			spotColor5.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-			spotColor5.addStyleName("gwt-Label-SpotColor5");
-			this.setWidget(4, 2, spotColor5);
-			spotColor5.setVisible(false);
-		}
+//		//Spot color labels
+//		{
+//			spotColor1 = new Label("");
+//			spotColor1.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
+//			spotColor1.addStyleName("gwt-Label-SpotColor1");
+//			this.setWidget(0, 2, spotColor1);
+//		}
+//		{
+//			spotColor2 = new Label("");
+//			spotColor2.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
+//			spotColor2.addStyleName("gwt-Label-SpotColor2");
+//			this.setWidget(1, 2, spotColor2);
+//		}
+//		{
+//			spotColor3 = new Label("");
+//			spotColor3.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
+//			spotColor3.addStyleName("gwt-Label-SpotColor3");
+//			this.setWidget(2, 2, spotColor3);
+//			spotColor3.setVisible(false);
+//		}
+//		{
+//			spotColor4 = new Label("");
+//			spotColor4.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
+//			spotColor4.addStyleName("gwt-Label-SpotColor4");
+//			this.setWidget(3, 2, spotColor4);
+//			spotColor4.setVisible(false);
+//		}
+//		{
+//			spotColor5 = new Label("");
+//			spotColor5.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
+//			spotColor5.addStyleName("gwt-Label-SpotColor5");
+//			this.setWidget(4, 2, spotColor5);
+//			spotColor5.setVisible(false);
+//		}
 		
 		//Spots forecasters listboxes
 		{
@@ -297,43 +297,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	}
 	
 	private DataTable createMotionTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
-		DataTable data = DataTable.create();
-//		data.addRows(6);
-//	    data.addColumn(ColumnType.STRING, "Spot");
-//	    data.addColumn(ColumnType.NUMBER, "Hours");
-//	    data.addColumn(ColumnType.NUMBER, "Wave Height");
-//	    data.setValue(0, 0, "Waimea");
-//	    data.setValue(0, 2, 10);
-//	    
-//	    data.setValue(1, 0, "Waimea");
-//	    data.setValue(1, 2, 12);
-//	    
-//	    data.setValue(2, 0, "Waimea");
-//	    data.setValue(2, 2, 5);
-//	    
-//	    data.setValue(3, 0, "Waimea");
-//	    data.setValue(3, 2, 13);
-//	    
-//	    data.setValue(4, 0, "Waimea");
-//	    data.setValue(4, 2, 3);
-//	    
-//	    data.setValue(5, 0, "Waimea");
-//	    data.setValue(5, 2, 12);
-//	    
-//
-//	    try {
-//	      data.setValue(0, 1, 2000);
-//	      data.setValue(1, 1, 2001);
-//	      data.setValue(2, 1, 2002);
-//	      data.setValue(3, 1, 2003);
-//	      data.setValue(4, 1, 2004);
-//	      data.setValue(5, 1, 2005);
-//	    } catch (JavaScriptException ex) {
-//	      GWT.log("Error creating data table - Date bug on mac?", ex);
-//	    }
-//	    
-	    /****************************************************/
-	    
+		DataTable data = DataTable.create();	    
 	    data.addColumn(ColumnType.STRING, "Spot");
 	    data.addColumn(ColumnType.NUMBER, "Hours");
 	    data.addColumn(ColumnType.NUMBER, "Wave Height");
@@ -416,7 +380,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			}
 			this.spotName3.setVisible(true);
 			this.spotBox3.setVisible(true);
-			this.spotColor3.setVisible(true);
+//			this.spotColor3.setVisible(true);
 			this.forecastersNames.add(this.spotBox3.getValue(0));
 			
 			if (spotsIds.size() >= 4) {
@@ -428,7 +392,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 				}
 				this.spotName4.setVisible(true);
 				this.spotBox4.setVisible(true);
-				this.spotColor4.setVisible(true);
+//				this.spotColor4.setVisible(true);
 				this.forecastersNames.add(this.spotBox4.getValue(0));
 				
 				if (spotsIds.size() == 5) {
@@ -441,7 +405,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 					
 					this.spotName5.setVisible(true);
 					this.spotBox5.setVisible(true);
-					this.spotColor5.setVisible(true);
+//					this.spotColor5.setVisible(true);
 					this.forecastersNames.add(this.spotBox5.getValue(0));
 				}
 			}

@@ -52,6 +52,10 @@ public class MessagePanel extends HorizontalPanel {
 		this.messagesVPanel = messagesVPanel;
 	}
 	
+	/**
+	 * Set a collection of messages to show in the same message panel
+	 * @param Vector<String> messages
+	 */
 	public void setMessages(Vector<String> messages) {
 		this.getMessagesVPanel().clear();
 		for (Enumeration<String> e = messages.elements(); e.hasMoreElements();){
@@ -61,6 +65,14 @@ public class MessagePanel extends HorizontalPanel {
 		}
 	}
 	
-	
-	
+	/**
+	 * Set a message to show in the message panel
+	 * @param String message
+	 */
+	public void setMessage(String message) {
+		this.getMessagesVPanel().clear();
+		Label lblMessage = new Label("- " + message);
+		lblMessage.addStyleName(this.getLabelsStyleNames());
+		this.getMessagesVPanel().add(lblMessage);
+	}
 }

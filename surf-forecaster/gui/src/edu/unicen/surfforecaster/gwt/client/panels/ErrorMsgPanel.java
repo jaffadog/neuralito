@@ -14,11 +14,15 @@ public class ErrorMsgPanel extends MessagePanel {
 		this.setLabelsStyleNames("gwt-Label-error");
 	}
 	
-	/**
-	 * @wbp.parser.constructor
-	 */
 	public ErrorMsgPanel(Vector<String> messages){
 		this();
 		this.setMessages(messages);	
+	}
+	
+	public ErrorMsgPanel(String message) {
+		this();
+		Vector<String> messages = new Vector<String>();
+		messages.add(message);
+		this.setMessages(messages);
 	}
 }

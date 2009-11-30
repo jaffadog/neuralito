@@ -13,10 +13,12 @@ import edu.unicen.surfforecaster.common.services.dto.UserDTO;
  * @author MAXI
  *
  */
+
+//TODO si estaclase se usa solo del lado del server meterla alla. Tb evaluar si hace falta tenerla.
 public class SessionData implements IsSerializable {
 	
 	private UserDTO userDTO;
-	private List<ComparationDTO> userComparations;
+	//private List<ComparationDTO> userComparations;
 	
 	private static SessionData instance = null;
 	
@@ -29,7 +31,7 @@ public class SessionData implements IsSerializable {
 	
 	public SessionData() {
 		this.userDTO = null;
-		this.userComparations = null;
+//		this.userComparations = null;
 	}
 	
 	/**
@@ -47,11 +49,11 @@ public class SessionData implements IsSerializable {
 		this.userDTO = userDTO;
 	}
 
-	public List<ComparationDTO> getUserComparations() {
-		return userComparations;
-	}
-
-	public void setUserComparations(List<ComparationDTO> userComparations) {
-		this.userComparations = userComparations;
-	}
+//	public List<ComparationDTO> getUserComparations() {
+//		return userComparations;
+//	}
+//
+//	public void setUserComparations(List<ComparationDTO> userComparations) {
+//		this.userComparations = userComparations;
+//	}
 }

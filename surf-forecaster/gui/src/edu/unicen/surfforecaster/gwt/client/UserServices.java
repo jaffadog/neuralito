@@ -37,6 +37,8 @@ public interface UserServices extends RemoteService {
 	
 	List<ComparationDTO> getSpotsComparations() throws NeuralitoException;
 	
+	Integer saveComparation(String name, String description, List<Integer> spotsIds) throws NeuralitoException;
+	
 	UserDTO getLoggedUser();
 
 }
