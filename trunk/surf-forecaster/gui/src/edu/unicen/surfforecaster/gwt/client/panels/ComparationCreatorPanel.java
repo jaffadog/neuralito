@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -17,8 +18,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
@@ -28,6 +33,7 @@ import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
+import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
@@ -46,6 +52,17 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private HTMLButtonGrayGrad upBtn;
 	private HTMLButtonGrayGrad downBtn;
 	private HTMLButtonGrayGrad lastBtn;
+	private LinksLocalizationPanel localizationPanel;
+	private DisclosurePanel myComparations;
+	private FlexTable compDefTable;
+	private Label lblComparationDescription;
+	private HTMLButtonGrayGrad cancelSaveCompBtn;
+	private HTMLButtonGrayGrad saveCompBtn;
+	private FlexTable savePanel;
+	private TextBox txtCompName;
+	private TextArea txtCompDescription;
+	private MessagePanel errorPanel;
+	private MessagePanel successPanel;
 	
 	private static final String LISTBOX_WIDTH = "200px";
 	private static final String LISTBOX_HEIGHT = "300px";
@@ -54,17 +71,27 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
 	private Map<Integer, Integer> selectedSpots = new HashMap<Integer, Integer>();
 	private Integer currentSelectedZone = null;
-	private LinksLocalizationPanel localizationPanel;
-	private DisclosurePanel myComparations;
-	private FlexTable compDefTable;
-	private Label lblComparationDescription;
 	
 	public ComparationCreatorPanel() {
+		
+		errorPanel = new ErrorMsgPanel();
+		errorPanel.setVisible(false);
+		this.setWidget(0, 0, errorPanel);
+		this.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.getFlexCellFormatter().setColSpan(0, 0, 3);
+		
+		Vector<String> message = new Vector<String>();
+		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
+		successPanel = new SuccessMsgPanel(message);
+		successPanel.setVisible(false);
+		this.setWidget(1, 0, successPanel);
+		this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.getFlexCellFormatter().setColSpan(1, 0, 3);
 		
 		//Define comparations
 		DisclosurePanel comparationDefinition = new DisclosurePanel("Seleccionar olas", true);
 		comparationDefinition.setAnimationEnabled(true);
-		this.setWidget(1, 0, comparationDefinition);
+		this.setWidget(3, 0, comparationDefinition);
 		{
 			compDefTable = new FlexTable();
 			comparationDefinition.setContent(compDefTable);
@@ -176,7 +203,11 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		else if (sender == downBtn) 
 			this.moveSpotDown();
 		else if (sender == saveBtn) 
+			this.showSavePanel();
+		else if (sender == saveCompBtn) 
 			this.saveComparation();
+		else if (sender == cancelSaveCompBtn) 
+			this.setSavePanelVisible(false);
 	}
 
 	/**
@@ -191,6 +222,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			}
 				
 			public void onFailure(Throwable caught) {
+				System.out.println("ComparationCreatorPanel - getSpots failed for zone: " + zoneId);
 				//TODO do something when the getspots methos fails
 			}
 		});
@@ -298,9 +330,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		for (int i = selectedSpotsBox.getItemCount() - 1 ; i >= 0; i--) {
 			if (selectedSpotsBox.isItemSelected(i)) {
 				Integer selectedSpotZone = selectedSpots.get(new Integer(selectedSpotsBox.getValue(i)));
-				System.out.println(selectedSpotZone);
-				System.out.println(this.currentSelectedZone);
-				
 				if (selectedSpotZone != null && selectedSpotZone.intValue() == this.currentSelectedZone.intValue())
 					spotBox.addItem(selectedSpotsBox.getItemText(i), selectedSpotsBox.getValue(i));
 				selectedSpots.remove(new Integer(selectedSpotsBox.getValue(i)));
@@ -335,28 +364,33 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	}
 	
 	/**
+	 * Checks that the selected spots count is valid, it means that is between two and MAX_SPOTS_TO_COMP const value
+	 * @return boolean
+	 */
+	private boolean validSelectedSpotsCount() {
+		if (selectedSpotsBox.getItemCount() < 2 || selectedSpotsBox.getItemCount() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP)
+			return false;
+		
+		return true;
+	}
+	
+	/**
 	 * Checks there are between 2 and 5 spots selected and generates the comparation
 	 */
 	private void makeComparation() {
-		List<Integer> selectedSpots = new ArrayList<Integer>();
-		List<String> selectedSpotsNames = new ArrayList<String>();
-		
-		for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
-			selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
-		}
-		
-		if (selectedSpots.size() < 2) {
-			// TODO msgbox tiene para este mensaje
-			Window.alert("Debe seleccionar al menos dos spots a comparar");
-		} else if (selectedSpots.size() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP) {
-			// TODO msgbox tiene para este mensaje
-			Window.alert("Debe seleccionar 5 spots como maximo");
-		} else {
+		errorPanel.setVisible(false);
+		successPanel.setVisible(false);
+		if (validSelectedSpotsCount()) {
+			List<Integer> selectedSpots = new ArrayList<Integer>();
+			List<String> selectedSpotsNames = new ArrayList<String>();
 			for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
+				selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
 				selectedSpotsNames.add(selectedSpotsBox.getItemText(i));
 			}
-			
 			((SpotComparatorPanel)baseParentPanel).generateSpotsComparation(selectedSpots, selectedSpotsNames);
+		} else {
+			errorPanel.setMessage("Debes elegin entre 2 y 5 spots para comparar");
+			errorPanel.setVisible(true);
 		}
 		
 		
@@ -372,13 +406,15 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		UserServices.Util.getInstance().getSpotsComparations(new AsyncCallback<List<ComparationDTO>>(){
 			public void onSuccess(List<ComparationDTO> result) {
 				if (result != null) {
-					saveBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-Save", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
-					compDefTable.setWidget(5, 3, saveBtn);	
 					showMyComparationsPanel(result);
+					createSavePanel();
+					saveBtn = new HTMLButtonGrayGrad("Save...", "CreateComparationPanel-Save", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+					compDefTable.setWidget(5, 3, saveBtn);
+					setSaveBtnClickHandler();
 				}
 				
 			}
-	
+
 			public void onFailure(Throwable caught) {
 				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 						Cookies.getCookie("surfForecaster-Username") != null) {
@@ -389,11 +425,16 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		});
 	}
 	
+	private void setSaveBtnClickHandler() {
+		//Set save button handler
+		saveBtn.addClickHandler(this);
+	}
+	
 	private void showMyComparationsPanel(List<ComparationDTO> comparations) {
 		//My comparations
 		myComparations = new DisclosurePanel("Mis comparaciones", true);
 		myComparations.setAnimationEnabled(true);
-		this.setWidget(0, 0, myComparations);
+		this.setWidget(2, 0, myComparations);
 		{
 			FlexTable myCompsTable = new FlexTable();
 			myComparations.setContent(myCompsTable);
@@ -409,10 +450,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		}
 		
 		this.fillCompsBox(comparations);
-		//Set save button handler
-		saveBtn.addClickHandler(this);
 	}
-
+	
 	private void fillCompsBox(final List<ComparationDTO> comparations) {
 		myCompsBox.addItem("<Choose a comparation>", "-1");
 		Iterator<ComparationDTO> i = comparations.iterator();
@@ -430,32 +469,184 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				for (int j = 0; j < comparations.size(); j++) {
 					if (comparations.get(j).getId().intValue() == new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue()) {
 						lblComparationDescription.setText(comparations.get(j).getDescription());
+						showComparationSpots(comparations.get(j).getSpots());
 						break;
 					}
 				}
+				fillSavePanel();
+				setSavePanelVisible(false);
 			}
 		});
 		SessionData.getInstance();
 	}
 	
-	/**
-	 * Saves or updates a comparation
-	 */
-	private void saveComparation() {
-		if (selectedSpotsBox.getItemCount() < 2) {
-			// TODO msgbox tiene para este mensaje
-			Window.alert("Debe seleccionar al menos dos spots a comparar");
-		} else if (selectedSpotsBox.getItemCount() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP) {
-			// TODO msgbox tiene para este mensaje
-			Window.alert("Debe seleccionar 5 spots como maximo");
+	private void createSavePanel() {
+		String txtWidth = "500px";
+		String areaWidth = "500px";
+		savePanel = new FlexTable();
+		savePanel.setVisible(false);
+		this.setWidget(4, 0, savePanel);
+		{
+			Label lblCompName = new Label("* " + "Nombre de comparacion" + ": ");
+			savePanel.setWidget(0, 0, lblCompName);
+			savePanel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		}
+		{
+			txtCompName = new TextBox();
+			txtCompName.setWidth(txtWidth);
+			savePanel.setWidget(0, 1, txtCompName);
+		}
+		{
+			saveCompBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-SaveComparation", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+			saveCompBtn.addClickHandler(this);
+			savePanel.setWidget(0, 2, saveCompBtn);
+		}
+		{
+			Label lblCompDescription = new Label("Descripcion" + ": ");
+			savePanel.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+			savePanel.getFlexCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
+			savePanel.setWidget(1, 0, lblCompDescription);
+		}
+		{
+			txtCompDescription = new TextArea();
+			txtCompDescription.setSize(areaWidth, "100px");
+			savePanel.setWidget(1, 1, txtCompDescription);
+		}
+		{
+			cancelSaveCompBtn = new HTMLButtonGrayGrad("Cancel", "CreateComparationPanel-CancelSaveComparation", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+			cancelSaveCompBtn.addClickHandler(this);
+			savePanel.getFlexCellFormatter().setVerticalAlignment(1, 2, HasVerticalAlignment.ALIGN_TOP);
+			savePanel.setWidget(1, 2, cancelSaveCompBtn);
+		}
+		this.fillSavePanel();
+	}
+
+	private void fillSavePanel() {
+		if (!myCompsBox.getValue(myCompsBox.getSelectedIndex()).equals("-1")) {
+			txtCompName.setText(myCompsBox.getItemText(myCompsBox.getSelectedIndex()));
+			txtCompDescription.setText(lblComparationDescription.getText());
 		} else {
+			txtCompName.setText("");
+			txtCompDescription.setText("");
+		}
+			
+		
+	}
+	
+	/**
+	 * Sets the save panel visibility
+	 * @param isVisible
+	 */
+	private void setSavePanelVisible(boolean isVisible) {
+		if (isVisible) {
+			saveBtn.setVisible(false);
+			savePanel.setVisible(true);
+		} else {
+			saveBtn.setVisible(true);
+			savePanel.setVisible(false);
+		}
+	}
+	
+	/**
+	 * fill the selected spots listbox with the spots defined in the choosen comparation
+	 */
+	private void showComparationSpots(List<SpotDTO> spots) {
+		selectedSpotsBox.clear();
+		selectedSpots.clear();
+		Iterator<SpotDTO> i = spots.iterator();
+		while (i.hasNext()) {
+			SpotDTO spotDTO = i.next();
+			selectedSpotsBox.addItem(spotDTO.getName(), spotDTO.getId().toString());
+			selectedSpots.put(spotDTO.getId(), spotDTO.getZone().getId());
+		}
+		//TODO ver si es necesario cachear los spots de cada zona para reducir llamadas al servidor , ver el resto del sistema por esto tambien. Ver si conviene
+		//inhabilitar el listbox mientras se realiza la llamada, por seguridad
+		this.getSpotsAndFillSpotsSelector();
+	}
+	
+	/**
+	 * Show savePanel
+	 */
+	private void showSavePanel() {
+		errorPanel.setVisible(false);
+		successPanel.setVisible(false);
+		if (validSelectedSpotsCount()) {
+			this.setSavePanelVisible(true);
+		} else {
+			errorPanel.setMessage("Debes elegin entre 2 y 5 spots para comparar");
+			errorPanel.setVisible(true);
+		}
+			
+	}
+	
+	private void saveComparation() {
+		errorPanel.setVisible(false);
+		successPanel.setVisible(false);
+		boolean nameDuplicated = false;
+		//check if comparation name already exists
+		for (int i = 1; i < myCompsBox.getItemCount(); i++) {
+			if (txtCompName.getText().trim().equals(myCompsBox.getItemText(i).trim())) {
+				nameDuplicated = true;
+				//TODO hacer esto en un msg box personalizado
+				if (Window.confirm("Ya tenes una comparacion con este nombre. Deseaas sobreescribir?"))
+					executeSaveComparation();
+				break;
+			}
+		}
+		if (!nameDuplicated)
+			executeSaveComparation();
+	}
+
+	private void executeSaveComparation() {
+		//generate spotsIds list
+		final Vector<String> messages = new Vector<String>();
+		errorPanel.setVisible(false);
+		successPanel.setVisible(false);
+		messages.addAll(validateForm());
+		if (messages.isEmpty()){
 			List<Integer> selectedSpots = new ArrayList<Integer>();
 			for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
 				selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
 			}
-			
-			
+			UserServices.Util.getInstance().saveComparation(txtCompName.getText().trim(), txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
+				public void onSuccess(Integer result) {
+					if (result != null && result > 0) {
+						successPanel.setVisible(true);
+					} else {
+						errorPanel.setMessage("Error guardando la comparacion, intentelo nuevamente.");
+						errorPanel.setVisible(true);
+					}
+				}
+	
+				public void onFailure(Throwable caught) {
+					if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+							Cookies.getCookie("surfForecaster-Username") != null) {
+						GWTUtils.showSessionExpiredLoginBox();
+					} else {
+						messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+						errorPanel.setMessages(messages);
+						errorPanel.setVisible(true);
+					}
+				}
+			});
+		} else {
+			errorPanel.setMessages(messages);
+			errorPanel.setVisible(true);
 		}
+	}
+
+	private Vector<String> validateForm() {
+		Vector<String> messages = new Vector<String>();
+		
+		if (!validSelectedSpotsCount())
+			messages.add("Debe elegir entre 2 y 5 spots");
+		
+		//TODO validar aca y entodos los campos de introduccion de texto que no meta caracteres raros (ver como hacer algo generico para todo el sistema)
+		if (txtCompName.getText().trim().equals(""))
+			//messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_AREA_VALUE());
+			messages.add("El campo nombre es obligatorio");
+		
+		return messages;
 	}
 
 }

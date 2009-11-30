@@ -14,11 +14,15 @@ public class SuccessMsgPanel extends MessagePanel {
 		this.setLabelsStyleNames("gwt-Label-success");
 	}
 	
-	/**
-	 * @wbp.parser.constructor
-	 */
 	public SuccessMsgPanel(Vector<String> messages){
 		this();
+		this.setMessages(messages);
+	}
+	
+	public SuccessMsgPanel(String message) {
+		this();
+		Vector<String> messages = new Vector<String>();
+		messages.add(message);
 		this.setMessages(messages);
 	}
 }

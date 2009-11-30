@@ -18,6 +18,8 @@ public interface UserServicesAsync {
 	
 	void getSpotsComparations(AsyncCallback<List<ComparationDTO>> callback);
 	
+	void saveComparation(String name, String description, List<Integer> spotsIds, AsyncCallback<Integer> callback);
+	
 	void getLoggedUser(AsyncCallback<UserDTO> callback);
 
 }
