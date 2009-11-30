@@ -58,7 +58,7 @@ div div#loadingTxtDiv {
     cursor:default;
 }
 
-.gwt-Label, .gwt-HyperLink, .gwt-PushButton, .gwt-ListBox, .gwt-RadioButton, .gwt-MapInfoText {
+.gwt-Label, .gwt-HyperLink, .gwt-PushButton, .gwt-ListBox, .gwt-RadioButton, .gwt-MapInfoText, .gwt-TextArea{
     font-family: 'Trebuchet MS', Helvetica, sans-serif;
     font-size:9pt;
 }
@@ -98,6 +98,7 @@ div div#loadingTxtDiv {
 /*****************************************************************************/
 /*********************** ComparationViewerPanel ***************************************/
 /*****************************************************************************/
+/*
 .gwt-Label-SpotColor1 {
 	background-color: #FF0000;
 }
@@ -117,7 +118,7 @@ div div#loadingTxtDiv {
 .gwt-Label-SpotColor5 {
 	background-color: #FF00FF;
 }
-
+*/
 /*****************************************************************************/
 /*********************** CurrentForecastPanel ***************************************/
 /*****************************************************************************/
