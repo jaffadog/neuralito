@@ -26,3 +26,12 @@ Eclipse->Preferences->Installed JRE(The one used to run the project)->Edit->VM a
    open-files-limit=3000
 }}}
   # Start the mysql server.
+
+== TOMCAT  ==
+Memory size of Tomcat should be incresed, grib decoder uses much memory;
+
+In Windows system, this can be done by editing / adding JAVA_OPTS variable (should be early in the file) in CATALINA_HOME/bin/catalina.bat or catalina.sh for Linux/Unix systems
+
+For catalina.bat there now should be a line in the file that looks like this:  set JAVA_OPTS=-Xms256m -Xmx256m 
+
+For catalina.sh:  JAVA_OPTS='-Xms800m -Xmx1024m' 
