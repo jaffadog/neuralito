@@ -37,7 +37,7 @@
 				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.connection.autocommit">true</prop>
 				<prop key="hibernate.jdbc.batch_size">40</prop>
-				<!--				## MySQL-->
+					<!--				## MySQL-->
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<!--
 					<prop
@@ -80,6 +80,7 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.Point</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.ForecastParameter</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservation</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservationsSet</value>
 			</list>
 		</property>
 	</bean>
@@ -113,6 +114,10 @@
 		<property name="gribDecoder" ref="gribDecoder" />
 	</bean><!--sessionFactory will get autowired-->
 
+	<bean id="visualObservationsSetDAOTarget"
+		class="edu.unicen.surfforecaster.server.dao.VisualObservationsSetDAOHibernateImpl"
+		 autowire="byName"/>
+		 
 	<bean id="gribDecoder"
 		class="edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf">
 	</bean>
@@ -161,6 +166,16 @@
 			</list>
 		</property>
 	</bean>
-
+		<bean id="visualObservationsSetDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>edu.unicen.surfforecaster.server.dao.VisualObservationsSetDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>hibernateInterceptor</value>
+				<value>visualObservationsSetDAOTarget</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>
