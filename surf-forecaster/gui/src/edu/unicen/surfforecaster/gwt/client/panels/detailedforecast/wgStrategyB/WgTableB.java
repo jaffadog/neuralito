@@ -40,8 +40,8 @@ public class WgTableB extends FlexTable {
 	Map<String, List<ForecastDTO>> forecasters = null;
 	
 	//Layout consts
-	private static final String LABELS_COL_WIDTH = "145";
-	private static final String DETAILED_FORECAST_COL_WIDTH = "30";
+	private static final String LABELS_COL_WIDTH = "145px";
+	private static final String DETAILED_FORECAST_COL_WIDTH = "30px";
 	
 	/**
 	 * Generates the complete forecaster table for al the forecasters assigned to the selected spot
@@ -198,7 +198,7 @@ public class WgTableB extends FlexTable {
 			Label waveHeight = new Label(GWTUtils.LOCALE_CONSTANTS.wave_height());
 			waveHeight.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(0, 0, waveHeight);
-			detailedForecastPanel.getCellFormatter().setHeight(0, 0, "30");
+			detailedForecastPanel.getCellFormatter().setHeight(0, 0, "30px");
 			detailedForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
 			
@@ -212,7 +212,7 @@ public class WgTableB extends FlexTable {
 			Label waveDirection = new Label(GWTUtils.LOCALE_CONSTANTS.wave_direction());
 			waveDirection.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(2, 0, waveDirection);
-			detailedForecastPanel.getCellFormatter().setHeight(2, 0, "30");
+			detailedForecastPanel.getCellFormatter().setHeight(2, 0, "30px");
 			detailedForecastPanel.getCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
 			Label period = new Label(GWTUtils.LOCALE_CONSTANTS.wave_period() + " (" + GWTUtils.LOCALE_CONSTANTS.seconds_abbr() + ")");
@@ -222,7 +222,7 @@ public class WgTableB extends FlexTable {
 			Label windDirection = new Label(GWTUtils.LOCALE_CONSTANTS.wind_direction());
 			windDirection.addStyleName("gwt-Label-TableLabels");
 			detailedForecastPanel.setWidget(4, 0, windDirection);
-			detailedForecastPanel.getCellFormatter().setHeight(4, 0, "30");
+			detailedForecastPanel.getCellFormatter().setHeight(4, 0, "30px");
 			detailedForecastPanel.getCellFormatter().setVerticalAlignment(4, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
 			Label windSpeed = new Label(GWTUtils.LOCALE_CONSTANTS.wind_speed() + " (" + GWTUtils.LOCALE_CONSTANTS.kilometers_per_hour_abbr() + ")");
@@ -239,7 +239,7 @@ public class WgTableB extends FlexTable {
 		Label waveHeight2 = new Label(GWTUtils.LOCALE_CONSTANTS.wave_height());
 		waveHeight2.addStyleName("gwt-Label-TableLabels");
 		miniForecastPanel.setWidget(0, 0, waveHeight2);
-		miniForecastPanel.getCellFormatter().setHeight(0, 0, "30");
+		miniForecastPanel.getCellFormatter().setHeight(0, 0, "30px");
 		miniForecastPanel.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 		
 		Label heightUnit2 = new Label("(" + GWTUtils.LOCALE_CONSTANTS.meters_abbr() + ")");
