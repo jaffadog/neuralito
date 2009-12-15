@@ -70,30 +70,21 @@ public class WgTableC extends FlexTable {
 			Integer spotId = spotsIds.get(i);
 			String spotName = spotsNames.get(i);
 			Map<String, List<ForecastDTO>> spotForecasters = forecasters.get(spotId);
-			renderSpotForecasters(spotForecasters, spotName);
+			renderSpotForecasters(spotForecasters, spotName, i);
 		}
-		
-		
-//		Set<Integer> spotsIds = forecasters.keySet();
-//		Iterator<Integer> i = spotsIds.iterator();
-//		while (i.hasNext()) {
-//			Integer spotId = i.next();
-//			Map<String, List<ForecastDTO>> spotForecasters = forecasters.get(spotId);
-//			renderSpotForecasters(spotForecasters);
-//		}
 	}
 
-	private void renderSpotForecasters(Map<String, List<ForecastDTO>> spotForecasters, String spotName) {
+	private void renderSpotForecasters(Map<String, List<ForecastDTO>> spotForecasters, String spotName, int spotIndex) {
 		Set<String> forecasterNames = spotForecasters.keySet();
 		Iterator<String> i = forecasterNames.iterator();
 		while (i.hasNext()) {
 			String forecasterName = i.next();
 			List<ForecastDTO> forecasts = spotForecasters.get(forecasterName);
-			renderForecastsRow(spotName, forecasterName, forecasts);
+			renderForecastsRow(spotName, forecasterName, forecasts, spotIndex);
 		}
 	}
 
-	private void renderForecastsRow(String spotName, String forecasterName, List<ForecastDTO> forecasts) {
+	private void renderForecastsRow(String spotName, String forecasterName, List<ForecastDTO> forecasts, int spotIndex) {
 		int forecastIndex = 1;
 		int max = (this.to != null) ? this.to : forecasts.size();
 		//Spot and Forecaster name
@@ -101,7 +92,7 @@ public class WgTableC extends FlexTable {
 		lblForecasterName.addStyleName("gwt-Label-Forecaster-Name");
 		this.setWidget(currentRow, 0, lblForecasterName);
 		this.getFlexCellFormatter().setColSpan(currentRow, 0, (max - from) + 1);
-		this.getFlexCellFormatter().addStyleName(currentRow, 0, "gwt-ForecasterName-Row");
+		this.getFlexCellFormatter().addStyleName(currentRow, 0, "gwt-ForecasterName-Row-" + spotIndex);
 		
 		currentRow++;
 		this.printLabels(currentRow);
