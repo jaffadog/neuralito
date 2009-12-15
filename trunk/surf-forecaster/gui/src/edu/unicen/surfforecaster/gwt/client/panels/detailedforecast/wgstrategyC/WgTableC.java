@@ -24,7 +24,6 @@ import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.MiniForecastPopup;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
-import edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s30.Arrows30PxFactory;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s30.Waves30PxFactory;
 
 public class WgTableC extends FlexTable {
@@ -37,8 +36,8 @@ public class WgTableC extends FlexTable {
 	Integer currentRow = 1;
 	
 	//Layout consts
-	private static final String LABELS_COL_WIDTH = "145";
-	private static final String DETAILED_FORECAST_COL_WIDTH = "30";
+	private static final String LABELS_COL_WIDTH = "145px";
+	private static final String DETAILED_FORECAST_COL_WIDTH = "30px";
 	
 	/**
 	 * Generates the complete forecaster table for all the spots in the map
@@ -54,6 +53,17 @@ public class WgTableC extends FlexTable {
 		this.from = from;
 		this.to = to;
 		this.forecasters = forecasters;
+		
+		//This flexTable style
+		this.addStyleName("gwt-FlexTable-WgTableB");
+		
+		//FirstRow style
+		this.getRowFormatter().addStyleName(0, "gwt-FlexTable-datesTable");
+		this.getCellFormatter().setStyleName(0, 0, "gwt-FlexTable-whiteCell");
+		
+		this.getFlexCellFormatter().setWidth(0, 0, WgTableC.LABELS_COL_WIDTH);
+		//Col 0 style
+		//this.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
 		
 		//Iterates spots
 		Set<Integer> spotsIds = forecasters.keySet();
@@ -81,7 +91,8 @@ public class WgTableC extends FlexTable {
 		Label lblForecasterName = new Label(forecasterName);
 		lblForecasterName.addStyleName("gwt-Label-Forecaster-Name");
 		this.setWidget(currentRow, 0, lblForecasterName);
-		this.getFlexCellFormatter().setColSpan(currentRow, 0, 2);
+		//this.getFlexCellFormatter().setWidth(currentRow, 0, WgTableC.LABELS_COL_WIDTH);
+		this.getFlexCellFormatter().setColSpan(currentRow, 0, (to - from) + 1);
 		this.getFlexCellFormatter().addStyleName(currentRow, 0, "gwt-ForecasterName-Row");
 		
 		currentRow++;
@@ -107,7 +118,7 @@ public class WgTableC extends FlexTable {
 		datePanel.add(new Label("02"));
 		datePanel.add(new Label("16" + GWTUtils.LOCALE_CONSTANTS.hour_abbr()));
 		
-		datePanel.setWidth("30");
+		datePanel.setWidth("30px");
 		
 		return datePanel;
 	}
@@ -116,18 +127,14 @@ public class WgTableC extends FlexTable {
 			Label waveHeight = new Label(GWTUtils.LOCALE_CONSTANTS.wave_height());
 			waveHeight.addStyleName("gwt-Label-TableLabels");
 			this.setWidget(rowIndex, 0, waveHeight);
-			this.getCellFormatter().setHeight(rowIndex, 0, "30");
+			this.getCellFormatter().setHeight(rowIndex, 0, "30px");
+			this.getFlexCellFormatter().setWidth(rowIndex, 0, WgTableC.LABELS_COL_WIDTH);
 			this.getCellFormatter().setVerticalAlignment(rowIndex, 0, HasVerticalAlignment.ALIGN_MIDDLE);
 			
 			Label heightUnit = new Label("(" + GWTUtils.LOCALE_CONSTANTS.meters_abbr() + ")");
 			heightUnit.addStyleName("gwt-Label-TableLabels");
 			this.setWidget(rowIndex + 1, 0, heightUnit);
-			
-			//Cols format
-			this.getColumnFormatter().setWidth(0, WgTableC.LABELS_COL_WIDTH);
-			
-			//Cols style
-			this.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
+			this.getFlexCellFormatter().setWidth(rowIndex + 1, 0, WgTableC.LABELS_COL_WIDTH);
 	}
 	
 	private Image getWaveIcon(final ForecastDTO forecastDTO) {

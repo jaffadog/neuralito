@@ -214,7 +214,8 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	
 	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts) {
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts));
-		this.setWidget(8, 0, renderContext.executeRenderStrategy()); 
+		this.setWidget(8, 0, renderContext.executeRenderStrategy());
+		this.getFlexCellFormatter().setColSpan(8, 0, 4);
 	}
 	
 	private void drawColumnChart(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
