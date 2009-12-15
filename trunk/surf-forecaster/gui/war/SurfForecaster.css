@@ -285,7 +285,7 @@ div#closeLoginBoxDiv a{
 /*********************** WgTableB ***************************************/
 /*****************************************************************************/
 .gwt-FlexTable-WgTableB{
-	margin-bottom: 35px;
+    margin-bottom: 35px;
 }
 
 .gwt-Label-Forecaster-Name{
@@ -308,6 +308,10 @@ div#closeLoginBoxDiv a{
 
 .gwt-FlexTable-datesTable{
     background:url("./images/gray-grad-forecast-table-dates-62px.png") repeat-x;
+}
+
+.gwt-FlexTable-whiteCell{
+    background-image:none;
 }
 
 .gwt-FlexTable-datesTable .gwt-Label{
