@@ -204,4 +204,26 @@ public final class GWTUtils {
 	  if (widget == null) throw new IllegalArgumentException("Widget can not be null");
 	}
 
+	public static String getDayAbbr(int day) {
+		switch (day) {
+		case 0:
+			return GWTUtils.LOCALE_CONSTANTS.sunday_abbr();
+		case 1:
+			return GWTUtils.LOCALE_CONSTANTS.monday_abbr();
+		case 2:
+			return GWTUtils.LOCALE_CONSTANTS.tuesday_abbr();
+		case 3:
+			return GWTUtils.LOCALE_CONSTANTS.wednesday_abbr();
+		case 4:
+			return GWTUtils.LOCALE_CONSTANTS.thursday_abbr();
+		case 5:
+			return GWTUtils.LOCALE_CONSTANTS.friday_abbr();
+		case 6:
+			return GWTUtils.LOCALE_CONSTANTS.saturday_abbr();
+
+		default:
+			return "";
+		}
+	}
+
 }//end class GWTUtils
