@@ -192,7 +192,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		this.baseParentPanel = basePanel;
 	}
 
-	public void renderComparation(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
+	public void renderComparation(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
 		//TODO hacer que el valor harcodedo 5 de la sig if sea una variable statica bien definida (ya se definio en el comparationCreatorPanel, tal vez habria que 
 		//meterla en otro lado)
 		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
@@ -201,7 +201,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
 			lnkShowDetailedTable.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					renderDetailedCompTable(spotsLatestForecasts);
+					renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
 				}
 			});
 		} else {
@@ -212,8 +212,8 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		
 	}
 	
-	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts) {
-		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts));
+	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
+		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames));
 		this.setWidget(8, 0, renderContext.executeRenderStrategy());
 		this.getFlexCellFormatter().setColSpan(8, 0, 4);
 	}

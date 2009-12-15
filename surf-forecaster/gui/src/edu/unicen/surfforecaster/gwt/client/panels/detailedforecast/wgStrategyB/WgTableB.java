@@ -59,7 +59,7 @@ public class WgTableB extends FlexTable {
 		datesTable = new FlexTable();
 		
 		//This flexTable style
-		this.addStyleName("gwt-FlexTable-WgTableB");
+		this.addStyleName("gwt-FlexTable-WgTable");
 		
 		//FirstRow style
 		this.getCellFormatter().addStyleName(0, 1, "gwt-FlexTable-datesTable");
@@ -185,7 +185,7 @@ public class WgTableB extends FlexTable {
 		for (int i = this.from; i < max; i++) {
 			ForecastDTO forecastDTO = forecasts.get(i);
 			if (fillDatesPanel){
-				datesTable.setWidget(0, forecastIndex, this.getDateVPanel(forecastDTO));
+				datesTable.setWidget(0, forecastIndex, this.getDateLabel(forecastDTO));
 				datesTable.getColumnFormatter().setWidth(forecastIndex, WgTableB.DETAILED_FORECAST_COL_WIDTH);
 			}
 			this.setDetailedForecast(detailedForecastPanel, miniForecastPanel, forecastDTO, forecastIndex + 1);
@@ -250,15 +250,11 @@ public class WgTableB extends FlexTable {
 		miniForecastPanel.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
 	}
 	
-	private VerticalPanel getDateVPanel(ForecastDTO forecastDTO) {
-		VerticalPanel datePanel = new VerticalPanel();
-		datePanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.monday_abbr()));
-		datePanel.add(new Label("02"));
-		datePanel.add(new Label("16" + GWTUtils.LOCALE_CONSTANTS.hour_abbr()));
-		
-		datePanel.setWidth("30");
-		
-		return datePanel;
+	private Label getDateLabel(ForecastDTO forecastDTO) {
+		Label lblDate = new Label(GWTUtils.LOCALE_CONSTANTS.monday_abbr() + " " + "02" + " " + "16");
+		lblDate.setWidth(WgTableB.DETAILED_FORECAST_COL_WIDTH);
+		lblDate.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		return lblDate;
 	}
 	
 	private Image getWaveIcon(final ForecastDTO forecastDTO, boolean showPopup) {

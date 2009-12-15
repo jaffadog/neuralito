@@ -49,60 +49,68 @@ public class WgTableC extends FlexTable {
 	 * @param to - Represents the last forecast to show, if null, goes to the end of the list of forecasts
 	 */
 	
-	public WgTableC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, Integer from, Integer to) {
+	public WgTableC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, Integer from, Integer to) {
 		this.from = from;
 		this.to = to;
 		this.forecasters = forecasters;
 		
 		//This flexTable style
-		this.addStyleName("gwt-FlexTable-WgTableB");
+		this.addStyleName("gwt-FlexTable-WgTable");
 		
 		//FirstRow style
 		this.getRowFormatter().addStyleName(0, "gwt-FlexTable-datesTable");
 		this.getCellFormatter().setStyleName(0, 0, "gwt-FlexTable-whiteCell");
-		
+		//Col 0 width
 		this.getFlexCellFormatter().setWidth(0, 0, WgTableC.LABELS_COL_WIDTH);
 		//Col 0 style
-		//this.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
+		this.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
 		
 		//Iterates spots
-		Set<Integer> spotsIds = forecasters.keySet();
-		Iterator<Integer> i = spotsIds.iterator();
-		while (i.hasNext()) {
-			Integer spotId = i.next();
+		for (int i = 0; i < spotsIds.size(); i++) {
+			Integer spotId = spotsIds.get(i);
+			String spotName = spotsNames.get(i);
 			Map<String, List<ForecastDTO>> spotForecasters = forecasters.get(spotId);
-			renderSpotForecasters(spotForecasters);
+			renderSpotForecasters(spotForecasters, spotName);
 		}
+		
+		
+//		Set<Integer> spotsIds = forecasters.keySet();
+//		Iterator<Integer> i = spotsIds.iterator();
+//		while (i.hasNext()) {
+//			Integer spotId = i.next();
+//			Map<String, List<ForecastDTO>> spotForecasters = forecasters.get(spotId);
+//			renderSpotForecasters(spotForecasters);
+//		}
 	}
 
-	private void renderSpotForecasters(Map<String, List<ForecastDTO>> spotForecasters) {
+	private void renderSpotForecasters(Map<String, List<ForecastDTO>> spotForecasters, String spotName) {
 		Set<String> forecasterNames = spotForecasters.keySet();
 		Iterator<String> i = forecasterNames.iterator();
 		while (i.hasNext()) {
 			String forecasterName = i.next();
 			List<ForecastDTO> forecasts = spotForecasters.get(forecasterName);
-			renderForecastsRow(forecasterName, forecasts);
+			renderForecastsRow(spotName, forecasterName, forecasts);
 		}
 	}
 
-	private void renderForecastsRow(String forecasterName, List<ForecastDTO> forecasts) {
+	private void renderForecastsRow(String spotName, String forecasterName, List<ForecastDTO> forecasts) {
 		int forecastIndex = 1;
-		//Forecaster name and + link HPanel
-		Label lblForecasterName = new Label(forecasterName);
+		int max = (this.to != null) ? this.to : forecasts.size();
+		//Spot and Forecaster name
+		Label lblForecasterName = new Label("Spot" + ": " + spotName + " - " + "Forecaster" + ": " + forecasterName);
 		lblForecasterName.addStyleName("gwt-Label-Forecaster-Name");
 		this.setWidget(currentRow, 0, lblForecasterName);
-		//this.getFlexCellFormatter().setWidth(currentRow, 0, WgTableC.LABELS_COL_WIDTH);
-		this.getFlexCellFormatter().setColSpan(currentRow, 0, (to - from) + 1);
+		this.getFlexCellFormatter().setColSpan(currentRow, 0, (max - from) + 1);
 		this.getFlexCellFormatter().addStyleName(currentRow, 0, "gwt-ForecasterName-Row");
 		
 		currentRow++;
 		this.printLabels(currentRow);
 		
-		int max = (this.to != null) ? this.to : forecasts.size();
+		
 		for (int i = this.from; i < max; i++) {
 			ForecastDTO forecastDTO = forecasts.get(i);
 			if (!isDatesAlreadyPrinted){
-				this.setWidget(0, forecastIndex, getDateVPanel(forecastDTO));
+				this.setWidget(0, forecastIndex, getDateLabel(forecastDTO));
 				this.getColumnFormatter().setWidth(forecastIndex, WgTableC.DETAILED_FORECAST_COL_WIDTH);
 			}
 			this.setDetailedForecast(forecastDTO, currentRow, forecastIndex);
@@ -112,15 +120,11 @@ public class WgTableC extends FlexTable {
 		currentRow += 2;
 	}
 	
-	private VerticalPanel getDateVPanel(ForecastDTO forecastDTO) {
-		VerticalPanel datePanel = new VerticalPanel();
-		datePanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.monday_abbr()));
-		datePanel.add(new Label("02"));
-		datePanel.add(new Label("16" + GWTUtils.LOCALE_CONSTANTS.hour_abbr()));
-		
-		datePanel.setWidth("30px");
-		
-		return datePanel;
+	private Label getDateLabel(ForecastDTO forecastDTO) {
+		Label lblDate = new Label(GWTUtils.LOCALE_CONSTANTS.monday_abbr() + " " + "02" + " " + "16");
+		lblDate.setWidth(WgTableC.DETAILED_FORECAST_COL_WIDTH);
+		lblDate.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		return lblDate;
 	}
 	
 	private void printLabels(int rowIndex) {
@@ -170,23 +174,11 @@ public class WgTableC extends FlexTable {
 	
 	private void setDetailedForecast(ForecastDTO forecastDTO, int rowIndex, int colIndex) {
 		Unit heightUnitTarget = Unit.Meters;
-		//Unit speedUnitTarget = Unit.KilometersPerHour;
-		//Unit directionUnitTarget = Unit.Degrees;
-		//Unit periodUnitTarget = Unit.Seconds;
-		
+
 		//wave height
 		String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
-//		//wind speed
-//		String windSpeed = forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
-//		//Wave direccion
-//		String waveDirection = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue();
-//		//Wave period
-//		String wavePeriod = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
 		try {
-//			windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
 			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
-//			waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
-//			wavePeriod = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
 		} catch (NeuralitoException e) {
 			// TODO ver como manejar esta exvepcion de conversion de unidades
 			e.printStackTrace();
