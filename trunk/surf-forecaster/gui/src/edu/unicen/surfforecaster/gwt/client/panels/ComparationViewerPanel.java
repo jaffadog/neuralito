@@ -11,6 +11,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -25,6 +26,8 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
+import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyC.DetailedForecastWgStrategyC;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
@@ -58,6 +61,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private static final String COLOR_LABEL_WIDTH = "15px";
 	private static final String COLOR_LABEL_HEIGHT = "15px";
 	private static final String FORECASTER_LIST_WIDTH = "200px";
+	private Hyperlink lnkShowDetailedTable;
 	
 	
 	public ComparationViewerPanel() {
@@ -154,15 +158,19 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			spotBox5.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
 			this.setWidget(4, 3, spotBox5);
 			spotBox5.setVisible(false);
-			
 		}
-		
+		{
+			lnkShowDetailedTable = new Hyperlink("Show detailed forecasts table", "");
+			lnkShowDetailedTable.addStyleName("gwt-HyperLink-showMoreLess");
+			this.setWidget(7, 0, lnkShowDetailedTable);
+			this.getFlexCellFormatter().setColSpan(7, 0, 4);
+		}
 		//Back button
 		{
 			backBtn = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
 			backBtn.addClickHandler(this);
-			this.setWidget(7, 0, backBtn);
-			this.getFlexCellFormatter().setColSpan(7, 0, 4);
+			this.setWidget(9, 0, backBtn);
+			this.getFlexCellFormatter().setColSpan(9, 0, 4);
 		}
 	}
 	
@@ -184,19 +192,29 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		this.baseParentPanel = basePanel;
 	}
 
-	public void renderComparation(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
+	public void renderComparation(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
 		//TODO hacer que el valor harcodedo 5 de la sig if sea una variable statica bien definida (ya se definio en el comparationCreatorPanel, tal vez habria que 
 		//meterla en otro lado)
 		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
 			this.fillSpotProperties(spotsLatestForecasts, spotsIds, spotsNames);
 			this.drawColumnChart(spotsLatestForecasts, spotsIds, spotsNames);
 			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
+			lnkShowDetailedTable.addClickHandler(new ClickHandler() {
+				public void onClick(ClickEvent event) {
+					renderDetailedCompTable(spotsLatestForecasts);
+				}
+			});
 		} else {
 			//TODO el mesagebox siguiente
 			Window.alert("La cantuidad de spots a comparar tiene que ser entre 2 y 5");
 			//TODO redirigir al panel de creacion de comparaciones
 		}
 		
+	}
+	
+	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts) {
+		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts));
+		this.setWidget(8, 0, renderContext.executeRenderStrategy()); 
 	}
 	
 	private void drawColumnChart(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {

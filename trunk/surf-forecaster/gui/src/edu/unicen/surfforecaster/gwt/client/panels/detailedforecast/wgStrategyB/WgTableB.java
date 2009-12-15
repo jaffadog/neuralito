@@ -180,11 +180,7 @@ public class WgTableB extends FlexTable {
 		
 		//Table left labels
 		this.setDetailedLabels(detailedForecastPanel, miniForecastPanel);
-		
-//		Iterator<ForecastDTO> i = forecasts.iterator();
 		int forecastIndex = 0;
-//		while (i.hasNext() && forecastIndex < 23) {
-//			ForecastDTO forecastDTO = i.next();
 		int max = (this.to != null) ? this.to : forecasts.size();
 		for (int i = this.from; i < max; i++) {
 			ForecastDTO forecastDTO = forecasts.get(i);
