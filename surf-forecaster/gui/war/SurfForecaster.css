@@ -238,7 +238,8 @@ div#closeLoginBoxDiv a{
 
 /** RootPanel */
 .gwt-RootPanel{
-    background-color:#A2ACA1;
+    /*background-color:#A2ACA1;*/
+    background-color:#FFF;
 }
 
 /** RootVPanel */

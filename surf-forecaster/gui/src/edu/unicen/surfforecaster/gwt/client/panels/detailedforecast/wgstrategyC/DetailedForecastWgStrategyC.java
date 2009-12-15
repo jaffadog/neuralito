@@ -3,11 +3,13 @@ package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyC
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrategy {
 	
@@ -33,11 +35,11 @@ public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrat
 
 	@Override
 	public Widget renderDetailedForecast() {
-		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 0, 3));
-//		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 23, 46));
-//		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 46, null));
+		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 0, 23));
+		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
+		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 23, 46));
+		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
+		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 46, null));
 		
 		return completeDetailedForecastVPanel;
 	}

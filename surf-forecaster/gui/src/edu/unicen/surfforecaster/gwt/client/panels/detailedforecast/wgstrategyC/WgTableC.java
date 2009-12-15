@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyC;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
@@ -112,7 +112,11 @@ public class WgTableC extends FlexTable {
 	}
 	
 	private Label getDateLabel(ForecastDTO forecastDTO) {
-		Label lblDate = new Label(GWTUtils.LOCALE_CONSTANTS.monday_abbr() + " " + "02" + " " + "16");
+		long miliDate = forecastDTO.getBaseDate().getTime() + (forecastDTO.getForecastTime() * 3600000);
+		Date realDate = new Date(miliDate);
+		Label lblDate = new Label(GWTUtils.getDayAbbr(realDate.getDay()) + " " + 
+				NumberFormat.getFormat("00").format(realDate.getDate()) + " " + 
+				NumberFormat.getFormat("00").format(realDate.getHours()) + GWTUtils.LOCALE_CONSTANTS.hour_abbr());
 		lblDate.setWidth(WgTableC.DETAILED_FORECAST_COL_WIDTH);
 		lblDate.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		return lblDate;
