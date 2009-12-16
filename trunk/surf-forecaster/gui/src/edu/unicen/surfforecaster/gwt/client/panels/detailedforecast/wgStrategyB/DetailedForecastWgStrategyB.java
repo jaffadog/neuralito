@@ -22,7 +22,7 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	private ILocalizationPanel localizationPanel = null;
 	
 	/**
-	 * This Strategy shows 2 panels with the following two forecasts (now and +3 hours), and shows below a detalied forecast
+	 * This Strategy shows 2 panels with the next two forecasts (now and +3 hours), and shows below a detalied forecast
 	 * table in wg format. 
 	 * @param forecasters
 	 * @param localizationPanel

@@ -25,6 +25,7 @@ public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrat
 	 * @param forecasters
 	 * @param spotsIds
 	 * @param spotsNames
+	 * @param forecastersNames
 	 */
 	public DetailedForecastWgStrategyC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, 
 			List<String> forecastersNames) {
