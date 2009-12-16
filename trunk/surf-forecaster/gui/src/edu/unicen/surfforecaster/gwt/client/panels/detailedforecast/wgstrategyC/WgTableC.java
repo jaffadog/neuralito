@@ -1,10 +1,8 @@
 package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyC;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -78,10 +76,11 @@ public class WgTableC extends FlexTable {
 
 	private void renderForecastsRow(Map<String, List<ForecastDTO>> spotForecasters, String spotName, String forecasterName, int spotIndex) {
 		List<ForecastDTO> forecasts = spotForecasters.get(forecasterName);
+		List<ForecastDTO> ww3Forecasts = spotForecasters.get("WW3 Noaa Forecaster");
 		int forecastIndex = 1;
 		int max = (this.to != null) ? this.to : forecasts.size();
 		//Spot and Forecaster name
-		Label lblForecasterName = new Label("Spot" + ": " + spotName + " - " + "Forecaster" + ": " + forecasterName);
+		Label lblForecasterName = new Label(spotName + "  >>  " + forecasterName);
 		lblForecasterName.addStyleName("gwt-Label-Forecaster-Name");
 		this.setWidget(currentRow, 0, lblForecasterName);
 		this.getFlexCellFormatter().setColSpan(currentRow, 0, (max - from) + 1);
@@ -90,14 +89,15 @@ public class WgTableC extends FlexTable {
 		currentRow++;
 		this.printLabels(currentRow);
 		
-		
+		//Iterates forecastDTOs
 		for (int i = this.from; i < max; i++) {
 			ForecastDTO forecastDTO = forecasts.get(i);
+			ForecastDTO ww3ForecastDTO = ww3Forecasts.get(i);
 			if (!isDatesAlreadyPrinted){
 				this.setWidget(0, forecastIndex, getDateLabel(forecastDTO));
 				this.getColumnFormatter().setWidth(forecastIndex, WgTableC.DETAILED_FORECAST_COL_WIDTH);
 			}
-			this.setDetailedForecast(forecastDTO, currentRow, forecastIndex);
+			this.setDetailedForecast(forecastDTO, ww3ForecastDTO, currentRow, forecastIndex);
 			forecastIndex++;
 		}
 		isDatesAlreadyPrinted = true;
@@ -129,7 +129,29 @@ public class WgTableC extends FlexTable {
 			this.getFlexCellFormatter().setWidth(rowIndex + 1, 0, WgTableC.LABELS_COL_WIDTH);
 	}
 	
-	private Image getWaveIcon(final ForecastDTO forecastDTO) {
+	private void setDetailedForecast(ForecastDTO forecastDTO, ForecastDTO ww3ForecastDTO, int rowIndex, int colIndex) {
+		Unit heightUnitTarget = Unit.Meters;
+
+		//wave height
+		String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
+		try {
+			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
+		} catch (NeuralitoException e) {
+			// TODO ver como manejar esta exvepcion de conversion de unidades
+			e.printStackTrace();
+		}
+		
+		this.setWidget(rowIndex, colIndex, this.getWaveIcon(forecastDTO, ww3ForecastDTO));
+		this.setWidget(rowIndex + 1, colIndex, new Label(waveHeight));
+		
+		this.getFlexCellFormatter().setHorizontalAlignment(rowIndex, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
+		this.getFlexCellFormatter().setHorizontalAlignment(rowIndex + 1, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
+		
+		this.getColumnFormatter().setWidth(colIndex, WgTableC.DETAILED_FORECAST_COL_WIDTH);
+		this.getColumnFormatter().addStyleName(colIndex, "gwt-flextable-detailedForecast-col");
+	}
+	
+	private Image getWaveIcon(final ForecastDTO forecastDTO, final ForecastDTO ww3ForecastDTO) {
 		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height
@@ -143,7 +165,7 @@ public class WgTableC extends FlexTable {
 		
 		final Image icon = Waves30PxFactory.getWaveIcon(waveHeight, heightUnitTarget);
 		
-		final MiniForecastPopup popup = new MiniForecastPopup(forecastDTO);
+		final MiniForecastPopup popup = new MiniForecastPopup(ww3ForecastDTO);
 		icon.addMouseOverHandler(new MouseOverHandler(){
 			public void onMouseOver(MouseOverEvent event) {
 				popup.showRelativeTo(icon);
@@ -158,27 +180,5 @@ public class WgTableC extends FlexTable {
 		});
 		
 		return icon;
-	}
-	
-	private void setDetailedForecast(ForecastDTO forecastDTO, int rowIndex, int colIndex) {
-		Unit heightUnitTarget = Unit.Meters;
-
-		//wave height
-		String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
-		try {
-			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
-		} catch (NeuralitoException e) {
-			// TODO ver como manejar esta exvepcion de conversion de unidades
-			e.printStackTrace();
-		}
-		
-		this.setWidget(rowIndex, colIndex, this.getWaveIcon(forecastDTO));
-		this.setWidget(rowIndex + 1, colIndex, new Label(waveHeight));
-		
-		this.getFlexCellFormatter().setHorizontalAlignment(rowIndex, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setHorizontalAlignment(rowIndex + 1, colIndex, HasHorizontalAlignment.ALIGN_CENTER);
-		
-		this.getColumnFormatter().setWidth(colIndex, WgTableC.DETAILED_FORECAST_COL_WIDTH);
-		this.getColumnFormatter().addStyleName(colIndex, "gwt-flextable-detailedForecast-col");
 	}
 }
