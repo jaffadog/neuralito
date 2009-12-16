@@ -38,6 +38,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	
 	private Widget baseParentPanel = null;
 	private HTMLButtonGrayGrad backBtn = null;
+	private HTMLButtonGrayGrad refreshBtn = null;
 	
 	private ListBox spotBox1 = null;
 	private ListBox spotBox2 = null;
@@ -51,14 +52,18 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private Label spotName4 = null;
 	private Label spotName5 = null;
 	
-	private List<String> forecastersNames = null;
-	
-	
 	private static final String COLOR_LABEL_WIDTH = "15px";
 	private static final String COLOR_LABEL_HEIGHT = "15px";
 	private static final String FORECASTER_LIST_WIDTH = "200px";
 	private Hyperlink lnkShowDetailedTable;
 	
+	//Temporal data
+	private List<String> forecastersNames = null;
+	private List<String> spotsNames = null;
+	private List<Integer> spotsIds = null;
+	private Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts = null;
+	private boolean isDetailedTableShowed = false;
+	private Widget detailedCompTable = null;
 	
 	public ComparationViewerPanel() {
 		//Spot name labels
@@ -94,28 +99,33 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		//Spots forecasters listboxes
 		{
 			spotBox1 = new ListBox();
+			spotBox1.addChangeHandler(this);
 			spotBox1.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
 			this.setWidget(0, 3, spotBox1);
 		}
 		{
 			spotBox2 = new ListBox();
+			spotBox2.addChangeHandler(this);
 			spotBox2.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
 			this.setWidget(1, 3, spotBox2);
 		}
 		{
 			spotBox3 = new ListBox();
+			spotBox3.addChangeHandler(this);
 			spotBox3.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
 			this.setWidget(2, 3, spotBox3);
 			spotBox3.setVisible(false);
 		}
 		{
 			spotBox4 = new ListBox();
+			spotBox4.addChangeHandler(this);
 			spotBox4.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
 			this.setWidget(3, 3, spotBox4);
 			spotBox4.setVisible(false);
 		}
 		{
 			spotBox5 = new ListBox();
+			spotBox5.addChangeHandler(this);
 			spotBox5.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
 			this.setWidget(4, 3, spotBox5);
 			spotBox5.setVisible(false);
@@ -125,6 +135,12 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			lnkShowDetailedTable.addStyleName("gwt-HyperLink-showMoreLess");
 			this.setWidget(7, 0, lnkShowDetailedTable);
 			this.getFlexCellFormatter().setColSpan(7, 0, 4);
+		}
+		//Refrash button
+		{
+			refreshBtn = new HTMLButtonGrayGrad("Actualizar", "ComparationViewerPanel-refresh", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+			refreshBtn.addClickHandler(this);
+			this.setWidget(0, 4, refreshBtn);
 		}
 		//Back button
 		{
@@ -140,7 +156,9 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		Widget sender = (Widget) event.getSource();
 		
 		if (sender == backBtn)
-			((SpotComparatorPanel)baseParentPanel).showComparationCreatorPanel();		
+			((SpotComparatorPanel)baseParentPanel).showComparationCreatorPanel();
+		if (sender == refreshBtn)
+			refreshComparation();
 	}
 
 	@Override
@@ -152,17 +170,40 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	public void setBasePanel(Widget basePanel) {
 		this.baseParentPanel = basePanel;
 	}
-
+	
+	/**
+	 * Executed when the user creates a comparation in comparationCreatorPanel and clicks "Compare" button.
+	 * This method fills the comboBox components.
+	 * @param spotsLatestForecasts
+	 * @param spotsIds
+	 * @param spotsNames
+	 */
 	public void renderComparation(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
+		this.spotsLatestForecasts = spotsLatestForecasts;
+		this.spotsIds = spotsIds;
+		this.spotsNames = spotsNames;
+		
 		//TODO hacer que el valor harcodedo 5 de la sig if sea una variable statica bien definida (ya se definio en el comparationCreatorPanel, tal vez habria que 
 		//meterla en otro lado)
 		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
-			this.fillSpotProperties(spotsLatestForecasts, spotsIds, spotsNames);
+			this.fillSpotProperties();
 			this.drawColumnChart(spotsLatestForecasts, spotsIds, spotsNames);
 			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
 			lnkShowDetailedTable.addClickHandler(new ClickHandler() {
 				public void onClick(ClickEvent event) {
-					renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
+					if (isDetailedTableShowed){
+						isDetailedTableShowed = false;
+						if (detailedCompTable != null)
+							detailedCompTable.setVisible(false);
+						lnkShowDetailedTable.setText("Show detailed forecasts table");
+					}
+					else{
+						if (detailedCompTable == null)
+							renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
+						detailedCompTable.setVisible(true);
+						lnkShowDetailedTable.setText("Hide detailed forecasts table");
+						isDetailedTableShowed = true;
+					}
 				}
 			});
 		} else {
@@ -173,9 +214,33 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		
 	}
 	
+	/**
+	 * Executed when click refresh button to update the comparation after changed the forecasters boxes
+	 */
+	public void refreshComparation() {
+		//TODO hacer que el valor harcodedo 5 de la sig if sea una variable statica bien definida (ya se definio en el comparationCreatorPanel, tal vez habria que 
+		//meterla en otro lado)
+		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
+			this.drawColumnChart(spotsLatestForecasts, spotsIds, spotsNames);
+			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
+			if (detailedCompTable != null && isDetailedTableShowed){
+				this.renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
+				detailedCompTable.setVisible(true);
+			} else if (detailedCompTable != null) {
+				detailedCompTable = null;
+			}
+		} else {
+			//TODO el mesagebox siguiente
+			Window.alert("La cantuidad de spots a comparar tiene que ser entre 2 y 5");
+			//TODO redirigir al panel de creacion de comparaciones
+		}
+		
+	}
+	
 	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames));
-		this.setWidget(8, 0, renderContext.executeRenderStrategy());
+		detailedCompTable = renderContext.executeRenderStrategy();
+		this.setWidget(8, 0, detailedCompTable);
 		this.getFlexCellFormatter().setColSpan(8, 0, 4);
 	}
 	
@@ -332,7 +397,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		return options;
 	}
 
-	private void fillSpotProperties(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
+	private void fillSpotProperties() {
 		this.forecastersNames = new ArrayList<String>();
 		
 		this.spotName1.setText(spotsNames.get(0));
@@ -360,7 +425,6 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			}
 			this.spotName3.setVisible(true);
 			this.spotBox3.setVisible(true);
-//			this.spotColor3.setVisible(true);
 			this.forecastersNames.add(this.spotBox3.getValue(0));
 			
 			if (spotsIds.size() >= 4) {
@@ -372,7 +436,6 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 				}
 				this.spotName4.setVisible(true);
 				this.spotBox4.setVisible(true);
-//				this.spotColor4.setVisible(true);
 				this.forecastersNames.add(this.spotBox4.getValue(0));
 				
 				if (spotsIds.size() == 5) {
@@ -385,7 +448,6 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 					
 					this.spotName5.setVisible(true);
 					this.spotBox5.setVisible(true);
-//					this.spotColor5.setVisible(true);
 					this.forecastersNames.add(this.spotBox5.getValue(0));
 				}
 			}
