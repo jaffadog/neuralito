@@ -89,7 +89,7 @@ public class WgTableB extends FlexTable {
 		int forecasterIndex = 1;
 		while (i.hasNext()) {
 			String key = i.next();
-			//if (!key.equals("WW3 Noaa Forecaster")) 
+			if (!key.equals("WW3 Noaa Forecaster")) 
 			{
 				forecasts = forecasters.get(key);
 				this.generateAllForecastersTable(key, forecasts, forecasterIndex, false, false);
@@ -304,15 +304,18 @@ public class WgTableB extends FlexTable {
 		String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
 		//wind speed
 		String windSpeed = forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
+		//wind windDirection
+		String windDirection = forecastDTO.getMap().get(WW3Parameter.WIND_DIRECTION.toString()).getValue();
 		//Wave direccion
 		String waveDirection = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue();
 		//Wave period
 		String wavePeriod = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
 		try {
 			windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
+			windDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windDirection, Unit.Degrees, directionUnitTarget));
 			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 			waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
-			wavePeriod = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
+			wavePeriod = NumberFormat.getFormat("###").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
 		} catch (NeuralitoException e) {
 			// TODO ver como manejar esta exvepcion de conversion de unidades
 			e.printStackTrace();
@@ -325,7 +328,7 @@ public class WgTableB extends FlexTable {
 			detailedForecastPanel.setWidget(1, index, new Label(waveHeight));
 			detailedForecastPanel.setWidget(2, index, Arrows30PxFactory.getArrowIcon(waveDirection, directionUnitTarget));
 			detailedForecastPanel.setWidget(3, index, new Label(wavePeriod));
-			detailedForecastPanel.setWidget(4, index, Arrows30PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget));
+			detailedForecastPanel.setWidget(4, index, Arrows30PxFactory.getArrowIcon(windDirection, windSpeed, directionUnitTarget, speedUnitTarget));
 			detailedForecastPanel.setWidget(5, index, new Label(windSpeed));
 			
 			//cols format

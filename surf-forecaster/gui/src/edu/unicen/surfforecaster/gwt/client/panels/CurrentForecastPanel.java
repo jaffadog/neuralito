@@ -47,12 +47,15 @@ public class CurrentForecastPanel extends FlexTable {
 				String waveHeight = forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
 				//wind speed
 				String windSpeed = forecast.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
+				//wind windDirection
+				String windDirection = forecast.getMap().get(WW3Parameter.WIND_DIRECTION.toString()).getValue();
 				//Wave direccion
 				String waveDirection = forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue();
 				//Wave period
 				String wavePeriod = forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
 				try {
 					windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
+					windDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windDirection, Unit.Degrees, directionUnitTarget));
 					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 					waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
 					wavePeriod = NumberFormat.getFormat("###").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
@@ -61,7 +64,7 @@ public class CurrentForecastPanel extends FlexTable {
 					e.printStackTrace();
 				}
 				
-				this.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + UnitTranslator.getUnitAbbrTranlation(speedUnitTarget), Arrows50PxFactory.getArrowIcon("23", windSpeed, directionUnitTarget, speedUnitTarget)));
+				this.setWidget(1, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wind(), windSpeed + " " + UnitTranslator.getUnitAbbrTranlation(speedUnitTarget), Arrows50PxFactory.getArrowIcon(windDirection, windSpeed, directionUnitTarget, speedUnitTarget)));
 				this.setWidget(1, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_direction(), "", Arrows50PxFactory.getArrowIcon(waveDirection, directionUnitTarget)));
 				this.setWidget(2, 0, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_height(), waveHeight + " " + UnitTranslator.getUnitAbbrTranlation(heightUnitTarget), Waves50PxFactory.getWaveIcon(waveHeight, heightUnitTarget)));
 				this.setWidget(2, 1, this.createTableItem(GWTUtils.LOCALE_CONSTANTS.wave_period(), wavePeriod, UnitTranslator.getUnitAbbrTranlation(periodUnitTarget)));

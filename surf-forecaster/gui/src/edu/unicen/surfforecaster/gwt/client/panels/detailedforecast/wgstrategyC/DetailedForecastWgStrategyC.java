@@ -17,6 +17,7 @@ public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrat
 	private Map<Integer, Map<String, List<ForecastDTO>>> forecasters = null;
 	List<Integer> spotsIds = null;
 	List<String> spotsNames = null;
+	List<String> forecastersNames = null;
 	
 	/**
 	 * This Strategy shows a detalied forecast table for multiple spots for comparation purposes
@@ -25,21 +26,23 @@ public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrat
 	 * @param spotsIds
 	 * @param spotsNames
 	 */
-	public DetailedForecastWgStrategyC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames) {
+	public DetailedForecastWgStrategyC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, 
+			List<String> forecastersNames) {
 		this.forecasters = forecasters;
 		this.spotsIds = spotsIds;
 		this.spotsNames = spotsNames;
+		this.forecastersNames = forecastersNames;
 		this.completeDetailedForecastVPanel = new VerticalPanel();
 		this.completeDetailedForecastVPanel.setWidth("100%");
 	}
 
 	@Override
 	public Widget renderDetailedForecast() {
-		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 0, 23));
+		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 0, 3));
 		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 23, 46));
-		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 46, null));
+//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 23, 46));
+//		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
+//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, 46, null));
 		
 		return completeDetailedForecastVPanel;
 	}

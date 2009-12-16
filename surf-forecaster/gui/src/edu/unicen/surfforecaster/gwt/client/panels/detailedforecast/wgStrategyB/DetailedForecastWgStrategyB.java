@@ -57,11 +57,11 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 		completeDetailedForecastVPanel.add(flexTable);
 		completeDetailedForecastVPanel.setCellHorizontalAlignment(flexTable, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 23));
+		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 13));
 		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 23, 46));
-		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 46, null));
+//		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 23, 46));
+//		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
+//		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 46, null));
 		
 		return completeDetailedForecastVPanel;
 	}

@@ -49,7 +49,8 @@ public class WgTableC extends FlexTable {
 	 * @param to - Represents the last forecast to show, if null, goes to the end of the list of forecasts
 	 */
 	
-	public WgTableC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, Integer from, Integer to) {
+	public WgTableC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, 
+			List<String> forecastersNames, Integer from, Integer to) {
 		this.from = from;
 		this.to = to;
 		this.forecasters = forecasters;
@@ -69,22 +70,14 @@ public class WgTableC extends FlexTable {
 		for (int i = 0; i < spotsIds.size(); i++) {
 			Integer spotId = spotsIds.get(i);
 			String spotName = spotsNames.get(i);
+			String forecasterName = forecastersNames.get(i);
 			Map<String, List<ForecastDTO>> spotForecasters = forecasters.get(spotId);
-			renderSpotForecasters(spotForecasters, spotName, i);
+			renderForecastsRow(spotForecasters, spotName, forecasterName, i);
 		}
 	}
 
-	private void renderSpotForecasters(Map<String, List<ForecastDTO>> spotForecasters, String spotName, int spotIndex) {
-		Set<String> forecasterNames = spotForecasters.keySet();
-		Iterator<String> i = forecasterNames.iterator();
-		while (i.hasNext()) {
-			String forecasterName = i.next();
-			List<ForecastDTO> forecasts = spotForecasters.get(forecasterName);
-			renderForecastsRow(spotName, forecasterName, forecasts, spotIndex);
-		}
-	}
-
-	private void renderForecastsRow(String spotName, String forecasterName, List<ForecastDTO> forecasts, int spotIndex) {
+	private void renderForecastsRow(Map<String, List<ForecastDTO>> spotForecasters, String spotName, String forecasterName, int spotIndex) {
+		List<ForecastDTO> forecasts = spotForecasters.get(forecasterName);
 		int forecastIndex = 1;
 		int max = (this.to != null) ? this.to : forecasts.size();
 		//Spot and Forecaster name
