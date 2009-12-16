@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -32,7 +34,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
-public class ComparationViewerPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler {
+public class ComparationViewerPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler, ChangeHandler {
 	
 	private Widget baseParentPanel = null;
 	private HTMLButtonGrayGrad backBtn = null;
@@ -42,12 +44,6 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private ListBox spotBox3 = null;
 	private ListBox spotBox4 = null;
 	private ListBox spotBox5 = null;
-	
-//	private Label spotColor1 = null;
-//	private Label spotColor2 = null;
-//	private Label spotColor3 = null;
-//	private Label spotColor4 = null;
-//	private Label spotColor5 = null;
 	
 	private Label spotName1 = null;
 	private Label spotName2 = null;
@@ -94,41 +90,6 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			this.getFlexCellFormatter().setHorizontalAlignment(4, 1, HasHorizontalAlignment.ALIGN_RIGHT);
 			spotName5.setVisible(false);
 		}
-		
-//		//Spot color labels
-//		{
-//			spotColor1 = new Label("");
-//			spotColor1.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-//			spotColor1.addStyleName("gwt-Label-SpotColor1");
-//			this.setWidget(0, 2, spotColor1);
-//		}
-//		{
-//			spotColor2 = new Label("");
-//			spotColor2.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-//			spotColor2.addStyleName("gwt-Label-SpotColor2");
-//			this.setWidget(1, 2, spotColor2);
-//		}
-//		{
-//			spotColor3 = new Label("");
-//			spotColor3.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-//			spotColor3.addStyleName("gwt-Label-SpotColor3");
-//			this.setWidget(2, 2, spotColor3);
-//			spotColor3.setVisible(false);
-//		}
-//		{
-//			spotColor4 = new Label("");
-//			spotColor4.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-//			spotColor4.addStyleName("gwt-Label-SpotColor4");
-//			this.setWidget(3, 2, spotColor4);
-//			spotColor4.setVisible(false);
-//		}
-//		{
-//			spotColor5 = new Label("");
-//			spotColor5.setSize(ComparationViewerPanel.COLOR_LABEL_WIDTH, ComparationViewerPanel.COLOR_LABEL_HEIGHT);
-//			spotColor5.addStyleName("gwt-Label-SpotColor5");
-//			this.setWidget(4, 2, spotColor5);
-//			spotColor5.setVisible(false);
-//		}
 		
 		//Spots forecasters listboxes
 		{
@@ -213,7 +174,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	}
 	
 	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
-		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames));
+		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames));
 		this.setWidget(8, 0, renderContext.executeRenderStrategy());
 		this.getFlexCellFormatter().setColSpan(8, 0, 4);
 	}
@@ -429,6 +390,22 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onChange(ChangeEvent event) {
+		Widget sender = (Widget) event.getSource();
+		
+		if (sender == spotBox1)
+			this.forecastersNames.set(0, this.spotBox1.getValue(this.spotBox1.getSelectedIndex()));
+		if (sender == spotBox2)
+			this.forecastersNames.set(1, this.spotBox2.getValue(this.spotBox2.getSelectedIndex()));
+		if (sender == spotBox3)
+			this.forecastersNames.set(2, this.spotBox3.getValue(this.spotBox3.getSelectedIndex()));
+		if (sender == spotBox4)
+			this.forecastersNames.set(3, this.spotBox4.getValue(this.spotBox4.getSelectedIndex()));
+		if (sender == spotBox5)
+			this.forecastersNames.set(4, this.spotBox5.getValue(this.spotBox5.getSelectedIndex()));
 	}
 	
 	
