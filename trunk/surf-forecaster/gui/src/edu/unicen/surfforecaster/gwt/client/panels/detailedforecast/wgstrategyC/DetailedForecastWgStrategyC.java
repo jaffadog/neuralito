@@ -39,7 +39,7 @@ public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrat
 
 	@Override
 	public Widget renderDetailedForecast() {
-		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 0, 13));
+		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 0, 3));
 		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
 //		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 23, 46));
 //		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
