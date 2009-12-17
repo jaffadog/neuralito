@@ -13,30 +13,22 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.visualization.client.DataTable;
-import com.google.gwt.visualization.client.VisualizationUtils;
-import com.google.gwt.visualization.client.AbstractDataTable.ColumnType;
-import com.google.gwt.visualization.client.visualizations.ColumnChart;
-import com.google.gwt.visualization.client.visualizations.MotionChart;
-import com.google.gwt.visualization.client.visualizations.ColumnChart.Options;
 
-import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
-import edu.unicen.surfforecaster.common.services.dto.Unit;
-import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.gwt.client.panels.charts.ISurfForecasterChart;
+import edu.unicen.surfforecaster.gwt.client.panels.charts.SpotComparationColumnChart;
+import edu.unicen.surfforecaster.gwt.client.panels.charts.SpotComparationMotionChart;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyC.DetailedForecastWgStrategyC;
-import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class ComparationViewerPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler, ChangeHandler {
@@ -189,16 +181,6 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			this.getFlexCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		}
 	}
-	
-	@Override
-	public void onClick(ClickEvent event) {
-		Widget sender = (Widget) event.getSource();
-		
-		if (sender == backBtn || sender == backBtn2)
-			((SpotComparatorPanel)baseParentPanel).showComparationCreatorPanel();
-		if (sender == refreshBtn)
-			refreshComparation();
-	}
 
 	@Override
 	public Widget getBasePanel() {
@@ -226,8 +208,8 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		//meterla en otro lado)
 		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
 			this.fillSpotProperties();
-			this.drawColumnChart(spotsLatestForecasts, spotsIds, spotsNames);
-			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
+			this.drawColumnChart();
+			this.drawMotionChart();
 			detailedCompTablePanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
 				public void onOpen(OpenEvent<DisclosurePanel> event) {
 					if (detailedCompTable == null)
@@ -256,8 +238,8 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		//TODO hacer que el valor harcodedo 5 de la sig if sea una variable statica bien definida (ya se definio en el comparationCreatorPanel, tal vez habria que 
 		//meterla en otro lado)
 		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
-			this.drawColumnChart(spotsLatestForecasts, spotsIds, spotsNames);
-			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
+			this.drawColumnChart();
+			this.drawMotionChart();
 			if (detailedCompTable != null && detailedCompTablePanel.isOpen())
 				this.renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
 			else if (detailedCompTable != null)
@@ -270,165 +252,6 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		
 	}
 	
-	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
-		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames));
-		detailedCompTable = renderContext.executeRenderStrategy();
-		detailedCompTablePanel.setContent(detailedCompTable);
-	}
-	
-	private void drawColumnChart(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
-	    VisualizationUtils.loadVisualizationApi("1.1",
-	            new Runnable() {
-	              public void run() {
-	            	  DataTable data = createTable(spotsLatestForecasts, spotsIds, spotsNames);
-	            	  
-		          	  Options options = createOptions();
-	            	  
-		          	  ColumnChart viz = new ColumnChart(data, options);
-	          	      setWidget(5, 0, viz);
-	          	      getFlexCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER);
-	              }
-        }, ColumnChart.PACKAGE);
-	}
-	
-	private Options createOptions() {
-		Options options = Options.create();
-		options.setHeight(300);
-		options.setTitle("Alturas de ola futuras");
-		options.setWidth(950);
-		options.set3D(true);
-		options.setShowCategories(true);
-		options.setEnableTooltip(true);
-		options.setMin(0);
-		options.setMax(20);
-		return options;
-	}
-	
-	private DataTable createTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
-		DataTable data = DataTable.create();
-		
-		data.addColumn(ColumnType.STRING, "Date");
-  	    
-		Iterator<String> i = spotsNames.iterator();
-  	    while (i.hasNext()) {
-  	    	String spotName = i.next();
-  	    	data.addColumn(ColumnType.NUMBER, spotName);
-  	    }
-  	    
-  	    data.addRows(4);
-  	    data.setValue(0, 0, "Ahora");
-  	    for (int index = 1; index < data.getNumberOfRows(); index++) {
-  	    	data.setValue(index, 0, "+" + index * 3 + " horas");
-		}
-  	    
-	    for (int spotIndex = 0; spotIndex < spotsIds.size(); spotIndex++) {
-	    	Integer spotId = spotsIds.get(spotIndex);
-	    	String forecasterName = this.forecastersNames.get(spotIndex);
-	    	List<ForecastDTO> forecasts = spotsLatestForecasts.get(spotId).get(forecasterName);
-	    	for (int forecastIndex = 0; forecastIndex < data.getNumberOfRows(); forecastIndex++) {
-				ForecastDTO forecastDTO = forecasts.get(forecastIndex);
-				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
-				Unit heightUnitTarget = Unit.Meters;
-				Unit speedUnitTarget = Unit.KilometersPerHour;
-				Unit directionUnitTarget = Unit.Degrees;
-				Unit periodUnitTarget = Unit.Seconds;
-				
-				//wave height
-				String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
-				//wind speed
-				String windSpeed = forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
-				//Wave direccion
-				String waveDirection = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue();
-				//Wave period
-				String wavePeriod = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
-				try {
-					windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
-					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
-					waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
-					wavePeriod = NumberFormat.getFormat("###").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
-				} catch (NeuralitoException e) {
-					// TODO ver como manejar esta exvepcion de conversion de unidades
-					e.printStackTrace();
-				}
-				
-	    		data.setValue(forecastIndex, spotIndex + 1, new Double(waveHeight));
-			}
-	    }
-  	    
-		return data;
-	}
-	
-	private void drawMotionChart(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
-	    VisualizationUtils.loadVisualizationApi("1.1",
-	            new Runnable() {
-	              public void run() {
-	            	  DataTable data = createMotionTable(spotsLatestForecasts, spotsIds, spotsNames);
-	            	  
-		          	  MotionChart.Options options = createMotionOptions();
-	            	  
-		          	  MotionChart viz = new MotionChart(data, options);
-	          	      setWidget(6, 0, viz);
-	          	    getFlexCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
-	              }				
-        }, MotionChart.PACKAGE);
-	}
-	
-	private DataTable createMotionTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
-		DataTable data = DataTable.create();	    
-	    data.addColumn(ColumnType.STRING, "Spot");
-	    data.addColumn(ColumnType.NUMBER, "Hours");
-	    data.addColumn(ColumnType.NUMBER, "Wave Height");
-	    
-	    for (int spotIndex = 0; spotIndex < spotsIds.size(); spotIndex++) {
-	    	Integer spotId = spotsIds.get(spotIndex);
-	    	String spotName = spotsNames.get(spotIndex);
-	    	String forecasterName = this.forecastersNames.get(spotIndex);
-	    	List<ForecastDTO> forecasts = spotsLatestForecasts.get(spotId).get(forecasterName);
-	    	if (data.getNumberOfRows() == 0)
-	    		data.addRows(spotsIds.size() * forecasts.size());
-	    		
-	    	for (int forecastIndex = 0; forecastIndex < forecasts.size(); forecastIndex++) {
-				ForecastDTO forecastDTO = forecasts.get(forecastIndex);
-				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
-				Unit heightUnitTarget = Unit.Meters;
-				Unit speedUnitTarget = Unit.KilometersPerHour;
-				Unit directionUnitTarget = Unit.Degrees;
-				Unit periodUnitTarget = Unit.Seconds;
-				
-				//wave height
-				String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
-				//wind speed
-				String windSpeed = forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
-				//Wave direccion
-				String waveDirection = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue();
-				//Wave period
-				String wavePeriod = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
-				try {
-					windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
-					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
-					waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
-					wavePeriod = NumberFormat.getFormat("###").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
-				} catch (NeuralitoException e) {
-					// TODO ver como manejar esta exvepcion de conversion de unidades
-					e.printStackTrace();
-				}
-				data.setValue(spotIndex * forecasts.size() + forecastIndex, 0, spotName);
-	    		data.setValue(spotIndex * forecasts.size() + forecastIndex, 1, 2000 + forecastIndex);
-	    		data.setValue(spotIndex * forecasts.size() + forecastIndex, 2, new Double(waveHeight));
-			}
-	    }
-	    
-	    
-		return data;
-	}
-	
-	private MotionChart.Options createMotionOptions() {
-		MotionChart.Options options = MotionChart.Options.create();
-		options.setHeight(300);
-	    options.setWidth(950);
-		return options;
-	}
-
 	private void fillSpotProperties() {
 		this.forecastersNames = new ArrayList<String>();
 		
@@ -485,7 +308,39 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			}
 		}
 	}
-
+	
+	private void drawColumnChart(){
+		SimplePanel chartContainer = new SimplePanel();
+		ISurfForecasterChart columnChart = new SpotComparationColumnChart(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames);
+		columnChart.render(chartContainer);
+		this.setWidget(5, 0, chartContainer);
+	    this.getFlexCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER);
+	}
+	
+	private void drawMotionChart(){
+		SimplePanel chartContainer = new SimplePanel();
+		ISurfForecasterChart motionChart = new SpotComparationMotionChart(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames);
+		motionChart.render(chartContainer);
+		this.setWidget(6, 0, chartContainer);
+	    this.getFlexCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
+	}
+	
+	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
+		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames));
+		detailedCompTable = renderContext.executeRenderStrategy();
+		detailedCompTablePanel.setContent(detailedCompTable);
+	}
+	
+	@Override
+	public void onClick(ClickEvent event) {
+		Widget sender = (Widget) event.getSource();
+		
+		if (sender == backBtn || sender == backBtn2)
+			((SpotComparatorPanel)baseParentPanel).showComparationCreatorPanel();
+		if (sender == refreshBtn)
+			refreshComparation();
+	}
+	
 	@Override
 	public void onChange(ChangeEvent event) {
 		Widget sender = (Widget) event.getSource();
