@@ -2,11 +2,17 @@ package edu.unicen.surfforecaster.gwt.client.widgets;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseUpHandler {
+public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseUpHandler, MouseOutHandler {
+	
+	public final static int BUTTON_GRAY_GRAD_SHORT = 60;
+	public final static int BUTTON_GRAY_GRAD_MEDIUM = 130;
+	public final static int BUTTON_GRAY_GRAD_LARGE = 200;
 	
 	String leftId = "";
 	String rightId = "";
@@ -38,11 +44,13 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 		
 		this.addMouseDownHandler(this);
 		this.addMouseUpHandler(this);
+		this.addMouseOutHandler(this);
 	}
 	
 	public HTMLButtonGrayGrad(String text, String id, int width) {
 		
 		this.width = width < 50 ? 50 : width;
+		this.setWidth(this.width + "px");
 		
 		int btnWidth = this.width - 18; //real width is width - rounded corners images width left and right
  
@@ -57,6 +65,7 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 		
 		this.addMouseDownHandler(this);
 		this.addMouseUpHandler(this);
+		this.addMouseOutHandler(this);
 	}
 	
 	//TODO Native code
@@ -102,8 +111,12 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 		this.setUpImage();	
 	}
 	
+	@Override
+	public void onMouseOut(MouseOutEvent event) {
+		this.setUpImage();
+	}
+	
 	public void setEnabled(boolean isEnabled){
 		
 	}
-
 }
