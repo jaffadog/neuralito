@@ -11,6 +11,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -30,7 +31,6 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyC.DetailedForecastWgStrategyC;
-import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
@@ -52,9 +52,8 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private Label spotName4 = null;
 	private Label spotName5 = null;
 	
-	private static final String COLOR_LABEL_WIDTH = "15px";
-	private static final String COLOR_LABEL_HEIGHT = "15px";
-	private static final String FORECASTER_LIST_WIDTH = "200px";
+	private static final String FORECASTER_LABEL_WIDTH = "150px";
+	private static final String FORECASTER_LIST_WIDTH = "250px";
 	private Hyperlink lnkShowDetailedTable;
 	
 	//Temporal data
@@ -66,85 +65,103 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private Widget detailedCompTable = null;
 	
 	public ComparationViewerPanel() {
-		//Spot name labels
 		{
-			spotName1  = new Label("");
-			this.setWidget(0, 1, spotName1 );
-			this.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-		}
-		{
-			spotName2  = new Label("");
-			this.setWidget(1, 1, spotName2 );
-			this.getFlexCellFormatter().setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-		}
-		{
-			spotName3  = new Label("");
-			this.setWidget(2, 1, spotName3 );
-			this.getFlexCellFormatter().setHorizontalAlignment(2, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-			spotName3.setVisible(false);
-		}
-		{
-			spotName4  = new Label("");
-			this.setWidget(3, 1, spotName4 );
-			this.getFlexCellFormatter().setHorizontalAlignment(3, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-			spotName4.setVisible(false);
-		}
-		{
-			spotName5  = new Label("");
-			this.setWidget(4, 1, spotName5);
-			this.getFlexCellFormatter().setHorizontalAlignment(4, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-			spotName5.setVisible(false);
+			DisclosurePanel spotsForecastersPanel = new DisclosurePanel("Selecciones los pronosticadores", true);
+			spotsForecastersPanel.setAnimationEnabled(true);
+			spotsForecastersPanel.setWidth("100%");
+			this.setWidget(0, 0, spotsForecastersPanel);
+			{
+				FlexTable spotsForecastersTable = new FlexTable();
+				spotsForecastersPanel.setContent(spotsForecastersTable);
+				//Spot name labels
+				{
+					spotName1  = new Label("");
+					spotName1.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+					spotsForecastersTable.setWidget(0, 0, spotName1 );
+					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+				}
+				{
+					spotName2  = new Label("");
+					spotName2.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+					spotsForecastersTable.setWidget(0, 2, spotName2 );
+					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT);
+				}
+				{
+					spotName3  = new Label("");
+					spotName3.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+					spotsForecastersTable.setWidget(1, 0, spotName3 );
+					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+					spotName3.setVisible(false);
+				}
+				{
+					spotName4  = new Label("");
+					spotName4.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+					spotsForecastersTable.setWidget(1, 2, spotName4 );
+					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_RIGHT);
+					spotName4.setVisible(false);
+				}
+				{
+					spotName5  = new Label("");
+					spotName5.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+					spotsForecastersTable.setWidget(2, 0, spotName5);
+					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+					spotName5.setVisible(false);
+				}
+				
+				//Spots forecasters listboxes
+				{
+					spotBox1 = new ListBox();
+					spotBox1.addChangeHandler(this);
+					spotBox1.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+					spotsForecastersTable.setWidget(0, 1, spotBox1);
+				}
+				{
+					spotBox2 = new ListBox();
+					spotBox2.addChangeHandler(this);
+					spotBox2.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+					spotsForecastersTable.setWidget(0, 3, spotBox2);
+				}
+				{
+					spotBox3 = new ListBox();
+					spotBox3.addChangeHandler(this);
+					spotBox3.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+					spotsForecastersTable.setWidget(1, 1, spotBox3);
+					spotBox3.setVisible(false);
+				}
+				{
+					spotBox4 = new ListBox();
+					spotBox4.addChangeHandler(this);
+					spotBox4.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+					spotsForecastersTable.setWidget(1, 3, spotBox4);
+					spotBox4.setVisible(false);
+				}
+				{
+					spotBox5 = new ListBox();
+					spotBox5.addChangeHandler(this);
+					spotBox5.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+					spotsForecastersTable.setWidget(2, 1, spotBox5);
+					spotBox5.setVisible(false);
+				}
+				//Refrash button
+				{
+					refreshBtn = new HTMLButtonGrayGrad("Actualizar", "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
+					refreshBtn.addClickHandler(this);
+					spotsForecastersTable.setWidget(3, 0, refreshBtn);
+					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
+					spotsForecastersTable.getFlexCellFormatter().setColSpan(3, 0, 4);
+				}
+			}
 		}
 		
-		//Spots forecasters listboxes
-		{
-			spotBox1 = new ListBox();
-			spotBox1.addChangeHandler(this);
-			spotBox1.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-			this.setWidget(0, 3, spotBox1);
-		}
-		{
-			spotBox2 = new ListBox();
-			spotBox2.addChangeHandler(this);
-			spotBox2.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-			this.setWidget(1, 3, spotBox2);
-		}
-		{
-			spotBox3 = new ListBox();
-			spotBox3.addChangeHandler(this);
-			spotBox3.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-			this.setWidget(2, 3, spotBox3);
-			spotBox3.setVisible(false);
-		}
-		{
-			spotBox4 = new ListBox();
-			spotBox4.addChangeHandler(this);
-			spotBox4.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-			this.setWidget(3, 3, spotBox4);
-			spotBox4.setVisible(false);
-		}
-		{
-			spotBox5 = new ListBox();
-			spotBox5.addChangeHandler(this);
-			spotBox5.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-			this.setWidget(4, 3, spotBox5);
-			spotBox5.setVisible(false);
-		}
 		{
 			lnkShowDetailedTable = new Hyperlink("Show detailed forecasts table", "");
 			lnkShowDetailedTable.addStyleName("gwt-HyperLink-showMoreLess");
 			this.setWidget(7, 0, lnkShowDetailedTable);
 			this.getFlexCellFormatter().setColSpan(7, 0, 4);
 		}
-		//Refrash button
-		{
-			refreshBtn = new HTMLButtonGrayGrad("Actualizar", "ComparationViewerPanel-refresh", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
-			refreshBtn.addClickHandler(this);
-			this.setWidget(0, 4, refreshBtn);
-		}
 		//Back button
 		{
-			backBtn = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+			backBtn = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 			backBtn.addClickHandler(this);
 			this.setWidget(9, 0, backBtn);
 			this.getFlexCellFormatter().setColSpan(9, 0, 4);

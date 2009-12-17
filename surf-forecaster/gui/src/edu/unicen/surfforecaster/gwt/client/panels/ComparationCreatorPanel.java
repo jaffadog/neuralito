@@ -109,7 +109,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setWidth(1, 0, ComparationCreatorPanel.LISTBOX_WIDTH);
 			}
 			{
-				addSpotBtn = new HTMLButtonGrayGrad(">>", "CreateComparationPanel-add", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				addSpotBtn = new HTMLButtonGrayGrad(">>", "CreateComparationPanel-add", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_SHORT);
 				compDefTable.setWidget(1, 1, addSpotBtn);
 				addSpotBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(1, 1, addSpotBtn.getWidth());
@@ -124,7 +124,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setWidth(1, 2, ComparationCreatorPanel.LISTBOX_WIDTH);
 			}
 			{
-				removeSpotBtn = new HTMLButtonGrayGrad("<<", "CreateComparationPanel-remove", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				removeSpotBtn = new HTMLButtonGrayGrad("<<", "CreateComparationPanel-remove", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_SHORT);
 				compDefTable.setWidget(2, 0, removeSpotBtn);
 				removeSpotBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(2, 0, removeSpotBtn.getWidth());
@@ -132,7 +132,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(2, 0, 1);
 			}
 			{
-				firstBtn = new HTMLButtonGrayGrad("First", "CreateComparationPanel-first", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				firstBtn = new HTMLButtonGrayGrad("First", "CreateComparationPanel-first", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_SHORT);
 				compDefTable.setWidget(1, 3, firstBtn);
 				firstBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(1, 3, firstBtn.getWidth());
@@ -140,7 +140,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(1, 3, 1);
 			}
 			{
-				upBtn = new HTMLButtonGrayGrad("Up", "CreateComparationPanel-up", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				upBtn = new HTMLButtonGrayGrad("Up", "CreateComparationPanel-up", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_SHORT);
 				compDefTable.setWidget(2, 1, upBtn);
 				upBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(2, 1, upBtn.getWidth());
@@ -148,7 +148,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(2, 1, 1);
 			}
 			{
-				downBtn = new HTMLButtonGrayGrad("Down", "CreateComparationPanel-down", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				downBtn = new HTMLButtonGrayGrad("Down", "CreateComparationPanel-down", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_SHORT);
 				compDefTable.setWidget(3, 1, downBtn);
 				downBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(3, 1, downBtn.getWidth());
@@ -156,7 +156,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(3, 1, 1);
 			}
 			{
-				lastBtn = new HTMLButtonGrayGrad("Last", "CreateComparationPanel-last", GWTUtils.BUTTON_GRAY_GRAD_SHORT);
+				lastBtn = new HTMLButtonGrayGrad("Last", "CreateComparationPanel-last", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_SHORT);
 				compDefTable.setWidget(4, 1, lastBtn);
 				lastBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(4, 1, lastBtn.getWidth());
@@ -164,7 +164,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(4, 1, 1);
 			}
 			{
-				compareBtn = new HTMLButtonGrayGrad("Compare", "CreateComparationPanel-Compare", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+				compareBtn = new HTMLButtonGrayGrad("Compare", "CreateComparationPanel-Compare", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 				compDefTable.setWidget(5, 2, compareBtn);
 				compareBtn.addClickHandler(this);
 			}
@@ -408,7 +408,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				if (result != null) {
 					showMyComparationsPanel(result);
 					createSavePanel();
-					saveBtn = new HTMLButtonGrayGrad("Save...", "CreateComparationPanel-Save", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+					saveBtn = new HTMLButtonGrayGrad("Save...", "CreateComparationPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 					compDefTable.setWidget(5, 3, saveBtn);
 					setSaveBtnClickHandler();
 				}
@@ -496,7 +496,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			savePanel.setWidget(0, 1, txtCompName);
 		}
 		{
-			saveCompBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-SaveComparation", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+			saveCompBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-SaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 			saveCompBtn.addClickHandler(this);
 			savePanel.setWidget(0, 2, saveCompBtn);
 		}
@@ -512,7 +512,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			savePanel.setWidget(1, 1, txtCompDescription);
 		}
 		{
-			cancelSaveCompBtn = new HTMLButtonGrayGrad("Cancel", "CreateComparationPanel-CancelSaveComparation", GWTUtils.BUTTON_GRAY_GRAD_MEDIUM);
+			cancelSaveCompBtn = new HTMLButtonGrayGrad("Cancel", "CreateComparationPanel-CancelSaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 			cancelSaveCompBtn.addClickHandler(this);
 			savePanel.getFlexCellFormatter().setVerticalAlignment(1, 2, HasVerticalAlignment.ALIGN_TOP);
 			savePanel.setWidget(1, 2, cancelSaveCompBtn);
