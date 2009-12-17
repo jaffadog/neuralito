@@ -9,6 +9,10 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DisclosurePanel;
@@ -37,7 +41,11 @@ import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 public class ComparationViewerPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler, ChangeHandler {
 	
 	private Widget baseParentPanel = null;
+	
+	private DisclosurePanel detailedCompTablePanel = null;
+	
 	private HTMLButtonGrayGrad backBtn = null;
+	private HTMLButtonGrayGrad backBtn2 = null;
 	private HTMLButtonGrayGrad refreshBtn = null;
 	
 	private ListBox spotBox1 = null;
@@ -54,19 +62,18 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	
 	private static final String FORECASTER_LABEL_WIDTH = "150px";
 	private static final String FORECASTER_LIST_WIDTH = "250px";
-	private Hyperlink lnkShowDetailedTable;
+	
 	
 	//Temporal data
 	private List<String> forecastersNames = null;
 	private List<String> spotsNames = null;
 	private List<Integer> spotsIds = null;
 	private Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts = null;
-	private boolean isDetailedTableShowed = false;
 	private Widget detailedCompTable = null;
 	
 	public ComparationViewerPanel() {
 		{
-			DisclosurePanel spotsForecastersPanel = new DisclosurePanel("Selecciones los pronosticadores", true);
+			DisclosurePanel spotsForecastersPanel = new DisclosurePanel("Seleccione el pronosticador de cada spot", true);
 			spotsForecastersPanel.setAnimationEnabled(true);
 			spotsForecastersPanel.setWidth("100%");
 			this.setWidget(0, 0, spotsForecastersPanel);
@@ -152,19 +159,28 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 				}
 			}
 		}
-		
-		{
-			lnkShowDetailedTable = new Hyperlink("Show detailed forecasts table", "");
-			lnkShowDetailedTable.addStyleName("gwt-HyperLink-showMoreLess");
-			this.setWidget(7, 0, lnkShowDetailedTable);
-			this.getFlexCellFormatter().setColSpan(7, 0, 4);
-		}
 		//Back button
 		{
 			backBtn = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 			backBtn.addClickHandler(this);
-			this.setWidget(9, 0, backBtn);
+			backBtn.setVisible(false);
+			this.setWidget(7, 0, backBtn);
+			this.getFlexCellFormatter().setColSpan(7, 0, 4);
+			this.getFlexCellFormatter().setHorizontalAlignment(7, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		}
+		{
+			detailedCompTablePanel = new DisclosurePanel("Tabla de pronosticos detallados", false);
+			detailedCompTablePanel.setAnimationEnabled(true);
+			this.setWidget(8, 0, detailedCompTablePanel);
+			this.getFlexCellFormatter().setColSpan(8, 0, 4);
+		}
+		//Back button2
+		{
+			backBtn2 = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back2", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
+			backBtn2.addClickHandler(this);
+			this.setWidget(9, 0, backBtn2);
 			this.getFlexCellFormatter().setColSpan(9, 0, 4);
+			this.getFlexCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		}
 	}
 	
@@ -172,7 +188,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	public void onClick(ClickEvent event) {
 		Widget sender = (Widget) event.getSource();
 		
-		if (sender == backBtn)
+		if (sender == backBtn || sender == backBtn2)
 			((SpotComparatorPanel)baseParentPanel).showComparationCreatorPanel();
 		if (sender == refreshBtn)
 			refreshComparation();
@@ -206,23 +222,19 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			this.fillSpotProperties();
 			this.drawColumnChart(spotsLatestForecasts, spotsIds, spotsNames);
 			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
-			lnkShowDetailedTable.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					if (isDetailedTableShowed){
-						isDetailedTableShowed = false;
-						if (detailedCompTable != null)
-							detailedCompTable.setVisible(false);
-						lnkShowDetailedTable.setText("Show detailed forecasts table");
-					}
-					else{
-						if (detailedCompTable == null)
-							renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
-						detailedCompTable.setVisible(true);
-						lnkShowDetailedTable.setText("Hide detailed forecasts table");
-						isDetailedTableShowed = true;
-					}
+			detailedCompTablePanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
+				public void onOpen(OpenEvent<DisclosurePanel> event) {
+					if (detailedCompTable == null)
+						renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
+					backBtn.setVisible(true);
 				}
 			});
+			detailedCompTablePanel.addCloseHandler(new CloseHandler<DisclosurePanel>() {
+				public void onClose(CloseEvent<DisclosurePanel> event) {
+					backBtn.setVisible(false);
+				}
+			});
+			
 		} else {
 			//TODO el mesagebox siguiente
 			Window.alert("La cantuidad de spots a comparar tiene que ser entre 2 y 5");
@@ -240,12 +252,10 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
 			this.drawColumnChart(spotsLatestForecasts, spotsIds, spotsNames);
 			this.drawMotionChart(spotsLatestForecasts, spotsIds, spotsNames);
-			if (detailedCompTable != null && isDetailedTableShowed){
+			if (detailedCompTable != null && detailedCompTablePanel.isOpen())
 				this.renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
-				detailedCompTable.setVisible(true);
-			} else if (detailedCompTable != null) {
+			else if (detailedCompTable != null)
 				detailedCompTable = null;
-			}
 		} else {
 			//TODO el mesagebox siguiente
 			Window.alert("La cantuidad de spots a comparar tiene que ser entre 2 y 5");
@@ -257,8 +267,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames));
 		detailedCompTable = renderContext.executeRenderStrategy();
-		this.setWidget(8, 0, detailedCompTable);
-		this.getFlexCellFormatter().setColSpan(8, 0, 4);
+		detailedCompTablePanel.setContent(detailedCompTable);
 	}
 	
 	private void drawColumnChart(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
