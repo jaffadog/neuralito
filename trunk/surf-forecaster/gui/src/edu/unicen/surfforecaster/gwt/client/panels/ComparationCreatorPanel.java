@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -74,27 +75,34 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	
 	public ComparationCreatorPanel() {
 		
+		Label lblSectionTitle = new Label("Comparador de olas");
+		lblSectionTitle.addStyleName("gwt-Label-SectionTitle");
+		this.setWidget(0, 0, lblSectionTitle);
+		
 		errorPanel = new ErrorMsgPanel();
 		errorPanel.setVisible(false);
-		this.setWidget(0, 0, errorPanel);
-		this.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setColSpan(0, 0, 3);
+		this.setWidget(1, 0, errorPanel);
+		this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.getFlexCellFormatter().setColSpan(1, 0, 3);
 		
 		Vector<String> message = new Vector<String>();
 		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
 		successPanel = new SuccessMsgPanel(message);
 		successPanel.setVisible(false);
-		this.setWidget(1, 0, successPanel);
-		this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setColSpan(1, 0, 3);
+		this.setWidget(2, 0, successPanel);
+		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		
 		//Define comparations
-		DisclosurePanel comparationDefinition = new DisclosurePanel("Seleccionar olas", true);
-		comparationDefinition.setAnimationEnabled(true);
-		this.setWidget(3, 0, comparationDefinition);
+		Label lblTitle = new Label("Olas a comparar");
+		lblTitle.addStyleName("gwt-Label-Title");
+		this.setWidget(4, 0, lblTitle);
+		
+		SimplePanel comparationDefinition = new SimplePanel();
+		this.setWidget(5, 0, comparationDefinition);
 		{
 			compDefTable = new FlexTable();
-			comparationDefinition.setContent(compDefTable);
+			comparationDefinition.setWidget(compDefTable);
 			{
 				localizationPanel = new LinksLocalizationPanel(false, false);			
 				localizationPanel.setBasePanel(this);
@@ -434,7 +442,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		//My comparations
 		myComparations = new DisclosurePanel("Mis comparaciones", true);
 		myComparations.setAnimationEnabled(true);
-		this.setWidget(2, 0, myComparations);
+		this.setWidget(3, 0, myComparations);
 		{
 			FlexTable myCompsTable = new FlexTable();
 			myComparations.setContent(myCompsTable);
@@ -482,40 +490,48 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private void createSavePanel() {
 		String txtWidth = "500px";
 		String areaWidth = "500px";
+		
 		savePanel = new FlexTable();
 		savePanel.setVisible(false);
-		this.setWidget(4, 0, savePanel);
+		this.setWidget(7, 0, savePanel);
+		{
+			//Panel title
+			Label lblTitle = new Label("Guardar comparacion");
+			lblTitle.addStyleName("gwt-Label-Title");
+			savePanel.setWidget(0, 0, lblTitle);
+			savePanel.getFlexCellFormatter().setColSpan(0, 0, 3);
+		}
 		{
 			Label lblCompName = new Label("* " + "Nombre de comparacion" + ": ");
-			savePanel.setWidget(0, 0, lblCompName);
-			savePanel.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+			savePanel.setWidget(1, 0, lblCompName);
+			savePanel.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		}
 		{
 			txtCompName = new TextBox();
 			txtCompName.setWidth(txtWidth);
-			savePanel.setWidget(0, 1, txtCompName);
+			savePanel.setWidget(1, 1, txtCompName);
 		}
 		{
 			saveCompBtn = new HTMLButtonGrayGrad("Save comparation", "CreateComparationPanel-SaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 			saveCompBtn.addClickHandler(this);
-			savePanel.setWidget(0, 2, saveCompBtn);
+			savePanel.setWidget(1, 2, saveCompBtn);
 		}
 		{
 			Label lblCompDescription = new Label("Descripcion" + ": ");
-			savePanel.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-			savePanel.getFlexCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
-			savePanel.setWidget(1, 0, lblCompDescription);
+			savePanel.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+			savePanel.getFlexCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_TOP);
+			savePanel.setWidget(2, 0, lblCompDescription);
 		}
 		{
 			txtCompDescription = new TextArea();
 			txtCompDescription.setSize(areaWidth, "100px");
-			savePanel.setWidget(1, 1, txtCompDescription);
+			savePanel.setWidget(2, 1, txtCompDescription);
 		}
 		{
 			cancelSaveCompBtn = new HTMLButtonGrayGrad("Cancel", "CreateComparationPanel-CancelSaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 			cancelSaveCompBtn.addClickHandler(this);
-			savePanel.getFlexCellFormatter().setVerticalAlignment(1, 2, HasVerticalAlignment.ALIGN_TOP);
-			savePanel.setWidget(1, 2, cancelSaveCompBtn);
+			savePanel.getFlexCellFormatter().setVerticalAlignment(2, 2, HasVerticalAlignment.ALIGN_TOP);
+			savePanel.setWidget(2, 2, cancelSaveCompBtn);
 		}
 		this.fillSavePanel();
 	}
