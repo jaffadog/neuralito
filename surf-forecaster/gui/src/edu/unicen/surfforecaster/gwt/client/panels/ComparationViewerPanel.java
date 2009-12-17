@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.visualization.client.DataTable;
 import com.google.gwt.visualization.client.VisualizationUtils;
@@ -78,85 +79,90 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			spotsForecastersPanel.setWidth("100%");
 			this.setWidget(0, 0, spotsForecastersPanel);
 			{
-				FlexTable spotsForecastersTable = new FlexTable();
-				spotsForecastersPanel.setContent(spotsForecastersTable);
-				//Spot name labels
+				VerticalPanel spotsForecastersVPanel = new VerticalPanel();
+				spotsForecastersVPanel.setWidth("100%");
+				spotsForecastersPanel.setContent(spotsForecastersVPanel);
 				{
-					spotName1  = new Label("");
-					spotName1.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
-					spotsForecastersTable.setWidget(0, 0, spotName1 );
-					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-				}
-				{
-					spotName2  = new Label("");
-					spotName2.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
-					spotsForecastersTable.setWidget(0, 2, spotName2 );
-					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT);
-				}
-				{
-					spotName3  = new Label("");
-					spotName3.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
-					spotsForecastersTable.setWidget(1, 0, spotName3 );
-					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-					spotName3.setVisible(false);
-				}
-				{
-					spotName4  = new Label("");
-					spotName4.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
-					spotsForecastersTable.setWidget(1, 2, spotName4 );
-					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_RIGHT);
-					spotName4.setVisible(false);
-				}
-				{
-					spotName5  = new Label("");
-					spotName5.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
-					spotsForecastersTable.setWidget(2, 0, spotName5);
-					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-					spotName5.setVisible(false);
-				}
-				
-				//Spots forecasters listboxes
-				{
-					spotBox1 = new ListBox();
-					spotBox1.addChangeHandler(this);
-					spotBox1.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-					spotsForecastersTable.setWidget(0, 1, spotBox1);
-				}
-				{
-					spotBox2 = new ListBox();
-					spotBox2.addChangeHandler(this);
-					spotBox2.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-					spotsForecastersTable.setWidget(0, 3, spotBox2);
-				}
-				{
-					spotBox3 = new ListBox();
-					spotBox3.addChangeHandler(this);
-					spotBox3.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-					spotsForecastersTable.setWidget(1, 1, spotBox3);
-					spotBox3.setVisible(false);
-				}
-				{
-					spotBox4 = new ListBox();
-					spotBox4.addChangeHandler(this);
-					spotBox4.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-					spotsForecastersTable.setWidget(1, 3, spotBox4);
-					spotBox4.setVisible(false);
-				}
-				{
-					spotBox5 = new ListBox();
-					spotBox5.addChangeHandler(this);
-					spotBox5.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
-					spotsForecastersTable.setWidget(2, 1, spotBox5);
-					spotBox5.setVisible(false);
+					FlexTable spotsForecastersTable = new FlexTable();
+					spotsForecastersVPanel.add(spotsForecastersTable);
+					//Spot name labels
+					{
+						spotName1  = new Label("");
+						spotName1.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+						spotsForecastersTable.setWidget(0, 0, spotName1 );
+						spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+					}
+					{
+						spotName2  = new Label("");
+						spotName2.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+						spotsForecastersTable.setWidget(0, 2, spotName2 );
+						spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT);
+					}
+					{
+						spotName3  = new Label("");
+						spotName3.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+						spotsForecastersTable.setWidget(1, 0, spotName3 );
+						spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+						spotName3.setVisible(false);
+					}
+					{
+						spotName4  = new Label("");
+						spotName4.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+						spotsForecastersTable.setWidget(1, 2, spotName4 );
+						spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_RIGHT);
+						spotName4.setVisible(false);
+					}
+					{
+						spotName5  = new Label("");
+						spotName5.setWidth(ComparationViewerPanel.FORECASTER_LABEL_WIDTH);
+						spotsForecastersTable.setWidget(2, 0, spotName5);
+						spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+						spotName5.setVisible(false);
+					}
+					
+					//Spots forecasters listboxes
+					{
+						spotBox1 = new ListBox();
+						spotBox1.addChangeHandler(this);
+						spotBox1.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+						spotsForecastersTable.setWidget(0, 1, spotBox1);
+					}
+					{
+						spotBox2 = new ListBox();
+						spotBox2.addChangeHandler(this);
+						spotBox2.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+						spotsForecastersTable.setWidget(0, 3, spotBox2);
+					}
+					{
+						spotBox3 = new ListBox();
+						spotBox3.addChangeHandler(this);
+						spotBox3.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+						spotsForecastersTable.setWidget(1, 1, spotBox3);
+						spotBox3.setVisible(false);
+					}
+					{
+						spotBox4 = new ListBox();
+						spotBox4.addChangeHandler(this);
+						spotBox4.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+						spotsForecastersTable.setWidget(1, 3, spotBox4);
+						spotBox4.setVisible(false);
+					}
+					{
+						spotBox5 = new ListBox();
+						spotBox5.addChangeHandler(this);
+						spotBox5.setWidth(ComparationViewerPanel.FORECASTER_LIST_WIDTH);
+						spotsForecastersTable.setWidget(2, 1, spotBox5);
+						spotBox5.setVisible(false);
+					}
 				}
 				//Refrash button
 				{
 					refreshBtn = new HTMLButtonGrayGrad("Actualizar", "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
 					refreshBtn.addClickHandler(this);
-					spotsForecastersTable.setWidget(3, 0, refreshBtn);
-					spotsForecastersTable.getFlexCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
-					spotsForecastersTable.getFlexCellFormatter().setColSpan(3, 0, 4);
+					spotsForecastersVPanel.add(refreshBtn);
+					spotsForecastersVPanel.setCellHorizontalAlignment(refreshBtn, HasHorizontalAlignment.ALIGN_CENTER);
 				}
+				
 			}
 		}
 		//Back button
@@ -280,7 +286,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	            	  
 		          	  ColumnChart viz = new ColumnChart(data, options);
 	          	      setWidget(5, 0, viz);
-	          	      getFlexCellFormatter().setColSpan(5, 0, 4);
+	          	      getFlexCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	              }
         }, ColumnChart.PACKAGE);
 	}
@@ -362,7 +368,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	            	  
 		          	  MotionChart viz = new MotionChart(data, options);
 	          	      setWidget(6, 0, viz);
-	          	      getFlexCellFormatter().setColSpan(6, 0, 4);
+	          	    getFlexCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	              }				
         }, MotionChart.PACKAGE);
 	}
