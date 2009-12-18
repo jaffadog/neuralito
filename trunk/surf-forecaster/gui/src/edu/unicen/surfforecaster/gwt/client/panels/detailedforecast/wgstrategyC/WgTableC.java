@@ -105,7 +105,7 @@ public class WgTableC extends FlexTable {
 	}
 	
 	private Label getDateLabel(ForecastDTO forecastDTO) {
-		long miliDate = forecastDTO.getBaseDate().getTime() + (forecastDTO.getForecastTime() * 3600000);
+		long miliDate = forecastDTO.getBaseDate().getTime().getTime() + (forecastDTO.getForecastTime() * 3600000);
 		Date realDate = new Date(miliDate);
 		Label lblDate = new Label(GWTUtils.getDayAbbr(realDate.getDay()) + " " + 
 				NumberFormat.getFormat("00").format(realDate.getDate()) + " " + 
