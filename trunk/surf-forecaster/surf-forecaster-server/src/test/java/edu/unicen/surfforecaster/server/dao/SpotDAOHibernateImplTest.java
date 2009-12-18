@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.server.dao;
 
 import java.util.List;
+import java.util.TimeZone;
 
 import junit.framework.Assert;
 
@@ -83,7 +84,7 @@ public class SpotDAOHibernateImplTest {
 		spot.setLocation(point);
 		spot.setName(spotName);
 		spot.setZone(zone);
-		spot.setTimeZone(null);
+		spot.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		area.addCountry(country);
 		country.addZone(zone);

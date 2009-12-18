@@ -87,8 +87,7 @@ public class Spot implements Serializable {
 	/**
 	 * The timezone of the spot.
 	 */
-	//TODO: should be nullable
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private TimeZone timeZone;
 
 	public Integer getId() {
