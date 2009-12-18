@@ -2,6 +2,7 @@ package edu.unicen.surfforecaster.gwt.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.log4j.Level;
 
@@ -95,12 +96,14 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			final float buoyLatitudeNum = new Float(buoyLatitude);
 			final Integer userId = super.getLoggedUser().getId();
 			Integer result = null;
+			//TODO: set time zone.
+			TimeZone tz = TimeZone.getTimeZone("UTC");
 			if (zoneName.trim().equals("")) {
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding only the spot: '" + spotName + "'...");
-				result = spotService.addSpot(spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public_, timezone);
+				result = spotService.addSpot(spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public_, tz);
 			} else {
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding both zone: '"  + zoneName.trim() + "' and spot: '" + spotName + "'...");	
-				result = spotService.addZoneAndSpot(zoneName.trim(), countryId, spotName, spotLatitudeNum, spotLongitudeNum, userId, public_, timezone);
+				result = spotService.addZoneAndSpot(zoneName.trim(), countryId, spotName, spotLatitudeNum, spotLongitudeNum, userId, public_, tz);
 			}
 			
 			if (result != null) {

@@ -2,6 +2,7 @@ package edu.unicen.surfforecaster.gwt.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
 
@@ -96,17 +97,17 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 				ZoneDTO z3 = new ZoneDTO(3, "", null);
 				ZoneDTO z4 = new ZoneDTO(4, "", null);
 				ZoneDTO z5 = new ZoneDTO(5, "", null);
-				
+				TimeZone tz = TimeZone.getTimeZone("UTC");
 				//SpotDTO s1 = new SpotDTO(1, "La paloma", point, zone, country, area, userId, publik);
-				SpotDTO s1 = new SpotDTO(1, "La paloma", null, z1, null, null, 1, false);
-				SpotDTO s2 = new SpotDTO(2, "La onda", null, z3, null, null, 1, false);
-				SpotDTO s3 = new SpotDTO(3, "Waikiki", null, z1, null, null, 1, false);
-				SpotDTO s4 = new SpotDTO(4, "La parroquia", null, z1, null, null, 1, false);
-				SpotDTO s5 = new SpotDTO(5, "Quilombo", null, z1, null, null, 1, false);
-				SpotDTO s6 = new SpotDTO(6, "chilena", null, z1, null, null, 1, false);
-				SpotDTO s7 = new SpotDTO(7, "Pipeline", null, z4, null, null, 1, false);
-				SpotDTO s8 = new SpotDTO(8, "Kakita", null, z5, null, null, 1, false);
-				SpotDTO s9 = new SpotDTO(9, "Fortaleza", null, z5, null, null, 1, false);
+				SpotDTO s1 = new SpotDTO(1, "La paloma", null, z1, null, null, 1, false,tz);
+				SpotDTO s2 = new SpotDTO(2, "La onda", null, z3, null, null, 1, false,tz);
+				SpotDTO s3 = new SpotDTO(3, "Waikiki", null, z1, null, null, 1, false,tz);
+				SpotDTO s4 = new SpotDTO(4, "La parroquia", null, z1, null, null, 1, false,tz);
+				SpotDTO s5 = new SpotDTO(5, "Quilombo", null, z1, null, null, 1, false,tz);
+				SpotDTO s6 = new SpotDTO(6, "chilena", null, z1, null, null, 1, false,tz);
+				SpotDTO s7 = new SpotDTO(7, "Pipeline", null, z4, null, null, 1, false,tz);
+				SpotDTO s8 = new SpotDTO(8, "Kakita", null, z5, null, null, 1, false,tz);
+				SpotDTO s9 = new SpotDTO(9, "Fortaleza", null, z5, null, null, 1, false,tz);
 				
 				List<SpotDTO> l1 = new ArrayList<SpotDTO>();
 				l1.add(s1);
