@@ -3,11 +3,14 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -112,11 +115,16 @@ public class Forecast {
 	public Integer getForecastTime() {
 		return forecastTime;
 	}
-
+	 public Date getForecastValidDate(){
+		 long minutes = this.getForecastTime()*60;
+		 long seconds = minutes*60;
+		 long milliseconds = seconds*1000;
+		 return new Date (this.getBaseDate().getTime()+milliseconds);
+	 }
 	/**
 	 * @return
 	 */
-	public ForecastDTO getDTO() {
+	public ForecastDTO getDTO(TimeZone timeZone) {
 		final Collection<ForecastParameter> values = parameters.values();
 		final Map<String, ForecastAttributeDTO> map = new HashMap<String, ForecastAttributeDTO>();
 		for (final Iterator iterator = values.iterator(); iterator.hasNext();) {
@@ -125,7 +133,9 @@ public class Forecast {
 			map.put(forecastParameter.getParameterName(), forecastParameter
 					.getDTO());
 		}
-		return new ForecastDTO(getBaseDate(), getForecastTime(), map);
+		Calendar cal = new GregorianCalendar(timeZone);
+		cal.setTime(getBaseDate());
+		return new ForecastDTO(cal, getForecastTime(), map);
 	}
 
 	/**

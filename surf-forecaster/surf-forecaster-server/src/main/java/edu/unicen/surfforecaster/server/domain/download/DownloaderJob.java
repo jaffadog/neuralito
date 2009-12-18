@@ -12,6 +12,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import com.enterprisedt.net.ftp.EventListener;
 import com.enterprisedt.net.ftp.FileTransferClient;
 
 /**
@@ -21,7 +22,44 @@ import com.enterprisedt.net.ftp.FileTransferClient;
  * 
  */
 public class DownloaderJob extends QuartzJobBean {
-	public static final String DownloadedFiles = "files";
+	private String host;
+	private String userName;
+	private String password;
+	public String getPassword() {
+		return password;
+	}
+
+	private String downloadFilePath;
+	private String destinationFilePath;
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getDownloadFilePath() {
+		return downloadFilePath;
+	}
+
+	public void setDownloadFilePath(String downloadFilePath) {
+		this.downloadFilePath = downloadFilePath;
+	}
+
+	public String getDestinationFilePath() {
+		return destinationFilePath;
+	}
+
+	public void setDestinationFilePath(String destinationFilePath) {
+		this.destinationFilePath = destinationFilePath;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public static final String DownloadedFile = "file";
 	Logger log = Logger.getLogger(this.getClass());
 
 	/**
@@ -35,32 +73,28 @@ public class DownloaderJob extends QuartzJobBean {
 		// System.out.println("refire: " + context.getRefireCount());
 		FileTransferClient ftp = null;
 		try {
-			log.info("Creating FTP client");
 			ftp = new FileTransferClient();
-			// final EventListener listener = new DownloaderListener();
-			// ftp.setEventListener(listener);
+			 final EventListener listener = new DownloaderListener();
+			 ftp.setEventListener(listener);
 
 			// set remote host
-			ftp.setRemoteHost(getHost());
-			ftp.setUserName(getUsername());
-			ftp.setPassword(getPassword());
+			ftp.setRemoteHost(this.getHost());
+			ftp.setUserName(this.getUserName());
+			ftp.setPassword(this.getPassword());
 			// connect to the server
-			log.info("Connecting to server " + getHost());
+			log.info("Connecting to FTP server " + getHost());
 			ftp.connect();
 			log.info("Connected and logged in to server " + getHost());
 			// Download file
-			log.info("Downloading file: " + getFilePath());
-			// ((DownloaderListener) listener).setFileSize(getFilePath(), ftp
-			// .getSize(getFilePath()));
-			ftp.downloadFile(getDestinationFileName(), getFilePath());
+			log.info("Downloading file: " + getDownloadFilePath());
+			 ((DownloaderListener) listener).setFileSize(getDownloadFilePath(), ftp
+			 .getSize(getDownloadFilePath()));
+			ftp.downloadFile(getDestinationFilePath(), getDownloadFilePath());
 			log.info("File downloaded");
-			final Collection<File> files = new ArrayList<File>();
-			files.add(new File(getDestinationFileName()));
-			// Put the downloaded files in the job context. So listeners can
+			// Put the downloaded file in the job context. So listeners can
 			// notify observers.
-			context.put(DownloadedFiles, files);
+			context.put(DownloadedFile, new File(getDestinationFilePath()));
 			// Shut down client
-			log.info("Quitting FTPclient");
 			ftp.disconnect();
 		} catch (final Exception e) {
 			log.error(e);
@@ -68,27 +102,14 @@ public class DownloaderJob extends QuartzJobBean {
 		}
 	}
 
-	/**
-	 * @return
-	 */
-	private String getDestinationFileName() {
-		return "src/main/resources/waves/latestforecast/grib2/latestForecast.grb2";
+	public void setHost(String host) {
+		this.host = host;
 	}
 
-	private String getHost() {
-		return "polar.ncep.noaa.gov";
+	public String getHost() {
+		return host;
 	}
 
-	private String getFilePath() {
-		return "/pub/waves/develop/multi_1.latest_run/multi_1.glo_30m.DIRPW.grb2";
-	}
-
-	private String getUsername() {
-		return "anonymous";
-	}
-
-	private String getPassword() {
-		return "a@d";
-	}
+	
 
 }

@@ -5,6 +5,7 @@ package edu.unicen.surfforecaster.common.services;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
@@ -30,7 +31,7 @@ public interface SpotService {
 	 * @return
 	 */
 	public Integer addSpot(String spotName, float latitude, float longitude,
-			Integer zoneId, Integer userId, boolean publik, String timeZone)
+			Integer zoneId, Integer userId, boolean publik, TimeZone timeZone)
 			throws NeuralitoException;
 
 	/**
@@ -53,7 +54,7 @@ public interface SpotService {
 	 */
 	public Integer addZoneAndSpot(String zoneName, Integer countryId,
 			String spotName, float latitude, float longitude, Integer userId,
-			boolean publik, String timeZone) throws NeuralitoException;
+			boolean publik, TimeZone timeZone) throws NeuralitoException;
 
 	/**
 	 * Obtain all the spots for the given user. That is all the spots the user

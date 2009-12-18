@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.TimeZone;
 
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -405,10 +406,6 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 					+ fromDate + "' AND '" + toDate + "'");
 
 			while (result.next() != false) {
-				final GregorianCalendar issuedDate = new GregorianCalendar(
-						result.getDate("issuedDate").getYear(), result.getDate(
-								"issuedDate").getMonth(), result.getDate(
-								"issuedDate").getDay());
 				final int validTime = result.getInt("validTime");
 				final float latitude = result.getFloat("latitude");
 				final float longitude = result.getFloat("longitude");
@@ -431,7 +428,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				final float windDirection = result.getFloat("windDirection");
 				final float windU = result.getFloat("windU");
 				final float windV = result.getFloat("windV");
-				final ForecastPlain arch = new ForecastPlain(issuedDate,
+				final ForecastPlain arch = new ForecastPlain(result.getDate("issuedDate"),
 						validTime, latitude, longitude, windWaveHeight,
 						windWavePeriod, windWaveDirection, swellWaveHeight,
 						swellWavePeriod, swellWaveDirection,
@@ -466,10 +463,6 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 					+ gridPoint.getLatitude() + " AND longitude = "
 					+ gridPoint.getLongitude());
 			while (result.next() != false) {
-				final GregorianCalendar issuedDate = new GregorianCalendar(
-						result.getDate("issuedDate").getYear(), result.getDate(
-								"issuedDate").getMonth(), result.getDate(
-								"issuedDate").getDay());
 				final int validTime = result.getInt("validTime");
 				final float latitude = result.getFloat("latitude");
 				final float longitude = result.getFloat("longitude");
@@ -492,7 +485,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				final float windDirection = result.getFloat("windDirection");
 				final float windU = result.getFloat("windU");
 				final float windV = result.getFloat("windV");
-				final ForecastPlain arch = new ForecastPlain(issuedDate,
+				final ForecastPlain arch = new ForecastPlain(result.getDate("issuedDate"),
 						validTime, latitude, longitude, windWaveHeight,
 						windWavePeriod, windWaveDirection, swellWaveHeight,
 						swellWavePeriod, swellWaveDirection,
@@ -626,7 +619,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			throw new InvalidParameterException();
 
 		final long init = System.currentTimeMillis();
-
+		//TODO check file has newer data.
 		// TODO Begin transaction
 		archiveLatestForecasts();
 		updateLatestForecasts((File) gribFile);
@@ -805,18 +798,19 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 						: forecast.getWindU();
 				final float windV = forecast.getWindV().isNaN() ? -1F
 						: forecast.getWindV();
-				final int year = forecast.getIssuedDate().get(Calendar.YEAR);
-				final int month = forecast.getIssuedDate().get(Calendar.MONTH) + 1;
+				Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+				calendar.setTime(forecast.getIssuedDate());
+				final int year = calendar.get(Calendar.YEAR);
+				final int month = calendar.get(Calendar.MONTH) + 1;
 				;
-				final int day = forecast.getIssuedDate().get(
+				final int day = calendar.get(
 						Calendar.DAY_OF_MONTH);
 				;
-				final int hour = forecast.getIssuedDate().get(
+				final int hour = calendar.get(
 						Calendar.HOUR_OF_DAY);
-				final int minute = forecast.getIssuedDate()
-						.get(Calendar.MINUTE);
+				final int minute = calendar.get(Calendar.MINUTE);
 				;
-				final int seconds = forecast.getIssuedDate().get(
+				final int seconds = calendar.get(
 						Calendar.SECOND);
 
 				final String line = lineStart + year + "-" + month + "-" + day
@@ -932,7 +926,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 					new ForecastParameter(WW3Parameter.WINDVComponent
 							.toString(), forecastArch.getWindV(), Unit.Meters));
 			final Forecast forecast = new Forecast(forecastArch.getIssuedDate()
-					.getTime(), forecastArch.getValidTime(), parameters,
+					, forecastArch.getValidTime(), parameters,
 					new Point(forecastArch.getLatitude(), forecastArch
 							.getLongitude()));
 			translatedForecasts.add(forecast);

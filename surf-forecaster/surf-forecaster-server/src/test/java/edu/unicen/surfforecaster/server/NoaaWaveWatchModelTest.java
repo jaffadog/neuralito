@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -37,8 +38,11 @@ public class NoaaWaveWatchModelTest {
 	
 	Logger log = Logger.getLogger(this.getClass());
 
+	/**
+	 * Tests the model decoding and storing of new wave watch data.
+	 */
 	@Test
-	
+	@Ignore
 	public void updateLatestForecast() {
 
 		((NoaaWaveWatchModel) model).update(new DownloaderJobListener(),
@@ -56,7 +60,7 @@ public class NoaaWaveWatchModelTest {
 				.getLatestForecast(new Point(-38.5F, -57.5F));
 		Forecast forecast = latestForecast.get(0);
 		log.info(forecast.getParameter(WW3Parameter.WIND_SPEED.toString()));
-		log.info(forecast.getDTO().getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue());
+		log.info(forecast.getDTO(TimeZone.getTimeZone("UTC")).getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue());
 		log.info("Number of latest forecasts:"+latestForecast.size());
 	}
 

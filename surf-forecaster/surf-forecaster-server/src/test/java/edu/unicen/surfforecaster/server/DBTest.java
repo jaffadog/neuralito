@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -136,8 +137,7 @@ Logger log = Logger.getLogger(this.getClass());
 			final int year = 2009;
 			final int month = 02;
 			final int day = 03;
-			forecasts.add(new ForecastPlain(new GregorianCalendar(year, month,
-					day), time, new Float(lat), new Float(lon), Float.NaN,
+			forecasts.add(new ForecastPlain(new Date(), time, new Float(lat), new Float(lon), Float.NaN,
 					new Float(random.nextInt(5000)), new Float(random
 							.nextInt(5000)), new Float(random.nextInt(5000)),
 					new Float(random.nextInt(5000)), new Float(random

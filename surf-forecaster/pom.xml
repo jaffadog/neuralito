@@ -262,6 +262,11 @@
 				<version>4.4</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>edu.waikato</groupId>
+				<artifactId>weka</artifactId>
+				<version>3.6</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	

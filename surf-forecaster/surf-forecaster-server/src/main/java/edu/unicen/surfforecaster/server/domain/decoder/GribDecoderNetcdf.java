@@ -9,14 +9,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
-import com.enterprisedt.util.debug.Logger;
+import org.apache.log4j.Logger;
 
 import ucar.ma2.Array;
 import ucar.nc2.dt.GridCoordSystem;
@@ -83,6 +82,12 @@ public class GribDecoderNetcdf implements GribDecoder {
 		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 		log.info("Forecasts for: " + formatter.format(gridDataSet.getStartDate())+ "+ "+time+"hs." );
 		final List<GridDatatype> grids = gridDataSet.getGrids();
+//		for (Iterator iterator = grids.iterator(); iterator.hasNext();) {
+//			GridDatatype gridDatatype = (GridDatatype) iterator.next();
+//			System.out.println(gridDatatype.getName());
+//		}
+//		log.info("Number of parameters: " +  grids.size());
+		
 		GridCoordSystem pwdGcs = null;
 		final HashMap<String, float[][]> arrays = new HashMap<String, float[][]>();
 		final Collection<ForecastPlain> forecasts = new ArrayList<ForecastPlain>();
@@ -138,10 +143,7 @@ public class GribDecoderNetcdf implements GribDecoder {
 								 * && windSpeed.isNaN() && windDirection.isNaN()
 								 * && windU.isNaN() && windV .isNaN()
 								 */)) {
-					final GregorianCalendar calendar = new GregorianCalendar(
-							TimeZone.getTimeZone("UTC"));
-					calendar.setTime(gridDataSet.getStartDate());
-					final ForecastPlain forecast = new ForecastPlain(calendar,
+					final ForecastPlain forecast = new ForecastPlain(gridDataSet.getStartDate(),
 							time * 3, new Float(latLon.getLatitude()),
 							new Float(latLon.getLongitude()), windWaveHeight,
 							windWavePeriod, windWaveDirection, swellWaveHeight,

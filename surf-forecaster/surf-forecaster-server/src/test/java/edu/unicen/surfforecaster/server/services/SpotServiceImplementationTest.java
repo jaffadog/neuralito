@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -98,19 +99,19 @@ public class SpotServiceImplementationTest {
 					UserType.ADMINISTRATOR);
 
 			// Create 6 Spots
-
+			TimeZone timeZone = TimeZone.getTimeZone("UTC");
 			spot1Id = spotService.addSpot("Guanchaco", 52.6963610F, 52.6963677777F, zoneId1,
-					userId1, true, "ACT");
+					userId1, true, timeZone);
 			spot2Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId2,
-					userId1, false, "UTC");
+					userId1, false, timeZone);
 			spot3Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId3,
-					userId2, false, "UTC");
+					userId2, false, timeZone);
 			spot4Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId4,
-					userId2, true, "ACT");
+					userId2, true, timeZone);
 			spot5Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId1,
-					userId2, true, "ACT");
+					userId2, true, timeZone);
 			spot6Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId1,
-					userId2, false, "ACT");
+					userId2, false, timeZone);
 		} catch (final NeuralitoException e) {
 			log.info(e.getMessage());
 			Assert.fail(e.toString());
@@ -263,10 +264,11 @@ public class SpotServiceImplementationTest {
 		try {
 			final String zoneName = "one zone";
 			final Integer spotId = spotService.addZoneAndSpot(zoneName,
-					countryId, "some spot name", 1L, 2L, userId1, true, "ACT");
+					countryId, "some spot name", 1L, 2L, userId1, true, TimeZone.getTimeZone("UTC"));
 			final SpotDTO spot = spotService.getSpotById(spotId);
 			Assert.assertEquals(zoneName, spot.getZone().getName());
 			Assert.assertEquals(countryId, spot.getCountry().getId());
+			Assert.assertEquals("UTC", spot.getTimeZone().getID());
 			spotService.removeSpot(spotId);
 			spotService.removeZone(spot.getZone().getId());
 		} catch (final NeuralitoException e) {
@@ -278,7 +280,7 @@ public class SpotServiceImplementationTest {
 	public void addZoneAndSpot2() {
 		try {
 			final Integer spotId = spotService.addZoneAndSpot(zoneName1,
-					countryId, "some spot name", 1L, 2L, userId1, true, "ACT");
+					countryId, "some spot name", 1L, 2L, userId1, true,TimeZone.getTimeZone("UTC"));
 
 			final SpotDTO spot = spotService.getSpotById(spotId);
 
@@ -335,7 +337,7 @@ public class SpotServiceImplementationTest {
 					.size();
 			final String zoneName = "one zone";
 			final Integer spotId = spotService.addZoneAndSpot(zoneName,
-					countryId, "some spot name", 1L, 2L, userId1, true, "ACT");
+					countryId, "some spot name", 1L, 2L, userId1, true, TimeZone.getTimeZone("UTC"));
 			final SpotDTO spot = spotService.getSpotById(spotId);
 			Assert.assertEquals(zoneName, spot.getZone().getName());
 			Assert.assertEquals(countryId, spot.getCountry().getId());

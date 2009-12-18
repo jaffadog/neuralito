@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 
 import edu.unicen.surfforecaster.common.services.ForecasterDTO;
 
@@ -32,7 +33,9 @@ public abstract class Forecaster {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length = 11)
 	private Integer id;
-
+	@ManyToOne
+	protected Spot spot;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -72,6 +75,10 @@ public abstract class Forecaster {
 	 */
 	public ForecasterDTO getDTO() {
 		return new ForecasterDTO(id, getName(), getDescription());
+	}
+	
+	public Spot getSpot(){
+		return this.spot;
 	}
 
 }
