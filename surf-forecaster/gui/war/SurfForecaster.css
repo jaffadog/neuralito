@@ -4,18 +4,6 @@
 /*********************** SurfForecaster.html *********************************/
 /*****************************************************************************/
 
-/** Loading image main screen */
-div#loadingDiv{
-    margin: 100px 390px;
-}
-
-/** Loading text main screen */
-div div#loadingTxtDiv {
-        text-align:center;
-        width:220px;
-        font-family: 'Trebuchet MS', Helvetica, sans-serif;
-        font-size:9pt;
-}
 
 /*****************************************************************************/
 /*********************** Button ***************************************/
@@ -58,7 +46,7 @@ div div#loadingTxtDiv {
     cursor:default;
 }
 
-.gwt-Label, .gwt-HyperLink, .gwt-PushButton, .gwt-ListBox, .gwt-RadioButton, .gwt-MapInfoText, .gwt-TextArea{
+.gwt-Label, .gwt-HyperLink, .gwt-PushButton, .gwt-ListBox, .gwt-RadioButton, .gwt-MapInfoText, .gwt-TextArea, .gwt-DisclosurePanel .header td{
     font-family: 'Trebuchet MS', Helvetica, sans-serif;
     font-size:9pt;
 }
@@ -74,7 +62,16 @@ div div#loadingTxtDiv {
 /** A simple title of a section*/
 .gwt-Label-Title{
     font-weight:bold;
+    font-size:10pt;
     margin-bottom:10px;
+    color:#3366CC;
+}
+
+/** The title of disclosure panels*/
+.gwt-DisclosurePanel .header td {
+    font-weight:bold;
+    font-size:10pt;
+    color:#3366CC;
 }
 
 /** Label to describe a section */
@@ -98,27 +95,7 @@ div div#loadingTxtDiv {
 /*****************************************************************************/
 /*********************** ComparationViewerPanel ***************************************/
 /*****************************************************************************/
-/*
-.gwt-Label-SpotColor1 {
-	background-color: #FF0000;
-}
 
-.gwt-Label-SpotColor2 {
-	background-color: #0000FF;
-}
-
-.gwt-Label-SpotColor3 {
-	background-color: #FF6600;
-}
-
-.gwt-Label-SpotColor4 {
-	background-color: #006600;
-}
-
-.gwt-Label-SpotColor5 {
-	background-color: #FF00FF;
-}
-*/
 /*****************************************************************************/
 /*********************** CurrentForecastPanel ***************************************/
 /*****************************************************************************/
