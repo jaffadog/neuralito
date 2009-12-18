@@ -10,6 +10,9 @@
   <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
   <inherits name='com.google.gwt.user.theme.chrome.Chrome'/>
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+  
+  <!-- Custom stylesheet -->
+  <stylesheet src="../SurfForecaster.css"/>
 
   <!-- I18N inherits                                      -->
   <inherits name="com.google.gwt.i18n.I18N"/>
@@ -32,4 +35,5 @@
   <extend-property name="locale" values="en"/>
   <!-- Spanish Locale                                      -->
   <extend-property name="locale" values="es"/>
+  
 </module>
