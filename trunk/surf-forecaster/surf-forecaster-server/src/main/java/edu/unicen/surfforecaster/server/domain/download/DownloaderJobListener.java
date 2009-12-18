@@ -88,11 +88,10 @@ public class DownloaderJobListener extends Observable implements JobListener {
 		if (exception == null) {
 			log.info("Download Job was executed successfully");
 			// Obtain from the job context the downloaded files.
-			final Collection<File> files = (Collection<File>) ctxt
-					.get(DownloaderJob.DownloadedFiles);
+			final File file = (File) ctxt.get(DownloaderJob.DownloadedFile);
 			setChanged();
 			// Notify observers of the just downloaded files.
-			this.notifyObservers(files);
+			this.notifyObservers(file);
 			reschedulings = 0;
 		} else {
 			log.error("Download Job failed on execution. Reason was:",
@@ -132,7 +131,10 @@ public class DownloaderJobListener extends Observable implements JobListener {
 	public void setName(final String name) {
 		this.name = name;
 	}
-
+	/**
+	 * Sets the observers to be notified when a new file has been downloaded.	
+	 * @param observers
+	 */
 	public void setObservers(final Collection<Observer> observers) {
 		for (final Iterator it = observers.iterator(); it.hasNext();) {
 			final Observer observer = (Observer) it.next();

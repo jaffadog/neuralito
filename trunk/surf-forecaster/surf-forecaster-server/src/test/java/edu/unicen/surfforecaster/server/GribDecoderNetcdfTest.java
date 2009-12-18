@@ -43,12 +43,14 @@ public class GribDecoderNetcdfTest {
 	}
 
 	@Test
-	@Ignore
+	
 	public void decodeAll() {
 		final GribDecoderNetcdf dec = new GribDecoderNetcdf();
 		try {
+			for (int i =1;i<10;i++){
 			dec.getForecastForTime(new File(
-					"src/test/resources/multi_1.glo_30m.all.grb2"), 1);
+					"c:/latestForecast.grb2"), i);
+			}
 		} catch (final IOException e) {
 			log.error(e);
 		}

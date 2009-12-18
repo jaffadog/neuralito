@@ -3,8 +3,10 @@ package edu.unicen.surfforecaster.server.domain.download;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.enterprisedt.net.ftp.EventListener;
-import com.enterprisedt.util.debug.Logger;
+
 
 /**
  * 
@@ -20,6 +22,10 @@ public class DownloaderListener implements EventListener {
 
 	private final Map<String, Long> map = new HashMap<String, Long>();
 	private Logger log = Logger.getLogger(DownloaderListener.class);
+	
+	public DownloaderListener(){
+		
+	}
 	/**
 	 * @see com.enterprisedt.net.ftp.EventListener#bytesTransferred(java.lang.String,
 	 *      java.lang.String, long)
@@ -29,7 +35,6 @@ public class DownloaderListener implements EventListener {
 			final String remoteFileName, final long transfered) {
 		log.info("Transfered(Kb)  : " + transfered / 1024 + "/"
 				+ map.get(remoteFileName) / 1024);
-
 	}
 
 	/**
@@ -38,8 +43,8 @@ public class DownloaderListener implements EventListener {
 	 */
 	@Override
 	public void commandSent(final String arg0, final String arg1) {
-		// TODO Auto-generated method stub
-
+		log.info(arg0);
+		log.info(arg1);
 	}
 
 	/**
@@ -48,7 +53,8 @@ public class DownloaderListener implements EventListener {
 	 */
 	@Override
 	public void downloadCompleted(final String arg0, final String arg1) {
-
+		log.info(arg0);
+		log.info(arg1);
 	}
 
 	/**
@@ -57,7 +63,8 @@ public class DownloaderListener implements EventListener {
 	 */
 	@Override
 	public void downloadStarted(final String arg0, final String arg1) {
-		// TODO Auto-generated method stub
+		log.info(arg0);
+		log.info(arg1);
 
 	}
 
@@ -67,7 +74,8 @@ public class DownloaderListener implements EventListener {
 	 */
 	@Override
 	public void replyReceived(final String arg0, final String arg1) {
-		// TODO Auto-generated method stub
+		log.info(arg0);
+		log.info(arg1);
 
 	}
 
@@ -77,7 +85,8 @@ public class DownloaderListener implements EventListener {
 	 */
 	@Override
 	public void uploadCompleted(final String arg0, final String arg1) {
-		// TODO Auto-generated method stub
+		log.info(arg0);
+		log.info(arg1);
 
 	}
 
@@ -87,7 +96,8 @@ public class DownloaderListener implements EventListener {
 	 */
 	@Override
 	public void uploadStarted(final String arg0, final String arg1) {
-		// TODO Auto-generated method stub
+		log.info(arg0);
+		log.info(arg1);
 
 	}
 

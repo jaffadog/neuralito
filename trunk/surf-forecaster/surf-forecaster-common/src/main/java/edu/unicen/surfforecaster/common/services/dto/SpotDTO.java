@@ -4,6 +4,7 @@
 package edu.unicen.surfforecaster.common.services.dto;
 
 import java.io.Serializable;
+import java.util.TimeZone;
 
 /**
  * @author esteban
@@ -53,6 +54,7 @@ public class SpotDTO implements Serializable {
 	 * Visibility of spot.
 	 */
 	private boolean publik;
+	private TimeZone timeZone;
 
 	/**
 	 * @param id
@@ -67,7 +69,7 @@ public class SpotDTO implements Serializable {
 	 */
 	public SpotDTO(final Integer id, final String name, final PointDTO point,
 			final ZoneDTO zone, final CountryDTO country, final AreaDTO area,
-			final Integer userId, final boolean publik) {
+			final Integer userId, final boolean publik, TimeZone timeZone) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -77,6 +79,7 @@ public class SpotDTO implements Serializable {
 		this.area = area;
 		this.userId = userId;
 		this.publik = publik;
+		this.setTimeZone(timeZone);
 	}
 
 	/**
@@ -126,6 +129,14 @@ public class SpotDTO implements Serializable {
 	 */
 	public Integer getUserId() {
 		return userId;
+	}
+
+	public void setTimeZone(TimeZone timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	public TimeZone getTimeZone() {
+		return timeZone;
 	}
 
 }

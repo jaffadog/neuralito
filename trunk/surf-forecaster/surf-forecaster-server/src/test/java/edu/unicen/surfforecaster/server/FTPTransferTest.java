@@ -3,13 +3,19 @@
  */
 package edu.unicen.surfforecaster.server;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.quartz.JobExecutionException;
 
 import com.enterprisedt.net.ftp.EventListener;
 import com.enterprisedt.net.ftp.FileTransferClient;
 import com.enterprisedt.util.debug.Level;
-import com.enterprisedt.util.debug.Logger;
+
 
 import edu.unicen.surfforecaster.server.domain.download.DownloaderListener;
 
@@ -19,6 +25,7 @@ import edu.unicen.surfforecaster.server.domain.download.DownloaderListener;
  */
 
 public class FTPTransferTest {
+	private Logger log = Logger.getLogger(FTPTransferTest.class);
 	@Test
 	@Ignore
 	public void transferNOAAFile() {
@@ -31,7 +38,7 @@ public class FTPTransferTest {
 
 		// set up logger so that we get some output
 		final Logger log = Logger.getLogger(this.getClass());
-		Logger.setLevel(Level.INFO);
+		//Logger.setLevel(Level.INFO);
 
 		FileTransferClient ftp = null;
 
@@ -69,5 +76,5 @@ public class FTPTransferTest {
 		}
 
 	}
-
+ 
 }

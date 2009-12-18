@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class SpotServiceImplementation implements SpotService {
 	@Transactional
 	public Integer addSpot(final String spotName, final float latitude,
 			final float longitude, final Integer zoneId, final Integer userId,
-			final boolean publik, final String timeZone)
+			final boolean publik, final TimeZone timeZone)
 			throws NeuralitoException {
 		validate(spotName, longitude, latitude, zoneId, userId, publik,
 				timeZone);
@@ -75,6 +76,7 @@ public class SpotServiceImplementation implements SpotService {
 		spot.setZone(zone);
 		spot.setUser(user);
 		spot.setTimeZone(timeZone);
+		
 		user.addSpot(spot);
 		zone.addSpot(spot);
 		try {
@@ -157,7 +159,7 @@ public class SpotServiceImplementation implements SpotService {
 	 */
 	private void validate(final String spotName, final double longitude,
 			final double latitude, final Integer zoneId, final Integer userId,
-			final boolean publik, final String timeZone)
+			final boolean publik, final TimeZone timeZone)
 			throws NeuralitoException {
 		// TODO:perform validations
 	}
@@ -355,7 +357,7 @@ public class SpotServiceImplementation implements SpotService {
 	public Integer addZoneAndSpot(final String zoneName,
 			final Integer countryId, final String spotName,
 			final float latitude, final float longitude, final Integer userId,
-			final boolean publik, final String timeZone)
+			final boolean publik, final TimeZone timeZone)
 			throws NeuralitoException {
 		validateCountryId(countryId);
 		validateUserId(userId);

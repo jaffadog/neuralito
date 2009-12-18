@@ -3,8 +3,7 @@
  */
 package edu.unicen.surfforecaster.server.domain;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 /**
  * This class is used to hold the grib decoded data.As the grib decoder decodes
@@ -15,7 +14,7 @@ import java.util.GregorianCalendar;
  */
 public class ForecastPlain {
 	// date
-	private final Calendar issuedDate;
+	private final Date issuedDate;
 	private final int validTime;
 	// location
 	private final Float latitude;
@@ -54,7 +53,7 @@ public class ForecastPlain {
 	 * @param windU
 	 * @param windV
 	 */
-	public ForecastPlain(final GregorianCalendar issuedDate,
+	public ForecastPlain(final Date issuedDate,
 			final int validTime, final Float latitude, final Float longitude,
 			final Float windWaveHeight, final Float windWavePeriod,
 			final Float windWaveDirection, final Float swellWaveHeight,
@@ -85,7 +84,7 @@ public class ForecastPlain {
 	/**
 	 * @return the issuedDate
 	 */
-	public Calendar getIssuedDate() {
+	public Date getIssuedDate() {
 		return issuedDate;
 	}
 

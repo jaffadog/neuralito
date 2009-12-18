@@ -83,7 +83,7 @@ public class SpotDAOHibernateImplTest {
 		spot.setLocation(point);
 		spot.setName(spotName);
 		spot.setZone(zone);
-		spot.setTimeZone("UTC");
+		spot.setTimeZone(null);
 
 		area.addCountry(country);
 		country.addZone(zone);

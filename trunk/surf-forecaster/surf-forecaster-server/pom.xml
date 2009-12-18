@@ -98,6 +98,10 @@
 			<groupId>com.enterprisedt</groupId>
 			<artifactId>edtFTPj</artifactId>
 		</dependency>
+		<dependency>
+				<groupId>edu.waikato</groupId>
+				<artifactId>weka</artifactId>
+		</dependency>
 
 	</dependencies>
 

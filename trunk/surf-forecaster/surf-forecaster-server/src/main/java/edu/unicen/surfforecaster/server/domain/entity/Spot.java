@@ -3,6 +3,8 @@ package edu.unicen.surfforecaster.server.domain.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -69,6 +71,12 @@ public class Spot implements Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<Forecaster> forecasters;
+	
+	/**
+	 * The available visual observations for this spot.
+	 */
+	@OneToMany()
+	private List<VisualObservationsSet> visualObservationsSet;
 	/**
 	 * The id for ORM pupose.
 	 */
@@ -79,8 +87,9 @@ public class Spot implements Serializable {
 	/**
 	 * The timezone of the spot.
 	 */
-	@Column(nullable = false)
-	private String timeZone;
+	//TODO: should be nullable
+	@Column(nullable = true)
+	private TimeZone timeZone;
 
 	public Integer getId() {
 		return id;
@@ -184,7 +193,7 @@ public class Spot implements Serializable {
 				new PointDTO(location.getLatitude(), location.getLongitude()),
 				spot.getZone().getDTO(), spot.getZone().getCountry().getDTO(),
 				spot.getZone().getCountry().getArea().getDTO(), spot.getUser()
-						.getId(), spot.isPublik());
+						.getId(), spot.isPublik(), this.getTimeZone());
 		return spotDTO;
 	}
 
@@ -215,7 +224,7 @@ public class Spot implements Serializable {
 	/**
 	 * @param timeZone
 	 */
-	public void setTimeZone(final String timeZone) {
+	public void setTimeZone(final TimeZone timeZone) {
 		this.timeZone = timeZone;
 
 	}
@@ -223,7 +232,7 @@ public class Spot implements Serializable {
 	/**
 	 * @return the timeZone
 	 */
-	public String getTimeZone() {
+	public TimeZone getTimeZone() {
 		return timeZone;
 	}
 
@@ -233,6 +242,10 @@ public class Spot implements Serializable {
 	 */
 	public void setLocation(final Point location) {
 		this.location = location;
+	}
+	public void addVisualObservationSet(VisualObservationsSet set){
+		Validate.notNull(set);
+		this.visualObservationsSet.add(set);
 	}
 
 }

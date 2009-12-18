@@ -55,10 +55,11 @@ public class WW3Forecaster extends Forecaster {
 	 * @param configuration
 	 */
 	public WW3Forecaster(final String modelName, final Point point,
-			final Point location) {
+			final Point location, Spot spot) {
 		gridPoint = point;
 		this.location = location;
 		this.modelName = modelName;
+		this.spot = spot;
 	}
 
 	/**

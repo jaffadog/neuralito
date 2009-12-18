@@ -3,10 +3,12 @@
  */
 package edu.unicen.surfforecaster.server.services;
 
+import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -25,6 +27,7 @@ import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
 
 /**
@@ -90,15 +93,15 @@ public class ForecastServiceImplementationTest {
 					UserType.ADMINISTRATOR);
 
 			// Create 4 Spots
-
+			TimeZone timeZone = TimeZone.getTimeZone("UTC");
 			spot1Id = spotService.addSpot("Guanchhyhaco", 75.0F, 0.5F, zoneId1,
-					userId1, true, "ACT");
+					userId1, true, timeZone);
 			spot2Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId2,
-					userId1, false, "UTC");
+					userId1, false, timeZone);
 			spot3Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId3,
-					userId2, false, "UTC");
+					userId2, false, timeZone);
 			spot4Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId4,
-					userId2, true, "ACT");
+					userId2, true, timeZone);
 		} catch (final NeuralitoException e) {
 			log.error(e);
 			Assert.fail(e.toString());
@@ -144,14 +147,18 @@ public class ForecastServiceImplementationTest {
 	}
 
 	@Test
-	@Ignore
+
 	public void getForecaster() {
 		try {
+			long initial = System.currentTimeMillis();
 			final int forecasterId = forecastService.createWW3Forecaster(
 					spot1Id, new PointDTO(75.0F, 0.5F));
 			final List<ForecastDTO> forecasts = forecastService
 					.getLatestForecasts(forecasterId);
 			log.info("Number of forecasts retrieved:"+forecasts.size());
+			log.info(forecasts.get(0).getBaseDate());
+			long end = System.currentTimeMillis();
+			log.info("Elapsed time:"+(end-initial)/1000);
 			Assert.assertTrue(forecasts.size() > 0);
 		} catch (final NeuralitoException e) {
 			// TODO Auto-generated catch block
@@ -186,5 +193,10 @@ public class ForecastServiceImplementationTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	@Test
+	public void addVisualObservations() throws NeuralitoException{
+		File file = new File("src/test/resources/oahu2003.dat");
+		forecastService.createVisualObservationSet(file, spot1Id, "Sunset observations", "Observations Goddard-Caldwell", Unit.Feets);
 	}
 }
