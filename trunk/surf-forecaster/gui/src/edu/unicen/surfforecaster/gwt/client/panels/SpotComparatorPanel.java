@@ -7,13 +7,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 
 public class SpotComparatorPanel extends VerticalPanel {
 
 	private DeckPanel deckPanel = null;
-	//private CreateComparationPanel createComparationPanel;
 	private static int CREATE_COMP_PANEL_INDEX = -1;
 	private static int VIEW_COMP_PANEL_INDEX = -1;
 	
@@ -46,8 +45,8 @@ public class SpotComparatorPanel extends VerticalPanel {
 	}
 
 	public void generateSpotsComparation(final List<Integer> selectedSpots, final List<String> selectedSpotsNames) {
-		ForecastServices.Util.getInstance().getLatestForecasts(selectedSpots, new AsyncCallback<Map<Integer, Map<String, List<ForecastDTO>>>>(){
-			public void onSuccess(Map<Integer, Map<String, List<ForecastDTO>>> result) {
+		ForecastServices.Util.getInstance().getLatestForecasts(selectedSpots, new AsyncCallback<Map<Integer, Map<String, List<ForecastGwtDTO>>>>(){
+			public void onSuccess(Map<Integer, Map<String, List<ForecastGwtDTO>>> result) {
 				((ComparationViewerPanel)deckPanel.getWidget(SpotComparatorPanel.VIEW_COMP_PANEL_INDEX)).renderComparation(result, selectedSpots, selectedSpotsNames);
 				showComparationViewerPanel();
 			}

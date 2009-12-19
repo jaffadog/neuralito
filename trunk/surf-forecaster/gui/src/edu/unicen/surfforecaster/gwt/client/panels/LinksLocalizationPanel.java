@@ -21,9 +21,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
-import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
+import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.Observable;
@@ -268,11 +268,11 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 	
 	private void setSpotListItems(Integer zoneId){
 		this.spotBox.clear();
-		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
-			public void onSuccess(List<SpotDTO> result) {
-				Iterator<SpotDTO> i = result.iterator(); 
+		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotGwtDTO>>(){
+			public void onSuccess(List<SpotGwtDTO> result) {
+				Iterator<SpotGwtDTO> i = result.iterator(); 
 				while (i.hasNext()){
-					SpotDTO spot = i.next();
+					SpotGwtDTO spot = i.next();
 					spotBox.addItem(spot.getName(), spot.getId().toString());
 				}
 				if (spotBox.getItemCount() > 0) {

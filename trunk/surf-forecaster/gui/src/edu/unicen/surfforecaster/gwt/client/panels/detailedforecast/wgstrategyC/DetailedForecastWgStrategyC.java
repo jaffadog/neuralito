@@ -7,14 +7,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrategy {
 	
 	private VerticalPanel completeDetailedForecastVPanel = null;
-	private Map<Integer, Map<String, List<ForecastDTO>>> forecasters = null;
+	private Map<Integer, Map<String, List<ForecastGwtDTO>>> forecasters = null;
 	List<Integer> spotsIds = null;
 	List<String> spotsNames = null;
 	List<String> forecastersNames = null;
@@ -27,7 +27,7 @@ public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrat
 	 * @param spotsNames
 	 * @param forecastersNames
 	 */
-	public DetailedForecastWgStrategyC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, 
+	public DetailedForecastWgStrategyC(Map<Integer, Map<String, List<ForecastGwtDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, 
 			List<String> forecastersNames) {
 		this.forecasters = forecasters;
 		this.spotsIds = spotsIds;

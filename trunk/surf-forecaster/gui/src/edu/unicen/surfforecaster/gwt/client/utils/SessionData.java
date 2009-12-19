@@ -1,10 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client.utils;
 
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 
 /**
@@ -18,7 +15,6 @@ import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 public class SessionData implements IsSerializable {
 	
 	private UserDTO userDTO;
-	//private List<ComparationDTO> userComparations;
 	
 	private static SessionData instance = null;
 	
@@ -31,7 +27,6 @@ public class SessionData implements IsSerializable {
 	
 	public SessionData() {
 		this.userDTO = null;
-//		this.userComparations = null;
 	}
 	
 	/**
@@ -48,12 +43,4 @@ public class SessionData implements IsSerializable {
 	public void setUserDTO(UserDTO userDTO) {
 		this.userDTO = userDTO;
 	}
-
-//	public List<ComparationDTO> getUserComparations() {
-//		return userComparations;
-//	}
-//
-//	public void setUserComparations(List<ComparationDTO> userComparations) {
-//		this.userComparations = userComparations;
-//	}
 }
