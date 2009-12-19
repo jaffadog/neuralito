@@ -34,6 +34,7 @@ public class SpotDTO implements Serializable {
 	 * Point DTO
 	 */
 	private PointDTO point;
+
 	/**
 	 * Zone that this spot belongs.
 	 */
@@ -138,5 +139,12 @@ public class SpotDTO implements Serializable {
 	public TimeZone getTimeZone() {
 		return timeZone;
 	}
+	
+	public PointDTO getPoint() {
+		return point;
+	}
 
+	public void setPoint(PointDTO point) {
+		this.point = point;
+	}
 }
