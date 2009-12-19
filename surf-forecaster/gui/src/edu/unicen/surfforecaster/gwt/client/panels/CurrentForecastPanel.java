@@ -9,9 +9,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitTranslator;
@@ -25,7 +25,7 @@ public class CurrentForecastPanel extends FlexTable {
 	
 	public CurrentForecastPanel(){}
 	
-	public CurrentForecastPanel(String title, ForecastDTO forecast){
+	public CurrentForecastPanel(String title, ForecastGwtDTO forecast){
 		{
 			//Panel stylename
 			this.addStyleName("gwt-FlexTable-CurrentForecast");

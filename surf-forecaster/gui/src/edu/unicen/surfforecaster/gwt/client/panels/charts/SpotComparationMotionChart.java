@@ -12,19 +12,19 @@ import com.google.gwt.visualization.client.visualizations.MotionChart;
 import com.google.gwt.visualization.client.visualizations.MotionChart.Options;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 
 public class SpotComparationMotionChart implements ISurfForecasterChart {
 
-	private Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts = null;
+	private Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts = null;
 	private List<Integer> spotsIds = null;
 	private List<String> spotsNames = null;
 	private List<String> forecastersNames = null;
 	
-	public SpotComparationMotionChart(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, 
+	public SpotComparationMotionChart(final Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, 
 			final List<String> spotsNames, final List<String> forecastersNames) {
 		this.spotsIds = spotsIds;
 		this.spotsLatestForecasts = spotsLatestForecasts;
@@ -63,12 +63,12 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 	    	Integer spotId = spotsIds.get(spotIndex);
 	    	String spotName = spotsNames.get(spotIndex);
 	    	String forecasterName = this.forecastersNames.get(spotIndex);
-	    	List<ForecastDTO> forecasts = spotsLatestForecasts.get(spotId).get(forecasterName);
+	    	List<ForecastGwtDTO> forecasts = spotsLatestForecasts.get(spotId).get(forecasterName);
 	    	if (data.getNumberOfRows() == 0)
 	    		data.addRows(spotsIds.size() * forecasts.size());
 	    		
 	    	for (int forecastIndex = 0; forecastIndex < forecasts.size(); forecastIndex++) {
-				ForecastDTO forecastDTO = forecasts.get(forecastIndex);
+				ForecastGwtDTO forecastDTO = forecasts.get(forecastIndex);
 				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
 				Unit heightUnitTarget = Unit.Meters;
 				Unit speedUnitTarget = Unit.KilometersPerHour;

@@ -23,9 +23,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.MiniForecastPopup;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
@@ -38,7 +38,7 @@ public class WgTableB extends FlexTable {
 	FlexTable datesTable = null;
 	Integer from = null;
 	Integer to = null;
-	Map<String, List<ForecastDTO>> forecasters = null;
+	Map<String, List<ForecastGwtDTO>> forecasters = null;
 	
 	//Layout consts
 	private static final String LABELS_COL_WIDTH = "145px";
@@ -50,7 +50,7 @@ public class WgTableB extends FlexTable {
 	 * @param from - Represents the forecast position in the forecasts list to start in the table 
 	 * @param to - Represents the last forecast to show, if null, goes to the end of the list of forecasts
 	 */
-	public WgTableB(Map<String, List<ForecastDTO>> forecasters, Integer from, Integer to) {
+	public WgTableB(Map<String, List<ForecastGwtDTO>> forecasters, Integer from, Integer to) {
 		
 		this.from = from;
 		this.to = to;
@@ -78,7 +78,7 @@ public class WgTableB extends FlexTable {
 		/*******************************************************************/
 		/****************** WW3 FORECASTS **********************************/
 		/*******************************************************************/
-		List<ForecastDTO> forecasts = forecasters.get("WW3 Noaa Forecaster");
+		List<ForecastGwtDTO> forecasts = forecasters.get("WW3 Noaa Forecaster");
 		this.generateAllForecastersTable("WW3 Noaa Forecaster", forecasts, 0, true, true);
 		
 		/*******************************************************************/
@@ -105,7 +105,7 @@ public class WgTableB extends FlexTable {
 	 * @param forecasterIndex - The index row where the detailed forecaster flexTable will be located
 	 * @param Generate detailedForecastPanel?
 	 */
-	private void generateAllForecastersTable(String forecasterName, List<ForecastDTO> forecasts, final int forecasterIndex, 
+	private void generateAllForecastersTable(String forecasterName, List<ForecastGwtDTO> forecasts, final int forecasterIndex, 
 			boolean fillDatesPanel, boolean generateDetailed) {
 		
 		//Horizontal panel for ww3 miniForecasts
@@ -175,7 +175,7 @@ public class WgTableB extends FlexTable {
 	 * @param fillDatesPanel - If true adds dates to the date panel, this must be true once.
 	 * @param forecasterIndex - The index row where the detailed forecaster flexTable will be located
 	 */
-	private void printForecast(List<ForecastDTO> forecasts, FlexTable detailedForecastPanel, FlexTable miniForecastPanel, 
+	private void printForecast(List<ForecastGwtDTO> forecasts, FlexTable detailedForecastPanel, FlexTable miniForecastPanel, 
 			boolean fillDatesPanel, int forecasterIndex) {
 		
 		
@@ -184,7 +184,7 @@ public class WgTableB extends FlexTable {
 		int forecastIndex = 0;
 		int max = (this.to != null) ? this.to : forecasts.size();
 		for (int i = this.from; i < max; i++) {
-			ForecastDTO forecastDTO = forecasts.get(i);
+			ForecastGwtDTO forecastDTO = forecasts.get(i);
 			if (fillDatesPanel){
 				datesTable.setWidget(0, forecastIndex, this.getDateLabel(forecastDTO));
 				datesTable.getColumnFormatter().setWidth(forecastIndex, WgTableB.DETAILED_FORECAST_COL_WIDTH);
@@ -251,8 +251,8 @@ public class WgTableB extends FlexTable {
 		miniForecastPanel.getColumnFormatter().addStyleName(0, "gwt-flextable-detailedForecast-col");
 	}
 	
-	private Label getDateLabel(ForecastDTO forecastDTO) {
-		long miliDate = forecastDTO.getBaseDate().getTime().getTime() + (forecastDTO.getForecastTime() * 3600000);
+	private Label getDateLabel(ForecastGwtDTO forecastDTO) {
+		long miliDate = forecastDTO.getBaseDate().getTime() + (forecastDTO.getForecastTime() * 3600000);
 		Date realDate = new Date(miliDate);
 		Label lblDate = new Label(GWTUtils.getDayAbbr(realDate.getDay()) + " " + 
 				NumberFormat.getFormat("00").format(realDate.getDate()) + " " + 
@@ -262,7 +262,7 @@ public class WgTableB extends FlexTable {
 		return lblDate;
 	}
 	
-	private Image getWaveIcon(final ForecastDTO forecastDTO, boolean showPopup) {
+	private Image getWaveIcon(final ForecastGwtDTO forecastDTO, boolean showPopup) {
 		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height
@@ -294,7 +294,7 @@ public class WgTableB extends FlexTable {
 		return icon;
 	}
 	
-	private void setDetailedForecast(FlexTable detailedForecastPanel, FlexTable miniForecastPanel, ForecastDTO forecastDTO, int index) {
+	private void setDetailedForecast(FlexTable detailedForecastPanel, FlexTable miniForecastPanel, ForecastGwtDTO forecastDTO, int index) {
 		Unit heightUnitTarget = Unit.Meters;
 		Unit speedUnitTarget = Unit.KilometersPerHour;
 		Unit directionUnitTarget = Unit.Degrees;

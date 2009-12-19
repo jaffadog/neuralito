@@ -15,6 +15,7 @@ import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 
 @SuppressWarnings("serial")
 public class ForecastServicesImpl extends ServicesImpl implements ForecastServices {
@@ -68,16 +69,24 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 	/**
 	 * Returns a map indexed by forecasterName, where each value represets the latest forecast 180h.
 	 * @param Integer spotId, the spot to evaluate
-	 * @return Map<String, List<ForecastDTO>>
+	 * @return Map<String, List<ForecastGwtDTO>>
 	 */
-	public Map<String, List<ForecastDTO>> getLatestForecasts(Integer spotId) throws NeuralitoException {
+	public Map<String, List<ForecastGwtDTO>> getLatestForecasts(Integer spotId) throws NeuralitoException {
 		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotId) - Retrieving latest forecasts from spotId = " + spotId + "...");
-		Map<String, List<ForecastDTO>> result = new HashMap<String, List<ForecastDTO>>();
+		Map<String, List<ForecastGwtDTO>> result = new HashMap<String, List<ForecastGwtDTO>>();
 		List<ForecasterDTO> spotForecasters = spotService.getSpotForecasters(spotId);
 		Iterator<ForecasterDTO> i = spotForecasters.iterator();
 		while (i.hasNext()) {
 			ForecasterDTO forecaster = i.next();
-			result.put(forecaster.getName(), forecastService.getLatestForecasts(forecaster.getId()));
+			List<ForecastDTO> latestForecasts = forecastService.getLatestForecasts(forecaster.getId());
+			List<ForecastGwtDTO> latestGwtForecasts = new ArrayList<ForecastGwtDTO>();
+			Iterator<ForecastDTO> j = latestForecasts.iterator();
+			while (j.hasNext()) {
+				ForecastDTO forecastDTO = j.next();
+				ForecastGwtDTO forecastGwtDTO = this.getForecastGwtDTO(forecastDTO);
+				latestGwtForecasts.add(forecastGwtDTO);
+			}
+			result.put(forecaster.getName(), latestGwtForecasts);
 		}
 		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotId) - Forecasts retrieved successfully.");
 		return result;
@@ -87,11 +96,11 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 	 * Returns a map indexed by spotId where each value contains another map<spotName, list> with all the forecasters of that
 	 * spot and each value contains the latest forecast (180h) for the spot
 	 * @param List<Integer> spotsIds, the list of spots to retrieve forecasts
-	 * @return Map<Integer, Map<String, List<ForecastDTO>>>
+	 * @return Map<Integer, Map<String, List<ForecastGwtDTO>>>
 	 */
-	public Map<Integer, Map<String, List<ForecastDTO>>> getLatestForecasts(List<Integer> spotsIds) throws NeuralitoException {
+	public Map<Integer, Map<String, List<ForecastGwtDTO>>> getLatestForecasts(List<Integer> spotsIds) throws NeuralitoException {
 		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotsList) - Retrieving latest forecasts of multiple spots...");
-		Map<Integer, Map<String, List<ForecastDTO>>> result = new HashMap<Integer, Map<String, List<ForecastDTO>>>();
+		Map<Integer, Map<String, List<ForecastGwtDTO>>> result = new HashMap<Integer, Map<String, List<ForecastGwtDTO>>>();
 		Iterator<Integer> i = spotsIds.iterator();
 		while (i.hasNext()) {
 			Integer spotId = i.next();
@@ -99,5 +108,9 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 		}
 		logger.log(Level.INFO,"ForecastServicesImpl - getLatestForecasts(spotsList) - Forecasts retrieved successfully.");
 		return result;
+	}
+	
+	private ForecastGwtDTO getForecastGwtDTO(ForecastDTO forecastDTO) {
+		return new ForecastGwtDTO(forecastDTO.getBaseDate().getTime(), forecastDTO.getForecastTime(), forecastDTO.getMap());
 	}
 }

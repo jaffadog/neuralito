@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.CurrentForecastPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
@@ -18,7 +18,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrategy {
 	
 	private VerticalPanel completeDetailedForecastVPanel = null;
-	private Map<String, List<ForecastDTO>> forecasters = null;
+	private Map<String, List<ForecastGwtDTO>> forecasters = null;
 	private ILocalizationPanel localizationPanel = null;
 	
 	/**
@@ -27,7 +27,7 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	 * @param forecasters
 	 * @param localizationPanel
 	 */
-	public DetailedForecastWgStrategyB(Map<String, List<ForecastDTO>> forecasters, ILocalizationPanel localizationPanel) {
+	public DetailedForecastWgStrategyB(Map<String, List<ForecastGwtDTO>> forecasters, ILocalizationPanel localizationPanel) {
 		this.forecasters = forecasters;
 		this.localizationPanel = localizationPanel;
 		this.completeDetailedForecastVPanel = new VerticalPanel();
@@ -49,7 +49,7 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 		//Current forecast
 		FlexTable flexTable = new FlexTable();
 		//TODO decidir como elijo y cual elijo de los forecasters del spot para mostrar los currentpanels, por ahora harcodeo para recuperar el ww3
-		List<ForecastDTO> ww3Forecaster = forecasters.get("WW3 Noaa Forecaster");
+		List<ForecastGwtDTO> ww3Forecaster = forecasters.get("WW3 Noaa Forecaster");
 		CurrentForecastPanel current = new CurrentForecastPanel(GWTUtils.LOCALE_CONSTANTS.now(), ww3Forecaster.size() > 0 ? ww3Forecaster.get(0) : null);
 		flexTable.setWidget(0, 0, current);
 		CurrentForecastPanel nextHours = new CurrentForecastPanel("+" + GWTUtils.LOCALE_CONSTANTS.num_3() + " " + GWTUtils.LOCALE_CONSTANTS.hours(), ww3Forecaster.size() > 1 ? ww3Forecaster.get(1) : null);

@@ -9,8 +9,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
-import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 
 @RemoteServiceRelativePath("SpotServices")
 public interface SpotServices extends RemoteService {
@@ -37,5 +37,5 @@ public interface SpotServices extends RemoteService {
 	
 	List<ZoneDTO> getZones(Integer country) throws NeuralitoException;
 
-	List<SpotDTO> getSpots(Integer zone) throws NeuralitoException;
+	List<SpotGwtDTO> getSpots(Integer zone) throws NeuralitoException;
 }

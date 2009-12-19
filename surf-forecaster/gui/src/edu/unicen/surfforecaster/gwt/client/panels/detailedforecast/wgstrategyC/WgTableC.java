@@ -16,9 +16,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.MiniForecastPopup;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
@@ -29,7 +29,7 @@ public class WgTableC extends FlexTable {
 	FlexTable datesTable = null;
 	Integer from = null;
 	Integer to = null;
-	Map<Integer, Map<String, List<ForecastDTO>>> forecasters = null;
+	Map<Integer, Map<String, List<ForecastGwtDTO>>> forecasters = null;
 	boolean isDatesAlreadyPrinted = false;
 	Integer currentRow = 1;
 	
@@ -47,7 +47,7 @@ public class WgTableC extends FlexTable {
 	 * @param to - Represents the last forecast to show, if null, goes to the end of the list of forecasts
 	 */
 	
-	public WgTableC(Map<Integer, Map<String, List<ForecastDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, 
+	public WgTableC(Map<Integer, Map<String, List<ForecastGwtDTO>>> forecasters, List<Integer> spotsIds, List<String> spotsNames, 
 			List<String> forecastersNames, Integer from, Integer to) {
 		this.from = from;
 		this.to = to;
@@ -69,14 +69,14 @@ public class WgTableC extends FlexTable {
 			Integer spotId = spotsIds.get(i);
 			String spotName = spotsNames.get(i);
 			String forecasterName = forecastersNames.get(i);
-			Map<String, List<ForecastDTO>> spotForecasters = forecasters.get(spotId);
+			Map<String, List<ForecastGwtDTO>> spotForecasters = forecasters.get(spotId);
 			renderForecastsRow(spotForecasters, spotName, forecasterName, i);
 		}
 	}
 
-	private void renderForecastsRow(Map<String, List<ForecastDTO>> spotForecasters, String spotName, String forecasterName, int spotIndex) {
-		List<ForecastDTO> forecasts = spotForecasters.get(forecasterName);
-		List<ForecastDTO> ww3Forecasts = spotForecasters.get("WW3 Noaa Forecaster");
+	private void renderForecastsRow(Map<String, List<ForecastGwtDTO>> spotForecasters, String spotName, String forecasterName, int spotIndex) {
+		List<ForecastGwtDTO> forecasts = spotForecasters.get(forecasterName);
+		List<ForecastGwtDTO> ww3Forecasts = spotForecasters.get("WW3 Noaa Forecaster");
 		int forecastIndex = 1;
 		int max = (this.to != null) ? this.to : forecasts.size();
 		//Spot and Forecaster name
@@ -91,8 +91,8 @@ public class WgTableC extends FlexTable {
 		
 		//Iterates forecastDTOs
 		for (int i = this.from; i < max; i++) {
-			ForecastDTO forecastDTO = forecasts.get(i);
-			ForecastDTO ww3ForecastDTO = ww3Forecasts.get(i);
+			ForecastGwtDTO forecastDTO = forecasts.get(i);
+			ForecastGwtDTO ww3ForecastDTO = ww3Forecasts.get(i);
 			if (!isDatesAlreadyPrinted){
 				this.setWidget(0, forecastIndex, getDateLabel(forecastDTO));
 				this.getColumnFormatter().setWidth(forecastIndex, WgTableC.DETAILED_FORECAST_COL_WIDTH);
@@ -104,8 +104,8 @@ public class WgTableC extends FlexTable {
 		currentRow += 2;
 	}
 	
-	private Label getDateLabel(ForecastDTO forecastDTO) {
-		long miliDate = forecastDTO.getBaseDate().getTime().getTime() + (forecastDTO.getForecastTime() * 3600000);
+	private Label getDateLabel(ForecastGwtDTO forecastDTO) {
+		long miliDate = forecastDTO.getBaseDate().getTime() + (forecastDTO.getForecastTime() * 3600000);
 		Date realDate = new Date(miliDate);
 		Label lblDate = new Label(GWTUtils.getDayAbbr(realDate.getDay()) + " " + 
 				NumberFormat.getFormat("00").format(realDate.getDate()) + " " + 
@@ -129,7 +129,7 @@ public class WgTableC extends FlexTable {
 			this.getFlexCellFormatter().setWidth(rowIndex + 1, 0, WgTableC.LABELS_COL_WIDTH);
 	}
 	
-	private void setDetailedForecast(ForecastDTO forecastDTO, ForecastDTO ww3ForecastDTO, int rowIndex, int colIndex) {
+	private void setDetailedForecast(ForecastGwtDTO forecastDTO, ForecastGwtDTO ww3ForecastDTO, int rowIndex, int colIndex) {
 		Unit heightUnitTarget = Unit.Meters;
 
 		//wave height
@@ -151,7 +151,7 @@ public class WgTableC extends FlexTable {
 		this.getColumnFormatter().addStyleName(colIndex, "gwt-flextable-detailedForecast-col");
 	}
 	
-	private Image getWaveIcon(final ForecastDTO forecastDTO, final ForecastDTO ww3ForecastDTO) {
+	private Image getWaveIcon(final ForecastGwtDTO forecastDTO, final ForecastGwtDTO ww3ForecastDTO) {
 		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height

@@ -8,8 +8,8 @@ import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgStrategyB.DetailedForecastWgStrategyB;
 
@@ -40,8 +40,8 @@ public class ForecastPanel extends LazyPanel {
 	public void getSpotLastestForecast(){
 		this.detailedForecast.removeFromParent();
 		this.detailedForecast = new Widget();
-		ForecastServices.Util.getInstance().getLatestForecasts(new Integer(localizationPanel.getSpotBoxDisplayValue()), new AsyncCallback<Map<String, List<ForecastDTO>>>(){
-			public void onSuccess(Map<String, List<ForecastDTO>> result) {
+		ForecastServices.Util.getInstance().getLatestForecasts(new Integer(localizationPanel.getSpotBoxDisplayValue()), new AsyncCallback<Map<String, List<ForecastGwtDTO>>>(){
+			public void onSuccess(Map<String, List<ForecastGwtDTO>> result) {
 				showSpotLatestForecast(result);
 			}
 				
@@ -53,7 +53,7 @@ public class ForecastPanel extends LazyPanel {
 		
 	}
 	
-	private void showSpotLatestForecast(Map<String, List<ForecastDTO>> forecasters) {
+	private void showSpotLatestForecast(Map<String, List<ForecastGwtDTO>> forecasters) {
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters, localizationPanel));
 		this.detailedForecast = renderContext.executeRenderStrategy(); 
 		container.add(this.detailedForecast);

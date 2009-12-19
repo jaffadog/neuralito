@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.gwt.server;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -15,6 +16,7 @@ import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
+import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 
 @SuppressWarnings("serial")
 public class SpotServicesImpl extends ServicesImpl implements SpotServices {
@@ -69,14 +71,20 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return zones;
 	}
 	
-	public List<SpotDTO> getSpots(Integer zone) throws NeuralitoException {
+	public List<SpotGwtDTO> getSpots(Integer zone) throws NeuralitoException {
 		List<SpotDTO> spots = new ArrayList<SpotDTO>();
+		List<SpotGwtDTO> spotsGwt = new ArrayList<SpotGwtDTO>();
 		if (this.getLoggedUser() != null) 
 			spots = spotService.getSpots(zone, this.getLoggedUser().getId());
 		else
 			spots = spotService.getSpots(zone);
-
-		return spots;
+		
+		Iterator<SpotDTO> i = spots.iterator();
+		while (i.hasNext()) {
+			SpotDTO spot = i.next();
+			spotsGwt.add(this.getSpotGwtDTO(spot));
+		}
+		return spotsGwt;
 	}
 	
 	/**
@@ -97,7 +105,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			final Integer userId = super.getLoggedUser().getId();
 			Integer result = null;
 			//TODO: set time zone.
-			TimeZone tz = TimeZone.getTimeZone("UTC");
+			TimeZone tz = TimeZone.getTimeZone("Etc/GMT");
 			if (zoneName.trim().equals("")) {
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding only the spot: '" + spotName + "'...");
 				result = spotService.addSpot(spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public_, tz);
@@ -114,6 +122,11 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			return result;
 		}
 		return null;
+	}
+	
+	private SpotGwtDTO getSpotGwtDTO(SpotDTO spotDTO) {
+		return new SpotGwtDTO(spotDTO.getId(), spotDTO.getName(), spotDTO.getPoint(), spotDTO.getZone(), 
+				spotDTO.getCountry(), spotDTO.getArea(), spotDTO.getUserId(), spotDTO.isPublik(), spotDTO.getTimeZone().getID());
 	}
 
 }

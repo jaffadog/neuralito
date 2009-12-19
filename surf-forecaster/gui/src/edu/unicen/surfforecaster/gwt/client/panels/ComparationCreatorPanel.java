@@ -29,11 +29,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
-import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
+import edu.unicen.surfforecaster.gwt.client.dto.ComparationGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
@@ -224,8 +224,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	 */
 	public void getSpotsAndFillSpotsSelector() {
 		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
-		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotDTO>>(){
-			public void onSuccess(List<SpotDTO> result) {
+		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotGwtDTO>>(){
+			public void onSuccess(List<SpotGwtDTO> result) {
 				fillSpotsListBox(result, zoneId);
 			}
 				
@@ -241,14 +241,14 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	 * @param spots
 	 * @param zoneId
 	 */
-	public void fillSpotsListBox(List<SpotDTO> spots, Integer zoneId) {
+	public void fillSpotsListBox(List<SpotGwtDTO> spots, Integer zoneId) {
 		spotBox.clear();
 		this.currentSelectedZone = zoneId;
 		if (spots.size() > 0) {
 			Set<Integer> selectedSpotsIds = (Set<Integer>)selectedSpots.keySet();
-			Iterator<SpotDTO> i = spots.iterator(); 
+			Iterator<SpotGwtDTO> i = spots.iterator(); 
 			while (i.hasNext()){
-				SpotDTO spot = i.next();
+				SpotGwtDTO spot = i.next();
 				if (!selectedSpotsIds.contains(spot.getId()))
 					spotBox.addItem(spot.getName(), spot.getId().toString());
 			}
@@ -411,8 +411,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	 * 
 	 */
 	private void showAllowedPanels() {
-		UserServices.Util.getInstance().getSpotsComparations(new AsyncCallback<List<ComparationDTO>>(){
-			public void onSuccess(List<ComparationDTO> result) {
+		UserServices.Util.getInstance().getSpotsComparations(new AsyncCallback<List<ComparationGwtDTO>>(){
+			public void onSuccess(List<ComparationGwtDTO> result) {
 				if (result != null) {
 					showMyComparationsPanel(result);
 					createSavePanel();
@@ -438,7 +438,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		saveBtn.addClickHandler(this);
 	}
 	
-	private void showMyComparationsPanel(List<ComparationDTO> comparations) {
+	private void showMyComparationsPanel(List<ComparationGwtDTO> comparations) {
 		//My comparations
 		myComparations = new DisclosurePanel("Mis comparaciones", true);
 		myComparations.setAnimationEnabled(true);
@@ -460,11 +460,11 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		this.fillCompsBox(comparations);
 	}
 	
-	private void fillCompsBox(final List<ComparationDTO> comparations) {
+	private void fillCompsBox(final List<ComparationGwtDTO> comparations) {
 		myCompsBox.addItem("<Choose a comparation>", "-1");
-		Iterator<ComparationDTO> i = comparations.iterator();
+		Iterator<ComparationGwtDTO> i = comparations.iterator();
 		while (i.hasNext()) {
-			ComparationDTO comparationDTO = i.next();
+			ComparationGwtDTO comparationDTO = i.next();
 			myCompsBox.addItem(comparationDTO.getName(), comparationDTO.getId().toString());
 		}
 		
@@ -565,10 +565,10 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	/**
 	 * fill the selected spots listbox with the spots defined in the choosen comparation
 	 */
-	private void showComparationSpots(List<SpotDTO> spots) {
-		Iterator<SpotDTO> i = spots.iterator();
+	private void showComparationSpots(List<SpotGwtDTO> spots) {
+		Iterator<SpotGwtDTO> i = spots.iterator();
 		while (i.hasNext()) {
-			SpotDTO spotDTO = i.next();
+			SpotGwtDTO spotDTO = i.next();
 			selectedSpotsBox.addItem(spotDTO.getName(), spotDTO.getId().toString());
 			selectedSpots.put(spotDTO.getId(), spotDTO.getZone().getId());
 		}

@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.charts.ISurfForecasterChart;
 import edu.unicen.surfforecaster.gwt.client.panels.charts.SpotComparationColumnChart;
 import edu.unicen.surfforecaster.gwt.client.panels.charts.SpotComparationMotionChart;
@@ -61,7 +61,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	private List<String> forecastersNames = null;
 	private List<String> spotsNames = null;
 	private List<Integer> spotsIds = null;
-	private Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts = null;
+	private Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts = null;
 	private Widget detailedCompTable = null;
 	
 	public ComparationViewerPanel() {
@@ -199,7 +199,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	 * @param spotsIds
 	 * @param spotsNames
 	 */
-	public void renderComparation(final Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
+	public void renderComparation(final Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, final List<String> spotsNames) {
 		this.spotsLatestForecasts = spotsLatestForecasts;
 		this.spotsIds = spotsIds;
 		this.spotsNames = spotsNames;
@@ -325,7 +325,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	    this.getFlexCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}
 	
-	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
+	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyC(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames));
 		detailedCompTable = renderContext.executeRenderStrategy();
 		detailedCompTablePanel.setContent(detailedCompTable);
