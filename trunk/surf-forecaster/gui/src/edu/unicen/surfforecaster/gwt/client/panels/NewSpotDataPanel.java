@@ -4,15 +4,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LazyPanel;
@@ -20,7 +25,12 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
@@ -34,6 +44,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.Observable;
 import edu.unicen.surfforecaster.gwt.client.utils.Observer;
 import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
+import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class NewSpotDataPanel extends LazyPanel implements Observer{
 
@@ -49,9 +60,11 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 	private TextBox spotTxt;
 	
 	private static final String INPUTS_WIDTH = "300px";
+	private static final String TIME_INPUTS_WIDTH = "25px";
 	private static final String TABLE_COL_0 = "133px";
 	private static final String TABLE_COL_1 = "310px";
 	private static final String TABLE_COL_2 = "522px";
+	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL() + "FileUploadServices";
 	
 	public NewSpotDataPanel() {
 	}
@@ -203,19 +216,95 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 		flexTable.setWidget(12, 0, mapPanel);
 		flexTable.getCellFormatter().setHorizontalAlignment(12, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getFlexCellFormatter().setColSpan(12, 0, 3);
-
-		final HorizontalPanel btnsPanel = new HorizontalPanel();
-		flexTable.setWidget(13, 0, btnsPanel);
-		btnsPanel.setSpacing(5);
-		flexTable.getCellFormatter().setHorizontalAlignment(13, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		
+		Label lblTrainClassifier = new Label(GWTUtils.LOCALE_CONSTANTS.trainClassifier());
+		lblTrainClassifier.addStyleName("gwt-Label-Title");
+		flexTable.setWidget(13, 0, lblTrainClassifier);
 		flexTable.getFlexCellFormatter().setColSpan(13, 0, 3);
+		
+		//Form
+		final FormPanel form = new FormPanel();
+		flexTable.setWidget(14, 0, form);
+		flexTable.getFlexCellFormatter().setColSpan(14, 0, 3);
+		form.setAction(UPLOAD_ACTION_URL);
+		form.setEncoding(FormPanel.ENCODING_MULTIPART);
+	    form.setMethod(FormPanel.METHOD_POST);
+	    form.addSubmitHandler(new SubmitHandler() {
+			@Override
+			public void onSubmit(SubmitEvent event) {
+				//TODO hacer algo
+				
+			}
+		});
+	    form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
+			@Override
+			public void onSubmitComplete(SubmitCompleteEvent event) {
+				//TODO hacer algo 
+				Window.alert("archivo subido");
+			}
+		});
+	    
+	    FlexTable formTable = new FlexTable();
+	    form.setWidget(formTable);
+	    //File Upload
+	    Label lblVisualObs = new Label(GWTUtils.LOCALE_CONSTANTS.visualObservations());
+	    formTable.setWidget(0, 0, lblVisualObs);
+	    formTable.getFlexCellFormatter().setColSpan(0, 0, 10);
+	    final FileUpload upload = new FileUpload();
+	    upload.setName("uploadFormElement");
+	    formTable.setWidget(1,0,upload);
+	    formTable.getFlexCellFormatter().setColSpan(1, 0, 10);
+	    //Day Light time inputs
+	    Label lblDayLightTime = new Label(GWTUtils.LOCALE_CONSTANTS.dayLightTime());
+	    formTable.setWidget(2, 0, lblDayLightTime);
+	    formTable.getFlexCellFormatter().setColSpan(2, 0, 10);
+	    Label lblFrom = new Label(GWTUtils.LOCALE_CONSTANTS.from());
+	    formTable.setWidget(3, 0, lblFrom);
+	    TextBox txtHour = new TextBox();
+	    txtHour.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtHour.setMaxLength(2);
+	    formTable.setWidget(3, 1, txtHour);
+	    Label lblHour = new Label(GWTUtils.LOCALE_CONSTANTS.hour_abbr());
+	    formTable.setWidget(3, 2, lblHour);
+	    TextBox txtMinutes = new TextBox();
+	    txtMinutes.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtMinutes.setMaxLength(2);
+	    formTable.setWidget(3, 3, txtMinutes);
+	    Label lblMinutes = new Label(GWTUtils.LOCALE_CONSTANTS.minutes_abbr());
+	    formTable.setWidget(3, 4, lblMinutes);
+	    Label lblTo = new Label(GWTUtils.LOCALE_CONSTANTS.to());
+	    formTable.setWidget(3, 5, lblTo);
+	    TextBox txtHour2 = new TextBox();
+	    txtHour2.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtHour2.setMaxLength(2);
+	    formTable.setWidget(3, 6, txtHour2);
+	    Label lblHour2 = new Label(GWTUtils.LOCALE_CONSTANTS.hour_abbr());
+	    formTable.setWidget(3, 7, lblHour2);
+	    TextBox txtMinutes2 = new TextBox();
+	    txtMinutes2.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtMinutes2.setMaxLength(2);
+	    formTable.setWidget(3, 8, txtMinutes2);
+	    Label lblMinutes2 = new Label(GWTUtils.LOCALE_CONSTANTS.minutes_abbr());
+	    formTable.setWidget(3, 9, lblMinutes2);
+		//Hidden spot id
+	    final Hidden spotId = new Hidden();
+	    spotId.setName("spotIdFormElement");
+	    spotId.setID("spotIdFormElement");
+	    spotId.setValue("0");
+	    formTable.setWidget(5, 0, spotId);
+	    formTable.getFlexCellFormatter().setColSpan(5, 0, 10);
 		
 		flexTable.getColumnFormatter().setWidth(0, NewSpotDataPanel.TABLE_COL_0);
 		flexTable.getColumnFormatter().setWidth(1, NewSpotDataPanel.TABLE_COL_1);
 		flexTable.getColumnFormatter().setWidth(2, NewSpotDataPanel.TABLE_COL_2);
-
-		final PushButton saveBtn = new PushButton();
-		btnsPanel.add(saveBtn);
+		
+		//Save Button	
+		final HTMLButtonGrayGrad saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.save(), "NewSpotDataPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+//		flexTable.setWidget(15, 0, saveBtn);
+//		flexTable.getFlexCellFormatter().setColSpan(15, 0, 0);
+//		flexTable.getFlexCellFormatter().setHorizontalAlignment(15, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		
+		
 		saveBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				
@@ -225,27 +314,32 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 				int countryId = countryBox.getItemCount() == 0 ? 0 : new Integer(countryBox.getValue(countryBox.getSelectedIndex()));
 				messages.addAll(validateForm());
 				if (messages.isEmpty()){
-					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
-					
-					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
-							mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
-							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
-							timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
-						public void onSuccess(Integer result){
-							//clearFields();		
-							successPanel.setVisible(true);
-			            }
-			            public void onFailure(Throwable caught){
-			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
-									Cookies.getCookie("surfForecaster-Username") != null) {
-								GWTUtils.showSessionExpiredLoginBox();
-							} else {
-								messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
-								errorPanel.setMessages(messages);
-								errorPanel.setVisible(true);
-							}
-			            }
-						});
+//					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
+//					
+//					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
+//							mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
+//							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
+//							timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
+//						public void onSuccess(Integer result){
+//							//clearFields();		
+//							successPanel.setVisible(true);
+//							
+//			            }
+//			            public void onFailure(Throwable caught){
+//			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+//									Cookies.getCookie("surfForecaster-Username") != null) {
+//								GWTUtils.showSessionExpiredLoginBox();
+//							} else {
+//								messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+//								errorPanel.setMessages(messages);
+//								errorPanel.setVisible(true);
+//							}
+//			            }
+//						});
+					if (!upload.getFilename().trim().equals("")) {
+						spotId.setValue("111");
+						form.submit();
+					}
 				}
 				else{
 					errorPanel.setMessages(messages);
@@ -253,31 +347,6 @@ public class NewSpotDataPanel extends LazyPanel implements Observer{
 				}
 			}
 		});
-		
-		saveBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		saveBtn.setText(GWTUtils.LOCALE_CONSTANTS.save());
-
-		final PushButton trainBtn = new PushButton();
-		trainBtn.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				((NewSpotPanel)getParent()).getNewSpotTrainPanel().setVisible(true);
-				setVisible(false);
-			}
-		});
-		trainBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		trainBtn.setText(GWTUtils.LOCALE_CONSTANTS.train());
-		btnsPanel.add(trainBtn);
-		
-		final PushButton cancelBtn = new PushButton();
-		cancelBtn.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				History.newItem(GWTUtils.DEFAULT_HISTORY_TOKEN);
-				//The previous statement call the history change event to reload the view
-			}
-		});
-		cancelBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		cancelBtn.setText(GWTUtils.LOCALE_CONSTANTS.goBack());
-		btnsPanel.add(cancelBtn);
 		
 		/**
 		 * Make this panel an observer for LocalizationUtils object
