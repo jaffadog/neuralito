@@ -12,6 +12,7 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.Overlay;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -173,23 +174,28 @@ public class MapPanel extends VerticalPanel {
 		ForecastServices.Util.getInstance().getNearbyGridPoints(new Float(point.getLatitude()), new Float(point.getLongitude()), new AsyncCallback<List<PointDTO>>(){
 			public void onSuccess(List<PointDTO> result) {
 				if (result != null) {
-					MarkerOptions options = MarkerOptions.newInstance();
-					options.setTitle(GWTUtils.LOCALE_CONSTANTS.ww3GridPoint());
-					
-					Iterator<PointDTO> i = result.iterator();
-					Marker marker = null;
-					while (i.hasNext()) {
-						PointDTO point = i.next();
-						marker = new Marker(LatLng.newInstance(new Double(point.getLatitude()), new Double(point.getLongitude())), options);
-				    	marker.getIcon().setImageURL(GWTUtils.IMAGE_BUOY);
-				    	map.addOverlay(marker);
+					if (result.size() > 0) {
+						MarkerOptions options = MarkerOptions.newInstance();
+						options.setTitle(GWTUtils.LOCALE_CONSTANTS.ww3GridPoint());
+						
+						Iterator<PointDTO> i = result.iterator();
+						Marker marker = null;
+						while (i.hasNext()) {
+							PointDTO point = i.next();
+							marker = new Marker(LatLng.newInstance(new Double(point.getLatitude()), new Double(point.getLongitude())), options);
+					    	marker.getIcon().setImageURL(GWTUtils.IMAGE_BUOY);
+					    	map.addOverlay(marker);
+						}
+					} else {
+						//TODO message box informando no haber gridpoints
+						Window.alert(GWTUtils.LOCALE_CONSTANTS.notAvailableGridPoints());
 					}
-					
 				}
 			}
 				
 			public void onFailure(Throwable caught) {
-				
+				//TODO message box informando la falla del servicio
+				Window.alert(GWTUtils.LOCALE_CONSTANTS.getNearbyGridPointsServiceFailed());
 			}
 		});
     }

@@ -44,6 +44,16 @@ public final class GWTUtils {
 	//Default language
 	private static String DEFAULT_LOCALE = "es"; 
 	
+	   
+	public static boolean isNumeric(String value){
+		try {
+			Integer.parseInt(value);
+			return true;
+		} catch (NumberFormatException nfe){
+			return false;
+		}
+	}
+	
 	public static void showSessionExpiredLoginBox() {
 		TransparentPanel.getInstance().show();
 		LoginBox.getInstance().showExpiredSessionState();

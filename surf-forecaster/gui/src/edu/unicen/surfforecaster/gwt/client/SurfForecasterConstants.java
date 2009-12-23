@@ -65,6 +65,15 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("El password no puede ser vacio o igual al nombre de usuario, por favor ingrese uno distinto.")
 	String INVALID_PASSWORD();
 	
+	@DefaultStringValue("Si desea entrenar un clasificador debe completar los horarios de luz solar donde se localiza la ola.")
+	String MANDATORY_DAYLIGHT_TIME();
+	
+	@DefaultStringValue("La hora ingresada es inv\u00E1lida, debe ingresar un valor entre 0 y 23.")
+	String INVALID_HOUR_VALUE();
+	
+	@DefaultStringValue("Los minutos ingresados son inv\u00E1lidos, debe ingresar un valor entre 0 y 59.")
+	String INVALID_MINUTES_VALUE();
+	
 	/**
 	 * Commons translates for more than one panel
 	 */
@@ -221,7 +230,8 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("0")
 	String num_0();
 	
-	
+	@DefaultStringValue("h")
+	String hour_abbr();
 	
 	/**
 	 * CurrentForecastPanel
@@ -286,6 +296,12 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Pronosticador seleccionado")
 	String selectedForecaster();
 	
+	@DefaultStringValue("No hay pronosticadores (WW3 Gridpoints) disponibles cerca de la ola seleccionada. Dicha ola no se puede pronosticar.")
+	String notAvailableGridPoints();
+	
+	@DefaultStringValue("El servicio que recupera los pronosticadores (WW3 Gridpoints) cercanos a la ola seleccionada fallo. Intentelo nuevamente en unos minutos.")
+	String getNearbyGridPointsServiceFailed();
+	
 	/**
 	 * NewSpotPanel
 	 */
@@ -309,6 +325,30 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Visibilidad de ola")
 	String spotVisibility();
+	
+	@DefaultStringValue("Entrenar un clasificador (Opcional)")
+	String trainClassifier();
+	
+	@DefaultStringValue("Observaciones visuales")
+	String visualObservations();
+	
+	@DefaultStringValue("Horas de luz solar")
+	String dayLightTime();
+	
+	@DefaultStringValue("De")
+	String from();
+	
+	@DefaultStringValue("a")
+	String to();
+	
+	@DefaultStringValue("m")
+	String minutes_abbr();
+	
+	@DefaultStringValue("Elegir una zona")
+	String chooseZone();
+	
+	@DefaultStringValue("Crear una zona")
+	String createZone();
 	
 	/**
 	 * RegisterNewUserPanel
@@ -344,7 +384,7 @@ public interface SurfForecasterConstants extends Constants {
 	String settings();
 	
 	/**
-	 * WgTableB
+	 * WgTableB and WgTableC
 	 */
 	@DefaultStringValue("Lun")
 	String monday_abbr();
@@ -366,7 +406,4 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Dom")
 	String sunday_abbr();
-	
-	@DefaultStringValue("h")
-	String hour_abbr();
 }
