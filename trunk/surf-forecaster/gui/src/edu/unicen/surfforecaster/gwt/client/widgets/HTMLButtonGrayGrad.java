@@ -10,9 +10,12 @@ import com.google.gwt.user.client.ui.HTML;
 
 public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseUpHandler, MouseOutHandler {
 	
-	public final static int BUTTON_GRAY_GRAD_SHORT = 60;
-	public final static int BUTTON_GRAY_GRAD_MEDIUM = 130;
-	public final static int BUTTON_GRAY_GRAD_LARGE = 200;
+	public final static int BUTTON_GRAY_GRAD_30PX = 30;
+	public final static int BUTTON_GRAY_GRAD_60PX = 60;
+	public final static int BUTTON_GRAY_GRAD_90PX = 90;
+	public final static int BUTTON_GRAY_GRAD_120PX = 120;
+	public final static int BUTTON_GRAY_GRAD_150PX = 150;
+	public final static int BUTTON_GRAY_GRAD_180PX = 180;
 	
 	String leftId = "";
 	String rightId = "";

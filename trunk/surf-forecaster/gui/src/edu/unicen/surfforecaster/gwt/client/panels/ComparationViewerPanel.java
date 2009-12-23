@@ -149,7 +149,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 				}
 				//Refrash button
 				{
-					refreshBtn = new HTMLButtonGrayGrad("Actualizar", "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
+					refreshBtn = new HTMLButtonGrayGrad("Actualizar", "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
 					refreshBtn.addClickHandler(this);
 					spotsForecastersVPanel.add(refreshBtn);
 					spotsForecastersVPanel.setCellHorizontalAlignment(refreshBtn, HasHorizontalAlignment.ALIGN_CENTER);
@@ -159,7 +159,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		}
 		//Back button
 		{
-			backBtn = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
+			backBtn = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 			backBtn.addClickHandler(this);
 			backBtn.setVisible(false);
 			this.setWidget(7, 0, backBtn);
@@ -174,7 +174,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		}
 		//Back button2
 		{
-			backBtn2 = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back2", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_MEDIUM);
+			backBtn2 = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back2", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 			backBtn2.addClickHandler(this);
 			this.setWidget(9, 0, backBtn2);
 			this.getFlexCellFormatter().setColSpan(9, 0, 4);

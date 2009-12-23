@@ -11,7 +11,7 @@ import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 
 public class SpotComparatorPanel extends VerticalPanel {
-
+	//TODO internalizacion de toda la parte de comparaciones
 	private DeckPanel deckPanel = null;
 	private static int CREATE_COMP_PANEL_INDEX = -1;
 	private static int VIEW_COMP_PANEL_INDEX = -1;
