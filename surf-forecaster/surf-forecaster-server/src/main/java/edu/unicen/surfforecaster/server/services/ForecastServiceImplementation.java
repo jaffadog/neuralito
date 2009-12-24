@@ -4,41 +4,37 @@
 package edu.unicen.surfforecaster.server.services;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
 
 import weka.classifiers.Classifier;
-
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAO;
 import edu.unicen.surfforecaster.server.dao.SpotDAO;
-import edu.unicen.surfforecaster.server.dao.VisualObservationsSetDAO;
-import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
-import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
-import edu.unicen.surfforecaster.server.domain.entity.VisualObservationsSet;
 import edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.WekaForecaster;
-import edu.unicen.surfforecaster.server.domain.entity.WekaForecasterV2;
-import edu.unicen.surfforecaster.server.domain.weka.strategy.GenerationStrategy;
-import edu.unicen.surfforecaster.server.domain.weka.util.VisualObservationsLoader;
+import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
 
 /**
  * @author esteban
@@ -50,21 +46,26 @@ public class ForecastServiceImplementation implements ForecastService {
 	 */
 	private ForecastDAO forecastDAO;
 
-	Map<String, WaveWatchModel> models;
+	/**
+	 * The available wave watch models to use in different forecasters;
+	 */
+	private Map<String, WaveWatchSystem> models;
+	/**
+	 * The available datasetStrategies to use in {@link WekaForecaster}..
+	 */
+	private Map<String, DataSetGenerationStrategy> dataSetStrategies;
+
+
+	/**
+	 * The available weka classifiers
+	 */
+	private Map<String, Classifier> classifiers;
+
+
 
 	private SpotDAO spotDAO;
 
 	private Logger log = Logger.getLogger(this.getClass());
-
-	private VisualObservationsSetDAO observationsSetDAO;
-
-	private StrategyManager strategyManager;
-
-	private ClassifierManager classifierManager;
-
-	private VisualObservationsSetDAO visualObservationsDAO;
-
-	private WaveWatchModelManager waveWatchModelManager;
 
 	/**
 	 * 
@@ -90,7 +91,8 @@ public class ForecastServiceImplementation implements ForecastService {
 			spotDAO.save(point);
 		}
 		final Spot spot = spotDAO.getSpotById(spotId);
-		final WW3Forecaster forecaster = new WW3Forecaster(modelName, point,
+		final WW3Forecaster forecaster = new WW3Forecaster(models
+				.get(modelName), point,
 				spot.getLocation(), spot);
 		final Integer id = forecastDAO.save(forecaster);
 		spotDAO.addForecasterToSpot(forecaster, spot);
@@ -131,7 +133,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Override
 	public List<PointDTO> getNearbyGridPoints(final float latitude,
 			final float longitude) throws NeuralitoException {
-		final WaveWatchModel model = models.get("GlobalModel");
+		final WaveWatchSystem model = models.get("GlobalModel");
 		final List<Point> surroundingGridPoints = model
 				.getNearbyGridPoints(new Point(latitude, longitude));
 		final List<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
@@ -167,57 +169,56 @@ public class ForecastServiceImplementation implements ForecastService {
 		return forecastsDTOs;
 	}
 
+//	/**
+//	 * @see edu.unicen.surfforecaster.common.services.ForecastService#createVisualObservationSet(File,
+//	 *      Integer, String, String, Unit)
+//	 * 
+//	 */
+//	@Override
+//	@Transactional
+//	public Integer createVisualObservationSet(File file, Integer spotId,
+//			String setName, String setDescription, Unit unit)
+//			throws NeuralitoException {
+//		validateSpotExists(spotId);
+//		validateUnit(unit);
+//		validateDescription(setDescription);
+//		validateName(setName);
+//		validateFile(file);
+//		VisualObservationsLoader loader = new VisualObservationsLoader();
+//		List<VisualObservation> observations = loader.loadVisualObservations(
+//				file, unit);
+//		Spot spot = spotDAO.getSpotById(spotId);
+//		
+//		VisualObservationsSet observationsSet = new VisualObservationsSet(
+//				setName, setDescription, observations, unit, spot);
+//		spot.addVisualObservationSet(observationsSet);
+//		Integer id = observationsSetDAO.save(observationsSet);
+//		return id;
+//	}
 	/**
-	 * @see edu.unicen.surfforecaster.common.services.ForecastService#createVisualObservationSet(File,
-	 *      Integer, String, String, Unit)
+	 * Creates and train a forecaster which uses a machine learner.
+	 * Inputs are:
 	 * 
-	 */
-	@Override
-	@Transactional
-	public Integer createVisualObservationSet(File file, Integer spotId,
-			String setName, String setDescription, Unit unit)
-			throws NeuralitoException {
-		validateSpotExists(spotId);
-		validateUnit(unit);
-		validateDescription(setDescription);
-		validateName(setName);
-		validateFile(file);
-		VisualObservationsLoader loader = new VisualObservationsLoader();
-		List<VisualObservation> observations = loader.loadVisualObservations(
-				file, unit);
-		Spot spot = spotDAO.getSpotById(spotId);
-		
-		VisualObservationsSet observationsSet = new VisualObservationsSet(
-				setName, setDescription, observations, unit, spot);
-		spot.addVisualObservationSet(observationsSet);
-		Integer id = observationsSetDAO.save(observationsSet);
-		return id;
-	}
-	/**
 	 * @see edu.unicen.surfforecaster.common.services.ForecastService#createWW3Forecaster(Integer, PointDTO)
 	 */
 	@Override
 	public WekaForecasterEvaluationDTO createWekaForecaster(
-			Integer observationSetId, Integer modelId, Integer strategyId,
-			Map<String, Object> strategyParameters, Integer classifierId,
-			Map<String, Object> classifierParameters) {
-		GenerationStrategy strategy = strategyManager.getStrategy(strategyId, strategyParameters);
-		Classifier classifier = classifierManager.getClassifier(classifierId,classifierParameters);
-		VisualObservationsSet observations = visualObservationsDAO.getVisualObservationSetById(observationSetId);
-		WaveWatchModel model = waveWatchModelManager.getModelById(modelId);
-		
-		WekaForecaster forecaster = new WekaForecaster(classifier, strategy, model, observations);
+			List<VisualObservationDTO> visualObservations,Integer spotId, HashMap<String,Serializable> dataSetStrategyOptions
+			) {
 		return null;
+		// final String modelName = "GlobalModel";
+		// WaveWatchModel model = models.get(modelName);
+		// DataSetGenerationStrategy dataSetStrategy =
+		// this.dataSetStrategies.get("noBuoyStrategy");
+		// Classifier classifier = this.classifiers.get("linearRegression");
+		// WekaForecaster forecaster = new WekaForecaster(classifier,
+		// model,dataSetStrategy,dataSetStrategyOptions);
+		// Integer forecasterId = forecastDAO.save(forecaster);
+		// Map<String,String> evaluations = forecaster.getEvaluation();
+		// return new
+		// WekaForecasterEvaluationDTO(Double.parseDouble(evaluations.get("correlation")),Double.parseDouble(evaluations.get("meanAbsoluteError")),forecasterId,null);
 	}
 	
-	/**
-	 * Injected by spring.
-	 * @param observationsSetDAO
-	 */
-	public void setObservationsSetDAO(VisualObservationsSetDAO observationsSetDAO) {
-		this.observationsSetDAO = observationsSetDAO;
-	}
-
 	/**
 	 * Validation
 	 * 
@@ -227,7 +228,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			throws NeuralitoException {
 		if (gridPoint == null)
 			throw new NeuralitoException(ErrorCode.GRID_POINT_CANNOT_BE_NULL);
-		final WaveWatchModel model = models.get("GlobalModel");
+		final WaveWatchSystem model = models.get("GlobalModel");
 		if (model.isGridPoint(new Point(gridPoint.getLatitude(), gridPoint
 				.getLongitude())))
 			return;
@@ -349,8 +350,17 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * @param models
 	 *            the models to set
 	 */
-	public void setModels(final Map<String, WaveWatchModel> models) {
+	public void setModels(final Map<String, WaveWatchSystem> models) {
 		this.models = models;
+	}
+
+	public void setDataSetStrategies(
+			Map<String, DataSetGenerationStrategy> dataSetStrategies) {
+		this.dataSetStrategies = dataSetStrategies;
+	}
+
+	public void setClassifiers(Map<String, Classifier> classifiers) {
+		this.classifiers = classifiers;
 	}
 
 

@@ -40,14 +40,15 @@ public class Forecast {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	/**
-	 * The base date of this forecast.
+	 * The base date of this forecast.This is the date the forecast was made.
 	 */
 	private Date issuedDate;
 	/**
-	 * The date to which this forecast applies. This corresponds to Hours since
+	 * The time ahead base date to which this forecast applies. This corresponds to Hours since
 	 * the baseDate.
 	 */
 	private Integer forecastTime;
+
 	/**
 	 * Map with <parameterName, parameterValue> info. Parameters may be:
 	 * waveHeight, wavePeriod, waveDirection, windSpeed.
@@ -143,6 +144,14 @@ public class Forecast {
 	 */
 	public Point getPoint() {
 		return point;
+	}
+	
+	public Date getForecastDate(){
+		long hoursInMillis = this.forecastTime * 60 * 60 * 1000;
+		return new Date(this.issuedDate.getTime()+ hoursInMillis);
+	}
+	public void addParameter(String name, ForecastParameter parameter){
+		this.parameters.put(name, parameter);
 	}
 
 }

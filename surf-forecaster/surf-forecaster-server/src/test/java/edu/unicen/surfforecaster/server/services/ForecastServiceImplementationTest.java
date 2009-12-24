@@ -3,7 +3,6 @@
  */
 package edu.unicen.surfforecaster.server.services;
 
-import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +26,8 @@ import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
-import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
+import edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl;
 
 /**
  * @author esteban
@@ -40,6 +39,8 @@ public class ForecastServiceImplementationTest {
 	Logger log = Logger.getLogger(this.getClass());
 	@Autowired
 	private ForecastService forecastService;
+	@Autowired
+	private ForecastDAOHibernateImpl forecastDAO;
 	@Autowired
 	protected SpotService spotService;
 	@Autowired
@@ -165,6 +166,27 @@ public class ForecastServiceImplementationTest {
 			e.printStackTrace();
 		}
 	}
+	@Test
+	public void createWekaForecaster() {
+		// try {
+		// long initial = System.currentTimeMillis();
+		// List<VisualObservationDTO> visualObservations;
+		// HashMap<String, Serializable> options;
+		// forecastService.createWekaForecaster(
+		// visualObservations, spot1Id, options);
+		//	
+		// final List<ForecastDTO> forecasts = forecastService
+		// .getLatestForecasts(forecasterId);
+		// log.info("Number of forecasts retrieved:" + forecasts.size());
+		// log.info(forecasts.get(0).getBaseDate());
+		// long end = System.currentTimeMillis();
+		// log.info("Elapsed time:" + (end - initial) / 1000);
+		// Assert.assertTrue(forecasts.size() > 0);
+		// } catch (final NeuralitoException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+	}
 
 	@Test
 	public void getNearByGridPoints() {
@@ -194,9 +216,22 @@ public class ForecastServiceImplementationTest {
 			e.printStackTrace();
 		}
 	}
-	@Test
-	public void addVisualObservations() throws NeuralitoException{
-		File file = new File("src/test/resources/oahu2003.dat");
-		forecastService.createVisualObservationSet(file, spot1Id, "Sunset observations", "Observations Goddard-Caldwell", Unit.Feets);
-	}
+	// @Test
+	// public void addVisualObservations() throws NeuralitoException{
+	// File file = new File("src/test/resources/oahu2003.dat");
+	// forecastService.createVisualObservationSet(file, spot1Id,
+	// "Sunset observations", "Observations Goddard-Caldwell", Unit.Feets);
+	// }
+	//	
+	// @Test
+	// public void wekaSerialization(){
+	// Classifier cl = new LinearRegression();
+	// InstancesGenerator st = new NoBuoyStrategy();
+	// Forecaster weka = new WekaForecaster(cl,st,null,null);
+	// Integer forecasterId = forecastDAO.save(weka);
+	// weka = forecastDAO.getForecasterById(forecasterId);
+	// System.out.println(((WekaForecaster)weka).getClassifier());
+	// System.out.println(((WekaForecaster)weka).getStrategy().getName());
+	//		
+	// }
 }

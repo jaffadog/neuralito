@@ -114,7 +114,7 @@ public class VisualObservationsLoader {
 			double waveHeight = Double.valueOf(line.elementAt(3));
 			// Create visual observation.
 			VisualObservation vo = new VisualObservation(waveHeight, date
-					.getTime());
+					.getTime(),unit);
 			observations.add(vo);
 		}
 		return observations;

@@ -18,7 +18,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.unicen.surfforecaster.server.domain.ForecastPlain;
-import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
 
 /**
  * @author esteban
@@ -36,7 +36,7 @@ Logger log = Logger.getLogger(this.getClass());
 		// dao = (WaveWatchDAO) context.getBean("waveWatchDAO");
 	}
 
-	WaveWatchModel dao;
+	WaveWatchSystem dao;
 
 	// @Test
 	// @Ignore

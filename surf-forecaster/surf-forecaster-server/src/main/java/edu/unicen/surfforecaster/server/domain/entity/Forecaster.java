@@ -35,7 +35,7 @@ public abstract class Forecaster {
 	private Integer id;
 	@ManyToOne
 	protected Spot spot;
-	
+
 	public Integer getId() {
 		return id;
 	}

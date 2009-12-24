@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
-import edu.unicen.surfforecaster.server.domain.NoaaWaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.WaveWatchSystemV3;
 import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
@@ -34,7 +34,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
 public class NoaaWaveWatchModelTest {
 	
 	@Autowired
-	NoaaWaveWatchModel model;
+	WaveWatchSystemV3 model;
 	
 	Logger log = Logger.getLogger(this.getClass());
 
@@ -45,7 +45,7 @@ public class NoaaWaveWatchModelTest {
 	@Ignore
 	public void updateLatestForecast() {
 
-		((NoaaWaveWatchModel) model).update(new DownloaderJobListener(),
+		((WaveWatchSystemV3) model).update(new DownloaderJobListener(),
 				new File("src/test/resources/multi_1.glo_30m.all.grb2"));
 		final Collection<Forecast> latestForecast = model
 				.getLatestForecast(new Point(75.0F, 125.0F));
@@ -88,12 +88,13 @@ public class NoaaWaveWatchModelTest {
 	@Ignore
 	public void getArchivedForecasts() {
 		List<Forecast> archivedForecasts = model.getArchivedForecasts(
-				new Point(75.0F, 0.5F), new GregorianCalendar(1991, 02, 02),
-				new GregorianCalendar(1992, 02, 02));
+				new Point(75.0F, 0.5F), new GregorianCalendar(1991, 02, 02)
+						.getTime(), new GregorianCalendar(1992, 02, 02)
+						.getTime());
 		Assert.assertEquals(0, archivedForecasts.size());
 		archivedForecasts = model.getArchivedForecasts(new Point(75.0F, 0.5F),
-				new GregorianCalendar(2008, 02, 02), new GregorianCalendar(
-						2010, 02, 02));
+				new GregorianCalendar(2008, 02, 02).getTime(),
+				new GregorianCalendar(2010, 02, 02).getTime());
 		Assert.assertTrue(archivedForecasts.size() > 0);
 	}
 

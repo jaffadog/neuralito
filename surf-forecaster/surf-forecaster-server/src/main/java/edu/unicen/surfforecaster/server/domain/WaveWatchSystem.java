@@ -4,7 +4,6 @@
 package edu.unicen.surfforecaster.server.domain;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
@@ -18,7 +17,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
  * @author esteban
  * 
  */
-public interface WaveWatchModel {
+public interface WaveWatchSystem {
 
 	/**
 	 * Obtain the latest forecast for the given grid point.
@@ -37,7 +36,7 @@ public interface WaveWatchModel {
 	 * @return
 	 */
 	public List<Forecast> getArchivedForecasts(Point gridPoint,
-			GregorianCalendar from, GregorianCalendar to);
+			Date from, Date to);
 
 	/**
 	 * Obtain all the model grid points surrounding the given point.
@@ -59,5 +58,7 @@ public interface WaveWatchModel {
 	 * @return
 	 */
 	public boolean isGridPoint(Point point);
+
+	public String getName();
 
 }

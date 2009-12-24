@@ -1,6 +1,8 @@
 package edu.unicen.surfforecaster.server.domain.weka.strategy;
 
-public enum OptionType {
+import java.io.Serializable;
+
+public enum OptionType implements Serializable {
 INTEGER,
 DECIMAL,
 STRING,

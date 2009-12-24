@@ -1,40 +1,23 @@
-/**
- * 
- */
-package edu.unicen.surfforecaster.server.domain.entity;
+package edu.unicen.surfforecaster.common.services.dto;
 
+import java.io.Serializable;
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.apache.commons.lang.Validate;
 
-import edu.unicen.surfforecaster.common.services.dto.Unit;
-
 /**
- * Record of a visual observation of a wave height.
+ * DTO for a visual observation.
  * @author esteban
- * 
+ *
  */
-@Entity
-public class VisualObservation {
-	
-	/**
-	 * The id for ORM pupose.
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(length = 11)
-	private Integer id;
+public class VisualObservationDTO implements Serializable {
+
+	public VisualObservationDTO() {
+
+	}
 	/**
 	 * The observed wave height.
 	 */
@@ -46,20 +29,15 @@ public class VisualObservation {
 	/**
 	 * The unit in which the observation was made.
 	 */
-	@Enumerated(EnumType.STRING)
 	private Unit unit;
 	
-	public VisualObservation() {
-		// Orm purpose
-	}
-
 	/**
 	 * @param waveHeight
 	 * @param observationDate
 	 * @param waveUnit
 	 * @param location
 	 */
-	public VisualObservation(final double waveHeight,
+	public VisualObservationDTO(final double waveHeight,
 			final Date observationDate, Unit unit) {
 		super();
 		Validate.notNull(observationDate);
@@ -81,10 +59,6 @@ public class VisualObservation {
 			throw new InvalidParameterException();
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
 	/**
 	 * @return the waveHeight
 	 */
@@ -95,7 +69,7 @@ public class VisualObservation {
 	/**
 	 * @return the observationDate
 	 */
-	public Date getDate() {
+	public Date getObservationDate() {
 		return observationDate;
 	}
 	/**

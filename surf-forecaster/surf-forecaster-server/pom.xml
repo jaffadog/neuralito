@@ -27,6 +27,11 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+		<dependency>
+				<groupId>junit-addons</groupId>
+				<artifactId>junit-addons</artifactId>
+			
+			</dependency>
 		<!-- Common Interfaces Module -->
 		<dependency>
 			<groupId>edu.unicen.surf-forecaster</groupId>
