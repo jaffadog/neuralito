@@ -238,17 +238,18 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) { 
 				String results = event.getResults();
-				Integer responseStatus = new Integer(results.substring(16, 19));
-				String responseText = results.substring(results.indexOf("<PRE>") + 5, results.indexOf("</PRE>"));
-				switch (responseStatus) {
-				case 200:
-					Window.alert("Status: " + responseStatus + " - Text: " + responseText);
-					break;
-				case 500:
-					Window.alert("Status: " + responseStatus + " - Text: " + responseText);
-				default:
-					break;
-				}
+				Window.alert(event.getResults());
+//				Integer responseStatus = new Integer(results.substring(16, 19));
+//				String responseText = results.substring(results.indexOf("<PRE>") + 5, results.indexOf("</PRE>"));
+//				switch (responseStatus) {
+//				case 200:
+//					Window.alert("Status: " + responseStatus + " - Text: " + responseText);
+//					break;
+//				case 500:
+//					Window.alert("Status: " + responseStatus + " - Text: " + responseText);
+//				default:
+//					break;
+//				}
 				
 			}
 		});

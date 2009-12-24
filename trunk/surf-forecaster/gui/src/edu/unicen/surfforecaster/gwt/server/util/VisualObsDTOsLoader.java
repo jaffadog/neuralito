@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.server.util;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -24,9 +25,9 @@ public class VisualObsDTOsLoader {
 	
 	private VisualObsDTOsLoader(){}
 	
-	public Vector<ObsData> loadObsData(String fileName) throws Exception{
+	public Vector<ObsData> loadObsData(InputStream is) throws Exception{
 		this.fileReader = new FileDataIO();
-		Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
+		Vector<Vector<String>> linesValues = this.fileReader.readFile(is);
 		Vector<ObsData> obsData = new Vector<ObsData>();
 		for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
 			Vector<String> lineValues = e.nextElement();
@@ -35,21 +36,7 @@ public class VisualObsDTOsLoader {
 		return obsData;
 	}
 	
-	public Vector<ObsData> loadObsData(String[] fileNames){
-		Vector<ObsData> obsData = new Vector<ObsData>();
-		for (int f = 0; f < fileNames.length; f++){
-			String fileName = fileNames[f];
-			Vector<Vector<String>> linesValues = this.fileReader.readFile(fileName);
-			for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
-				Vector<String> lineValues = e.nextElement();
-				obsData.add(this.generateData(lineValues));
-			}
-			this.fileReader = new FileDataIO();
-		}
-		return obsData;
-	}
-	
-//	specific method to generate the data, depends of the input file structure
+	//	specific method to generate the data, depends of the input file structure
 	private ObsData generateData(Vector<String> lineValues){
 		ObsData data = new ObsData();
 		
