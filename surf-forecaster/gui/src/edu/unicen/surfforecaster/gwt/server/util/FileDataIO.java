@@ -1,10 +1,10 @@
 package edu.unicen.surfforecaster.gwt.server.util;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Vector;
 
@@ -16,22 +16,15 @@ public class FileDataIO {
 		this.linesValues = new Vector<Vector<String>>();
 	}
 	
-	public Vector<Vector<String>> readFile(String fileName) {
-	      File file = null;
-	      FileReader fr = null;
+	public Vector<Vector<String>> readFile(InputStream is) {
 	      BufferedReader br = null;
 
 	      try {
-	         // Apertura del fichero y creacion de BufferedReader para poder
-	         // hacer una lectura comoda (disponer del metodo readLine()).
-	         file = new File(fileName);
-	    	 fr = new FileReader(file);
-	         br = new BufferedReader(fr);
+	    	 br = new BufferedReader(new InputStreamReader( is ));
 
-	         // Lectura del fichero
+	         // Read file
 	         String line = "";
 	         while((line = br.readLine())!=null){
-	        	//System.out.println(line);
 	         	this.linesValues.add(this.parseLine(line));
 	         	line = "";
 	         }
@@ -40,25 +33,19 @@ public class FileDataIO {
 	         e.printStackTrace();
 	         return null;
 	      }finally{
-	         // En el finally cerramos el fichero, para asegurarnos
-	         // que se cierra tanto si todo va bien como si salta 
-	         // una excepcion.
-	         try{                    
-	            if( null != fr ){   
-	               fr.close();
-	               return this.linesValues;
-	            }                  
-	         }catch (Exception e2){ 
-	            e2.printStackTrace();
-	            return null;
-	         }
+	    	  try {
+				br.close();
+				return this.linesValues;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}  
 	      }
 	      return null;
 	   }
 	
 	private Vector<String> parseLine(String line){
 		String value = "";
-		Vector<String> lineValues = new Vector();
+		Vector<String> lineValues = new Vector<String>();
 		for (int i = 0; i < line.length(); i++){
 			if (line.charAt(i) != ' ' && line.charAt(i) != '\n')
 				value += line.charAt(i);
@@ -85,14 +72,11 @@ public class FileDataIO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-           // Nuevamente aprovechamos el finally para 
-           // asegurarnos que se cierra el fichero.
            if (null != file){
 				try {
 					file.close();
 					return true;
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return false;
 				}
