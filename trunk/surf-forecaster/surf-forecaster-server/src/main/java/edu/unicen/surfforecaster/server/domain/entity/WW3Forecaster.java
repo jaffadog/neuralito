@@ -5,18 +5,15 @@ package edu.unicen.surfforecaster.server.domain.entity;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import edu.unicen.surfforecaster.server.domain.WaveWatchModel;
+import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
 
 /**
- * Wave Watch 3 Forecaster. This forecaster will use NOAA wave watch 3 output to
- * generate the forecast for the given grid points.
+ * Forecaster which uses a {@link WaveWatchSystem} to obtain forecasts.
  * 
  * @author esteban
  * 
@@ -39,8 +36,10 @@ public class WW3Forecaster extends Forecaster {
 	 * The wave watch model to use.
 	 */
 	@Transient
-	private WaveWatchModel model;
-	@Column(nullable = false, length = 100)
+	private WaveWatchSystem model;
+	/**
+	 * The wave watch model name.
+	 */
 	private String modelName;
 
 	/**
@@ -48,17 +47,19 @@ public class WW3Forecaster extends Forecaster {
 	 */
 
 	public WW3Forecaster() {
+
 		// ORM purpose
 	}
 
 	/**
 	 * @param configuration
 	 */
-	public WW3Forecaster(final String modelName, final Point point,
+	public WW3Forecaster(final WaveWatchSystem model, final Point point,
 			final Point location, Spot spot) {
-		gridPoint = point;
+		this.gridPoint = point;
 		this.location = location;
-		this.modelName = modelName;
+		this.model = model;
+		this.modelName = model.getName();
 		this.spot = spot;
 	}
 
@@ -100,26 +101,7 @@ public class WW3Forecaster extends Forecaster {
 	@Override
 	public Collection<Forecast> getArchivedForecasts(final Date from,
 			final Date to) {
-		final GregorianCalendar fr = new GregorianCalendar();
-		fr.setTime(from);
-		final GregorianCalendar too = new GregorianCalendar();
-		too.setTime(to);
-		return model.getArchivedForecasts(location, fr, too);
-	}
-
-	/**
-	 * @return the modelName
-	 */
-	public String getModelName() {
-		return modelName;
-	}
-
-	/**
-	 * @param model
-	 *            the model to set
-	 */
-	public void setModel(final WaveWatchModel model) {
-		this.model = model;
+		return model.getArchivedForecasts(gridPoint, from, to);
 	}
 
 }

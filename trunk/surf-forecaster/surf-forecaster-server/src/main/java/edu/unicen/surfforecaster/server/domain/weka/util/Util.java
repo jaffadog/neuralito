@@ -1,20 +1,19 @@
 package edu.unicen.surfforecaster.server.domain.weka.util;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
 import weka.core.Attribute;
+import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
-import edu.unicen.surfforecaster.server.domain.weka.InstancesCreator;
-import edu.unicen.surfforecaster.server.domain.weka.strategy.GenerationStrategy;
 
 
 
@@ -159,31 +158,57 @@ public final class Util {
 		return decimalFormat;
 	}
 	
-	public static void generateResultPackage(GenerationStrategy generationStrategy, String[] years, Instances wekaDataSet){
-		
-		
-		String yearsDirectory = "";
-		for (int i = 0; i < years.length; i++)
-			yearsDirectory += years[i] + "-";
-		
-		File directory = new File(".//files//wekaResults//" + generationStrategy.getName() + "//" + generationStrategy.getBeach());
-		directory.mkdir();
-		
-		directory = new File(directory.getPath() + "//" + yearsDirectory + "//v0");
-		int i = 1;
-		while (directory.exists()){
-			directory = new File(directory.getParent() + "//v" + i);
-			i++;
+	
+	public static Instances createWekaInstances(String name, Collection<Map<String,Double>> instancesData, String[] attributes, String classAttribute){
+		Instances instancesDataSet = initDataSet(name,attributes,classAttribute);
+		for (Iterator it = instancesData.iterator();it.hasNext();) {
+			Map arf =(Map) it.next();
+			Instance instance = makeInstance(instancesDataSet, arf);
+			instancesDataSet.add(instance);
 		}
-		directory.mkdir();
-		
-		//Save arff file
-		InstancesCreator creator = new InstancesCreator();
-		creator.generateFile(directory.getPath() + "//" + generationStrategy.getShortDescription() + ".arff", wekaDataSet);
-		
-		//Save strategy description
-		SpaceDelimitedFileReader fileWriter = new SpaceDelimitedFileReader();
-		fileWriter.writeFile(directory.getPath() + "//StrategyDescription.txt", generationStrategy.toString());
+		return instancesDataSet;
 	}
+	
+	public static Instance createWekaInstance(Map<String,Double> instanceData, String[] attributes, String classAttribute){
+		Instances instancesDataSet = initDataSet("",attributes,classAttribute);
+		Instance instance = makeInstance(instancesDataSet, instanceData);
+		return instance;
+	}
+	
+	
+	private static Instances initDataSet(String name, String[] attributes,String classAttribute){
+		
+		Instances data;
+		// 	Creates the numeric attributes
+		FastVector fastVectorAttributes = new FastVector(attributes.length);
+		for (int i = 0; i < attributes.length; i++)
+			fastVectorAttributes.addElement(new Attribute(attributes[i]));
+		
+		// Creates an empty data set
+		data = new Instances(name, fastVectorAttributes, 100000);
+		Attribute attribute = data.attribute(classAttribute);
+		data.setClass(attribute);
+		return data;
+		
+	}
+	private static Instance makeInstance(Instances dataSet, Map<String,Double> data){
+ 		
+		//Create empty instance
+		Instance instance = new Instance(dataSet.numAttributes());
+
+		// give the instances access to the data set
+		instance.setDataset(dataSet);
+		
+		//set instance values
+		for (int i = 0; i < dataSet.numAttributes(); i++ ){
+			String attributeName = dataSet.attribute(i).name();
+			instance.setValue(dataSet.attribute(attributeName), data.get(attributeName));
+		}
+		
+		return instance;
+
+	}
+	
+	
 }
 

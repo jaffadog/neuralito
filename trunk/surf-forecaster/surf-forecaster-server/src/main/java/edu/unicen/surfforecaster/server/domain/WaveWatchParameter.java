@@ -9,7 +9,7 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
  * @author esteban
  * 
  */
-public enum WW3Parameter {
+public enum WaveWatchParameter {
 	SWELL_DIRECTION("Direction_of_swell_waves", Unit.Degrees),
 	/**
 	 *
@@ -74,14 +74,14 @@ public enum WW3Parameter {
 	/**
 	 * 
 	 */
-	private WW3Parameter(final String value) {
+	private WaveWatchParameter(final String value) {
 		this.value = value;
 	}
 
 	/**
 	 * 
 	 */
-	private WW3Parameter(final String value, final Unit unit) {
+	private WaveWatchParameter(final String value, final Unit unit) {
 		this.value = value;
 		this.unit = unit;
 	}

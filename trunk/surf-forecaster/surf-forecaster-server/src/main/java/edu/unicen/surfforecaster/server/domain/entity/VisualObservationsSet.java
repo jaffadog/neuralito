@@ -94,12 +94,12 @@ public class VisualObservationsSet {
 		for (Iterator iterator = observations2.iterator(); iterator.hasNext();) {
 			VisualObservation visualObservation = (VisualObservation) iterator
 					.next();
-			if (visualObservation.getObservationDate().getTime() < minDate
+			if (visualObservation.getDate().getTime() < minDate
 					.getTime())
-				minDate = visualObservation.getObservationDate();
-			if (visualObservation.getObservationDate().getTime() > maxDate
+				minDate = visualObservation.getDate();
+			if (visualObservation.getDate().getTime() > maxDate
 					.getTime())
-				maxDate = visualObservation.getObservationDate();
+				maxDate = visualObservation.getDate();
 		}
 		this.fromDate = minDate;
 		this.toDate = maxDate;

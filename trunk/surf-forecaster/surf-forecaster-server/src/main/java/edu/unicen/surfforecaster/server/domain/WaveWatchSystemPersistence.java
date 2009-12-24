@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.unicen.surfforecaster.server.domain;
 
 import java.io.BufferedWriter;
@@ -9,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -24,11 +20,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.TimeZone;
 
-import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -36,43 +29,16 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
-import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
-import edu.unicen.surfforecaster.server.domain.download.DownloaderJob;
-import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.ForecastParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 
-/**
- * This class provides the latest forecasts issued by the NOAA and also archived
- * forecasts. NOAA place in their FTP servers the latest forecast encoded in
- * GRIB2 format. A downloader automatically download the files posted by NOAA at
- * the ftp server. When a new file is downloaded the downloader notifies this
- * class. After the notification this class decodes the files and obtain the
- * forecast info for all the locations needed and also stores the previous
- * latest forecast in the archive. For space efficiency we only store the
- * forecasts for the 0 hours and +3 hours all others are deleted.
- * 
- * 
- * @author esteban wagner.
- * 
- */
-public class NoaaWaveWatchModel extends HibernateDaoSupport implements
-		WaveWatchModel, Observer {
+public class WaveWatchSystemPersistence extends HibernateDaoSupport {
+
 	/**
 	 * The logger.
 	 */
 	Logger log = Logger.getLogger(this.getClass());
-	/**
-	 * 
-	 * The grib decoder to use.
-	 */
-	private GribDecoder gribDecoder;
-	/**
-	 * Model Name
-	 */
-	private final String modelName;
-
 	/**
 	 * DB table to use for the archived forecasts.
 	 */
@@ -85,11 +51,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	 * DB table to use for the model gridPoints.
 	 */
 	private final String gridPointsTableName;
-
 	/**
-	 * File path to use to perform massive inserts to DB.
+	 * Temp file;
 	 */
-	private final String massiveInsertsTempFile;
+	File file;
 	/**
 	 * Delimiter characters of massive insert file.
 	 */
@@ -98,47 +63,70 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	public final static String lineEnd = "x";
 	private String validPointsFilePath;
 
-	/**
-	 * Creates a new Model with the specified name. Tables to store model data
-	 * will be created according to the model name.
-	 * 
-	 * @throws IOException
-	 * @throws SQLException
-	 * @throws IllegalStateException
-	 * @throws HibernateException
-	 * @throws DataAccessResourceFailureException
-	 */
-	public NoaaWaveWatchModel(final String modelName) {
-		Validate.notEmpty(modelName);
-		this.modelName = modelName;
-		archiveTableName = "waveWatchArchive_" + modelName;
-		latestForecastTableName = "waveWatchLatestForecast_" + modelName;
-		gridPointsTableName = "waveWatchGridPoints_" + modelName;
-		massiveInsertsTempFile = "c:\\waveWatch_" + modelName + ".csv";
+	private String name = "";
+
+	public WaveWatchSystemPersistence(String archiveTableName,
+			String latestForecastTableName, String gridPointsTableName,
+			String validPointsFilePath) {
+		super();
+		this.archiveTableName = archiveTableName;
+		this.latestForecastTableName = latestForecastTableName;
+		this.gridPointsTableName = gridPointsTableName;
+		this.validPointsFilePath = validPointsFilePath;
 	}
 
 	public void init() throws IOException, DataAccessResourceFailureException,
-			HibernateException, IllegalStateException, SQLException, URISyntaxException {
+			HibernateException, IllegalStateException, SQLException,
+			URISyntaxException {
 		// Init valid grid points table.
 		if (!tableExists(gridPointsTableName)) {
-			if (validPointsFilePath==null){
-				validPointsFilePath="validGridPoints_"+modelName;
+			if (validPointsFilePath == null) {
+				validPointsFilePath = "validGridPoints_" + name;
 			}
-			URL resource = ClassLoader.getSystemClassLoader().getResource("validGridPoints_"+modelName+".csv");
+			URL resource = ClassLoader.getSystemClassLoader().getResource(
+					"validGridPoints_" + name + ".csv");
 			massiveInsertValidGridPoints(new File(resource.getFile()));
 		}
-		//Init archive table
+		// Init archive table
 		if (!tableExists(archiveTableName)) {
 			createArchiveTable();
 		}
-		//Init latest forecast table
+		// Init latest forecast table
 		if (!tableExists(latestForecastTableName)) {
 			createLatestForecastTable();
 		}
 	}
+	private void massiveInsertValidGridPoints(final File csvFile) {
+		log.info("Using valid grid point data from: "
+				+ csvFile.getAbsolutePath());
+		final long init = System.currentTimeMillis();
+		try {
+			final Connection connection = this.getSession().connection();
+			final Statement st = connection.createStatement();
+			// Create Table Grid Points
+			st
+					.execute("CREATE TABLE "
+							+ gridPointsTableName
+							+ "  (   `latitude` float NOT NULL,  `longitude` float NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+			// Insert into table CSV data.
+			final String query = "LOAD DATA INFILE '"
+					+ csvFile.getAbsolutePath().replace('\\', '/')
+					+ "' INTO TABLE " + gridPointsTableName
+					+ " FIELDS TERMINATED BY '" + fieldSeparator
+					+ "'  LINES STARTING BY '" + lineStart
+					+ "' TERMINATED BY '" + lineEnd + "'";
+			st.execute(query);
+			// Add indexes to table.
+			st.execute("ALTER TABLE " + gridPointsTableName
+					+ " ADD INDEX location(latitude, longitude)");
+			st.close();
+		} catch (final SQLException e) {
+			throw new DataAccessResourceFailureException(e.toString(), e);
+		}
+		final long end = System.currentTimeMillis();
+		log.info(gridPointsTableName + " data inserted in: " + (end - init)
+				/ 1000 + " sec.");
 
-	public void setValidPointsFilePath(String validPointsFilePath) {
-		this.validPointsFilePath = validPointsFilePath;
 	}
 
 	/**
@@ -291,25 +279,6 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @param gridFile
-	 * @return
-	 * @throws IOException
-	 */
-	private List<Point> getValidGridPoints(final String gridFile)
-			throws IOException {
-		final Collection<ForecastPlain> forecastForTime = gribDecoder
-				.getForecastForTime(new File(gridFile), 0);
-		final List<Point> points = new ArrayList<Point>();
-		for (final Iterator iterator = forecastForTime.iterator(); iterator
-				.hasNext();) {
-			final ForecastPlain forecastArch = (ForecastPlain) iterator.next();
-			points.add(new Point(forecastArch.getLatitude(), forecastArch
-					.getLongitude()));
-		}
-		return points;
-	}
-
-	/**
 	 * 
 	 */
 	private void createGridPointTable() {
@@ -354,7 +323,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			connection.close();
 		} catch (final SQLException e) {
 			log.error(e);
-			
+
 		}
 
 	}
@@ -380,12 +349,11 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#getArchivedForecasts(float,
+	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchSystem#getArchivedForecasts(float,
 	 *      float, java.util.GregorianCalendar, java.util.GregorianCalendar)
 	 */
-	@Override
 	public List<Forecast> getArchivedForecasts(final Point point,
-			final GregorianCalendar from, final GregorianCalendar to) {
+			final Date fromDate, final Date toDate) {
 		final long init = System.currentTimeMillis();
 		final float lat = new Float(point.getLatitude());
 		final float lon = new Float(point.getLongitude());
@@ -393,17 +361,23 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
-			final String fromDate = from.get(Calendar.YEAR) + "-"
+			final Calendar from = new GregorianCalendar(TimeZone
+					.getTimeZone("UTC"));
+			from.setTime(fromDate);
+			final Calendar to = new GregorianCalendar(TimeZone
+					.getTimeZone("UTC"));
+			to.setTime(toDate);
+			final String fromString = from.get(Calendar.YEAR) + "-"
 					+ (from.get(Calendar.MONTH) + 1) + "-"
 					+ from.get(Calendar.DAY_OF_MONTH);
-			final String toDate = to.get(Calendar.YEAR) + "-"
+			final String toString = to.get(Calendar.YEAR) + "-"
 					+ (to.get(Calendar.MONTH) + 1) + "-"
 					+ to.get(Calendar.DAY_OF_MONTH);
 
 			final ResultSet result = st.executeQuery("select * from "
 					+ archiveTableName + " where latitude = " + lat
 					+ " AND longitude = " + lon + " AND issuedDate BETWEEN '"
-					+ fromDate + "' AND '" + toDate + "'");
+					+ fromString + "' AND '" + toString + "'");
 
 			while (result.next() != false) {
 				final int validTime = result.getInt("validTime");
@@ -428,10 +402,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				final float windDirection = result.getFloat("windDirection");
 				final float windU = result.getFloat("windU");
 				final float windV = result.getFloat("windV");
-				final ForecastPlain arch = new ForecastPlain(result.getDate("issuedDate"),
-						validTime, latitude, longitude, windWaveHeight,
-						windWavePeriod, windWaveDirection, swellWaveHeight,
-						swellWavePeriod, swellWaveDirection,
+				final ForecastPlain arch = new ForecastPlain(result
+						.getDate("issuedDate"), validTime, latitude, longitude,
+						windWaveHeight, windWavePeriod, windWaveDirection,
+						swellWaveHeight, swellWavePeriod, swellWaveDirection,
 						combinedWaveHeight, peakWavePeriod, peakWaveDirection,
 						windSpeed, windDirection, windU, windV);
 				forecasts.add(arch);
@@ -440,7 +414,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			st.close();
 		} catch (final SQLException e) {
 			log.error(e);
-			}
+		}
 		final long end = System.currentTimeMillis();
 		log.info("Readed: " + forecasts.size() + " forecasts.");
 		log.info("Elapsed Time: " + (end - init) / 1000);
@@ -448,9 +422,8 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#getLatestForecast(edu.unicen.surfforecaster.server.domain.entity.forecasters.Point)
+	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchSystem#getLatestForecast(edu.unicen.surfforecaster.server.domain.entity.forecasters.Point)
 	 */
-	@Override
 	public List<Forecast> getLatestForecast(final Point gridPoint) {
 		log.info("Retrieving latest forecast for: " + gridPoint);
 		final long init = System.currentTimeMillis();
@@ -485,10 +458,10 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 				final float windDirection = result.getFloat("windDirection");
 				final float windU = result.getFloat("windU");
 				final float windV = result.getFloat("windV");
-				final ForecastPlain arch = new ForecastPlain(result.getDate("issuedDate"),
-						validTime, latitude, longitude, windWaveHeight,
-						windWavePeriod, windWaveDirection, swellWaveHeight,
-						swellWavePeriod, swellWaveDirection,
+				final ForecastPlain arch = new ForecastPlain(result
+						.getDate("issuedDate"), validTime, latitude, longitude,
+						windWaveHeight, windWavePeriod, windWaveDirection,
+						swellWaveHeight, swellWavePeriod, swellWaveDirection,
 						combinedWaveHeight, peakWavePeriod, peakWaveDirection,
 						windSpeed, windDirection, windU, windV);
 				forecasts.add(arch);
@@ -497,8 +470,8 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		log.info("Elapsed Time To retrieve latest forecast : "
-				+ (end - init) / 1000);
+		log.info("Elapsed Time To retrieve latest forecast : " + (end - init)
+				/ 1000);
 		return translate(forecasts);
 	}
 
@@ -533,36 +506,14 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		}
 		final long end = System.currentTimeMillis();
 		log.info("Elapsed Time To retrieve latest forecast issued date : "
-						+ (end - init) / 1000);
+				+ (end - init) / 1000);
 		return date;
 	}
 
 	/**
-	 * Obtain near by grid points of the given point.
-	 * 
-	 * @param point
 	 * @return
 	 */
-	public List<Point> getNearbyGridPoints(final Point point) {
-
-		final List<Point> validPoints = getValidGridPointsFromDB();
-		final List<Point> nearbyPoints = new ArrayList<Point>();
-		for (final Iterator iterator = validPoints.iterator(); iterator
-				.hasNext();) {
-			final Point validPoint = (Point) iterator.next();
-			if (Math.abs(point.getLatitude() - validPoint.getLatitude()) < 0.5
-					&& Math.abs(point.getLongitude()
-							- validPoint.getLongitude()) < 0.5) {
-				nearbyPoints.add(validPoint);
-			}
-		}
-		return nearbyPoints;
-	}
-
-	/**
-	 * @return
-	 */
-	private List<Point> getValidGridPointsFromDB() {
+	public List<Point> getValidGridPointsFromDB() {
 		log.info("Retrieving valid grid points from DB");
 		final long init = System.currentTimeMillis();
 		final List<Point> points = new ArrayList<Point>();
@@ -581,57 +532,12 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 		}
 		final long end = System.currentTimeMillis();
 		log.info("Found " + points.size() + " grid points");
-		log.info("Elapsed Time To retrieve valid grid points : "
-				+ (end - init) / 1000);
+		log.info("Elapsed Time To retrieve valid grid points : " + (end - init)
+				/ 1000);
 		return points;
 	}
 
-	/**
-	 * Sets the Grib decoder to use.
-	 * 
-	 * @param decoder
-	 *            the decoder to set
-	 */
-	public void setGribDecoder(final GribDecoder decoder) {
-		gribDecoder = decoder;
-	}
-
-	/**
-	 * Called when a new Grib file with latest forecast data has been
-	 * downloaded. Actions performed are: 1)Move latest forecast to the archive.
-	 * 2)Decode grib file and obtain latest forecast. 3)Persist latest forecast
-	 * into DB.
-	 * 
-	 * @param observable
-	 *            {@link DownloaderJobListener} notifies when a new forecast
-	 *            file has been downloaded.
-	 * @param gribFile
-	 *            grib2 file containing latest wave watch forecasts just
-	 *            downloaded by {@link DownloaderJob}
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public void update(final Observable o, final Object gribFile) {
-
-		if (!(o instanceof DownloaderJobListener))
-			throw new IncompatibleClassChangeError();
-		if (!(gribFile instanceof File))
-			throw new InvalidParameterException();
-
-		final long init = System.currentTimeMillis();
-		//TODO check file has newer data.
-		// TODO Begin transaction
-		archiveLatestForecasts();
-		updateLatestForecasts((File) gribFile);
-		// TODO End Transaction
-
-		final long end = System.currentTimeMillis();
-
-		log.info("Elapsed Time To update forecasts: " + (end - init)
-				/ 1000);
-	}
-
-	private void archiveLatestForecasts() {
+	public void archiveLatestForecasts() {
 		log.info("Archiving Forecasts");
 		final long init = System.currentTimeMillis();
 		try {
@@ -646,70 +552,12 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		log.info("Elapsed Time To archive forecast : " + (end - init)
-				/ 1000);
+		log.info("Elapsed Time To archive forecast : " + (end - init) / 1000);
 
 	}
 
-	/**
-	 * Decode given grib file and create forecasts objects.
-	 * 
-	 * @param file
-	 */
-	private void updateLatestForecasts(final File csvFile) {
-		// Decode downloaded NOAA grib files to obtain latest forecasts.
-		final File textFile = new File(massiveInsertsTempFile);
-		if (textFile.exists())
-			if (textFile.isFile()) {
-				textFile.delete();
-			}
-		for (int time = 0; time < 61; time++) {
-			try {
-				final Collection<ForecastPlain> forecasts = gribDecoder
-						.getForecastForTime(csvFile, time);
-				appendForecastsToFile(textFile, forecasts);
-			} catch (final IOException e) {
-				log.error(e);
-			}
-		}
-		massiveInsertLatestForecast(textFile);
-	}
-	private void massiveInsertValidGridPoints(final File csvFile) {
-		log.info("Using valid grid point data from: " + csvFile.getAbsolutePath());
-		final long init = System.currentTimeMillis();
-		try {
-			final Connection connection = this.getSession().connection();
-			final Statement st = connection.createStatement();
-			//Create Table Grid Points
-			st
-			.execute("CREATE TABLE "
-					+ gridPointsTableName
-					+ "  (   `latitude` float NOT NULL,  `longitude` float NOT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
-			//Insert into table CSV data.
-			final String query = "LOAD DATA INFILE '"
-					+ csvFile.getAbsolutePath().replace('\\', '/')
-					+ "' INTO TABLE " + gridPointsTableName
-					+ " FIELDS TERMINATED BY '" + fieldSeparator
-					+ "'  LINES STARTING BY '" + lineStart
-					+ "' TERMINATED BY '" + lineEnd + "'";
-			st.execute(query);
-			//Add indexes to table.
-			st.execute("ALTER TABLE " + gridPointsTableName
-					+ " ADD INDEX location(latitude, longitude)");
-			st.close();
-		} catch (final SQLException e) {
-			throw new DataAccessResourceFailureException(e.toString(),e) ;
-		}
-		final long end = System.currentTimeMillis();
-		log.info(gridPointsTableName +" data inserted in: "+ (end - init) / 1000  +" sec.");
-
-	}
-	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#insertIntoLatestForecastFromFile(java.io.File)
-	 */
-
-	private void massiveInsertLatestForecast(final File textFile) {
-		log.info("Inserting data from: " + textFile.getAbsolutePath());
+	public void massiveInsertLatestForecast() {
+		log.info("Inserting data from: " + file.getAbsolutePath());
 		final long init = System.currentTimeMillis();
 		try {
 			final Connection connection = this.getSession().connection();
@@ -720,7 +568,7 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 							+ latestForecastTableName
 							+ "  (  `issuedDate` DATETIME NOT NULL,  `validTime` tinyint(4) unsigned NOT NULL,  `latitude` float NOT NULL,  `longitude` float NOT NULL,  `windWaveHeight` float DEFAULT NULL,  `windWavePeriod` float DEFAULT NULL,  `windWaveDirection` float DEFAULT NULL,  `swellWaveHeight` float DEFAULT NULL,  `swellWavePeriod` float DEFAULT NULL,  `swellWaveDirection` float DEFAULT NULL,  `combinedWaveHeight` float DEFAULT NULL,  `peakWavePeriod` float DEFAULT NULL,  `peakWaveDirection` float DEFAULT NULL,  `windSpeed` float DEFAULT NULL,  `windDirection` float DEFAULT NULL,  `windU` float DEFAULT NULL,  `windV` float DEFAULT NULL) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 			final String query = "LOAD DATA INFILE '"
-					+ textFile.getAbsolutePath().replace('\\', '/')
+					+ file.getAbsolutePath().replace('\\', '/')
 					+ "' INTO TABLE " + latestForecastTableName
 					+ " FIELDS TERMINATED BY '" + fieldSeparator
 					+ "'  LINES STARTING BY '" + lineStart
@@ -733,8 +581,8 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			log.error(e);
 		}
 		final long end = System.currentTimeMillis();
-		log.info("Elapsed Time To insert data from file: "
-				+ (end - init) / 1000);
+		log.info("Elapsed Time To insert data from file: " + (end - init)
+				/ 1000);
 
 	}
 
@@ -751,123 +599,6 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			connection.close();
 		} catch (final SQLException e) {
 			log.error(e);
-		}
-	}
-
-	/**
-	 * Writes the given forecasts to a text file, this file will be used to
-	 * perform massive inserts into DB.
-	 * 
-	 * @param forecasts
-	 */
-	private void appendForecastsToFile(final File file,
-			final Collection forecasts) {
-		final long init = System.currentTimeMillis();
-		try {
-			final BufferedWriter output = new BufferedWriter(new FileWriter(
-					file, true));
-
-			for (final Iterator iterator = forecasts.iterator(); iterator
-					.hasNext();) {
-				final ForecastPlain forecast = (ForecastPlain) iterator.next();
-				final float windWaveHeight = forecast.getWindWaveHeight()
-						.isNaN() ? -1F : forecast.getWindWaveHeight();
-				final float windWavePeriod = forecast.getWindWavePeriod()
-						.isNaN() ? -1F : forecast.getWindWavePeriod();
-				final float windWaveDirection = forecast.getWindWaveDirection()
-						.isNaN() ? -1F : forecast.getWindWaveDirection();
-				final float swellWaveHeight = forecast.getSwellWaveHeight()
-						.isNaN() ? -1F : forecast.getSwellWaveHeight();
-				final float swellWavePeriod = forecast.getSwellWavePeriod()
-						.isNaN() ? -1F : forecast.getSwellWavePeriod();
-				final float swellWaveDirection = forecast
-						.getSwellWaveDirection().isNaN() ? -1F : forecast
-						.getSwellWaveDirection();
-				final float combinaedWaveHeight = forecast
-						.getCombinedWaveHeight().isNaN() ? -1F : forecast
-						.getCombinedWaveHeight();
-				final float peakWavePeriod = forecast.getPeakWavePeriod()
-						.isNaN() ? -1F : forecast.getPeakWavePeriod();
-				final float peakWaveDirection = forecast.getPeakWaveDirection()
-						.isNaN() ? -1F : forecast.getPeakWaveDirection();
-				final float windSpeed = forecast.getWindSpeed().isNaN() ? -1F
-						: forecast.getWindSpeed();
-				final float windDirection = forecast.getWindDirection().isNaN() ? -1F
-						: forecast.getWindDirection();
-				final float windU = forecast.getWindU().isNaN() ? -1F
-						: forecast.getWindU();
-				final float windV = forecast.getWindV().isNaN() ? -1F
-						: forecast.getWindV();
-				Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-				calendar.setTime(forecast.getIssuedDate());
-				final int year = calendar.get(Calendar.YEAR);
-				final int month = calendar.get(Calendar.MONTH) + 1;
-				;
-				final int day = calendar.get(
-						Calendar.DAY_OF_MONTH);
-				;
-				final int hour = calendar.get(
-						Calendar.HOUR_OF_DAY);
-				final int minute = calendar.get(Calendar.MINUTE);
-				;
-				final int seconds = calendar.get(
-						Calendar.SECOND);
-
-				final String line = lineStart + year + "-" + month + "-" + day
-						+ " " + hour + ":" + minute + ":" + seconds
-						+ fieldSeparator + forecast.getValidTime()
-						+ fieldSeparator + forecast.getLatitude()
-						+ fieldSeparator + forecast.getLongitude()
-						+ fieldSeparator + windWaveHeight + fieldSeparator
-						+ windWavePeriod + fieldSeparator + windWaveDirection
-						+ fieldSeparator + swellWaveHeight + fieldSeparator
-						+ swellWavePeriod + fieldSeparator + swellWaveDirection
-						+ fieldSeparator + combinaedWaveHeight + fieldSeparator
-						+ peakWavePeriod + fieldSeparator + peakWaveDirection
-						+ fieldSeparator + windSpeed + fieldSeparator
-						+ windDirection + fieldSeparator + windU
-						+ fieldSeparator + windV + lineEnd;
-				output.append(line);
-				output.newLine();
-
-			}
-			output.close();
-		} catch (final Exception e) {
-			log.error(e);
-		}
-		final long end = System.currentTimeMillis();
-		log.info("Writing forecasts to file");
-		log.info("Elapsed time: " + (end - init) / 1000);
-	}
-
-	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchModel#isGridPoint(edu.unicen.surfforecaster.server.domain.entity.forecasters.Point)
-	 */
-	@Override
-	public boolean isGridPoint(final Point point) {
-
-		final long init = System.currentTimeMillis();
-		try {
-			final Connection connection = this.getSession().connection();
-			final Statement st = connection.createStatement();
-			final String query = "SELECT * FROM " + gridPointsTableName
-					+ " WHERE latitude = " + point.getLatitude()
-					+ " AND longitude = " + point.getLongitude();
-			final ResultSet result = st.executeQuery(query);
-			boolean found = false;
-			if (result.next()) {
-				found = true;
-			}
-			st.close();
-			connection.close();
-			final long end = System.currentTimeMillis();
-			log.info("Elapsed Time To find point in grid points table"
-							+ (end - init) / 1000);
-
-			return found;
-		} catch (final SQLException e) {
-			log.error(e);
-			return false;
 		}
 	}
 
@@ -925,12 +656,103 @@ public class NoaaWaveWatchModel extends HibernateDaoSupport implements
 			parameters.put(WW3Parameter.WINDVComponent.toString(),
 					new ForecastParameter(WW3Parameter.WINDVComponent
 							.toString(), forecastArch.getWindV(), Unit.Meters));
-			final Forecast forecast = new Forecast(forecastArch.getIssuedDate()
-					, forecastArch.getValidTime(), parameters,
-					new Point(forecastArch.getLatitude(), forecastArch
-							.getLongitude()));
+			final Forecast forecast = new Forecast(
+					forecastArch.getIssuedDate(), forecastArch.getValidTime(),
+					parameters, new Point(forecastArch.getLatitude(),
+							forecastArch.getLongitude()));
 			translatedForecasts.add(forecast);
 		}
 		return translatedForecasts;
 	}
+
+	/**
+	 * Writes the given forecasts to a text file, this file will be used to
+	 * perform massive inserts into DB.
+	 * 
+	 * @param forecasts
+	 */
+	public void appendForecastsToFile(
+			final Collection forecasts) {
+		final long init = System.currentTimeMillis();
+		try {
+			final BufferedWriter output = new BufferedWriter(new FileWriter(
+					file, true));
+
+			for (final Iterator iterator = forecasts.iterator(); iterator
+					.hasNext();) {
+				final ForecastPlain forecast = (ForecastPlain) iterator.next();
+				final float windWaveHeight = forecast.getWindWaveHeight()
+						.isNaN() ? -1F : forecast.getWindWaveHeight();
+				final float windWavePeriod = forecast.getWindWavePeriod()
+						.isNaN() ? -1F : forecast.getWindWavePeriod();
+				final float windWaveDirection = forecast.getWindWaveDirection()
+						.isNaN() ? -1F : forecast.getWindWaveDirection();
+				final float swellWaveHeight = forecast.getSwellWaveHeight()
+						.isNaN() ? -1F : forecast.getSwellWaveHeight();
+				final float swellWavePeriod = forecast.getSwellWavePeriod()
+						.isNaN() ? -1F : forecast.getSwellWavePeriod();
+				final float swellWaveDirection = forecast
+						.getSwellWaveDirection().isNaN() ? -1F : forecast
+						.getSwellWaveDirection();
+				final float combinaedWaveHeight = forecast
+						.getCombinedWaveHeight().isNaN() ? -1F : forecast
+						.getCombinedWaveHeight();
+				final float peakWavePeriod = forecast.getPeakWavePeriod()
+						.isNaN() ? -1F : forecast.getPeakWavePeriod();
+				final float peakWaveDirection = forecast.getPeakWaveDirection()
+						.isNaN() ? -1F : forecast.getPeakWaveDirection();
+				final float windSpeed = forecast.getWindSpeed().isNaN() ? -1F
+						: forecast.getWindSpeed();
+				final float windDirection = forecast.getWindDirection().isNaN() ? -1F
+						: forecast.getWindDirection();
+				final float windU = forecast.getWindU().isNaN() ? -1F
+						: forecast.getWindU();
+				final float windV = forecast.getWindV().isNaN() ? -1F
+						: forecast.getWindV();
+				Calendar calendar = new GregorianCalendar(TimeZone
+						.getTimeZone("UTC"));
+				calendar.setTime(forecast.getIssuedDate());
+				final int year = calendar.get(Calendar.YEAR);
+				final int month = calendar.get(Calendar.MONTH) + 1;
+				;
+				final int day = calendar.get(Calendar.DAY_OF_MONTH);
+				;
+				final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+				final int minute = calendar.get(Calendar.MINUTE);
+				;
+				final int seconds = calendar.get(Calendar.SECOND);
+
+				final String line = lineStart + year + "-" + month + "-" + day
+						+ " " + hour + ":" + minute + ":" + seconds
+						+ fieldSeparator + forecast.getValidTime()
+						+ fieldSeparator + forecast.getLatitude()
+						+ fieldSeparator + forecast.getLongitude()
+						+ fieldSeparator + windWaveHeight + fieldSeparator
+						+ windWavePeriod + fieldSeparator + windWaveDirection
+						+ fieldSeparator + swellWaveHeight + fieldSeparator
+						+ swellWavePeriod + fieldSeparator + swellWaveDirection
+						+ fieldSeparator + combinaedWaveHeight + fieldSeparator
+						+ peakWavePeriod + fieldSeparator + peakWaveDirection
+						+ fieldSeparator + windSpeed + fieldSeparator
+						+ windDirection + fieldSeparator + windU
+						+ fieldSeparator + windV + lineEnd;
+				output.append(line);
+				output.newLine();
+
+			}
+			output.close();
+		} catch (final Exception e) {
+			log.error(e);
+		}
+		final long end = System.currentTimeMillis();
+		log.info("Writing forecasts to file");
+		log.info("Elapsed time: " + (end - init) / 1000);
+	}
+	// // Decode downloaded NOAA grib files to obtain latest forecasts.
+	// final File textFile = new File(massiveInsertsTempFile);
+	// if (textFile.exists())
+	// if (textFile.isFile()) {
+	// textFile.delete();
+	// }
+
 }

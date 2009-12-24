@@ -1,14 +1,16 @@
 package edu.unicen.surfforecaster.server.domain.weka;
 
+import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
-public class ArfData {
+public class ArfData implements Serializable{
 	
-	private Calendar date = null;
+	private Date date = null;
 	private BuoyData buoyData = null;
 	private VisualObservationsManager obsData = null;
 	private WaveWatchData ww3Data = null;
@@ -53,11 +55,11 @@ public class ArfData {
 		this.buoyData = buoyData;
 	}
 
-	public Calendar getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Calendar date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

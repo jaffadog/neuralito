@@ -57,9 +57,9 @@ public class ValidGridPointsGenerator {
 				false));
 		for (Iterator iterator = validGridPoints.iterator(); iterator.hasNext();) {
 			Point point = (Point) iterator.next();
-			final String line = NoaaWaveWatchModel.lineStart
-					+ point.getLatitude() + NoaaWaveWatchModel.fieldSeparator
-					+ point.getLongitude() + NoaaWaveWatchModel.lineEnd;
+			final String line = WaveWatchSystemV3.lineStart
+					+ point.getLatitude() + WaveWatchSystemV3.fieldSeparator
+					+ point.getLongitude() + WaveWatchSystemV3.lineEnd;
 			output.append(line);
 			output.newLine();
 		}

@@ -16,7 +16,7 @@ public interface ForecastDAO {
 	 * @param forecaster
 	 * @return
 	 */
-	public Integer save(WW3Forecaster forecaster);
+	public Integer save(Forecaster forecaster);
 
 	/**
 	 * @param forecasterId

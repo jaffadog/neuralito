@@ -1,9 +1,10 @@
 package edu.unicen.surfforecaster.server.domain.weka;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Vector;
 
-public class DataSet {
+public class DataSet implements Serializable{
 	private String dataSetName;
 	private String dataSetDescription;
 	private Collection<ArfData> instances;

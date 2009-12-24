@@ -3,6 +3,8 @@
  */
 package edu.unicen.surfforecaster.server.domain.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +18,7 @@ import edu.unicen.surfforecaster.common.services.dto.PointDTO;
  * 
  */
 @Entity
-public class Point {
+public class Point implements Serializable {
 	/**
 	 * The id for ORM pupose.
 	 */

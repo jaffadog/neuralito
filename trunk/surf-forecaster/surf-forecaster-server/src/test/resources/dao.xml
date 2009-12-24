@@ -77,6 +77,9 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.Forecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Forecast</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.WekaForecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerator</value>
+				<value>edu.unicen.surfforecaster.server.domain.weka.strategy.NoBuoyStrategy</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Point</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.ForecastParameter</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservation</value>
