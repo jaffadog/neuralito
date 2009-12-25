@@ -517,7 +517,6 @@ public final class Arrows30PxFactory {
 	public static Image getArrowIcon(String direction, Unit unitDirection) {
 		
 		double directionValue = 0;
-		double speedValue = 0;
 		Image result = null;
 		try {
 			directionValue = UnitConverter.convertValue(direction, unitDirection, Unit.Degrees);
