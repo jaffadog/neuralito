@@ -37,6 +37,12 @@ import edu.unicen.surfforecaster.gwt.client.utils.Observer;
 import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
+/**
+ * Used both for create and edit spots.
+ * For create spots use the empty constructor, for edit use the constructor with spotId as parameter
+ * @author MAXI
+ *
+ */
 public class NewSpotPanel extends FlexTable implements Observer{
 
 	private ListBox areaBox = null;
@@ -371,6 +377,14 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			update(LocalizationUtils.getInstance(), null);
 		
 		this.setTimeZoneItems();
+	}
+	
+	/**
+	 * Use this constructor to display the spot data for edit purpose
+	 * @param idSpot Integer
+	 */
+	public NewSpotPanel(Integer idSpot) {
+		this();
 	}
 	
 	private Vector<String> validateForm() {

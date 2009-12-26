@@ -38,4 +38,6 @@ public interface SpotServices extends RemoteService {
 	List<ZoneDTO> getZones(Integer country) throws NeuralitoException;
 
 	List<SpotGwtDTO> getSpots(Integer zone) throws NeuralitoException;
+	
+	List<SpotGwtDTO> getSpotsCreatedBy() throws NeuralitoException;
 }

@@ -86,6 +86,7 @@ public final class GWTUtils {
 		VALID_HISTORY_TOKENS.add("descriptionTab");
 		VALID_HISTORY_TOKENS.add("comparatorTab");
 		VALID_HISTORY_TOKENS.add("newSpotTab");
+		VALID_HISTORY_TOKENS.add("mySpotsTab");
 		VALID_HISTORY_TOKENS.add("registerNewUser");
 	}
 	

@@ -266,6 +266,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Nueva ola")
 	String newSpot();
 	
+	@DefaultStringValue("Mis olas")
+	String mySpots();
+	
 	/**
 	 * LocalizationPanel
 	 */
@@ -304,6 +307,15 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("El servicio que recupera los pronosticadores (WW3 Gridpoints) cercanos a la ola seleccionada fallo. Intentelo nuevamente en unos minutos.")
 	String getNearbyGridPointsServiceFailed();
+	
+	/**
+	 * MySpotsPanel
+	 */
+	@DefaultStringValue("Editar")
+	String edit();
+	
+	@DefaultStringValue("Borrar")
+	String delete();
 	
 	/**
 	 * NewSpotPanel
