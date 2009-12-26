@@ -32,6 +32,8 @@ public final class GWTUtils {
 	public final static String IMAGE_BLUE_CIRCLE_LOADER = "images/blue-circle-loader.gif";
 	public final static String IMAGE_ERROR_ICON = "images/Error.png";
 	public final static String IMAGE_GOOD_ICON = "images/Good.png";
+	public final static String EDIT_ICON_URL = "images/edit.png";
+	public final static String DELETE_ICON_URL = "images/delete.png";
 	
 	//Translators
 	public static SurfForecasterConstants LOCALE_CONSTANTS;
