@@ -29,6 +29,7 @@ import edu.unicen.surfforecaster.gwt.client.panels.charts.SpotComparationColumnC
 import edu.unicen.surfforecaster.gwt.client.panels.charts.SpotComparationMotionChart;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgstrategyC.DetailedForecastWgStrategyC;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class ComparationViewerPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler, ChangeHandler {
@@ -224,9 +225,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			});
 			
 		} else {
-			//TODO el mesagebox siguiente
-			Window.alert("La cantuidad de spots a comparar tiene que ser entre 2 y 5");
-			//TODO redirigir al panel de creacion de comparaciones
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "La cantidad de spots a comparar tiene que ser entre 2 y 5", MessageBox.IconType.INFO);
 		}
 		
 	}
@@ -245,9 +244,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			else if (detailedCompTable != null)
 				detailedCompTable = null;
 		} else {
-			//TODO el mesagebox siguiente
-			Window.alert("La cantuidad de spots a comparar tiene que ser entre 2 y 5");
-			//TODO redirigir al panel de creacion de comparaciones
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "La cantidad de spots a comparar tiene que ser entre 2 y 5", MessageBox.IconType.INFO);
 		}
 		
 	}

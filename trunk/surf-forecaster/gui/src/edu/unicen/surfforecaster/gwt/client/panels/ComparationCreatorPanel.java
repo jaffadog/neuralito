@@ -38,7 +38,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
-
+//TODO show a tooltip with the spot zone country and area in the second listbox
 public class ComparationCreatorPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler {
 	
 	private ListBox spotBox = null;
@@ -266,8 +266,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				selectedSpotsBox.setSelectedIndex(index - 1);
 			}
 		} else {
-			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
-			Window.alert("Debe seleccionar un spot para realizar esta accion");
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
 		}
 	}
 
@@ -282,8 +281,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				selectedSpotsBox.setSelectedIndex(index + 1);
 			}
 		} else {
-			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
-			Window.alert("Debe seleccionar un spot para realizar esta accion");
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
 		}
 	}
 
@@ -296,8 +294,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			selectedSpotsBox.insertItem(item, value, selectedSpotsBox.getItemCount());
 			selectedSpotsBox.setSelectedIndex(selectedSpotsBox.getItemCount() - 1);
 		} else {
-			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
-			Window.alert("Debe seleccionar un spot para realizar esta accion");
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
 		}
 	}
 
@@ -310,8 +307,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			selectedSpotsBox.insertItem(item, value, 0);
 			selectedSpotsBox.setSelectedIndex(0);
 		} else {
-			// TODO msgbox tiene que seleccionar un solo spot para realizar esta accion
-			Window.alert("Debe seleccionar un spot para realizar esta accion");
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
 		}
 	}
 

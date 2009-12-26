@@ -233,6 +233,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("h")
 	String hour_abbr();
 	
+	@DefaultStringValue("Cerrar")
+	String close();
+	
 	/**
 	 * CurrentForecastPanel
 	 */
