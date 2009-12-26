@@ -20,9 +20,6 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 public class MySpotsPanel extends FlexTable{
 
 	FlexTable mySpotsTable = null;
-	//Icon images
-	private static String EDIT_ICON_URL = "images/edit.png";
-	private static String DELETE_ICON_URL = "images/delete.png";
 	
 	public MySpotsPanel() {
 		mySpotsTable = new FlexTable();
@@ -86,7 +83,7 @@ public class MySpotsPanel extends FlexTable{
 		while (it.hasNext()) {
 			final SpotGwtDTO spot = it.next();
 			
-			Image editIcon = new Image(MySpotsPanel.EDIT_ICON_URL);
+			Image editIcon = new Image(GWTUtils.EDIT_ICON_URL);
 			editIcon.setSize("30px", "30px");
 			editIcon.addClickHandler(new ClickHandler() {
 				@Override
@@ -95,7 +92,7 @@ public class MySpotsPanel extends FlexTable{
 				}
 			});
 			
-			Image deleteIcon = new Image(MySpotsPanel.DELETE_ICON_URL);
+			Image deleteIcon = new Image(GWTUtils.DELETE_ICON_URL);
 			deleteIcon.setSize("30px", "30px");
 			deleteIcon.addClickHandler(new ClickHandler() {
 				@Override
