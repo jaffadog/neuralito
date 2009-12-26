@@ -82,11 +82,6 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		if (index < 0 || index >= this.getTabBar().getTabCount())
 			index = 0;
 		
-		//if selected tab equals to newSpotTab (LazyPanel) its visibility should be set to true 
-		if (historyTokens.get(index).equals("newSpotTab")) {
-			((NewSpotPanel)this.getWidget(index)).getNewSpotDataPanel().setVisible(true);
-		}
-		
 		System.out.println("ForecastTabPanel->select tab: " + historyToken);
 		selectTab(index);
 	}

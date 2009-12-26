@@ -37,7 +37,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.Observer;
 import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
-public class NewSpotDataPanel extends FlexTable implements Observer{
+public class NewSpotPanel extends FlexTable implements Observer{
 
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
@@ -62,7 +62,7 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 	private TextBox txtHour2;
 	private TextBox txtMinutes2;
 	
-	public NewSpotDataPanel() {	
+	public NewSpotPanel() {	
 		this.setWidth("100%");
 		
 		final MessagePanel errorPanel = new ErrorMsgPanel();
@@ -99,7 +99,7 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 		this.getCellFormatter().setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		areaBox = new ListBox();
-		areaBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		areaBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		areaBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
 				setCountryListItems(new Integer(areaBox.getValue(areaBox.getSelectedIndex())));
@@ -112,7 +112,7 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 		this.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		countryBox = new ListBox();
-		countryBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		countryBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		countryBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
 				setZoneListItems(new Integer(countryBox.getValue(countryBox.getSelectedIndex())));
@@ -133,12 +133,12 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 		this.getCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		zoneBox = new ListBox();
-		zoneBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		zoneBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		this.setWidget(6, 1, zoneBox);
 		
 		zoneTxt = new TextBox();
 		zoneTxt.setMaxLength(50);
-		zoneTxt.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		zoneTxt.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		zoneTxt.setVisible(false);
 		this.setWidget(7, 1, zoneTxt);
 		
@@ -176,10 +176,10 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 		spotTxt = new TextBox();
 		spotTxt.setMaxLength(50);
 		this.setWidget(8, 1, spotTxt);
-		spotTxt.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		spotTxt.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		
 		timeZoneBox = new ListBox();
-		timeZoneBox.setWidth(NewSpotDataPanel.INPUTS_WIDTH);
+		timeZoneBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		this.setWidget(9, 1, timeZoneBox);
 		
 		Label lblSpotVisibility = new Label(GWTUtils.LOCALE_CONSTANTS.spotVisibility() + ":");
@@ -265,7 +265,7 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 	    txtHour = new TextBox();
 	    txtHour.setName("hourFormElement");
 	    txtHour.setText("06");
-	    txtHour.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtHour.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtHour.setMaxLength(2);
 	    formTable.setWidget(3, 1, txtHour);
 	    Label lblHour = new Label(GWTUtils.LOCALE_CONSTANTS.hour_abbr());
@@ -273,7 +273,7 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 	    txtMinutes = new TextBox();
 	    txtMinutes.setName("minutesFormElement");
 	    txtMinutes.setText("30");
-	    txtMinutes.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtMinutes.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtMinutes.setMaxLength(2);
 	    formTable.setWidget(3, 3, txtMinutes);
 	    Label lblMinutes = new Label(GWTUtils.LOCALE_CONSTANTS.minutes_abbr());
@@ -283,14 +283,14 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 	    txtHour2 = new TextBox();
 	    txtHour2.setName("hour2FormElement");
 	    txtHour2.setText("19");
-	    txtHour2.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtHour2.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtHour2.setMaxLength(2);
 	    formTable.setWidget(3, 6, txtHour2);
 	    Label lblHour2 = new Label(GWTUtils.LOCALE_CONSTANTS.hour_abbr());
 	    formTable.setWidget(3, 7, lblHour2);
 	    txtMinutes2 = new TextBox();
 	    txtMinutes2.setName("minutes2FormElement");
-	    txtMinutes2.setWidth(NewSpotDataPanel.TIME_INPUTS_WIDTH);
+	    txtMinutes2.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtMinutes2.setMaxLength(2);
 	    txtMinutes2.setText("30");
 	    formTable.setWidget(3, 8, txtMinutes2);
@@ -304,9 +304,9 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 	    formTable.setWidget(5, 0, spotId);
 	    formTable.getFlexCellFormatter().setColSpan(5, 0, 10);
 		
-		this.getColumnFormatter().setWidth(0, NewSpotDataPanel.TABLE_COL_0);
-		this.getColumnFormatter().setWidth(1, NewSpotDataPanel.TABLE_COL_1);
-		this.getColumnFormatter().setWidth(2, NewSpotDataPanel.TABLE_COL_2);
+		this.getColumnFormatter().setWidth(0, NewSpotPanel.TABLE_COL_0);
+		this.getColumnFormatter().setWidth(1, NewSpotPanel.TABLE_COL_1);
+		this.getColumnFormatter().setWidth(2, NewSpotPanel.TABLE_COL_2);
 		
 		//Save Button	
 		final HTMLButtonGrayGrad saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.save(), "NewSpotDataPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
