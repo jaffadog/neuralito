@@ -12,7 +12,6 @@ import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.maps.client.overlay.Overlay;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -187,15 +186,13 @@ public class MapPanel extends VerticalPanel {
 					    	map.addOverlay(marker);
 						}
 					} else {
-						//TODO message box informando no haber gridpoints
-						Window.alert(GWTUtils.LOCALE_CONSTANTS.notAvailableGridPoints());
+						new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.notAvailableGridPoints(), MessageBox.IconType.ERROR);
 					}
 				}
 			}
 				
 			public void onFailure(Throwable caught) {
-				//TODO message box informando la falla del servicio
-				Window.alert(GWTUtils.LOCALE_CONSTANTS.getNearbyGridPointsServiceFailed());
+				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.getNearbyGridPointsServiceFailed(), MessageBox.IconType.ERROR);
 			}
 		});
     }

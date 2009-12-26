@@ -9,9 +9,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -20,20 +17,14 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 
-import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
-import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
@@ -238,7 +229,7 @@ public class NewSpotDataPanel extends FlexTable implements Observer{
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) { 
 				String results = event.getResults();
-				Window.alert(event.getResults());
+				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), event.getResults(), MessageBox.IconType.INFO);
 //				Integer responseStatus = new Integer(results.substring(16, 19));
 //				String responseText = results.substring(results.indexOf("<PRE>") + 5, results.indexOf("</PRE>"));
 //				switch (responseStatus) {
