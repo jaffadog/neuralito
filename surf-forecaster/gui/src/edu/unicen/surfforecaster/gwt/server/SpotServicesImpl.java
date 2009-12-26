@@ -121,12 +121,38 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			
 			return result;
 		}
+		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Permissions denied to the current user to perform this action.");
 		return null;
 	}
 	
 	private SpotGwtDTO getSpotGwtDTO(SpotDTO spotDTO) {
 		return new SpotGwtDTO(spotDTO.getId(), spotDTO.getName(), spotDTO.getPoint(), spotDTO.getZone(), 
 				spotDTO.getCountry(), spotDTO.getArea(), spotDTO.getUserId(), spotDTO.isPublik(), spotDTO.getTimeZone().getID());
+	}
+
+	/**
+	 * Retrieve the spots created by the logged in user, without the public spots
+	 */
+	public List<SpotGwtDTO> getSpotsCreatedBy() throws NeuralitoException {
+		logger.log(Level.INFO,"SpotServicesImpl - getSpotsCreatedBy - Trying to retrieve the spots created by the current logged in user...");
+		if (super.hasAccessTo("getSpotCreatedByUser")){
+			List<SpotDTO> spots = new ArrayList<SpotDTO>();
+			List<SpotGwtDTO> spotsGwt = new ArrayList<SpotGwtDTO>();
+			final Integer userId = super.getLoggedUser().getId();
+			// TODO change getSpotForUser call for a specific service that retrieves only the spots created by de logged user
+			//with out public spots
+			spots = spotService.getSpotsForUser(userId);
+			
+			Iterator<SpotDTO> i = spots.iterator();
+			while (i.hasNext()) {
+				SpotDTO spot = i.next();
+				spotsGwt.add(this.getSpotGwtDTO(spot));
+			}
+			logger.log(Level.INFO,"SpotServicesImpl - getSpotsCreatedBy - Retrieved " + spotsGwt.size() + " for the current logged in user.");
+			return spotsGwt;
+		}
+		logger.log(Level.INFO,"SpotServicesImpl - getSpotsCreatedBy - Permissions denied to the current user to perform this action.");
+		return null;
 	}
 
 }
