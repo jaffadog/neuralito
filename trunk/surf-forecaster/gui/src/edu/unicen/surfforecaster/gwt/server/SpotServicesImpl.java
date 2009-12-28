@@ -155,4 +155,18 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return null;
 	}
 
+	public boolean deleteSpot(Integer spotId) throws NeuralitoException {
+		logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Trying to delete spot: " + spotId + "...");
+		if (super.hasAccessTo("deleteSpot")){
+			final Integer userId = super.getLoggedUser().getId();
+			// TODO uncomment deletespot service call
+			boolean result = true; //spotService.deleteSpot(spotId, userId);
+			logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - The result of call delete spot service was: " + result + ".");
+			return result;
+		}
+		logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Permissions denied to the current user to perform this action.");
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

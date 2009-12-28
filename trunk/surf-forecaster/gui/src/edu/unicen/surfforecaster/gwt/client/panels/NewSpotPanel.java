@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -25,10 +26,13 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
+import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
@@ -330,32 +334,32 @@ public class NewSpotPanel extends FlexTable implements Observer{
 				int countryId = countryBox.getItemCount() == 0 ? 0 : new Integer(countryBox.getValue(countryBox.getSelectedIndex()));
 				messages.addAll(validateForm());
 				if (messages.isEmpty()){
-//					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
-//					
-//					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
-//							mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
-//							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
-//							timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
-//						public void onSuccess(Integer result){
-//							//clearFields();		
-//							successPanel.setVisible(true);
-//							
-//			            }
-//			            public void onFailure(Throwable caught){
-//			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
-//									Cookies.getCookie("surfForecaster-Username") != null) {
-//								GWTUtils.showSessionExpiredLoginBox();
-//							} else {
-//								messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
-//								errorPanel.setMessages(messages);
-//								errorPanel.setVisible(true);
-//							}
-//			            }
-//						});
-					if (!upload.getFilename().trim().equals("")) {
-						spotId.setValue("111");
-						form.submit();
-					}
+					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
+					
+					SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
+							mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
+							zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
+							timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
+						public void onSuccess(Integer result){
+							if (!upload.getFilename().trim().equals("")) {
+								spotId.setValue(result.toString());
+								form.submit();
+							}
+							//clearFields();
+							successPanel.setVisible(true);
+							
+			            }
+			            public void onFailure(Throwable caught){
+			            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+									Cookies.getCookie("surfForecaster-Username") != null) {
+								GWTUtils.showSessionExpiredLoginBox();
+							} else {
+								messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+								errorPanel.setMessages(messages);
+								errorPanel.setVisible(true);
+							}
+			            }
+						});
 				}
 				else{
 					errorPanel.setMessages(messages);
@@ -383,7 +387,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	 * Use this constructor to display the spot data for edit purpose
 	 * @param idSpot Integer
 	 */
-	public NewSpotPanel(Integer idSpot) {
+	public NewSpotPanel(SpotGwtDTO spot) {
 		this();
 	}
 	

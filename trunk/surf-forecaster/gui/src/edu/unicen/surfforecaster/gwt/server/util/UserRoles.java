@@ -43,6 +43,8 @@ public class UserRoles {
 		registeredUserActions.add("addSpot");
 		registeredUserActions.add("addComparation");
 		registeredUserActions.add("getSpotCreatedByUser");
+		registeredUserActions.add("deleteSpot");
+		registeredUserActions.add("editSpot");
 	}
 	
 	private void setAdministratorUserActions() {

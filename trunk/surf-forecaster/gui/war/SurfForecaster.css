@@ -6,39 +6,6 @@
 
 
 /*****************************************************************************/
-/*********************** Button ***************************************/
-/*****************************************************************************/
-.gwt-HTML-gray-grad-btn-left {
-	background:url("./images/gray-grad-button-up-26px-left.gif");
-	float:left;
-	height: 26px;
-	width: 9px;
-	cursor: pointer;
-}
-
-.gwt-HTML-gray-grad-btn-center{
-	background:url("./images/gray-grad-button-up-26px-center.gif") repeat-x;
-	font-family: 'Trebuchet MS', Helvetica, sans-serif;
-	font-size:10pt;
-	font-weight: bold;
-	text-align:center;
-    color: #FFF;
-    height: 22px;
-	*height: 26px; /*IE ALL VERSIONS HACK*/
-	float:left;
-	padding: 4px 0 0;
-	cursor: pointer;
-}
-
-.gwt-HTML-gray-grad-btn-right {
-	background:url("./images/gray-grad-button-up-26px-right.gif");
-	float:left;
-	height: 26px;
-	width: 9px;
-	cursor: pointer;
-}
-
-/*****************************************************************************/
 /*********************** Common styles ***************************************/
 /*****************************************************************************/
 
@@ -104,11 +71,11 @@
 }
 
 .gwt-Label-CurrentForecast-Title{
-	background:url("./images/gray-grad-currentforecast-title-26px.png") repeat-x;
-	font-weight:bold;
+    background:url("./images/gray-grad-currentforecast-title-26px.png") repeat-x;
+    font-weight:bold;
     color: #FFF;
     height: 26px;
-	padding-top: 5px;
+    padding-top: 5px;
 }
 
 .gwt-VerticalPanel-ForecastItem{
@@ -133,6 +100,39 @@
 .gwt-errorsPanel{
     background-color:#F6CECE;
     border: solid 2px #FF0000;
+}
+
+/*****************************************************************************/
+/*********************** HTMLButtonGrayGrad ***************************************/
+/*****************************************************************************/
+.gwt-HTML-gray-grad-btn-left {
+    background:url("./images/gray-grad-button-up-26px-left.gif");
+    float:left;
+    height: 26px;
+    width: 9px;
+    cursor: pointer;
+}
+
+.gwt-HTML-gray-grad-btn-center{
+    background:url("./images/gray-grad-button-up-26px-center.gif") repeat-x;
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    font-size:10pt;
+    font-weight: bold;
+    text-align:center;
+    color: #FFF;
+    height: 22px;
+    *height: 26px; /*IE ALL VERSIONS HACK*/
+    float:left;
+    padding: 4px 0 0;
+    cursor: pointer;
+}
+
+.gwt-HTML-gray-grad-btn-right {
+    background:url("./images/gray-grad-button-up-26px-right.gif");
+    float:left;
+    height: 26px;
+    width: 9px;
+    cursor: pointer;
 }
 
 /*****************************************************************************/
@@ -181,17 +181,31 @@ div#closeLoginBoxDiv a{
 /*********************** MiniForecastPopup ***************************************/
 /****************************************************************************/
 .gwt-Label-MiniForecast-Title{
-	background:url("./images/gray-grad-currentforecast-title-26px.png") repeat-x;
-	font-weight:bold;
+    background:url("./images/gray-grad-currentforecast-title-26px.png") repeat-x;
+    font-weight:bold;
     color: #FFF;
     height: 13px;
-	padding-top: 2px;
+    padding-top: 2px;
 }
 
 .gwt-Label-MiniForecastItem-Value{
-	font-weight:bold;
-	font-size:16pt;
-	color:#3366CC;
+    font-weight:bold;
+    font-size:16pt;
+    color:#3366CC;
+}
+
+/*****************************************************************************/
+/*********************** MySpotsPanel ***************************************/
+/*****************************************************************************/
+.gwt-Image-ActionIcon{
+    cursor:pointer;
+}
+
+.gwt-FlexTable-MySpotsTable-Titles{
+    background:url("./images/gray-grad-currentforecast-title-26px.png") repeat-x;
+    font-weight:bold;
+    color: #FFF;
+    height: 26px;
 }
 
 /*****************************************************************************/

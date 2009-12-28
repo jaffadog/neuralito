@@ -40,4 +40,6 @@ public interface SpotServices extends RemoteService {
 	List<SpotGwtDTO> getSpots(Integer zone) throws NeuralitoException;
 	
 	List<SpotGwtDTO> getSpotsCreatedBy() throws NeuralitoException;
+	
+	boolean deleteSpot(Integer spotId) throws NeuralitoException;
 }

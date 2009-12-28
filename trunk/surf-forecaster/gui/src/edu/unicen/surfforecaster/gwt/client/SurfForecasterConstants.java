@@ -74,6 +74,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Los minutos ingresados son inv\u00E1lidos, debe ingresar un valor entre 0 y 59.")
 	String INVALID_MINUTES_VALUE();
 	
+	@DefaultStringValue("Ocurri\u00F3 un error al intentar eliminar la ola seleccionada, por favor intente nuevamente en unos minutos.")
+	String ERROR_DELETING_SPOT();
+	
 	/**
 	 * Commons translates for more than one panel
 	 */
@@ -316,6 +319,9 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Borrar")
 	String delete();
+	
+	@DefaultStringValue("Todav\u00EDa no a creado ninguna ola.")
+	String noneSpotsCreated();
 	
 	/**
 	 * NewSpotPanel
