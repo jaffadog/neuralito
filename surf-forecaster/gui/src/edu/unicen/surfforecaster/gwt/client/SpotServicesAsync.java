@@ -21,4 +21,6 @@ public interface SpotServicesAsync {
 	void getSpots(Integer zone, AsyncCallback<List<SpotGwtDTO>> callback);
 	
 	void getSpotsCreatedBy(AsyncCallback<List<SpotGwtDTO>> callback);
+	
+	void deleteSpot(Integer spotId, AsyncCallback<Boolean> callback);
 }
