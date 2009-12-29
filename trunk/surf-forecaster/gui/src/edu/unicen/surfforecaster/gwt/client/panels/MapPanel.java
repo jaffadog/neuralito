@@ -222,5 +222,33 @@ public class MapPanel extends VerticalPanel {
 	public String getBuoyLat() {
 		return this.txtBuoyLat.getText();
 	}
+	
+	public void setSpotLocation(PointDTO pointDTO) {
+        LatLng point = LatLng.newInstance(new Double(pointDTO.getLatitude()), new Double(pointDTO.getLongitude()));
+		map.clearOverlays();
+    	MarkerOptions options = MarkerOptions.newInstance();
+    	options.setTitle(GWTUtils.LOCALE_CONSTANTS.spot());
+        Marker marker = new Marker(point, options);
+        marker.getIcon().setImageURL(GWTUtils.IMAGE_SPOT);
+    	map.addOverlay(marker);
+        InfoWindow info = map.getInfoWindow();
+        info.setMaximizeEnabled(false);
+        InfoWindowContent content = new InfoWindowContent(getInfoWindowContent(GWTUtils.LOCALE_CONSTANTS.spotLocation(), point));
+
+        info.open(marker, content);
+        txtSpotLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude())));
+        txtSpotLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude())));
+        
+        showWW3Buoys(map, point);
+        //TODO nose si aca o en showww3buoys pero cuando el spotDTO tenga el punto de ww3 incorporado tengo que marcar la boya selecionada (tal vez solo completar 
+        //los campos de texto que llevan esta info, o si el icono de la boya seleccionada va a ser distinto del de las no seleccionadas entonces tendre que hacer
+        //algo visual)
+	}
+
+	public void setGridPointLocation(PointDTO pointDTO) {
+		LatLng point = LatLng.newInstance(new Double(pointDTO.getLatitude()), new Double(pointDTO.getLongitude()));
+        txtBuoyLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLongitude())));
+        txtBuoyLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLatitude())));
+	}
 
 }
