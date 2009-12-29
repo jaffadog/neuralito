@@ -116,7 +116,7 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 					}
 					{
 						//As button id added at the end the current time in milliseconds to avoid duplicated ids along all of this panels creation in the app.
-						forecastButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LocalizationPanel-Forecast" + (new Date()).getTime() , 150);
+						forecastButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LocalizationPanel-Forecast" + (new Date()).getTime() , HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_150PX);
 						//forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
 						//forecastButton.setEnabled(false);
 						forecastButton.addClickHandler(new ClickHandler() {

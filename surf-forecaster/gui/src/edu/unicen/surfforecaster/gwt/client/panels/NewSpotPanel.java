@@ -49,6 +49,8 @@ import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
  */
 public class NewSpotPanel extends FlexTable implements Observer{
 
+	private SpotGwtDTO spot = null;
+	
 	private ListBox areaBox = null;
 	private ListBox countryBox = null;
 	private ListBox timeZoneBox = null;
@@ -59,20 +61,24 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private MapPanel mapPanel;
 	private RadioButton radioPublicButton;
 	private TextBox spotTxt;
+	private FileUpload upload;
+	private TextBox txtHour;
+	private TextBox txtMinutes;
+	private TextBox txtHour2;
+	private TextBox txtMinutes2;
+	private RadioButton radioPrivateButton;
 	
+	//static fields
+	private static String PANEL_MODE = "create";
 	private static final String INPUTS_WIDTH = "300px";
 	private static final String TIME_INPUTS_WIDTH = "25px";
 	private static final String TABLE_COL_0 = "133px";
 	private static final String TABLE_COL_1 = "310px";
 	private static final String TABLE_COL_2 = "522px";
 	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL() + "FileUploadServices";
-	private FileUpload upload;
-	private TextBox txtHour;
-	private TextBox txtMinutes;
-	private TextBox txtHour2;
-	private TextBox txtMinutes2;
 	
-	public NewSpotPanel() {	
+	public NewSpotPanel() {
+		NewSpotPanel.PANEL_MODE = "create";
 		this.setWidth("100%");
 		
 		final MessagePanel errorPanel = new ErrorMsgPanel();
@@ -200,7 +206,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		radioPanel.setSpacing(5);
 		this.setWidget(10, 1, radioPanel);
 		
-		RadioButton radioPrivateButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.private_());
+		radioPrivateButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.private_());
 		radioPrivateButton.setValue(true);
 		radioPanel.add(radioPrivateButton);
 		
@@ -389,6 +395,59 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	 */
 	public NewSpotPanel(SpotGwtDTO spot) {
 		this();
+		this.spot = spot;
+		NewSpotPanel.PANEL_MODE = "edit";
+		//set spot name
+		spotTxt.setText(spot.getName());
+		//set timezone
+		for (int i = 0; i < timeZoneBox.getItemCount(); i++) {
+			if (timeZoneBox.getValue(i) == spot.getTimeZone())
+				timeZoneBox.setSelectedIndex(i);
+				break;
+		}
+		//set public or private
+		if (spot.isPublik()) {
+			radioPublicButton.setValue(true);
+			radioPrivateButton.setValue(false);
+		} else {
+			radioPrivateButton.setValue(true);
+			radioPublicButton.setValue(false);
+		}
+		
+		//set spot and gridpoint location
+		mapPanel.setSpotLocation(spot.getPoint());
+		//TODO poner el point de la grilla
+		mapPanel.setGridPointLocation(spot.getPoint());
+		
+		if (LocalizationUtils.getInstance().getCallsQueue().allFinished())
+			update(LocalizationUtils.getInstance(), null);
+	}
+	
+	/**
+	 * This method is called only in edit mode when update observer method is called to update the localization listboxes items after zones list is loaded
+	 */
+	private void setLocalizationListBoxesValues() {
+		//set area value
+		for (int i = 0; i < areaBox.getItemCount(); i++) {
+			if (new Integer(areaBox.getValue(i)).equals(spot.getArea().getId())) {
+				areaBox.setSelectedIndex(i);
+				break;
+			}
+		}
+		//set country value
+		for (int i = 0; i < countryBox.getItemCount(); i++) {
+			if (new Integer(countryBox.getValue(i)).equals(spot.getCountry().getId())){
+				countryBox.setSelectedIndex(i);
+				break;
+			}
+		}
+		//set zone value
+		for (int i = 0; i < zoneBox.getItemCount(); i++) {
+			if (new Integer(zoneBox.getValue(i)).equals(spot.getZone().getId())) {
+				zoneBox.setSelectedIndex(i);
+				break;
+			}
+		}
 	}
 	
 	private Vector<String> validateForm() {
@@ -462,8 +521,12 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	public void update(Observable o, Object arg) {
 		if (o == LocalizationUtils.getInstance()) {
 			this.setAreaListItems();
-			if (this.areaBox.getItemCount() > 0)
-				this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
+			if (this.areaBox.getItemCount() > 0) {
+				if (NewSpotPanel.PANEL_MODE.equals("edit"))
+					this.setCountryListItems(spot.getArea().getId());
+				else
+					this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
+			}
 		}
 	}
 	
@@ -483,8 +546,12 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			CountryDTO country = i.next();
 			this.countryBox.addItem(country.getNames().get(GWTUtils.getCurrentLocaleCode()), country.getId().toString());
 		}
-		if (this.countryBox.getItemCount() > 0)
-			this.setZoneListItems(new Integer(this.countryBox.getValue(this.countryBox.getSelectedIndex())));
+		if (this.countryBox.getItemCount() > 0) {
+			if (NewSpotPanel.PANEL_MODE.equals("edit"))
+				this.setZoneListItems(spot.getCountry().getId());
+			else
+				this.setZoneListItems(new Integer(this.countryBox.getValue(this.countryBox.getSelectedIndex())));
+		}
 	}
 	
 	private void setZoneListItems(Integer countryId){
@@ -496,6 +563,10 @@ public class NewSpotPanel extends FlexTable implements Observer{
 					ZoneDTO zone = i.next();
 					zoneBox.addItem(zone.getName(), zone.getId().toString());
 				}
+				
+				//set Localization boxes values in edit mode
+				if (NewSpotPanel.PANEL_MODE.equals("edit"))
+					setLocalizationListBoxesValues();
 			}
 				
 			public void onFailure(Throwable caught) {

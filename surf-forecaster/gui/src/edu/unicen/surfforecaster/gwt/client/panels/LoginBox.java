@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -25,6 +24,7 @@ import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class LoginBox extends DialogBox{
 	
@@ -99,11 +99,11 @@ public class LoginBox extends DialogBox{
 		flexTable.setWidget(2, 0, horizontalPanel_1);
 		horizontalPanel_1.setSpacing(5);
 		
-		final PushButton ingresarPushButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.signIn(), GWTUtils.LOCALE_CONSTANTS.signIn());
-		horizontalPanel_1.add(ingresarPushButton);
-		horizontalPanel_1.setCellHorizontalAlignment(ingresarPushButton, HasHorizontalAlignment.ALIGN_CENTER);
-		ingresarPushButton.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		ingresarPushButton.addClickHandler(new ClickHandler() {
+		final HTMLButtonGrayGrad signInBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.signIn(), "LoginBox-signIn", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
+		horizontalPanel_1.add(signInBtn);
+		horizontalPanel_1.setCellHorizontalAlignment(signInBtn, HasHorizontalAlignment.ALIGN_CENTER);
+		//signInBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
+		signInBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				label_loginMessage.setVisible(false);
 				showLoadingPanel();

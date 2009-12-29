@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -48,8 +49,12 @@ public class MySpotsPanel extends FlexTable{
 		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		
+		DisclosurePanel mySpotsTableContainer = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.mySpots(), true);
+		mySpotsTableContainer.setWidth("100%");
+		mySpotsTableContainer.setAnimationEnabled(true);
 		mySpotsTable = new FlexTable();
-		this.setWidget(3, 0, mySpotsTable);
+		mySpotsTableContainer.setContent(mySpotsTable);
+		this.setWidget(3, 0, mySpotsTableContainer);
 		//First row style
 		mySpotsTable.getRowFormatter().addStyleName(0, "gwt-FlexTable-MySpotsTable-Titles");
 		
@@ -164,7 +169,8 @@ public class MySpotsPanel extends FlexTable{
 	private void editSpot(SpotGwtDTO spot) {
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
-		this.setWidget(4, 0, new NewSpotPanel(spot));
+		NewSpotPanel newSpotPanel = new NewSpotPanel(spot); 
+		this.setWidget(4, 0, newSpotPanel);
 	}
 	
 	private void deleteSpot(Integer spotId, final int rowIndex) {
