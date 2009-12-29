@@ -84,7 +84,7 @@ public class WW3Forecaster extends Forecaster {
 	 */
 	@Override
 	public Collection<Forecast> getLatestForecasts() {
-		return model.getLatestForecast(gridPoint);
+		return model.getForecasts(gridPoint);
 	}
 
 	/**

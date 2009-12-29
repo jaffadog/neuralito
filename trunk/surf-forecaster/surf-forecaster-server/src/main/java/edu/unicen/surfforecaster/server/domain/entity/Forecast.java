@@ -10,11 +10,11 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,7 +55,7 @@ public class Forecast {
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@MapKey(name = "parameterName")
-	private Map<String, ForecastParameter> parameters;
+	private Map<String, Value> parameters;
 
 	/**
 	 * The location this forecast belongs.
@@ -79,7 +79,7 @@ public class Forecast {
 	 * @param ww3Forecaster
 	 */
 	public Forecast(final Date baseDate, final Integer forecastTime,
-			final Map<String, ForecastParameter> parameters, final Point point2) {
+			final Point point2, final Map<String, Value> parameters) {
 		Validate.notNull(baseDate);
 		Validate.notNull(parameters);
 		issuedDate = baseDate;
@@ -98,7 +98,7 @@ public class Forecast {
 	/**
 	 * @return the attributes this forecast has.
 	 */
-	public ForecastParameter getParameter(final String parameterName) {
+	public Value getParameter(final String parameterName) {
 		return parameters.get(parameterName);
 	}
 
@@ -126,10 +126,10 @@ public class Forecast {
 	 * @return
 	 */
 	public ForecastDTO getDTO(TimeZone timeZone) {
-		final Collection<ForecastParameter> values = parameters.values();
+		final Collection<Value> values = parameters.values();
 		final Map<String, ForecastAttributeDTO> map = new HashMap<String, ForecastAttributeDTO>();
 		for (final Iterator iterator = values.iterator(); iterator.hasNext();) {
-			final ForecastParameter forecastParameter = (ForecastParameter) iterator
+			final Value forecastParameter = (Value) iterator
 					.next();
 			map.put(forecastParameter.getParameterName(), forecastParameter
 					.getDTO());
@@ -150,8 +150,12 @@ public class Forecast {
 		long hoursInMillis = this.forecastTime * 60 * 60 * 1000;
 		return new Date(this.issuedDate.getTime()+ hoursInMillis);
 	}
-	public void addParameter(String name, ForecastParameter parameter){
+	public void addParameter(String name, Value parameter){
 		this.parameters.put(name, parameter);
+	}
+
+	public Set<String> getParameters() {
+		return this.parameters.keySet();
 	}
 
 }

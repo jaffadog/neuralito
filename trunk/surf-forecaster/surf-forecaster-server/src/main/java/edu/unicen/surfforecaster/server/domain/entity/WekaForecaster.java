@@ -157,7 +157,7 @@ public class WekaForecaster extends Forecaster {
 				double improvedWaveHeight = classifier
 						.classifyInstance(forecastInstance);
 				forecast.addParameter("improvedWaveHeight",
-						new ForecastParameter("improvedWaveHeight",
+						new Value("improvedWaveHeight",
 								improvedWaveHeight, Unit.Meters));
 				improvedForecasts.add(forecast);
 			}

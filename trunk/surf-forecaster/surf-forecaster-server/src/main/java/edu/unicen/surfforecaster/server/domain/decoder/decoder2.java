@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
@@ -21,8 +22,10 @@ import ucar.nc2.dt.GridCoordSystem;
 import ucar.nc2.dt.GridDatatype;
 import ucar.nc2.dt.grid.GridDataset;
 import ucar.unidata.geoloc.LatLonPoint;
+import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.ForecastPlain;
+import edu.unicen.surfforecaster.server.domain.entity.Value;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
@@ -33,8 +36,9 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
  * @author esteban
  * 
  */
-public class GribDecoderNetcdf implements GribDecoder {
+public class decoder2 implements GribDecoder {
 	private Logger log = Logger.getLogger(GribDecoderNetcdf.class);
+
 	/**
 	 * @see edu.unicen.surfforecaster.server.domain.entity.forecasters.WW3DataManager.decoder.GribDecoder#getValidPoints(java.io.File)
 	 */
@@ -73,20 +77,22 @@ public class GribDecoderNetcdf implements GribDecoder {
 	@Override
 	public Collection<ForecastPlain> getForecastForTime(final File file,
 			final int time) throws IOException {
-		log.info("Decoding forecasts from file: "+file.getAbsolutePath());
+		log.info("Decoding forecasts from file: " + file.getAbsolutePath());
 		final long init = System.currentTimeMillis();
 		final GridDataset gridDataSet = GridDataset
 				.open(file.getAbsolutePath());
-		DateFormat formatter  = SimpleDateFormat.getInstance();
+		DateFormat formatter = SimpleDateFormat.getInstance();
 		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-		log.info("Forecasts for: " + formatter.format(gridDataSet.getStartDate())+ "+ "+time+"hs." );
+		log.info("Forecasts for: "
+				+ formatter.format(gridDataSet.getStartDate()) + "+ " + time
+				+ "hs.");
 		final List<GridDatatype> grids = gridDataSet.getGrids();
-//		for (Iterator iterator = grids.iterator(); iterator.hasNext();) {
-//			GridDatatype gridDatatype = (GridDatatype) iterator.next();
-//			System.out.println(gridDatatype.getName());
-//		}
-//		log.info("Number of parameters: " +  grids.size());
-		
+		// for (Iterator iterator = grids.iterator(); iterator.hasNext();) {
+		// GridDatatype gridDatatype = (GridDatatype) iterator.next();
+		// System.out.println(gridDatatype.getName());
+		// }
+		// log.info("Number of parameters: " + grids.size());
+
 		GridCoordSystem pwdGcs = null;
 		final HashMap<String, float[][]> arrays = new HashMap<String, float[][]>();
 		final Collection<ForecastPlain> forecasts = new ArrayList<ForecastPlain>();
@@ -104,61 +110,26 @@ public class GribDecoderNetcdf implements GribDecoder {
 		}
 		for (int i = 0; i < imax; i++) {
 			for (int j = 0; j < jmax; j++) {
+				Map<WW3Parameter, Value> parameter = new HashMap<WW3Parameter, Value>();
 				final LatLonPoint latLon = pwdGcs.getLatLon(j, i);
-
-				final Float windWaveHeight = arrays
-						.get(WW3Parameter.WIND_WAVE_HEIGHT.getValue())[i][j];
-				final Float windWavePeriod = arrays
-						.get(WW3Parameter.WIND_WAVE_PERIOD.getValue())[i][j];
-				final Float windWaveDirection = arrays
-						.get(WW3Parameter.WIND_WAVE_DIRECTION.getValue())[i][j];
-				final Float swellWaveHeight = arrays
-						.get(WW3Parameter.SWELL_WAVE_HEIGHT.getValue())[i][j];
-				final Float swellWavePeriod = arrays
-						.get(WW3Parameter.SWELL_WAVE_PERIOD.getValue())[i][j];
-				final Float swellWaveDirection = arrays
-						.get(WW3Parameter.SWELL_DIRECTION.getValue())[i][j];
-				final Float combinedWaveHeight = arrays
-						.get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT
-								.getValue())[i][j];
-				final Float peakWavePeriod = arrays
-						.get(WW3Parameter.PRIMARY_WAVE_PERIOD.getValue())[i][j];
-				final Float peakWaveDirection = arrays
-						.get(WW3Parameter.PRIMARY_WAVE_DIRECTION.getValue())[i][j];
-				final Float windSpeed = arrays.get(WW3Parameter.WIND_SPEED
-						.getValue())[i][j];
-				final Float windDirection = arrays
-						.get(WW3Parameter.WIND_DIRECTION.getValue())[i][j];
-				final Float windU = arrays.get(WW3Parameter.WINDUComponent
-						.getValue())[i][j];
-				final Float windV = arrays.get(WW3Parameter.WINDVComponent
-						.getValue())[i][j];
-				if (!(windWaveHeight.isNaN() && windWavePeriod.isNaN()
-						&& windWaveDirection.isNaN() && swellWaveHeight.isNaN()
-						&& swellWavePeriod.isNaN()
-						&& swellWaveDirection.isNaN()
-						&& combinedWaveHeight.isNaN() && peakWavePeriod.isNaN() && peakWaveDirection
-						.isNaN() /*
-								 * && windSpeed.isNaN() && windDirection.isNaN()
-								 * && windU.isNaN() && windV .isNaN()
-								 */)) {
-					final ForecastPlain forecast = new ForecastPlain(gridDataSet.getStartDate(),
-							time * 3, new Float(latLon.getLatitude()),
-							new Float(latLon.getLongitude()), windWaveHeight,
-							windWavePeriod, windWaveDirection, swellWaveHeight,
-							swellWavePeriod, swellWaveDirection,
-							combinedWaveHeight, peakWavePeriod,
-							peakWaveDirection, windSpeed, windDirection, windU,
-							windV);
+				WW3Parameter[] values = WW3Parameter.values();
+				for (int k = 0; k < values.length; k++) {
+					WW3Parameter ww3Parameter = values[k];
+					parameter.put(ww3Parameter, new Value(
+							ww3Parameter.getValue(), arrays.get(ww3Parameter
+									.getValue())[i][j], Unit.Meters));
+				}
+				final ForecastPlain forecast = new ForecastPlain(
+							gridDataSet.getStartDate(), time * 3, new Float(
+									latLon.getLatitude()), new Float(latLon
+									.getLongitude()), parameter);
 					forecasts.add(forecast);
 				}
 			}
-		}
 
-		final long end = System.currentTimeMillis();
-		log.info("Decoded and created: " + forecasts.size()
-				+ " forecasts.");
-		log.info("Elapsed Time: " + (end - init) / 1000);
+		long end = System.currentTimeMillis();
+		this.log.info("Decoded and created: " + forecasts.size() + " forecasts.");
+		this.log.info("Elapsed Time: " + (end - init) / 1000);
 		return forecasts;
 	}
 
