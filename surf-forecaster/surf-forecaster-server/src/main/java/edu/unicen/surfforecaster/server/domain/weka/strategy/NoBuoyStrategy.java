@@ -66,7 +66,7 @@ public class NoBuoyStrategy implements DataSetGenerationStrategy {
 			WaveWatchSystem model, Map<String, Serializable> options) {
 		Map<Forecast, Instance> generatedInstances = new HashMap<Forecast, Instance>();
 		Point gridPoint = getGridPoint(options);
-		List<Forecast> latestForecasts = model.getLatestForecast(gridPoint);
+		List<Forecast> latestForecasts = model.getForecasts(gridPoint);
 		for (Forecast forecast : latestForecasts) {
 			Map<String, Double> instanceData = generateInstanceData(forecast,
 					null);

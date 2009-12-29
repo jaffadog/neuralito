@@ -4,6 +4,10 @@
 package edu.unicen.surfforecaster.server.domain;
 
 import java.util.Date;
+import java.util.Map;
+
+import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.server.domain.entity.Value;
 
 /**
  * This class is used to hold the grib decoded data.As the grib decoder decodes
@@ -20,19 +24,20 @@ public class ForecastPlain {
 	private final Float latitude;
 	private final Float longitude;
 	// Wave Parameters
-	private final Float windWaveHeight;
-	private final Float windWavePeriod;
-	private final Float windWaveDirection;
-	private final Float swellWaveHeight;
-	private final Float swellWavePeriod;
-	private final Float swellWaveDirection;
-	private final Float combinedWaveHeight;
-	private final Float peakWavePeriod;
-	private final Float peakWaveDirection;
-	private final Float windSpeed;
-	private final Float windDirection;
-	private final Float windU;
-	private final Float windV;
+	// private final Float windWaveHeight;
+	// private final Float windWavePeriod;
+	// private final Float windWaveDirection;
+	// private final Float swellWaveHeight;
+	// private final Float swellWavePeriod;
+	// private final Float swellWaveDirection;
+	// private final Float combinedWaveHeight;
+	// private final Float peakWavePeriod;
+	// private final Float peakWaveDirection;
+	// private final Float windSpeed;
+	// private final Float windDirection;
+	// private final Float windU;
+	// private final Float windV;
+	private Map<WW3Parameter, Value> parameter;
 
 	/**
 	 * @param issuedDate
@@ -66,19 +71,28 @@ public class ForecastPlain {
 		this.validTime = validTime;
 		this.latitude = latitude;
 		this.longitude = longitude;
-		this.windWaveHeight = windWaveHeight;
-		this.windWavePeriod = windWavePeriod;
-		this.windWaveDirection = windWaveDirection;
-		this.swellWaveHeight = swellWaveHeight;
-		this.swellWavePeriod = swellWavePeriod;
-		this.swellWaveDirection = swellWaveDirection;
-		this.combinedWaveHeight = combinedWaveHeight;
-		this.peakWavePeriod = peakWavePeriod;
-		this.peakWaveDirection = peakWaveDirection;
-		this.windSpeed = windSpeed;
-		this.windDirection = windDirection;
-		this.windU = windU;
-		this.windV = windV;
+		// this.windWaveHeight = windWaveHeight;
+		// this.windWavePeriod = windWavePeriod;
+		// this.windWaveDirection = windWaveDirection;
+		// this.swellWaveHeight = swellWaveHeight;
+		// this.swellWavePeriod = swellWavePeriod;
+		// this.swellWaveDirection = swellWaveDirection;
+		// this.combinedWaveHeight = combinedWaveHeight;
+		// this.peakWavePeriod = peakWavePeriod;
+		// this.peakWaveDirection = peakWaveDirection;
+		// this.windSpeed = windSpeed;
+		// this.windDirection = windDirection;
+		// this.windU = windU;
+		// this.windV = windV;
+	}
+
+	public ForecastPlain(Date startDate, int i, Float float1, Float float2,
+			Map<WW3Parameter, Value> parameter) {
+		this.issuedDate = startDate;
+		this.validTime = i;
+		this.latitude = float1;
+		this.longitude = float2;
+		this.parameter = parameter;
 	}
 
 	/**
@@ -109,95 +123,95 @@ public class ForecastPlain {
 		return longitude;
 	}
 
-	/**
-	 * @return the windWaveHeight
-	 */
-	public Float getWindWaveHeight() {
-		return windWaveHeight;
-	}
-
-	/**
-	 * @return the windWavePeriod
-	 */
-	public Float getWindWavePeriod() {
-		return windWavePeriod;
-	}
-
-	/**
-	 * @return the windWaveDirection
-	 */
-	public Float getWindWaveDirection() {
-		return windWaveDirection;
-	}
-
-	/**
-	 * @return the swellWaveHeight
-	 */
-	public Float getSwellWaveHeight() {
-		return swellWaveHeight;
-	}
-
-	/**
-	 * @return the swellWavePeriod
-	 */
-	public Float getSwellWavePeriod() {
-		return swellWavePeriod;
-	}
-
-	/**
-	 * @return the swellWaveDirection
-	 */
-	public Float getSwellWaveDirection() {
-		return swellWaveDirection;
-	}
-
-	/**
-	 * @return the combinedWaveHeight
-	 */
-	public Float getCombinedWaveHeight() {
-		return combinedWaveHeight;
-	}
-
-	/**
-	 * @return the peakWavePeriod
-	 */
-	public Float getPeakWavePeriod() {
-		return peakWavePeriod;
-	}
-
-	/**
-	 * @return the peakWaveDirection
-	 */
-	public Float getPeakWaveDirection() {
-		return peakWaveDirection;
-	}
-
-	/**
-	 * @return the windSpeed
-	 */
-	public Float getWindSpeed() {
-		return windSpeed;
-	}
-
-	/**
-	 * @return the windDirection
-	 */
-	public Float getWindDirection() {
-		return windDirection;
-	}
-
-	/**
-	 * @return the windU
-	 */
-	public Float getWindU() {
-		return windU;
-	}
-
-	/**
-	 * @return the windV
-	 */
-	public Float getWindV() {
-		return windV;
-	}
+	// /**
+	// * @return the windWaveHeight
+	// */
+	// public Float getWindWaveHeight() {
+	// return windWaveHeight;
+	// }
+	//
+	// /**
+	// * @return the windWavePeriod
+	// */
+	// public Float getWindWavePeriod() {
+	// return windWavePeriod;
+	// }
+	//
+	// /**
+	// * @return the windWaveDirection
+	// */
+	// public Float getWindWaveDirection() {
+	// return windWaveDirection;
+	// }
+	//
+	// /**
+	// * @return the swellWaveHeight
+	// */
+	// public Float getSwellWaveHeight() {
+	// return swellWaveHeight;
+	// }
+	//
+	// /**
+	// * @return the swellWavePeriod
+	// */
+	// public Float getSwellWavePeriod() {
+	// return swellWavePeriod;
+	// }
+	//
+	// /**
+	// * @return the swellWaveDirection
+	// */
+	// public Float getSwellWaveDirection() {
+	// return swellWaveDirection;
+	// }
+	//
+	// /**
+	// * @return the combinedWaveHeight
+	// */
+	// public Float getCombinedWaveHeight() {
+	// return combinedWaveHeight;
+	// }
+	//
+	// /**
+	// * @return the peakWavePeriod
+	// */
+	// public Float getPeakWavePeriod() {
+	// return peakWavePeriod;
+	// }
+	//
+	// /**
+	// * @return the peakWaveDirection
+	// */
+	// public Float getPeakWaveDirection() {
+	// return peakWaveDirection;
+	// }
+	//
+	// /**
+	// * @return the windSpeed
+	// */
+	// public Float getWindSpeed() {
+	// return windSpeed;
+	// }
+	//
+	// /**
+	// * @return the windDirection
+	// */
+	// public Float getWindDirection() {
+	// return windDirection;
+	// }
+	//
+	// /**
+	// * @return the windU
+	// */
+	// public Float getWindU() {
+	// return windU;
+	// }
+	//
+	// /**
+	// * @return the windV
+	// */
+	// public Float getWindV() {
+	// return windV;
+	// }
 
 }

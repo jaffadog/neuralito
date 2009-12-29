@@ -4,8 +4,6 @@
 package edu.unicen.surfforecaster.server.domain.download;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
@@ -71,6 +69,7 @@ public class DownloaderJob extends QuartzJobBean {
 		// System.out.println("THE DOWNLOADER HAS BEEN EXECUTED AND FAILED : ");
 		// System.out.println(context.getMergedJobDataMap().get("esteban"));
 		// System.out.println("refire: " + context.getRefireCount());
+
 		FileTransferClient ftp = null;
 		try {
 			ftp = new FileTransferClient();

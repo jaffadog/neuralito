@@ -12,7 +12,9 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf;
+import edu.unicen.surfforecaster.server.domain.decoder.decoder2;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
@@ -45,11 +47,11 @@ public class GribDecoderNetcdfTest {
 	@Test
 	
 	public void decodeAll() {
-		final GribDecoderNetcdf dec = new GribDecoderNetcdf();
+		final GribDecoder dec = new decoder2();
 		try {
-			for (int i =1;i<10;i++){
+			for (int i = 1; i < 2; i++) {
 			dec.getForecastForTime(new File(
-					"c:/latestForecast.grb2"), i);
+						"src/test/resources/multi_1.glo_30m.all.grb2"), i);
 			}
 		} catch (final IOException e) {
 			log.error(e);

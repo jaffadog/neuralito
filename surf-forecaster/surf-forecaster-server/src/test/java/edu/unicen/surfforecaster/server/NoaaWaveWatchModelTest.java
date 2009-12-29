@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
-import edu.unicen.surfforecaster.server.domain.WaveWatchSystemV3;
+import edu.unicen.surfforecaster.server.domain.WaveWatchSystemImpl;
 import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
@@ -34,7 +34,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
 public class NoaaWaveWatchModelTest {
 	
 	@Autowired
-	WaveWatchSystemV3 model;
+	WaveWatchSystemImpl model;
 	
 	Logger log = Logger.getLogger(this.getClass());
 
@@ -45,10 +45,10 @@ public class NoaaWaveWatchModelTest {
 	@Ignore
 	public void updateLatestForecast() {
 
-		((WaveWatchSystemV3) model).update(new DownloaderJobListener(),
+		((WaveWatchSystemImpl) model).update(new DownloaderJobListener(),
 				new File("src/test/resources/multi_1.glo_30m.all.grb2"));
 		final Collection<Forecast> latestForecast = model
-				.getLatestForecast(new Point(75.0F, 125.0F));
+				.getForecasts(new Point(75.0F, 125.0F));
 		
 		log.info(""+latestForecast.size());
 	}
@@ -57,7 +57,7 @@ public class NoaaWaveWatchModelTest {
 	public void getLatestForecast() {
 
 		final List<Forecast> latestForecast = model
-				.getLatestForecast(new Point(-38.5F, -57.5F));
+				.getForecasts(new Point(-38.5F, -57.5F));
 		Forecast forecast = latestForecast.get(0);
 		log.info(forecast.getParameter(WW3Parameter.WIND_SPEED.toString()));
 		log.info(forecast.getDTO(TimeZone.getTimeZone("UTC")).getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue());

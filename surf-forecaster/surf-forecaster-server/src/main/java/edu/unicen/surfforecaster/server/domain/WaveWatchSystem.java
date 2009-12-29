@@ -20,45 +20,59 @@ import edu.unicen.surfforecaster.server.domain.entity.Point;
 public interface WaveWatchSystem {
 
 	/**
-	 * Obtain the latest forecast for the given grid point.
+	 * Obtain the forecasts for the given grid point.
 	 * 
 	 * @param gridPoint
 	 * @return
 	 */
-	public List<Forecast> getLatestForecast(Point gridPoint);
+	public List<Forecast> getForecasts(Point gridPoint);
 
 	/**
-	 * Obtain the model forecast for the given point in the given time range.
+	 * Obtain archived forecasts.
 	 * 
 	 * @param gridPoint
+	 *            the point of the forecast
 	 * @param from
+	 *            initial ti range of forecasts.
 	 * @param to
-	 * @return
+	 *            final date range of the forecasts.
+	 * @return list of pasts forecasts in the date range for the gridPoint
 	 */
-	public List<Forecast> getArchivedForecasts(Point gridPoint,
-			Date from, Date to);
+	public List<Forecast> getArchivedForecasts(Point gridPoint, Date from,
+			Date to);
 
 	/**
-	 * Obtain all the model grid points surrounding the given point.
-	 * 
-	 * @param point
-	 * @return
-	 */
-	public List<Point> getNearbyGridPoints(final Point point);
-
-	/**
-	 * Obtain the date of the latest forecast.
+	 * The last time the forecasts where updated.
 	 * 
 	 * @return
 	 */
 	public Date getLatestForecastTime();
 
 	/**
+	 * Obtain the neighbors of a grid point.
+	 * 
 	 * @param point
-	 * @return
+	 *            the point to look for neighbors.
+	 * @param distance
+	 *            the maximum distance of the neighbors. (In degrees).
+	 * @return the neighbors points
+	 */
+	public List<Point> getPointNeighbors(final Point point, Double distance);
+
+	/**
+	 * Determines if the given point belongs to this system grid.
+	 * 
+	 * @param point
+	 *            to evaluate
+	 * @return true if point is a valid grid point, false otherwise.
 	 */
 	public boolean isGridPoint(Point point);
 
-	public String getName();
+	/**
+	 * Obtain the wave parameters that this system supports.
+	 * 
+	 * @return
+	 */
+	public List<WaveWatchParameter> getParameters();
 
 }
