@@ -34,32 +34,37 @@ public class MySpotsPanel extends FlexTable{
 	
 	public MySpotsPanel() {
 		this.setWidth("100%");
-		
-		errorPanel = new ErrorMsgPanel();
-		errorPanel.setVisible(false);
-		this.setWidget(1, 0, errorPanel);
-		this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setColSpan(1, 0, 3);
-		
-		Vector<String> message = new Vector<String>();
-		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
-		successPanel = new SuccessMsgPanel(message);
-		successPanel.setVisible(false);
-		this.setWidget(2, 0, successPanel);
-		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setColSpan(2, 0, 3);
-		
-		DisclosurePanel mySpotsTableContainer = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.mySpots(), true);
-		mySpotsTableContainer.setWidth("100%");
-		mySpotsTableContainer.setAnimationEnabled(true);
-		mySpotsTable = new FlexTable();
-		mySpotsTableContainer.setContent(mySpotsTable);
-		this.setWidget(3, 0, mySpotsTableContainer);
-		//First row style
-		mySpotsTable.getRowFormatter().addStyleName(0, "gwt-FlexTable-MySpotsTable-Titles");
-		
-		this.setSpotsTableTitles();
-		this.retrieveMySpots();
+		{
+			errorPanel = new ErrorMsgPanel();
+			errorPanel.setVisible(false);
+			this.setWidget(1, 0, errorPanel);
+			this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			this.getFlexCellFormatter().setColSpan(1, 0, 3);
+		}
+		{
+			Vector<String> message = new Vector<String>();
+			message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
+			successPanel = new SuccessMsgPanel(message);
+			successPanel.setVisible(false);
+			this.setWidget(2, 0, successPanel);
+			this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			this.getFlexCellFormatter().setColSpan(2, 0, 3);
+		}
+		{
+			DisclosurePanel mySpotsTableContainer = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.mySpots(), true);
+			mySpotsTableContainer.setWidth("100%");
+			mySpotsTableContainer.setAnimationEnabled(true);
+			{
+				mySpotsTable = new FlexTable();
+				mySpotsTableContainer.setContent(mySpotsTable);
+				this.setWidget(3, 0, mySpotsTableContainer);
+				//First row style
+				mySpotsTable.getRowFormatter().addStyleName(0, "gwt-FlexTable-MySpotsTable-Titles");
+				
+				this.setSpotsTableTitles();
+				this.retrieveMySpots();
+			}
+		}
 	}
 
 	/**
