@@ -85,7 +85,7 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 	public List<ComparationGwtDTO> getSpotsComparations() throws NeuralitoException {
 		logger.log(Level.INFO,"UserServicesImpl - getSpotsComparations - Retrieving spots comparations'...");
 		
-		if (super.hasAccessTo("addComparation")){
+		if (super.hasAccessTo("getComparations")){
 			final Integer userId = super.getLoggedUser().getId();
 			List<ComparationGwtDTO> result = new ArrayList<ComparationGwtDTO>();
 			
@@ -144,7 +144,32 @@ public class UserServicesImpl extends ServicesImpl implements UserServices {
 	}
 
 	public Integer saveComparation(String name, String description, List<Integer> spotsIds) throws NeuralitoException {
-		return 1;
+		logger.log(Level.INFO,"UserServicesImpl - saveComparation - Saving comparation: " + name + "'...");
+		
+		if (super.hasAccessTo("saveComparation")){
+			final Integer userId = super.getLoggedUser().getId();
+			
+			logger.log(Level.INFO,"UserServicesImpl - saveComparation - Comparation saved successfully.");
+			//TODO pedir al servicio del usuario las comparaciones reales y borrar el siguiente bloque mockeado
+			return 1;
+		}
+		logger.log(Level.INFO,"UserServicesImpl - saveComparation - Permissions denied to the current user to perform this action.");
+		return null;
+	}
+
+	@Override
+	public boolean deleteComparation(Integer comparationId) throws NeuralitoException {
+		logger.log(Level.INFO,"UserServicesImpl - deleteComparation - Deleting comparation: " + comparationId + "'...");
+		
+		if (super.hasAccessTo("deleteComparation")){
+			final Integer userId = super.getLoggedUser().getId();
+			
+			logger.log(Level.INFO,"UserServicesImpl - deleteComparation - Comparation deleted successfully.");
+			//TODO pedir al servicio del usuario las comparaciones reales y borrar el siguiente bloque mockeado
+			return true;
+		}
+		logger.log(Level.INFO,"UserServicesImpl - deleteComparation - Permissions denied to the current user to perform this action.");
+		return false;
 	}
 
 }

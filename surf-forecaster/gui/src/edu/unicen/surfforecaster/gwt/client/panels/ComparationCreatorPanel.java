@@ -14,7 +14,6 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -59,6 +58,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private Label lblComparationDescription;
 	private HTMLButtonGrayGrad cancelSaveCompBtn;
 	private HTMLButtonGrayGrad saveCompBtn;
+	private HTMLButtonGrayGrad deleteCompBtn;
 	private FlexTable savePanel;
 	private TextBox txtCompName;
 	private TextArea txtCompDescription;
@@ -214,8 +214,13 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.showSavePanel();
 		else if (sender == saveCompBtn) 
 			this.saveComparation();
-		else if (sender == cancelSaveCompBtn) 
+		else if (sender == cancelSaveCompBtn)
 			this.setSavePanelVisible(false);
+		else if (sender == deleteCompBtn) {
+			DeleteCompConfirmMessageBox confirmBox = new DeleteCompConfirmMessageBox("Eliminar esta comparacion?", MessageBox.IconType.WARNING);
+			confirmBox.setBasePanel(this);
+		}
+			
 	}
 
 	/**
@@ -448,8 +453,15 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				myCompsTable.setWidget(0, 0, myCompsBox);
 			}
 			{
+				deleteCompBtn = new HTMLButtonGrayGrad("Delete", "CreateComparationPanel-DeleteComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+				deleteCompBtn.setVisible(false);
+				deleteCompBtn.addClickHandler(this);
+				myCompsTable.setWidget(0, 1, deleteCompBtn);
+			}
+			{
 				lblComparationDescription = new Label("");
 				myCompsTable.setWidget(1, 0, lblComparationDescription);
+				myCompsTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 			}
 		}
 		
@@ -466,14 +478,20 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		
 		myCompsBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
+				Integer selectedCompId = new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue();
 				lblComparationDescription.setText("");
 				selectedSpotsBox.clear();
 				selectedSpots.clear();
-				for (int j = 0; j < comparations.size(); j++) {
-					if (comparations.get(j).getId().intValue() == new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue()) {
-						lblComparationDescription.setText(comparations.get(j).getDescription());
-						showComparationSpots(comparations.get(j).getSpots());
-						break;
+				if (selectedCompId.intValue() == -1)
+					deleteCompBtn.setVisible(false);
+				else {
+					deleteCompBtn.setVisible(true);
+					for (int j = 0; j < comparations.size(); j++) {
+						if (comparations.get(j).getId().intValue() == selectedCompId) {
+							lblComparationDescription.setText(comparations.get(j).getDescription());
+							showComparationSpots(comparations.get(j).getSpots());
+							break;
+						}
 					}
 				}
 				fillSavePanel();
@@ -597,16 +615,52 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			if (txtCompName.getText().trim().equals(myCompsBox.getItemText(i).trim())) {
 				nameDuplicated = true;
 				//TODO hacer esto en un msg box personalizado
-				if (Window.confirm("Ya tenes una comparacion con este nombre. Deseaas sobreescribir?"))
-					executeSaveComparation();
+				SaveCompConfirmMessageBox confirmBox = new SaveCompConfirmMessageBox("Ya tenes una comparacion con este nombre. Deseaas sobreescribir?", MessageBox.IconType.WARNING);
+				confirmBox.setBasePanel(this);
 				break;
 			}
 		}
 		if (!nameDuplicated)
 			executeSaveComparation();
 	}
+	
+	public void deleteComparation() {
+		final Integer selectedCompId = new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue();
+		
+		UserServices.Util.getInstance().deleteComparation(selectedCompId, new AsyncCallback<Boolean>(){
+			public void onSuccess(Boolean result) {
+				if (result) {
+					
+					//remove item from listbox
+					for (int i = 0; i < myCompsBox.getItemCount(); i++) {
+						if (selectedCompId.toString().equals(myCompsBox.getValue(i))) {
+							myCompsBox.removeItem(i);
+							break;
+						}
+					}
+					lblComparationDescription.setText("");
+					fillSavePanel();
+					setSavePanelVisible(false);
+					successPanel.setVisible(true);
+				} else {
+					errorPanel.setMessage("Error al intentar eliminar la comparacion, intentelo nuevamente en unos minutos.");
+					errorPanel.setVisible(true);
+				}
+			}
 
-	private void executeSaveComparation() {
+			public void onFailure(Throwable caught) {
+				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+						Cookies.getCookie("surfForecaster-Username") != null) {
+					GWTUtils.showSessionExpiredLoginBox();
+				} else {
+					errorPanel.setMessage(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+					errorPanel.setVisible(true);
+				}
+			}
+		});
+	}
+	
+	public void executeSaveComparation() {
 		//generate spotsIds list
 		final Vector<String> messages = new Vector<String>();
 		errorPanel.setVisible(false);

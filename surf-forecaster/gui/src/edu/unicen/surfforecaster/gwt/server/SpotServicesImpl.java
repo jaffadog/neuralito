@@ -169,4 +169,14 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return false;
 	}
 
+	@Override
+	public Integer editSpot(Integer spotId, String spotName,
+			String spotLatitude, String spotLongitude, String buoyLatitude,
+			String buoyLongitude, Integer zoneId, Integer countryId,
+			String zoneName, boolean public1, String timezone)
+			throws NeuralitoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

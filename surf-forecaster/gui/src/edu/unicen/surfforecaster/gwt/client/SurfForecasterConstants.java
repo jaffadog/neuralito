@@ -77,6 +77,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Ocurri\u00F3 un error al intentar eliminar la ola seleccionada, por favor intente nuevamente en unos minutos.")
 	String ERROR_DELETING_SPOT();
 	
+	@DefaultStringValue("El usuario registrado no tiene permisos suficientes para ejecutar esta operaci\u00F3n.")
+	String USER_ROLE_INSUFFICIENT();
+	
 	/**
 	 * Commons translates for more than one panel
 	 */
@@ -239,6 +242,12 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Cerrar")
 	String close();
 	
+	@DefaultStringValue("Aceptar")
+	String accept();
+	
+	@DefaultStringValue("Cancelar")
+	String cancel();
+	
 	/**
 	 * CurrentForecastPanel
 	 */
@@ -370,6 +379,12 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Crear una zona")
 	String createZone();
+	
+	@DefaultStringValue("Reemplazar observaciones")
+	String replaceObservations();
+	
+	@DefaultStringValue("Agregar observaciones")
+	String appendObservations();
 	
 	/**
 	 * RegisterNewUserPanel

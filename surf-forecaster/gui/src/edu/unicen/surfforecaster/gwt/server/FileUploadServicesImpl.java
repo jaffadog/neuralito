@@ -32,12 +32,8 @@ import edu.unicen.surfforecaster.server.services.ForecastServiceImplementation;
  */
 public class FileUploadServicesImpl extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private ForecastService forecastService = new ForecastServiceImplementation();
-	private static final String UPLOAD_DIRECTORY = "d:\\uploaded\\";
 	/**
 	 * Logger.
 	 */
@@ -82,9 +78,7 @@ public class FileUploadServicesImpl extends HttpServlet {
 
 			// Parse the request
 			try {
-				logger
-						.log(Level.INFO,
-								"FileUploadServicesImpl - doPost - Parsing visual observations data...");
+				logger.log(Level.INFO, "FileUploadServicesImpl - doPost - Parsing visual observations data...");
 				List<FileItem> items = upload.parseRequest(req);
 				for (FileItem item : items) {
 					if (item.isFormField()) {

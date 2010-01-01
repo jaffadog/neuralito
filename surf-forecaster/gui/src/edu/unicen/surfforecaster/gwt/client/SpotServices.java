@@ -31,6 +31,9 @@ public interface SpotServices extends RemoteService {
 	Integer addSpot(String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
 			String zoneName, boolean public_, String timezone) throws NeuralitoException;
 	
+	Integer editSpot(Integer spotId, String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
+			String zoneName, boolean public_, String timezone) throws NeuralitoException;
+	
 	List<AreaDTO> getAreas() throws NeuralitoException;
 	
 	List<CountryDTO> getCountries() throws NeuralitoException;

@@ -20,7 +20,7 @@ public class MessageBox extends DialogBox {
 
 	public static enum IconType { GOOD, HELP, ERROR, INFO, WARNING; IconType(){}}
 	
-	public MessageBox(String hideBtnLbl, String message, IconType iconType) {
+	public MessageBox(String message, IconType iconType) {
 		super(false, true);
 		
 		setText("Surf - Forecaster");
@@ -28,7 +28,6 @@ public class MessageBox extends DialogBox {
 		final FlexTable flexTable = new FlexTable();
 		flexTable.setWidth("100%");
 		setWidget(flexTable);
-		//setWidth("500px");
 
 		final Image icon = this.getIcon(iconType);
 		flexTable.setWidget(0, 0, icon);
@@ -38,15 +37,19 @@ public class MessageBox extends DialogBox {
 		flexTable.setWidget(0, 1, messageLbl);
 
 		buttonsPanel = new HorizontalPanel();
+		buttonsPanel.setSpacing(5);
 		flexTable.setWidget(1, 0, buttonsPanel);
 		flexTable.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		//buttonsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 
-		buttonsPanel.add(this.addBtn(hideBtnLbl));
 		//Show message
 		this.center();
 		this.checkForResize();
+	}
+	
+	public MessageBox(String hideBtnLbl, String message, IconType iconType) {
+		this(message, iconType);
+		buttonsPanel.add(this.addBtn(hideBtnLbl));
 	}
 	
 	private void checkForResize() {
@@ -64,6 +67,10 @@ public class MessageBox extends DialogBox {
 			}
 		});
 		return button;
+	}
+	
+	public void addBtn(HTMLButtonGrayGrad button) {
+		buttonsPanel.add(button);
 	}
 	
 	private Image getIcon(IconType iconType) {

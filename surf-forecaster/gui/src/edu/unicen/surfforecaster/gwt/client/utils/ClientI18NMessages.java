@@ -6,6 +6,7 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 
 public class ClientI18NMessages extends HashMap<String, String>{
 	
+	private static final long serialVersionUID = 1L;
 	private static ClientI18NMessages instance = null;
 	
 	public static ClientI18NMessages getInstance() {
@@ -64,5 +65,6 @@ public class ClientI18NMessages extends HashMap<String, String>{
 //		this.put("USER_ID_NULL", GWTUtils.LOCALE_CONSTANTS.USER_ID_NULL());
 //		this.put("USER_ID_INVALID", GWTUtils.LOCALE_CONSTANTS.USER_ID_INVALID());
 //		this.put("USER_ID_DOES_NOT_EXIST", GWTUtils.LOCALE_CONSTANTS.USER_ID_DOES_NOT_EXIST());
+		this.put("USER_ROLE_INSUFFICIENT", GWTUtils.LOCALE_CONSTANTS.USER_ROLE_INSUFFICIENT());
 	}
 }
