@@ -41,7 +41,9 @@ public class UserRoles {
 	private void setRegisteredUserActions() {
 		registeredUserActions = new Vector<String>();
 		registeredUserActions.add("addSpot");
-		registeredUserActions.add("addComparation");
+		registeredUserActions.add("saveComparation");
+		registeredUserActions.add("deleteComparation");
+		registeredUserActions.add("getComparations");
 		registeredUserActions.add("getSpotCreatedByUser");
 		registeredUserActions.add("deleteSpot");
 		registeredUserActions.add("editSpot");
