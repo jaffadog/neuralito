@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import edu.unicen.surfforecaster.server.domain.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 
 /**
  * @author esteban

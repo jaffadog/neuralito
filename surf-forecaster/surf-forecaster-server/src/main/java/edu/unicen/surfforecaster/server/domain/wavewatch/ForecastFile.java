@@ -1,8 +1,9 @@
-package edu.unicen.surfforecaster.server.domain;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -48,10 +49,11 @@ public class ForecastFile extends File {
 	 * perform massive inserts into DB.
 	 * 
 	 * @param forecasts
+	 * @throws IOException
 	 */
-	public void writeForecasts(final Collection<Forecast> forecasts) {
+	public void writeForecasts(final Collection<Forecast> forecasts)
+			throws IOException {
 		final long init = System.currentTimeMillis();
-		try {
 			final BufferedWriter output = new BufferedWriter(new FileWriter(
 					this, true));
 
@@ -79,9 +81,6 @@ public class ForecastFile extends File {
 				output.newLine();
 			}
 			output.close();
-		} catch (final Exception e) {
-			log.error(e);
-		}
 		final long end = System.currentTimeMillis();
 		log.info("Writing forecasts to file");
 		log.info("Elapsed time: " + (end - init) / 1000);

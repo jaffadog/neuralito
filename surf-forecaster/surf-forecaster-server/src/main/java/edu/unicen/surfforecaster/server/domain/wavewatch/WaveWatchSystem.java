@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.util.Date;
 import java.util.List;
@@ -74,5 +74,11 @@ public interface WaveWatchSystem {
 	 * @return
 	 */
 	public List<WaveWatchParameter> getParameters();
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getName();
 
 }

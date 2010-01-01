@@ -5,8 +5,10 @@ package edu.unicen.surfforecaster.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
@@ -14,8 +16,8 @@ import org.junit.Test;
 
 import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf;
-import edu.unicen.surfforecaster.server.domain.decoder.decoder2;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 
 /**
  * @author esteban
@@ -45,13 +47,16 @@ public class GribDecoderNetcdfTest {
 	}
 
 	@Test
-	
 	public void decodeAll() {
-		final GribDecoder dec = new decoder2();
+		final GribDecoder dec = new GribDecoderNetcdf();
+		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
+		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT);
+		parameters.add(WaveWatchParameter.PRIMARY_WAVE_DIRECTION);
 		try {
-			for (int i = 1; i < 2; i++) {
-			dec.getForecastForTime(new File(
-						"src/test/resources/multi_1.glo_30m.all.grb2"), i);
+			for (int i = 1; i < 4; i++) {
+				dec.decodeForecastForTime(new File(
+						"src/test/resources/multi_1.glo_30m.all.grb2"),
+						parameters, i);
 			}
 		} catch (final IOException e) {
 			log.error(e);

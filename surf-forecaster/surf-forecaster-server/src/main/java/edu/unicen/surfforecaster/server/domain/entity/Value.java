@@ -37,6 +37,11 @@ public class Value {
 	}
 
 	/**
+	 * the parameter name
+	 */
+	@Column(nullable = false, length = 100)
+	String parameterName;
+	/**
 	 * double value
 	 */
 
@@ -69,10 +74,11 @@ public class Value {
 	 * @param string
 	 * @param l
 	 */
-	public Value(final Double value,
+	public Value(final String parameterName, final Double value,
 			final Unit unit) {
 		Validate.notNull(value);
 		Validate.notNull(unit);
+		this.parameterName = parameterName;
 		this.unit = unit;
 		dValue = value;
 	}
@@ -81,11 +87,12 @@ public class Value {
 	 * @param string
 	 * @param l
 	 */
-	public Value(
+	public Value(final String parameterName,
 			final String value,
 			final Unit unit) {
 		Validate.notNull(value);
 		Validate.notNull(unit);
+		this.parameterName = parameterName;
 		this.unit = unit;
 		sValue = value;
 	}
@@ -94,11 +101,12 @@ public class Value {
 	 * @param string
 	 * @param l
 	 */
-	public Value(
+	public Value(final String parameterName,
 			final Integer value,
 			final Unit unit) {
 		Validate.notNull(value);
 		Validate.notNull(unit);
+		this.parameterName = parameterName;
 		this.unit = unit;
 		iValue = value;
 	}
@@ -108,11 +116,12 @@ public class Value {
 	 * @param f
 	 * @param unit
 	 */
-	public Value(
+	public Value(final String parameterName,
 			final float f,
 			final Unit unit) {
 		Validate.notNull(f);
 		Validate.notNull(unit);
+		this.parameterName = parameterName;
 		this.unit = unit;
 		fValue = f;
 	}

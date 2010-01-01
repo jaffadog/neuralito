@@ -27,13 +27,13 @@ import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAO;
 import edu.unicen.surfforecaster.server.dao.SpotDAO;
-import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.WekaForecaster;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
 
 /**
@@ -46,10 +46,6 @@ public class ForecastServiceImplementation implements ForecastService {
 	 */
 	private ForecastDAO forecastDAO;
 
-	/**
-	 * The available wave watch models to use in different forecasters;
-	 */
-	private Map<String, WaveWatchSystem> models;
 	/**
 	 * The available datasetStrategies to use in {@link WekaForecaster}..
 	 */
@@ -66,6 +62,12 @@ public class ForecastServiceImplementation implements ForecastService {
 	private SpotDAO spotDAO;
 
 	private Logger log = Logger.getLogger(this.getClass());
+
+	private WaveWatchSystem waveWatchSystem;
+
+	public void setWaveWatchSystem(WaveWatchSystem waveWatchSystem) {
+		this.waveWatchSystem = waveWatchSystem;
+	}
 
 	/**
 	 * 
@@ -91,8 +93,8 @@ public class ForecastServiceImplementation implements ForecastService {
 			spotDAO.save(point);
 		}
 		final Spot spot = spotDAO.getSpotById(spotId);
-		final WW3Forecaster forecaster = new WW3Forecaster(models
-				.get(modelName), point,
+		final WW3Forecaster forecaster = new WW3Forecaster(waveWatchSystem,
+				point,
 				spot.getLocation(), spot);
 		final Integer id = forecastDAO.save(forecaster);
 		spotDAO.addForecasterToSpot(forecaster, spot);
@@ -133,9 +135,10 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Override
 	public List<PointDTO> getNearbyGridPoints(final float latitude,
 			final float longitude) throws NeuralitoException {
-		final WaveWatchSystem model = models.get("GlobalModel");
-		final List<Point> surroundingGridPoints = model
-				.getNearbyGridPoints(new Point(latitude, longitude));
+
+		final List<Point> surroundingGridPoints = waveWatchSystem
+.getPointNeighbors(
+				new Point(latitude, longitude), 0.5D);
 		final List<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
 		for (final Iterator iterator = surroundingGridPoints.iterator(); iterator
 				.hasNext();) {
@@ -228,8 +231,9 @@ public class ForecastServiceImplementation implements ForecastService {
 			throws NeuralitoException {
 		if (gridPoint == null)
 			throw new NeuralitoException(ErrorCode.GRID_POINT_CANNOT_BE_NULL);
-		final WaveWatchSystem model = models.get("GlobalModel");
-		if (model.isGridPoint(new Point(gridPoint.getLatitude(), gridPoint
+
+		if (waveWatchSystem.isGridPoint(new Point(gridPoint.getLatitude(),
+				gridPoint
 				.getLongitude())))
 			return;
 		else
@@ -345,14 +349,6 @@ public class ForecastServiceImplementation implements ForecastService {
 		this.spotDAO = spotDAO;
 	}
 
-	/**
-	 * For Spring injection
-	 * @param models
-	 *            the models to set
-	 */
-	public void setModels(final Map<String, WaveWatchSystem> models) {
-		this.models = models;
-	}
 
 	public void setDataSetStrategies(
 			Map<String, DataSetGenerationStrategy> dataSetStrategies) {

@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf;
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 public class ValidGridPointsGenerator {
@@ -37,14 +38,16 @@ public class ValidGridPointsGenerator {
 	private static List<Point> getValidGridPoints(final String gridFile)
 			throws IOException {
 		log.info("Decoding grib file to obtain valid grid points.");
-		final Collection<ForecastPlain> forecastForTime = gribDecoder
-				.getForecastForTime(new File(gridFile), 0);
+		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
+		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT);
+		final Collection<Forecast> forecastForTime = gribDecoder
+				.decodeForecastForTime(new File(gridFile), parameters
+						, 0);
 		final List<Point> points = new ArrayList<Point>();
 		for (final Iterator iterator = forecastForTime.iterator(); iterator
 				.hasNext();) {
-			final ForecastPlain forecastArch = (ForecastPlain) iterator.next();
-			points.add(new Point(forecastArch.getLatitude(), forecastArch
-					.getLongitude()));
+			final Forecast forecastArch = (Forecast) iterator.next();
+			points.add(forecastArch.getPoint());
 		}
 		log.info(points.size()+" valid grid points have been found.");
 		return points;
@@ -57,9 +60,9 @@ public class ValidGridPointsGenerator {
 				false));
 		for (Iterator iterator = validGridPoints.iterator(); iterator.hasNext();) {
 			Point point = (Point) iterator.next();
-			final String line = WaveWatchSystemV3.WaveWatchSystemImpl
-					+ point.getLatitude() + WaveWatchSystemV3.WaveWatchSystemImpl
-					+ point.getLongitude() + WaveWatchSystemV3.WaveWatchSystemImpl;
+			final String line = GridPointsFile.lineStart + point.getLatitude()
+					+ GridPointsFile.fieldSeparator + point.getLongitude()
+					+ GridPointsFile.lineEnd;
 			output.append(line);
 			output.newLine();
 		}

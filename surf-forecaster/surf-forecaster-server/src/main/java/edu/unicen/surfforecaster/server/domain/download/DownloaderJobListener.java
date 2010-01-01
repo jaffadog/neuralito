@@ -3,12 +3,7 @@
  */
 package edu.unicen.surfforecaster.server.domain.download;
 
-import java.io.File;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
@@ -25,7 +20,7 @@ import org.quartz.Trigger;
  * @author esteban
  * 
  */
-public class DownloaderJobListener extends Observable implements JobListener {
+public class DownloaderJobListener implements JobListener {
 	/**
 	 * Max number of times to reschedule the job.
 	 */
@@ -46,6 +41,10 @@ public class DownloaderJobListener extends Observable implements JobListener {
 	 * The logger.
 	 */
 	private final Logger log = Logger.getLogger(this.getClass());
+
+	public DownloaderJobListener(String listenerName) {
+		this.name = listenerName;
+	}
 
 	/**
 	 * @see org.quartz.JobListener#getName()
@@ -86,15 +85,11 @@ public class DownloaderJobListener extends Observable implements JobListener {
 			final JobExecutionException exception) {
 		// If download was correct
 		if (exception == null) {
-			log.info("Download Job was executed successfully");
-			// Obtain from the job context the downloaded files.
-			final File file = (File) ctxt.get(DownloaderJob.DownloadedFile);
-			setChanged();
-			// Notify observers of the just downloaded files.
-			this.notifyObservers(file);
+			log.info("WaveWatchSystemImpl Job was executed successfully");
 			reschedulings = 0;
 		} else {
-			log.error("Download Job failed on execution. Reason was:",
+			log.error(
+					"WaveWatchSystemImpl Job failed on execution. Reason was:",
 					exception);
 			if (reschedulings < MAX_RESCHEDULINGS) {
 				log.info("Rescheduling job");
@@ -123,23 +118,4 @@ public class DownloaderJobListener extends Observable implements JobListener {
 
 		}
 	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(final String name) {
-		this.name = name;
-	}
-	/**
-	 * Sets the observers to be notified when a new file has been downloaded.	
-	 * @param observers
-	 */
-	public void setObservers(final Collection<Observer> observers) {
-		for (final Iterator it = observers.iterator(); it.hasNext();) {
-			final Observer observer = (Observer) it.next();
-			addObserver(observer);
-		}
-	}
-
 }

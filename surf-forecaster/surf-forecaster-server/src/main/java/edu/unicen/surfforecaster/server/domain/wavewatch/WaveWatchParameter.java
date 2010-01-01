@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 

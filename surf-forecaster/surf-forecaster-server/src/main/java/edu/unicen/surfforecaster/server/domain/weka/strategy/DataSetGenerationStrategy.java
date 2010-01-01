@@ -6,9 +6,9 @@ import java.util.Map;
 
 import weka.core.Instance;
 import weka.core.Instances;
-import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 
 /**
  * Strategy for the assembling of instances.

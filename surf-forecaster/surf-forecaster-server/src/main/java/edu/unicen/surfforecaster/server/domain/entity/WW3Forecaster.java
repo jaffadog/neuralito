@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 
 /**
  * Forecaster which uses a {@link WaveWatchSystem} to obtain forecasts.
