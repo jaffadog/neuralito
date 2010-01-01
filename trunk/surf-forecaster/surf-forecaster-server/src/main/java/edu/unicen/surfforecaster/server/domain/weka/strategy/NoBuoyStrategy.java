@@ -13,10 +13,10 @@ import java.util.Vector;
 
 import weka.core.Instance;
 import weka.core.Instances;
-import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.filter.AndFilter;
 import edu.unicen.surfforecaster.server.domain.weka.filter.Filter;
 import edu.unicen.surfforecaster.server.domain.weka.filter.wavewatch.DataTimeFilter;

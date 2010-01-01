@@ -20,7 +20,7 @@ import weka.classifiers.Evaluation;
 import weka.core.Instance;
 import weka.core.Instances;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
-import edu.unicen.surfforecaster.server.domain.WaveWatchSystem;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
 
 /**
@@ -157,7 +157,8 @@ public class WekaForecaster extends Forecaster {
 				double improvedWaveHeight = classifier
 						.classifyInstance(forecastInstance);
 				forecast.addParameter("improvedWaveHeight",
-						new Value("improvedWaveHeight",
+ new Value(
+						"improvedWaveHeight",
 								improvedWaveHeight, Unit.Meters));
 				improvedForecasts.add(forecast);
 			}

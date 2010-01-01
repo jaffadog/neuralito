@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import edu.unicen.surfforecaster.server.domain.ValidGridPointsGenerator;
+import edu.unicen.surfforecaster.server.domain.wavewatch.ValidGridPointsGenerator;
 
 public class ValidGridPointsGeneratorTest {
 	@Test

@@ -126,13 +126,12 @@ public class Forecast {
 	 * @return
 	 */
 	public ForecastDTO getDTO(TimeZone timeZone) {
-		final Collection<Value> values = parameters.values();
+		final Collection<String> keys = parameters.keySet();
 		final Map<String, ForecastAttributeDTO> map = new HashMap<String, ForecastAttributeDTO>();
-		for (final Iterator iterator = values.iterator(); iterator.hasNext();) {
-			final Value forecastParameter = (Value) iterator
+		for (final Iterator iterator = keys.iterator(); iterator.hasNext();) {
+			final String key = (String) iterator
 					.next();
-			map.put(forecastParameter.getParameterName(), forecastParameter
-					.getDTO());
+			map.put(key, parameters.get(key).getDTO());
 		}
 		Calendar cal = new GregorianCalendar(timeZone);
 		cal.setTime(getBaseDate());

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +17,13 @@ import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
 import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
+import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 
@@ -38,7 +40,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	/**
 	 * The number of forecasts this system produces.
 	 */
-	private static final int forecastTimes = 61;
+	private static final int forecastTimes = 1;
 	/**
 	 * The component to obtain forecasts updates in grib format.
 	 */
@@ -58,11 +60,15 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	/**
 	 * The component used to persist forecast data.
 	 */
-	private final WaveWatchSystemPersistence persister;
+	private final WaveWatchSystemPersistenceI persister;
 	/**
 	 * The wave parameters this system supports.
 	 */
 	private final List<WaveWatchParameter> parameters;
+	/**
+	 * The name identifying the system.
+	 */
+	private String name;
 
 	/**
 	 * Initialize System.
@@ -79,21 +85,36 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 *            component used to persist forecasts into DB.
 	 * 
 	 */
-	public WaveWatchSystemImpl(List<WaveWatchParameter> parameters,
+	public WaveWatchSystemImpl(String name,
+			List<WaveWatchParameter> parameters,
 			GribDecoder gribDecoder, String cronExpression,
-			GribAccess gribAccess, WaveWatchSystemPersistence persister) {
+			GribAccess gribAccess, WaveWatchSystemPersistenceI persister) {
+		this.name = name;
 		this.parameters = parameters;
 		this.gribDecoder = gribDecoder;
 		this.gribAccess = gribAccess;
 		this.persister = persister;
+		this.configureScheduler(cronExpression);
+	}
+
+	private void configureScheduler(String cronExpression) {
 		try {
-			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
-			this.scheduler.start();
+			// Create the job
 			JobDetail jobDetail = new JobDetail("ForecastUpdateJob", null, this
 					.getClass());
-			trigger = new CronTrigger();
-			trigger.setCronExpression(cronExpression);
-			scheduler.scheduleJob(jobDetail, trigger);
+			// Create the trigger
+			this.trigger = new CronTrigger();
+			this.trigger.setName("NOAA Grib Download Trigger");
+			this.trigger.setCronExpression(cronExpression);
+			// Create job listener
+			JobListener listener = new DownloaderJobListener(this.name);
+			jobDetail.addJobListener(listener.getName());
+			// Create Scheduler, register Job and Listener
+			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
+			this.scheduler.scheduleJob(jobDetail, trigger);
+			this.scheduler.addJobListener(listener);
+			// Start Scheduler
+			this.scheduler.start();
 		} catch (Exception e) {
 			this.scheduler = null;
 			log.error(e);
@@ -104,6 +125,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 * Shuts down the scheduler on object destruction.
 	 */
 	protected void finalize() {
+		// Shutdown scheduler.
 		try {
 			scheduler.shutdown();
 		} catch (SchedulerException e) {
@@ -112,23 +134,61 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchSystem#getArchivedForecasts(float,
+	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem#getArchivedForecasts(float,
 	 *      float, java.util.GregorianCalendar, java.util.GregorianCalendar)
 	 */
 	@Override
 	public List<Forecast> getArchivedForecasts(final Point point,
 			final Date fromDate, final Date toDate) {
-		// ask the persister
-		return null;
+
+		return persister.getArchivedForecasts(point, fromDate, toDate);
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.domain.WaveWatchSystem#getForecasts(edu.unicen.surfforecaster.server.domain.entity.forecasters.Point)
+	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem#getForecasts(edu.unicen.surfforecaster.server.domain.entity.forecasters.Point)
 	 */
 	@Override
 	public List<Forecast> getForecasts(final Point gridPoint) {
-		// ask the persister
-		return null;
+
+		return persister.getLatestForecasts(gridPoint);
+	}
+
+	/**
+	 * Method called by Scheduler when the the trigger is fired. This means that
+	 * its time to obtain new forecasts and persist them into DB.
+	 */
+	@Override
+	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+		// Obtain last forecasts in grib format
+		File gribFile;
+		try {
+			gribFile = this.gribAccess.getLastGrib();
+		} catch (GribAccessException e1) {
+			throw new JobExecutionException();
+		}
+		// Decode forecasts and persist them
+		ForecastFile forecastFile = new ForecastFile("tempFilePath",
+				this.parameters);
+		try {
+			for (int time = 0; time < forecastTimes; time++) {
+				final Collection<Forecast> decodedForecasts = gribDecoder
+						.decodeForecastForTime(gribFile, this.parameters, time);
+				forecastFile.writeForecasts(decodedForecasts);
+			}
+			persister.updateLatestForecast(forecastFile);
+		} catch (final IOException e) {
+			log.error(e);
+		}
+		// Delete the temporal forecast file.
+		forecastFile.delete();
+	}
+
+	/**
+	 * Determines if the given point belongs to this system grid.
+	 */
+	@Override
+	public boolean isGridPoint(final Point point) {
+		return persister.isGridPoint(point);
 	}
 
 	/**
@@ -140,8 +200,9 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 *            the maximum distance of the neighbors. (In degrees).
 	 * @return the neighbors points
 	 */
+	@Override
 	public List<Point> getPointNeighbors(final Point point, Double distance) {
-		final List<Point> gridPoints = persister.getValidGridPointsFromDB();
+		final List<Point> gridPoints = persister.getValidGridPoints();
 		final List<Point> neighbors = new ArrayList<Point>();
 		for (final Iterator<Point> iterator = gridPoints.iterator(); iterator
 				.hasNext();) {
@@ -157,18 +218,13 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 		return neighbors;
 	}
 
-	/**
-	 * Determines if the given point belongs to this system grid.
-	 */
-	@Override
-	public boolean isGridPoint(final Point point) {
-		return false;
-	}
+
 
 	/**
 	 * @return the list of {@link WaveWatchParameter} that this system supports.
 	 * 
 	 */
+	@Override
 	public List<WaveWatchParameter> getParameters() {
 		return this.parameters;
 	}
@@ -178,7 +234,8 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 * 
 	 * @return
 	 */
-	public Date lastForecastUpdateTime() {
+	@Override
+	public Date getLatestForecastTime() {
 		return null;
 	}
 
@@ -200,29 +257,11 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 		return this.trigger.getPreviousFireTime();
 	}
 
-	/**
-	 * Method called by Scheduler when the the trigger is fired. This means that
-	 * its time to obtain new forecasts and persist them into DB.
-	 */
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		// Obtain last forecasts in grib format
-		final File gribFile = this.gribAccess.getLastGrib();
-		// Decode forecasts and persist them
-		ForecastFile forecastFile = new ForecastFile("tempFilePath",
-				this.parameters);
-		try {
-			for (int time = 0; time < forecastTimes; time++) {
-				final Collection<Forecast> decodedForecasts = gribDecoder
-						.decodeForecastForTime(gribFile, this.parameters, time);
-				forecastFile.writeForecasts(decodedForecasts);
-			}
-			persister.updateLatestForecast(forecastFile);
-		} catch (final IOException e) {
-			log.error(e);
-		}
-		// Delete the temporal forecast file.
-		forecastFile.delete();
+	public String getName() {
+		// TODO Auto-generated method stub
+		return this.name;
 	}
+
 
 }

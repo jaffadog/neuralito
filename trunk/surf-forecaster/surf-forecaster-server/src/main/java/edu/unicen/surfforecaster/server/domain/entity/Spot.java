@@ -3,13 +3,11 @@ package edu.unicen.surfforecaster.server.domain.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -72,11 +70,12 @@ public class Spot implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<Forecaster> forecasters;
 	
-	/**
-	 * The available visual observations for this spot.
-	 */
-	@OneToMany()
-	private List<VisualObservationsSet> visualObservationsSet;
+
+	// /**
+	// * The available visual observations for this spot.
+	// */
+	// @OneToMany()
+	// private List<VisualObservationsSet> visualObservationsSet;
 	/**
 	 * The id for ORM pupose.
 	 */
@@ -242,9 +241,9 @@ public class Spot implements Serializable {
 	public void setLocation(final Point location) {
 		this.location = location;
 	}
-	public void addVisualObservationSet(VisualObservationsSet set){
-		Validate.notNull(set);
-		this.visualObservationsSet.add(set);
-	}
+	// public void addVisualObservationSet(VisualObservationsSet set){
+	// Validate.notNull(set);
+	// this.visualObservationsSet.add(set);
+	// }
 
 }
