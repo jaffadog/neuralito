@@ -3,11 +3,15 @@
  */
 package edu.unicen.surfforecaster.server;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -19,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemImpl;
@@ -58,9 +61,11 @@ public class NoaaWaveWatchModelTest {
 		final List<Forecast> latestForecast = model.getForecasts(new Point(
 				-38.5F, -57.5F));
 		Forecast forecast = latestForecast.get(0);
-		log.info(forecast.getParameter(WW3Parameter.WIND_SPEED.toString()));
-		log.info(forecast.getDTO(TimeZone.getTimeZone("UTC")).getMap().get(
-				WW3Parameter.WIND_SPEED.toString()).getValue());
+		Set<String> parameters = forecast.getParameters();
+		for (Iterator iterator = parameters.iterator(); iterator.hasNext();) {
+			String string = (String) iterator.next();
+			log.info(string + ": " + forecast.getParameter(string));
+		}
 		log.info("Number of latest forecasts:" + latestForecast.size());
 	}
 
@@ -99,11 +104,42 @@ public class NoaaWaveWatchModelTest {
 	}
 
 	@Test
-	@Ignore
 	public void getLatestForecastUpdate() {
 		log.info("Latest forecast update time: "
 				+ model.getLatestForecastTime().getDay());
 	}
 
+	@Test
+	public void importArchives() throws IOException {
+		Collection<File> files = new ArrayList<File>();
+		for (int i = 1997; i <= 2004; i++) {
+			for (int j = 1; j <= 12; j++) {
+				files = generateFile(i, j);
+				model.importForecasts(files);
+			}
+		}
+	}
 
+	private Collection<File> generateFile(int i, int j) {
+		Collection<File> files = new ArrayList<File>();
+		DecimalFormat format = new DecimalFormat();
+		format.setMinimumIntegerDigits(2);
+
+		String month = format.format(j);
+		String yearMonth = i + month;
+		files.add(new File(
+				"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.wind."
+						+ yearMonth + ".grb"));
+		files.add(new File(
+				"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.dp."
+						+ yearMonth + ".grb"));
+		files.add(new File(
+				"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.hs."
+						+ yearMonth + ".grb"));
+		files.add(new File(
+				"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.tp."
+						+ yearMonth + ".grb"));
+
+		return files;
+	}
 }

@@ -3,6 +3,9 @@
  */
 package edu.unicen.surfforecaster.server.domain.wavewatch;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -80,5 +83,7 @@ public interface WaveWatchSystem {
 	 * @return
 	 */
 	public String getName();
+
+	public void importForecasts(Collection<File> gribFiles) throws IOException;
 
 }

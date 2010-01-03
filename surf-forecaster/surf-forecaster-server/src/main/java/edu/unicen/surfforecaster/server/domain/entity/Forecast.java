@@ -43,6 +43,7 @@ public class Forecast {
 	 * The base date of this forecast.This is the date the forecast was made.
 	 */
 	private Date issuedDate;
+
 	/**
 	 * The time ahead base date to which this forecast applies. This corresponds to Hours since
 	 * the baseDate.
@@ -122,6 +123,7 @@ public class Forecast {
 		 long milliseconds = seconds*1000;
 		 return new Date (this.getBaseDate().getTime()+milliseconds);
 	 }
+
 	/**
 	 * @return
 	 */
@@ -149,12 +151,26 @@ public class Forecast {
 		long hoursInMillis = this.forecastTime * 60 * 60 * 1000;
 		return new Date(this.issuedDate.getTime()+ hoursInMillis);
 	}
+
 	public void addParameter(String name, Value parameter){
 		this.parameters.put(name, parameter);
 	}
 
 	public Set<String> getParameters() {
 		return this.parameters.keySet();
+	}
+
+	public boolean equalsDate(Date date) {
+		Calendar cal = new GregorianCalendar();
+		Calendar cal2 = new GregorianCalendar();
+		cal2.setTime(date);
+		cal.setTime(this.getForecastValidDate());
+		if (cal.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
+			if (cal.get(Calendar.MONTH) == cal2.get(Calendar.MONTH))
+				if (cal.get(Calendar.DAY_OF_MONTH) == cal2
+						.get(Calendar.DAY_OF_MONTH))
+					return true;
+		return false;
 	}
 
 }

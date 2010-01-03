@@ -132,6 +132,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		}
 	}
 
+
 	/* (non-Javadoc)
 	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI#getArchivedForecasts(edu.unicen.surfforecaster.server.domain.entity.Point, java.util.Date, java.util.Date)
 	 */
@@ -287,6 +288,29 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 
 	}
 
+	public void importIntoArchive(ForecastFile forecastsToArchive) {
+		log
+				.info("Inserting data from: "
+						+ forecastsToArchive.getAbsolutePath());
+		final long init = System.currentTimeMillis();
+		try {
+			final Connection connection = this.getSession().connection();
+			final Statement st = connection.createStatement();
+			final String query = "LOAD DATA INFILE '"
+					+ forecastsToArchive.getAbsolutePath().replace('\\', '/')
+					+ "' INTO TABLE " + archiveTableName
+					+ " FIELDS TERMINATED BY '" + ForecastFile.fieldSeparator
+					+ "'  LINES STARTING BY '" + ForecastFile.lineStart
+					+ "' TERMINATED BY '" + ForecastFile.lineEnd + "'";
+			st.execute(query);
+			st.close();
+		} catch (final SQLException e) {
+			log.error(e);
+		}
+		final long end = System.currentTimeMillis();
+		log.info("Elapsed Time To insert data from file: " + (end - init)
+				/ 1000);
+	}
 	/**
 	 * Move forecasts in latest forecast table to archive table.
 	 */
@@ -462,7 +486,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 				final int validTime = result.getInt("validTime");
 				final float latitude = result.getFloat("latitude");
 				final float longitude = result.getFloat("longitude");
-				Date issuedDate = result.getDate("issuedDate");
+				Date issuedDate = result.getTimestamp("issuedDate");
 				Point forecastGridPoint = new Point(latitude, longitude);
 				Map<String, Value> parameters = new HashMap<String, Value>();
 				for (int i = 0; i < this.waveParameters.length; i++) {

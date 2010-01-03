@@ -5,9 +5,9 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.weka.filter.Filter;
 import edu.unicen.surfforecaster.server.domain.weka.filter.OrFilter;
-import edu.unicen.surfforecaster.server.domain.weka.util.WaveData;
 
 public class DataTimeFilter extends Filter {
 
@@ -24,21 +24,25 @@ public class DataTimeFilter extends Filter {
 	}
 
 	@Override
-	public Vector<WaveData> executeFilter(Vector<?> dataSet) {
-		Vector<WaveData> dataset = (Vector<WaveData>) dataSet;
-		Vector<WaveData> dataFiltered = new Vector<WaveData>();
+	public Vector<Forecast> executeFilter(Vector<?> dataSet) {
+		Vector<Forecast> dataset = (Vector<Forecast>) dataSet;
+		Vector<Forecast> dataFiltered = new Vector<Forecast>();
 
 		if (this.compareTime(this.minTime, this.maxTime) == 1) {
 			Vector<Filter> filters = new Vector<Filter>();
 			filters.add(new DataTimeFilter(this.minTime, new GregorianCalendar(0, 0, 0, 23, 59)));
 			filters.add(new DataTimeFilter(new GregorianCalendar(0, 0, 0, 0, 0), this.maxTime));
 			Filter compuestFilter = new OrFilter(filters);
-			dataFiltered = (Vector<WaveData>) compuestFilter.executeFilter(dataSet);
+			dataFiltered = (Vector<Forecast>) compuestFilter
+					.executeFilter(dataSet);
 		} else {
-			for (Enumeration<WaveData> e = dataset.elements(); e.hasMoreElements();) {
-				WaveData data = e.nextElement();
-				
-				if (this.compareTime(data.getDate(), this.minTime) == -1 || this.compareTime(data.getDate(), this.maxTime) == 1){
+			for (Enumeration<Forecast> e = dataset.elements(); e
+					.hasMoreElements();) {
+				Forecast data = e.nextElement();
+				Calendar cal = new GregorianCalendar();
+				cal.setTime(data.getForecastValidDate());
+				if (this.compareTime(cal, this.minTime) == -1
+						|| this.compareTime(cal, this.maxTime) == 1) {
 						//do nothing
 				}
 				else

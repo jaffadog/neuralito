@@ -6,7 +6,15 @@
 	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd ">
 	<import resource="dao.xml" />
 	<util:constant id="peakWaveHeight"
-		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT" />
+		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2" />
+		<util:constant id="peakWavePeriod"
+		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2" />
+		<util:constant id="peakWaveDirection"
+		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2" />
+		<util:constant id="windU"
+		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.WINDUComponent_V2" />
+		<util:constant id="windV"
+		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.WINDVComponent_V2" />
 	<bean id="userService"
 		class="edu.unicen.surfforecaster.server.services.UserServiceImplementation">
 		<property name="userDAO" ref="userDAO"></property>
@@ -21,6 +29,8 @@
 		<property name="forecastDAO" ref="forecastDAO"></property>
 		<property name="spotDAO" ref="spotDAO"></property>
 		<property name="waveWatchSystem" ref="waveWatchSystemV2"></property>
+		<property name="classifierName" value="weka.classifiers.functions.LinearRegression"></property>
+		<property name="dataSetGenerationStrategy" ref="dataSetGenerationStrategy"></property>
 		
 <!--		<property name="observationsSetDAO" ref="visualObservationsSetDAO"></property>-->
 <!--		<property name="models">-->
@@ -29,6 +39,7 @@
 <!--			</map>-->
 <!--		</property>-->
 	</bean>
+	<bean id = "dataSetGenerationStrategy" class="edu.unicen.surfforecaster.server.domain.weka.strategy.NoBuoyStrategy"/> 
 <!--	-->
 <!--		QUARTZ SCHEDULER CONFIGURATION-->
 <!--	-->
@@ -119,6 +130,10 @@
 		<constructor-arg index="1">
 			<list>
 				<ref bean="peakWaveHeight" />
+				<ref bean="peakWaveDirection" />
+				<ref bean="peakWavePeriod" />
+				<ref bean="windU" />
+				<ref bean="windV" />
 			</list>
 		</constructor-arg>
 		<constructor-arg index="2" ref="gribDecoder" />
