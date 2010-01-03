@@ -166,6 +166,12 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 		} catch (GribAccessException e1) {
 			throw new JobExecutionException();
 		}
+		updateForecasts(gribFile);
+
+
+	}
+
+	private void updateForecasts(File gribFile) {
 		// Decode forecasts and persist them
 		ForecastFile forecastFile = new ForecastFile("tempFilePath",
 				this.parameters);
@@ -181,6 +187,35 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 		}
 		// Delete the temporal forecast file.
 		forecastFile.delete();
+
+	}
+
+	/*
+	 * Each file in the collection represents one grib file for one parameter.
+	 * (non-Javadoc)
+	 * 
+	 * @seeedu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem#
+	 * importForecasts(java.util.Collection)
+	 */
+	public void importForecasts(Collection<File> files) throws IOException {
+		ForecastFile forecastFile = new ForecastFile("tempFilePath",
+				this.parameters);
+		int times = this.gribDecoder.getTimes((File) files.toArray()[0]);
+			try {
+			for (int time = 0; time < times; time++) {
+					final Collection<Forecast> decodedForecasts = gribDecoder
+						.decodeForecastForTime(files, this.parameters, time);
+					forecastFile.writeForecasts(decodedForecasts);
+				}
+
+			} catch (final IOException e) {
+				log.error(e);
+			}
+
+		persister.importIntoArchive(forecastFile);
+		// Delete the temporal forecast file.
+		forecastFile.delete();
+
 	}
 
 	/**
@@ -236,7 +271,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 */
 	@Override
 	public Date getLatestForecastTime() {
-		return null;
+		return persister.getLatestForecastTime();
 	}
 
 	/**
@@ -259,7 +294,6 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return this.name;
 	}
 

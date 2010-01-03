@@ -3,29 +3,30 @@ package edu.unicen.surfforecaster.server.domain.weka.filter.wavewatch;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.weka.filter.Filter;
-import edu.unicen.surfforecaster.server.domain.weka.util.WaveData;
-
-
 
 public class MaxWaveHeightFilter extends Filter {
-	
-	public MaxWaveHeightFilter(){}
-	
+
+	public MaxWaveHeightFilter() {
+	}
+
 	@Override
-	public Vector<WaveData> executeFilter(Vector<?> dataSet) {
-		Vector<WaveData> dataset = (Vector<WaveData>) dataSet;
-		Vector<WaveData> dataFiltered = new Vector<WaveData>();
-		WaveData currentMaxHeight = null;
-		for (Enumeration<WaveData> e = dataset.elements(); e.hasMoreElements();){
-			WaveData data = e.nextElement();
-			
+	public Vector<Forecast> executeFilter(Vector<?> dataSet) {
+		Vector<Forecast> dataset = (Vector<Forecast>) dataSet;
+		Vector<Forecast> dataFiltered = new Vector<Forecast>();
+		Forecast currentMaxHeight = null;
+		for (Enumeration<Forecast> e = dataset.elements(); e.hasMoreElements();) {
+			Forecast data = e.nextElement();
+
 			if (currentMaxHeight == null)
 				currentMaxHeight = data;
-			else{
-				if (currentMaxHeight.equalsDate(data.getDate()))
-					currentMaxHeight = this.maxHeightRead(currentMaxHeight, data);
-				else{
+			else {
+				if (currentMaxHeight.equalsDate(data.getForecastValidDate()))
+					currentMaxHeight = this.maxHeightRead(currentMaxHeight,
+							data);
+				else {
 					dataFiltered.add(currentMaxHeight);
 					currentMaxHeight = data;
 				}
@@ -35,16 +36,21 @@ public class MaxWaveHeightFilter extends Filter {
 			dataFiltered.add(currentMaxHeight);
 		return dataFiltered;
 	}
-	
-	private WaveData maxHeightRead(WaveData currentMaxHeight, WaveData currentData){
-		if (currentMaxHeight.getWaveHeight() < currentData.getWaveHeight())
+
+	private Forecast maxHeightRead(Forecast currentMaxHeight,
+			Forecast currentData) {
+		if (currentMaxHeight.getParameter(
+				WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.getValue())
+				.getdValue() < currentData.getParameter(
+				WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.getValue())
+				.getdValue())
 			return currentData;
 		else
 			return currentMaxHeight;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return "\tMaxWaveHeightFilter\n";
 	}
-	
+
 }

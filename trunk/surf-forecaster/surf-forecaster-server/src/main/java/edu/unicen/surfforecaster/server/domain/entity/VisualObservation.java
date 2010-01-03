@@ -112,7 +112,7 @@ public class VisualObservation {
 		observationDay.setTime(observationDate);
 		
 		Calendar calendarDate = new GregorianCalendar();
-		observationDay.setTime(date);
+		calendarDate.setTime(date);
 		if (observationDay.get(Calendar.YEAR) == calendarDate.get(Calendar.YEAR))
 			if (observationDay.get(Calendar.MONTH) == calendarDate.get(Calendar.MONTH))
 				if (observationDay.get(Calendar.DAY_OF_MONTH) == calendarDate.get(Calendar.DAY_OF_MONTH))

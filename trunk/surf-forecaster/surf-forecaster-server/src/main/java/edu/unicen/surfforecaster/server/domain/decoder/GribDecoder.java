@@ -18,13 +18,14 @@ import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
  */
 public interface GribDecoder extends Serializable{
 
-	/**
-	 * @param file
-	 * @param time
-	 * @return
-	 * @throws IOException
-	 */
-	Collection<Forecast> decodeForecastForTime(File file,
-			List<WaveWatchParameter> parametersToDecode, int time)
-			throws IOException;
+
+	public List<String> listParameters(File file) throws IOException;
+
+	public Collection<Forecast> decodeForecastForTime(File file,
+			List<WaveWatchParameter> parameters, int time) throws IOException;
+
+	public Collection<Forecast> decodeForecastForTime(Collection<File> files,
+			List<WaveWatchParameter> parameters, int time) throws IOException;
+
+	public int getTimes(File file) throws IOException;
 }

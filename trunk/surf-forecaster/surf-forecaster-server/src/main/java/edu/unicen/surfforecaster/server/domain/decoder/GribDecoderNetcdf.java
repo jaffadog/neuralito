@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -74,6 +75,68 @@ public class GribDecoderNetcdf implements GribDecoder {
 
 	}
 
+	public Collection<Forecast> decodeForecastForTime(
+			final Collection<File> files,
+			List<WaveWatchParameter> parameters, final int time)
+			throws IOException {
+		final long init = System.currentTimeMillis();
+
+		final List<GridDatatype> grids = new ArrayList<GridDatatype>();
+		GridCoordSystem pwdGcs = null;
+		final HashMap<String, float[][]> arrays = new HashMap<String, float[][]>();
+		final Collection<Forecast> decodedForecasts = new ArrayList<Forecast>();
+		int imax = 0;
+		int jmax = 0;
+		Date startDate = null;
+		for (File file : files) {
+			log.info("Decoding forecasts from file: " + file.getAbsolutePath());
+			final GridDataset gridDataSet = GridDataset.open(file
+					.getAbsolutePath());
+			grids.addAll(this.getGridsForParameters(gridDataSet, parameters));
+			startDate = gridDataSet.getStartDate();
+
+		}
+		// For each parameter
+		for (final Iterator<GridDatatype> iterator = grids.iterator(); iterator
+				.hasNext();) {
+
+			final GridDatatype pwd = iterator.next();
+			pwdGcs = pwd.getCoordinateSystem();
+			final Array array = pwd.readDataSlice(time, -1, -1, -1);
+			log.info("Read parameter: " + pwd.getName());
+			final float[][] data = (float[][]) array.copyToNDJavaArray();
+			arrays.put(pwd.getName(), data);
+			imax = array.getShape()[0];
+			jmax = array.getShape()[1];
+		}
+		// for each point
+		for (int i = 0; i < imax; i++) {
+			for (int j = 0; j < jmax; j++) {
+				Map<String, Value> parameter = new HashMap<String, Value>();
+				final LatLonPoint latLon = pwdGcs.getLatLon(j, i);
+				for (GridDatatype gridDatatype : grids) {
+					Float value = arrays.get(gridDatatype.getName())[i][j];
+					if (value.isNaN())
+						value = -1F;
+					parameter.put(gridDatatype.getName(), new Value(
+							gridDatatype.getName(), value, Unit.Meters));
+				}
+				float latitude = new Float(latLon.getLatitude());
+				float longitude = new Float(latLon.getLongitude());
+				Point point = new Point(latitude, longitude);
+				final Forecast forecast = new Forecast(startDate, time * 3,
+						point, parameter);
+				decodedForecasts.add(forecast);
+			}
+		}
+
+		final long end = System.currentTimeMillis();
+		log.info("Decoded and created: " + decodedForecasts.size()
+				+ " forecasts.");
+		log.info("Elapsed Time: " + (end - init) / 1000);
+		return decodedForecasts;
+	}
+
 	@Override
 	public Collection<Forecast> decodeForecastForTime(final File file,
 			List<WaveWatchParameter> parameters, final int time)
@@ -106,6 +169,7 @@ public class GribDecoderNetcdf implements GribDecoder {
 				.hasNext();) {
 			final GridDatatype pwd = iterator.next();
 			pwdGcs = pwd.getCoordinateSystem();
+
 			final Array array = pwd.readDataSlice(time, -1, -1, -1);
 			log.info("Read parameter: " + pwd.getName());
 			final float[][] data = (float[][]) array.copyToNDJavaArray();
@@ -153,5 +217,40 @@ public class GribDecoderNetcdf implements GribDecoder {
 		}
 		return gridsForParameters;
 	}
+
+	@Override
+	public List<String> listParameters(File file) throws IOException {
+
+		log.info("Decoding forecasts from file: " + file.getAbsolutePath());
+		List<String> parameters = new ArrayList<String>();
+		final long init = System.currentTimeMillis();
+		final GridDataset gridDataSet = GridDataset
+				.open(file.getAbsolutePath());
+		DateFormat formatter = SimpleDateFormat.getInstance();
+		formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		final List<GridDatatype> grids = gridDataSet.getGrids();
+		for (Iterator iterator = grids.iterator(); iterator.hasNext();) {
+			GridDatatype gridDatatype = (GridDatatype) iterator.next();
+			parameters.add(gridDatatype.getName());
+		}
+		return parameters;
+	}
+
+	public int getTimes(File file) throws IOException {
+		log.info("Decoding forecasts from file: " + file.getAbsolutePath());
+		final long init = System.currentTimeMillis();
+
+		final GridDataset gridDataSet = GridDataset
+				.open(file.getAbsolutePath());
+		int time = -1;
+		 final List<GridDatatype> grids = gridDataSet.getGrids();
+		 for (Iterator iterator = grids.iterator(); iterator.hasNext();) {
+		 GridDatatype gridDatatype = (GridDatatype) iterator.next();
+		  time = gridDatatype.getTimeDimension().getLength();
+		  break;
+		 }
+		return time;
+	}
+
 
 }

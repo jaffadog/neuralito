@@ -55,4 +55,6 @@ public interface WaveWatchSystemPersistenceI {
 
 	public boolean isGridPoint(Point point);
 
+	public void importIntoArchive(ForecastFile forecastsToArchive);
+
 }

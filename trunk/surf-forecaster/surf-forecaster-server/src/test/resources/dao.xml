@@ -118,7 +118,7 @@
 		<!--				<entry key="GlobalModel" value-ref="waveWatchDaoTarget" />-->
 		<!--			</map>-->
 		<!--		</property>-->
-			<property name="waveWatchSystem" ref="waveWatchSystemV2"></property>
+		<property name="waveWatchSystem" ref="waveWatchSystemV2"></property>
 	</bean><!--sessionFactory will get autowired-->
 
 	<bean id="persisterTarget"
@@ -132,9 +132,13 @@
 		<constructor-arg index="4">
 			<list>
 				<ref bean="peakWaveHeight" />
+				<ref bean="peakWaveDirection" />
+				<ref bean="peakWavePeriod" />
+				<ref bean="windU" />
+				<ref bean="windV" />
 			</list>
 		</constructor-arg>
-	
+
 	</bean><!--sessionFactory will get autowired-->
 
 

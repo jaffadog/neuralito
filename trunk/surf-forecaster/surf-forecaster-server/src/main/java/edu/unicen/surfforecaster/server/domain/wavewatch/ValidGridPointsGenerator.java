@@ -39,7 +39,7 @@ public class ValidGridPointsGenerator {
 			throws IOException {
 		log.info("Decoding grib file to obtain valid grid points.");
 		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
-		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT);
+		parameters.add(WaveWatchParameterV3.WaveWatchParameter);
 		final Collection<Forecast> forecastForTime = gribDecoder
 				.decodeForecastForTime(new File(gridFile), parameters
 						, 0);
