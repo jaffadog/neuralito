@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -21,6 +20,7 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 
 public class RegisterUserPanel extends VerticalPanel {
@@ -33,7 +33,7 @@ public class RegisterUserPanel extends VerticalPanel {
 	private PasswordTextBox passTxt;
 	
 	public RegisterUserPanel() {
-		setSpacing(10);
+		//setSpacing(5);
 		this.setWidth(GWTUtils.APLICATION_WIDTH);
 		
 		final MessagePanel errorPanel = new ErrorMsgPanel();
@@ -60,8 +60,8 @@ public class RegisterUserPanel extends VerticalPanel {
 		add(lblRegisterdescription);
 		
 		this.add(flexTable);
-		flexTable.setCellSpacing(5);
-		flexTable.setSize("450", "300");
+		//flexTable.setCellSpacing(5);
+		//flexTable.setSize("450", "300");
 
 		errorlabel = new Label();
 		errorlabel.setStylePrimaryName("gwt-Label-error");
@@ -108,24 +108,15 @@ public class RegisterUserPanel extends VerticalPanel {
 		passTxt = new PasswordTextBox();
 		flexTable.setWidget(5, 2, passTxt);
 		passTxt.setWidth("300px");
-		
-//		final Label adminLabel = new Label(GWTUtils.LOCALE_CONSTANTS.administrator() + ":");
-//		flexTable.setWidget(6, 0, adminLabel);
-//		adminLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-//
-//		final CheckBox adminCheck = new CheckBox();
-//		flexTable.setWidget(6, 2, adminCheck);
-//		
-//		flexTable.getCellFormatter().setVisible(6, 0, false);
-//		flexTable.getCellFormatter().setVisible(6, 2, false);
 
 		final HorizontalPanel btnsPanel = new HorizontalPanel();
 		flexTable.setWidget(6, 0, btnsPanel);
 		btnsPanel.setSpacing(5);
 		flexTable.getCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getFlexCellFormatter().setColSpan(6, 0, 3);
-
-		final PushButton registerBtn = new PushButton();
+		
+		final HTMLButtonGrayGrad registerBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.register(), "RegisterUserPanel-register", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+		//final PushButton registerBtn = new PushButton();
 		btnsPanel.add(registerBtn);
 		registerBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -157,24 +148,15 @@ public class RegisterUserPanel extends VerticalPanel {
 				}
 			}
 		});
-		registerBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		registerBtn.setText(GWTUtils.LOCALE_CONSTANTS.register());
 
-		final PushButton cancelBtn = new PushButton();
-		cancelBtn.addClickHandler(new ClickHandler() {
+		final HTMLButtonGrayGrad backBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.goBack(), "RegisterUserPanel-goBack", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+		backBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				History.newItem(GWTUtils.DEFAULT_HISTORY_TOKEN);
 				//The previos statement call the history change event to reload the view
 			}
 		});
-		btnsPanel.add(cancelBtn);
-//		cancelBtn.addClickListener(new ClickListener() {
-//			public void onClick(final Widget sender) {
-//				hide();
-//			}
-//		});
-		cancelBtn.setHeight(GWTUtils.PUSHBUTTON_HEIGHT);
-		cancelBtn.setText(GWTUtils.LOCALE_CONSTANTS.goBack());
+		btnsPanel.add(backBtn);
 		flexTable.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 	}
 	

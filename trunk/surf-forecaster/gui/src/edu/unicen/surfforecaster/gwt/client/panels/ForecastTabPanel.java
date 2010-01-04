@@ -35,7 +35,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		}
 		{
 			SpotComparatorPanel waveComparatorPanel = new SpotComparatorPanel();
-			this.add(waveComparatorPanel, GWTUtils.LOCALE_CONSTANTS.spotComparator());
+			this.add(waveComparatorPanel, GWTUtils.LOCALE_CONSTANTS.spotComparer());
 			this.historyTokens.add("comparatorTab");
 		}
 		
