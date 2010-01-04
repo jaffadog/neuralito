@@ -52,7 +52,7 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 	
 	public HTMLButtonGrayGrad(String text, String id, int width) {
 		
-		this.width = width < 50 ? 50 : width;
+		this.width = width < 40 ? 40 : width;
 		this.setWidth(this.width + "px");
 		
 		int btnWidth = this.width - 18; //real width is width - rounded corners images width left and right

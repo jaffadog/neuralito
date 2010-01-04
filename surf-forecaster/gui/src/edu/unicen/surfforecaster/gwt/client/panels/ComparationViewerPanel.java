@@ -13,7 +13,6 @@ import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -67,7 +66,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	
 	public ComparationViewerPanel() {
 		{
-			DisclosurePanel spotsForecastersPanel = new DisclosurePanel("Seleccione el pronosticador de cada spot", true);
+			DisclosurePanel spotsForecastersPanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.chooseForecasters(), true);
 			spotsForecastersPanel.setAnimationEnabled(true);
 			spotsForecastersPanel.setWidth("100%");
 			this.setWidget(0, 0, spotsForecastersPanel);
@@ -150,7 +149,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 				}
 				//Refrash button
 				{
-					refreshBtn = new HTMLButtonGrayGrad("Actualizar", "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
+					refreshBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.refresh(), "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
 					refreshBtn.addClickHandler(this);
 					spotsForecastersVPanel.add(refreshBtn);
 					spotsForecastersVPanel.setCellHorizontalAlignment(refreshBtn, HasHorizontalAlignment.ALIGN_CENTER);
@@ -160,7 +159,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		}
 		//Back button
 		{
-			backBtn = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+			backBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.back(), "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 			backBtn.addClickHandler(this);
 			backBtn.setVisible(false);
 			this.setWidget(7, 0, backBtn);
@@ -168,14 +167,14 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			this.getFlexCellFormatter().setHorizontalAlignment(7, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		}
 		{
-			detailedCompTablePanel = new DisclosurePanel("Tabla de pronosticos detallados", false);
+			detailedCompTablePanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.detailedForecastsTable(), false);
 			detailedCompTablePanel.setAnimationEnabled(true);
 			this.setWidget(8, 0, detailedCompTablePanel);
 			this.getFlexCellFormatter().setColSpan(8, 0, 4);
 		}
 		//Back button2
 		{
-			backBtn2 = new HTMLButtonGrayGrad("Volver", "ComparationViewerPanel-back2", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+			backBtn2 = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.back(), "ComparationViewerPanel-back2", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 			backBtn2.addClickHandler(this);
 			this.setWidget(9, 0, backBtn2);
 			this.getFlexCellFormatter().setColSpan(9, 0, 4);
@@ -225,7 +224,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			});
 			
 		} else {
-			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "La cantidad de spots a comparar tiene que ser entre 2 y 5", MessageBox.IconType.INFO);
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToMakeComparation(), MessageBox.IconType.INFO);
 		}
 		
 	}
@@ -244,7 +243,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			else if (detailedCompTable != null)
 				detailedCompTable = null;
 		} else {
-			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "La cantidad de spots a comparar tiene que ser entre 2 y 5", MessageBox.IconType.INFO);
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToMakeComparation(), MessageBox.IconType.INFO);
 		}
 		
 	}

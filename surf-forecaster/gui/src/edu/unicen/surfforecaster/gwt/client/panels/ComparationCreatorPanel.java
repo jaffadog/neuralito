@@ -67,6 +67,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	
 	private static final String LISTBOX_WIDTH = "200px";
 	private static final String LISTBOX_HEIGHT = "300px";
+	private static final String COMBOBOX_WIDTH = "300px";
 	private static final int MAX_SPOTS_TO_COMP = 5;
 	
 	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
@@ -75,7 +76,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	
 	public ComparationCreatorPanel() {
 		
-		Label lblSectionTitle = new Label("Comparador de olas");
+		Label lblSectionTitle = new Label(GWTUtils.LOCALE_CONSTANTS.spotComparator());
 		lblSectionTitle.addStyleName("gwt-Label-SectionTitle");
 		this.setWidget(0, 0, lblSectionTitle);
 		
@@ -94,7 +95,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		
 		//Define comparations
-		Label lblTitle = new Label("Olas a comparar");
+		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.spotsToCompare());
 		lblTitle.addStyleName("gwt-Label-Title");
 		this.setWidget(4, 0, lblTitle);
 		
@@ -140,7 +141,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(2, 0, 1);
 			}
 			{
-				firstBtn = new HTMLButtonGrayGrad("First", "CreateComparationPanel-first", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_60PX);
+				firstBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.first(), "CreateComparationPanel-first", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(1, 3, firstBtn);
 				firstBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(1, 3, firstBtn.getWidth());
@@ -148,7 +149,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(1, 3, 1);
 			}
 			{
-				upBtn = new HTMLButtonGrayGrad("Up", "CreateComparationPanel-up", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_60PX);
+				upBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.up(), "CreateComparationPanel-up", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(2, 1, upBtn);
 				upBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(2, 1, upBtn.getWidth());
@@ -156,7 +157,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(2, 1, 1);
 			}
 			{
-				downBtn = new HTMLButtonGrayGrad("Down", "CreateComparationPanel-down", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_60PX);
+				downBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.down(), "CreateComparationPanel-down", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(3, 1, downBtn);
 				downBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(3, 1, downBtn.getWidth());
@@ -164,7 +165,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(3, 1, 1);
 			}
 			{
-				lastBtn = new HTMLButtonGrayGrad("Last", "CreateComparationPanel-last", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_60PX);
+				lastBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.last(), "CreateComparationPanel-last", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(4, 1, lastBtn);
 				lastBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(4, 1, lastBtn.getWidth());
@@ -172,7 +173,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.getFlexCellFormatter().setRowSpan(4, 1, 1);
 			}
 			{
-				compareBtn = new HTMLButtonGrayGrad("Compare", "CreateComparationPanel-Compare", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+				compareBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.compare(), "CreateComparationPanel-Compare", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(5, 2, compareBtn);
 				compareBtn.addClickHandler(this);
 			}
@@ -217,7 +218,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		else if (sender == cancelSaveCompBtn)
 			this.setSavePanelVisible(false);
 		else if (sender == deleteCompBtn) {
-			DeleteCompConfirmMessageBox confirmBox = new DeleteCompConfirmMessageBox("Eliminar esta comparacion?", MessageBox.IconType.WARNING);
+			DeleteCompConfirmMessageBox confirmBox = new DeleteCompConfirmMessageBox(GWTUtils.LOCALE_CONSTANTS.askForDeleteComp(), MessageBox.IconType.WARNING);
 			confirmBox.setBasePanel(this);
 		}
 			
@@ -271,7 +272,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				selectedSpotsBox.setSelectedIndex(index - 1);
 			}
 		} else {
-			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectSpot(), MessageBox.IconType.INFO);
 		}
 	}
 
@@ -286,7 +287,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				selectedSpotsBox.setSelectedIndex(index + 1);
 			}
 		} else {
-			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectSpot(), MessageBox.IconType.INFO);
 		}
 	}
 
@@ -299,7 +300,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			selectedSpotsBox.insertItem(item, value, selectedSpotsBox.getItemCount());
 			selectedSpotsBox.setSelectedIndex(selectedSpotsBox.getItemCount() - 1);
 		} else {
-			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectSpot(), MessageBox.IconType.INFO);
 		}
 	}
 
@@ -312,7 +313,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			selectedSpotsBox.insertItem(item, value, 0);
 			selectedSpotsBox.setSelectedIndex(0);
 		} else {
-			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), "Debe seleccionar un spot para realizar esta accion", MessageBox.IconType.INFO);
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectSpot(), MessageBox.IconType.INFO);
 		}
 	}
 
@@ -398,7 +399,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			}
 			((SpotComparatorPanel)baseParentPanel).generateSpotsComparation(selectedSpots, selectedSpotsNames);
 		} else {
-			errorPanel.setMessage("Debes elegin entre 2 y 5 spots para comparar");
+			errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToMakeComparation());
 			errorPanel.setVisible(true);
 		}
 		
@@ -417,7 +418,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				if (result != null) {
 					showMyComparationsPanel(result);
 					createSavePanel();
-					saveBtn = new HTMLButtonGrayGrad("Save...", "CreateComparationPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+					saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.showSave(), "CreateComparationPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 					compDefTable.setWidget(5, 3, saveBtn);
 					setSaveBtnClickHandler();
 				}
@@ -441,7 +442,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	
 	private void showMyComparationsPanel(List<ComparationGwtDTO> comparations) {
 		//My comparations
-		myComparations = new DisclosurePanel("Mis comparaciones", true);
+		myComparations = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.myComparations(), true);
 		myComparations.setAnimationEnabled(true);
 		this.setWidget(3, 0, myComparations);
 		{
@@ -449,14 +450,16 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			myComparations.setContent(myCompsTable);
 			{
 				myCompsBox = new ListBox();
-				myCompsBox.setWidth("300px");
+				myCompsBox.setWidth(ComparationCreatorPanel.COMBOBOX_WIDTH);
 				myCompsTable.setWidget(0, 0, myCompsBox);
+				myCompsTable.getFlexCellFormatter().setWidth(0, 0, ComparationCreatorPanel.COMBOBOX_WIDTH);
 			}
 			{
-				deleteCompBtn = new HTMLButtonGrayGrad("Delete", "CreateComparationPanel-DeleteComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+				deleteCompBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.delete(), "CreateComparationPanel-DeleteComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				deleteCompBtn.setVisible(false);
 				deleteCompBtn.addClickHandler(this);
 				myCompsTable.setWidget(0, 1, deleteCompBtn);
+				myCompsTable.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
 			}
 			{
 				lblComparationDescription = new Label("");
@@ -469,7 +472,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	}
 	
 	private void fillCompsBox(final List<ComparationGwtDTO> comparations) {
-		myCompsBox.addItem("<Choose a comparation>", "-1");
+		myCompsBox.addItem("<" + GWTUtils.LOCALE_CONSTANTS.chooseComparation() + ">", "-1");
 		Iterator<ComparationGwtDTO> i = comparations.iterator();
 		while (i.hasNext()) {
 			ComparationGwtDTO comparationDTO = i.next();
@@ -510,13 +513,13 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		this.setWidget(7, 0, savePanel);
 		{
 			//Panel title
-			Label lblTitle = new Label("Guardar comparacion");
+			Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.saveComparation());
 			lblTitle.addStyleName("gwt-Label-Title");
 			savePanel.setWidget(0, 0, lblTitle);
 			savePanel.getFlexCellFormatter().setColSpan(0, 0, 3);
 		}
 		{
-			Label lblCompName = new Label("* " + "Nombre de comparacion" + ": ");
+			Label lblCompName = new Label("* " + GWTUtils.LOCALE_CONSTANTS.comparationName() + ": ");
 			savePanel.setWidget(1, 0, lblCompName);
 			savePanel.getFlexCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		}
@@ -526,12 +529,12 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			savePanel.setWidget(1, 1, txtCompName);
 		}
 		{
-			saveCompBtn = new HTMLButtonGrayGrad("Save", "CreateComparationPanel-SaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+			saveCompBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.save(), "CreateComparationPanel-SaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 			saveCompBtn.addClickHandler(this);
 			savePanel.setWidget(1, 2, saveCompBtn);
 		}
 		{
-			Label lblCompDescription = new Label("Descripcion" + ": ");
+			Label lblCompDescription = new Label(GWTUtils.LOCALE_CONSTANTS.description() + ": ");
 			savePanel.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 			savePanel.getFlexCellFormatter().setVerticalAlignment(2, 0, HasVerticalAlignment.ALIGN_TOP);
 			savePanel.setWidget(2, 0, lblCompDescription);
@@ -542,7 +545,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			savePanel.setWidget(2, 1, txtCompDescription);
 		}
 		{
-			cancelSaveCompBtn = new HTMLButtonGrayGrad("Cancel", "CreateComparationPanel-CancelSaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+			cancelSaveCompBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.cancel(), "CreateComparationPanel-CancelSaveComparation", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 			cancelSaveCompBtn.addClickHandler(this);
 			savePanel.getFlexCellFormatter().setVerticalAlignment(2, 2, HasVerticalAlignment.ALIGN_TOP);
 			savePanel.setWidget(2, 2, cancelSaveCompBtn);
@@ -600,7 +603,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		if (validSelectedSpotsCount()) {
 			this.setSavePanelVisible(true);
 		} else {
-			errorPanel.setMessage("Debes elegin entre 2 y 5 spots para comparar");
+			errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToSaveComparation());
 			errorPanel.setVisible(true);
 		}
 			
@@ -615,7 +618,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			if (txtCompName.getText().trim().equals(myCompsBox.getItemText(i).trim())) {
 				nameDuplicated = true;
 				//TODO hacer esto en un msg box personalizado
-				SaveCompConfirmMessageBox confirmBox = new SaveCompConfirmMessageBox("Ya tenes una comparacion con este nombre. Deseaas sobreescribir?", MessageBox.IconType.WARNING);
+				SaveCompConfirmMessageBox confirmBox = new SaveCompConfirmMessageBox(GWTUtils.LOCALE_CONSTANTS.askForAnotherName(), MessageBox.IconType.WARNING);
 				confirmBox.setBasePanel(this);
 				break;
 			}
@@ -643,7 +646,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 					setSavePanelVisible(false);
 					successPanel.setVisible(true);
 				} else {
-					errorPanel.setMessage("Error al intentar eliminar la comparacion, intentelo nuevamente en unos minutos.");
+					errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_DELETING_COMPARATION());
 					errorPanel.setVisible(true);
 				}
 			}
@@ -676,7 +679,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 					if (result != null && result > 0) {
 						successPanel.setVisible(true);
 					} else {
-						errorPanel.setMessage("Error guardando la comparacion, intentelo nuevamente.");
+						errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_SAVING_COMPARATION());
 						errorPanel.setVisible(true);
 					}
 				}
@@ -702,12 +705,12 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		Vector<String> messages = new Vector<String>();
 		
 		if (!validSelectedSpotsCount())
-			messages.add("Debe elegir entre 2 y 5 spots");
+			messages.add(GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToSaveComparation());
 		
 		//TODO validar aca y entodos los campos de introduccion de texto que no meta caracteres raros (ver como hacer algo generico para todo el sistema)
 		if (txtCompName.getText().trim().equals(""))
 			//messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_AREA_VALUE());
-			messages.add("El campo nombre es obligatorio");
+			messages.add(GWTUtils.LOCALE_CONSTANTS.mandatoryFieldName());
 		
 		return messages;
 	}

@@ -80,6 +80,12 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("El usuario registrado no tiene permisos suficientes para ejecutar esta operaci\u00F3n.")
 	String USER_ROLE_INSUFFICIENT();
 	
+	@DefaultStringValue("Error al intentar eliminar la comparaci\u00F3n, por favor intente nuevamente en unos minutos.")
+	String ERROR_DELETING_COMPARATION();
+	
+	@DefaultStringValue("Error al intentar guardar la comparaci\u00F3n, por favor intente nuevamente en unos minutos.")
+	String ERROR_SAVING_COMPARATION();
+	
 	/**
 	 * Commons translates for more than one panel
 	 */
@@ -248,6 +254,84 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Cancelar")
 	String cancel();
 	
+	@DefaultStringValue("Borrar")
+	String delete();
+	
+	@DefaultStringValue("Debe elegir entre dos y cinco spots para realizar una comparaci\u00F3n.")
+	String twoToFiveSpotsToMakeComparation();
+	
+	/**
+	 * ComparationCreatorPanel
+	 */
+	@DefaultStringValue("Comparador de olas")
+	String spotComparator();
+	
+	@DefaultStringValue("Olas a comparar")
+	String spotsToCompare();
+	
+	@DefaultStringValue("Primero")
+	String first();
+	
+	@DefaultStringValue("Bajar")
+	String down();
+	
+	@DefaultStringValue("Subir")
+	String up();
+	
+	@DefaultStringValue("Ultimo")
+	String last();
+	
+	@DefaultStringValue("Comparar")
+	String compare();
+	
+	@DefaultStringValue("Confirma que desea eliminar esta comparaci\u00F3n?")
+	String askForDeleteComp();
+	
+	@DefaultStringValue("Debe seleccionar un spot para realizar esta acci\u00F3n.")
+	String mustSelectSpot();
+	
+	@DefaultStringValue("Debe elegir entre dos y cinco spots para grabar una comparaci\u00F3n.")
+	String twoToFiveSpotsToSaveComparation();
+	
+	@DefaultStringValue("Guardar...")
+	String showSave();
+	
+	@DefaultStringValue("Mis comparaciones")
+	String myComparations();
+	
+	@DefaultStringValue("Elija una comparaci\u00F3n")
+	String chooseComparation();
+	
+	@DefaultStringValue("Guardar comparaci\u00F3n")
+	String saveComparation();
+	
+	@DefaultStringValue("Nombre de comparaci\u00F3n")
+	String comparationName();
+	
+	@DefaultStringValue("Descripci\u00F3n")
+	String description();
+	
+	@DefaultStringValue("Ya tiene grabada una comparacion con ese nombre. Desea sobreescribirla?")
+	String askForAnotherName();
+	
+	@DefaultStringValue("El campo Nombre de comparaci\u00F3n es obligatorio")
+	String mandatoryFieldName();
+	
+	/**
+	 * ComparationViewerPanel
+	 */
+	@DefaultStringValue("Seleccione el pronosticador de cada spot")
+	String chooseForecasters();
+	
+	@DefaultStringValue("Actualizar")
+	String refresh();
+	
+	@DefaultStringValue("Volver")
+	String back();
+	
+	@DefaultStringValue("Tabla de pronosticos detallados")
+	String detailedForecastsTable();
+	
 	/**
 	 * CurrentForecastPanel
 	 */
@@ -273,7 +357,7 @@ public interface SurfForecasterConstants extends Constants {
 	String spotDescription();
 	
 	@DefaultStringValue("Comparar olas")
-	String spotComparator();
+	String spotComparer();
 	
 	@DefaultStringValue("Nueva ola")
 	String newSpot();
@@ -325,9 +409,6 @@ public interface SurfForecasterConstants extends Constants {
 	 */
 	@DefaultStringValue("Editar")
 	String edit();
-	
-	@DefaultStringValue("Borrar")
-	String delete();
 	
 	@DefaultStringValue("Todav\u00EDa no a creado ninguna ola.")
 	String noneSpotsCreated();
