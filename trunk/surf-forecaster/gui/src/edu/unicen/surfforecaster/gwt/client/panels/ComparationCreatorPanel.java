@@ -66,9 +66,10 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private MessagePanel successPanel;
 	
 	private static final String LISTBOX_WIDTH = "200px";
-	private static final String LISTBOX_HEIGHT = "300px";
+	private static final String LISTBOX_HEIGHT = "286px"; //11 rows of the container flextable
 	private static final String COMBOBOX_WIDTH = "300px";
 	private static final int MAX_SPOTS_TO_COMP = 5;
+	private static final String COMP_DEF_TABLE_CELL_HEIGHT = "26px";
 	
 	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
 	private Map<Integer, Integer> selectedSpots = new HashMap<Integer, Integer>();
@@ -80,27 +81,29 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		lblSectionTitle.addStyleName("gwt-Label-SectionTitle");
 		this.setWidget(0, 0, lblSectionTitle);
 		
+		Label lblSectionDescription = new Label(GWTUtils.LOCALE_CONSTANTS.compSectionDescription());
+		this.setWidget(1, 0, lblSectionDescription);
+		lblSectionDescription.addStyleName("gwt-Label-SectionDescription");
+		
 		errorPanel = new ErrorMsgPanel();
 		errorPanel.setVisible(false);
-		this.setWidget(1, 0, errorPanel);
-		this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setColSpan(1, 0, 3);
+		this.setWidget(2, 0, errorPanel);
+		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		Vector<String> message = new Vector<String>();
 		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
 		successPanel = new SuccessMsgPanel(message);
 		successPanel.setVisible(false);
-		this.setWidget(2, 0, successPanel);
-		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setColSpan(2, 0, 3);
+		this.setWidget(3, 0, successPanel);
+		this.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		//Define comparations
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.spotsToCompare());
 		lblTitle.addStyleName("gwt-Label-Title");
-		this.setWidget(4, 0, lblTitle);
+		this.setWidget(5, 0, lblTitle);
 		
 		SimplePanel comparationDefinition = new SimplePanel();
-		this.setWidget(5, 0, comparationDefinition);
+		this.setWidget(6, 0, comparationDefinition);
 		{
 			compDefTable = new FlexTable();
 			comparationDefinition.setWidget(compDefTable);
@@ -109,12 +112,13 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				localizationPanel.setBasePanel(this);
 				compDefTable.setWidget(0, 0, localizationPanel);
 				compDefTable.getFlexCellFormatter().setColSpan(0, 0, 4);
+				compDefTable.getFlexCellFormatter().setHeight(0, 0, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 			}
 			{
 				this.spotBox = new ListBox(true);
 				this.spotBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
 				compDefTable.setWidget(1, 0, this.spotBox);
-				compDefTable.getFlexCellFormatter().setRowSpan(1, 0, 4);
+				compDefTable.getFlexCellFormatter().setRowSpan(1, 0, 11);
 				compDefTable.getFlexCellFormatter().setWidth(1, 0, ComparationCreatorPanel.LISTBOX_WIDTH);
 			}
 			{
@@ -122,14 +126,13 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.setWidget(1, 1, addSpotBtn);
 				addSpotBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(1, 1, addSpotBtn.getWidth());
-				compDefTable.getFlexCellFormatter().setHeight(1, 1, addSpotBtn.getHeight());
-				compDefTable.getFlexCellFormatter().setRowSpan(1, 1, 1);
+				compDefTable.getFlexCellFormatter().setHeight(1, 1, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 			}
 			{
 				this.selectedSpotsBox = new ListBox(true);
 				this.selectedSpotsBox.setSize(ComparationCreatorPanel.LISTBOX_WIDTH, ComparationCreatorPanel.LISTBOX_HEIGHT);
 				compDefTable.setWidget(1, 2, this.selectedSpotsBox);
-				compDefTable.getFlexCellFormatter().setRowSpan(1, 2, 4);
+				compDefTable.getFlexCellFormatter().setRowSpan(1, 2, 11);
 				compDefTable.getFlexCellFormatter().setWidth(1, 2, ComparationCreatorPanel.LISTBOX_WIDTH);
 			}
 			{
@@ -137,44 +140,41 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				compDefTable.setWidget(2, 0, removeSpotBtn);
 				removeSpotBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(2, 0, removeSpotBtn.getWidth());
-				compDefTable.getFlexCellFormatter().setHeight(2, 0, removeSpotBtn.getHeight());
-				compDefTable.getFlexCellFormatter().setRowSpan(2, 0, 1);
+				compDefTable.getFlexCellFormatter().setHeight(2, 0, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 			}
 			{
-				firstBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.first(), "CreateComparationPanel-first", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+				firstBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.first(), "CreateComparationPanel-first", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX, GWTUtils.LOCALE_CONSTANTS.saveTip());
 				compDefTable.setWidget(1, 3, firstBtn);
 				firstBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(1, 3, firstBtn.getWidth());
-				compDefTable.getFlexCellFormatter().setHeight(1, 3, firstBtn.getHeight());
-				compDefTable.getFlexCellFormatter().setRowSpan(1, 3, 1);
+				compDefTable.getFlexCellFormatter().setHeight(1, 3, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 			}
 			{
 				upBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.up(), "CreateComparationPanel-up", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(2, 1, upBtn);
 				upBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(2, 1, upBtn.getWidth());
-				compDefTable.getFlexCellFormatter().setHeight(2, 1, upBtn.getHeight());
-				compDefTable.getFlexCellFormatter().setRowSpan(2, 1, 1);
+				compDefTable.getFlexCellFormatter().setHeight(2, 1, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 			}
 			{
 				downBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.down(), "CreateComparationPanel-down", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(3, 1, downBtn);
 				downBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(3, 1, downBtn.getWidth());
-				compDefTable.getFlexCellFormatter().setHeight(3, 1, downBtn.getHeight());
-				compDefTable.getFlexCellFormatter().setRowSpan(3, 1, 1);
+				compDefTable.getFlexCellFormatter().setHeight(3, 1, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 			}
 			{
 				lastBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.last(), "CreateComparationPanel-last", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 				compDefTable.setWidget(4, 1, lastBtn);
 				lastBtn.addClickHandler(this);
 				compDefTable.getFlexCellFormatter().setWidth(4, 1, lastBtn.getWidth());
-				compDefTable.getFlexCellFormatter().setHeight(4, 1, lastBtn.getHeight());
-				compDefTable.getFlexCellFormatter().setRowSpan(4, 1, 1);
+				compDefTable.getFlexCellFormatter().setHeight(4, 1, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 			}
 			{
 				compareBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.compare(), "CreateComparationPanel-Compare", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
-				compDefTable.setWidget(5, 2, compareBtn);
+				compDefTable.setWidget(12, 2, compareBtn);
+				compDefTable.getFlexCellFormatter().setHeight(12, 2, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
+				compDefTable.getFlexCellFormatter().setHorizontalAlignment(12, 2, HasHorizontalAlignment.ALIGN_RIGHT);
 				compareBtn.addClickHandler(this);
 			}
 		}
@@ -418,8 +418,9 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				if (result != null) {
 					showMyComparationsPanel(result);
 					createSavePanel();
-					saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.showSave(), "CreateComparationPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
-					compDefTable.setWidget(5, 3, saveBtn);
+					saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.showSave(), "CreateComparationPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX, GWTUtils.LOCALE_CONSTANTS.saveTip());
+					compDefTable.setWidget(12, 3, saveBtn);
+					compDefTable.getFlexCellFormatter().setHeight(12, 3, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 					setSaveBtnClickHandler();
 				}
 				
@@ -444,7 +445,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		//My comparations
 		myComparations = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.myComparations(), true);
 		myComparations.setAnimationEnabled(true);
-		this.setWidget(3, 0, myComparations);
+		this.setWidget(4, 0, myComparations);
 		{
 			FlexTable myCompsTable = new FlexTable();
 			myComparations.setContent(myCompsTable);
@@ -460,10 +461,12 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				deleteCompBtn.addClickHandler(this);
 				myCompsTable.setWidget(0, 1, deleteCompBtn);
 				myCompsTable.getFlexCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_LEFT);
+				myCompsTable.getFlexCellFormatter().setWidth(0, 1, "100%");
 			}
 			{
 				lblComparationDescription = new Label("");
 				myCompsTable.setWidget(1, 0, lblComparationDescription);
+				lblComparationDescription.addStyleName("gwt-Label-SectionDescription");
 				myCompsTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 			}
 		}

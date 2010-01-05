@@ -33,7 +33,6 @@ public class RegisterUserPanel extends VerticalPanel {
 	private PasswordTextBox passTxt;
 	
 	public RegisterUserPanel() {
-		//setSpacing(5);
 		this.setWidth(GWTUtils.APLICATION_WIDTH);
 		
 		final MessagePanel errorPanel = new ErrorMsgPanel();
@@ -60,8 +59,6 @@ public class RegisterUserPanel extends VerticalPanel {
 		add(lblRegisterdescription);
 		
 		this.add(flexTable);
-		//flexTable.setCellSpacing(5);
-		//flexTable.setSize("450", "300");
 
 		errorlabel = new Label();
 		errorlabel.setStylePrimaryName("gwt-Label-error");
@@ -116,7 +113,6 @@ public class RegisterUserPanel extends VerticalPanel {
 		flexTable.getFlexCellFormatter().setColSpan(6, 0, 3);
 		
 		final HTMLButtonGrayGrad registerBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.register(), "RegisterUserPanel-register", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
-		//final PushButton registerBtn = new PushButton();
 		btnsPanel.add(registerBtn);
 		registerBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {

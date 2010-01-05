@@ -22,7 +22,7 @@
 .gwt-Label-SectionTitle{
     font-weight:bold;
     font-size:11pt;
-    margin-bottom:20px;
+    margin-bottom:10px;
     color:#3366CC;
 }
 
@@ -30,7 +30,7 @@
 .gwt-Label-Title{
     font-weight:bold;
     font-size:10pt;
-    margin-bottom:10px;
+    margin-bottom:5px;
     color:#3366CC;
 }
 
@@ -44,7 +44,7 @@
 /** Label to describe a section */
 .gwt-Label-SectionDescription{
     text-align:justify;
-    margin-bottom:20px;
+    margin-bottom:10px;
 }
 
 /** Label error */
@@ -220,7 +220,14 @@ div#closeLoginBoxDiv a{
 /*********************** RegisterUserPanel ***************************************/
 /*****************************************************************************/
 
+/*****************************************************************************/
+/*********************** SpotComparationColumnChart ***************************************/
+/*****************************************************************************/
 
+.gwt-viz-container #chartArea text{
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    font-size:9pt;
+}
 
 /*****************************************************************************/
 /*********************** SuccessPanel ***************************************/

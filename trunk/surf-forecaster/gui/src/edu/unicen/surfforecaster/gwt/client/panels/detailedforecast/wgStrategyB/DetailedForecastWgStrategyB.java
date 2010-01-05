@@ -43,7 +43,6 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 		
 		//Subtitle
 		Label lblSubTitle = new Label("04-10-09 > [UTC-10] Pacific/Rarotonga, CKT");
-		//lblSubTitle.addStyleName("gwt-Label-SubTitle");
 		completeDetailedForecastVPanel.add(lblSubTitle);
 		
 		//Current forecast
@@ -56,6 +55,11 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 		flexTable.setWidget(0, 1, nextHours);
 		completeDetailedForecastVPanel.add(flexTable);
 		completeDetailedForecastVPanel.setCellHorizontalAlignment(flexTable, HasHorizontalAlignment.ALIGN_CENTER);
+		
+		//Table title
+		Label lblTableTitle = new Label(GWTUtils.LOCALE_CONSTANTS.detailedForecastsTable());
+		lblTableTitle.addStyleName("gwt-Label-Title");
+		completeDetailedForecastVPanel.add(lblTableTitle);
 		
 		completeDetailedForecastVPanel.add(new WgTableB(forecasters, 0, 23));
 		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));

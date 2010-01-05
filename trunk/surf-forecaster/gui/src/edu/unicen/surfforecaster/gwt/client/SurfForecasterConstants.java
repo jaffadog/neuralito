@@ -257,7 +257,7 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Borrar")
 	String delete();
 	
-	@DefaultStringValue("Debe elegir entre dos y cinco spots para realizar una comparaci\u00F3n.")
+	@DefaultStringValue("Debe elegir entre dos y cinco olas para realizar una comparaci\u00F3n.")
 	String twoToFiveSpotsToMakeComparation();
 	
 	/**
@@ -287,10 +287,10 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Confirma que desea eliminar esta comparaci\u00F3n?")
 	String askForDeleteComp();
 	
-	@DefaultStringValue("Debe seleccionar un spot para realizar esta acci\u00F3n.")
+	@DefaultStringValue("Debe seleccionar una ola para realizar esta acci\u00F3n.")
 	String mustSelectSpot();
 	
-	@DefaultStringValue("Debe elegir entre dos y cinco spots para grabar una comparaci\u00F3n.")
+	@DefaultStringValue("Debe elegir entre dos y cinco olas para grabar una comparaci\u00F3n.")
 	String twoToFiveSpotsToSaveComparation();
 	
 	@DefaultStringValue("Guardar...")
@@ -317,10 +317,17 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("El campo Nombre de comparaci\u00F3n es obligatorio")
 	String mandatoryFieldName();
 	
+	@DefaultStringValue("Grabar la comparaci\u00F3n")
+	String saveTip();
+	
+	@DefaultStringValue("Utilice el comparador de olas para realizar comparaciones de entre dos y cinco de sus olas preferidas. Si usted es un usuario registrado " +
+			"podr\u00E1 incluso guardar sus comparaciones para visualizarlas cuando lo desee.")
+	String compSectionDescription();
+	
 	/**
 	 * ComparationViewerPanel
 	 */
-	@DefaultStringValue("Seleccione el pronosticador de cada spot")
+	@DefaultStringValue("Seleccione el pronosticador de cada ola")
 	String chooseForecasters();
 	
 	@DefaultStringValue("Actualizar")
@@ -331,6 +338,26 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Tabla de pronosticos detallados")
 	String detailedForecastsTable();
+	
+	@DefaultStringValue("Volver a la pantalla de definici\u00F3n de comparaciones")
+	String compBackTip();
+	
+	@DefaultStringValue("Refrescar la comparaci\u00F3n con los pronosticadores seleccionados")
+	String refreshTip();
+	
+	@DefaultStringValue("Altura de olas en las pr\u00F3ximas horas")
+	String waveHeightNextHours();
+	
+	@DefaultStringValue("El siguiente gr\u00E1fico de barras muestra la altura de las distintas olas comparadas durante las pr\u00F3ximas horas del d\u00EDa. " +
+			"Los datos de cada ola son pronosticados con el pronosticador seleccionado previamente.")
+	String waveHeightNextHoursDescr();
+	
+	@DefaultStringValue("Gr\u00E1fico animado de altura de olas")
+	String waveHeightAllForecast();
+	
+	@DefaultStringValue("El siguiente gr\u00E1fico animado permite visualizar como ir\u00E1n variando las alturas de las olas comparadas desde este momento hasta " +
+			"la semana pr\u00F3xima. Los datos de cada ola son pronosticados con el pronosticador seleccionado previamente.")
+	String waveHeightAllForecastDescr();
 	
 	/**
 	 * CurrentForecastPanel
