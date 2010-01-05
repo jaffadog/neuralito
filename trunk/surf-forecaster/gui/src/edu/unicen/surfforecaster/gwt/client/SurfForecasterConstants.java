@@ -407,7 +407,8 @@ public interface SurfForecasterConstants extends Constants {
 	/**
 	 * MapPanel
 	 */
-	@DefaultStringValue("Clickee en el mapa para ubicar geogr\u00E1ficamente la ola que desea pronosticar.")
+	@DefaultStringValue("Clickee en el mapa para ubicar geogr\u00E1ficamente la ola que desea pronosticar. Luego seleccione uno de los pronosticadores(WW3GridPoint) " +
+			"que aparecen alrededor de la ola seleccionada.")
 	String mapHelpTip();
 	
 	@DefaultStringValue("Latitud")
@@ -476,7 +477,7 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("De")
 	String from();
 	
-	@DefaultStringValue("a")
+	@DefaultStringValue("A")
 	String to();
 	
 	@DefaultStringValue("m")
@@ -493,6 +494,11 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Agregar observaciones")
 	String appendObservations();
+	
+	@DefaultStringValue("Esta secci\u00F3n le permite registrar una ola en cualquier lugar del mundo para que pueda empezar a recibir predicciones del pronosticador(WW3GridPoint)" +
+			" m\u00E1s cercano a dicha ola. Adem\u00E1s, si dispone de algun historial de observaciones costeras diarias con la altura m\u00E1xima que alcanzaron las olas en esa ubicaci\u00F3n " +
+			"(una observaci\u00F3n diaria de altura m\u00E1xima), podr\u00E1 entrenar un pronosticador especializado ubicado exactamente en las coordenadas de la ola registrada.")
+	String registerNewSpotDesc();
 	
 	/**
 	 * RegisterNewUserPanel

@@ -39,7 +39,7 @@ public class MapPanel extends VerticalPanel {
 	
 	public MapPanel() {
 		Label lblMapDescription = new Label(GWTUtils.LOCALE_CONSTANTS.mapHelpTip());
-		lblMapDescription.addStyleName("gwt-Label-RegisterSectionDescription");
+		lblMapDescription.addStyleName("gwt-Label-SectionDescription");
 		this.add(lblMapDescription);
 		
 		HorizontalPanel mapHPanel = new HorizontalPanel();
@@ -119,6 +119,7 @@ public class MapPanel extends VerticalPanel {
 	    mapHPanel.add(flexTable);
 	    
 	    Label lblSpot = new Label(GWTUtils.LOCALE_CONSTANTS.spot());
+	    lblSpot.addStyleName("gwt-Label-Title");
 	    flexTable.setWidget(0, 0, lblSpot);
 	    
 	    Label lblSpotLat = new Label(GWTUtils.LOCALE_CONSTANTS.latitude());
@@ -146,6 +147,7 @@ public class MapPanel extends VerticalPanel {
 	    flexTable.setWidget(5, 0, lblSpace);
 	    
 	    Label lblBuoy = new Label(GWTUtils.LOCALE_CONSTANTS.ww3GridPoint());
+	    lblBuoy.addStyleName("gwt-Label-Title");
 	    flexTable.setWidget(6, 0, lblBuoy);
 	    
 	    Label lblBuoyLat = new Label(GWTUtils.LOCALE_CONSTANTS.latitude());
