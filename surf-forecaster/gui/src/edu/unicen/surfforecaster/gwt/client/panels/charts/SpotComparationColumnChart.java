@@ -16,7 +16,9 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
+import edu.unicen.surfforecaster.gwt.client.utils.UnitTranslator;
 
 public class SpotComparationColumnChart implements ISurfForecasterChart {
 
@@ -47,6 +49,9 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Options createOptions() {
+		//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
+		Unit heightUnitTarget = Unit.Meters;
+		
 		Options options = Options.create();
 		options.setHeight(300);
 		options.setWidth(950);
@@ -55,6 +60,7 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 		options.setEnableTooltip(true);
 		options.setMin(0);
 		options.setMax(20);
+		options.setTitleY(GWTUtils.LOCALE_CONSTANTS.wave_height() + " (" + UnitTranslator.getUnitAbbrTranlation(heightUnitTarget) + ")");
 		return options;
 	}
 
@@ -71,9 +77,9 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
   	    }
   	    
   	    data.addRows(4);
-  	    data.setValue(0, 0, "Ahora");
+  	    data.setValue(0, 0, GWTUtils.LOCALE_CONSTANTS.now());
   	    for (int index = 1; index < data.getNumberOfRows(); index++) {
-  	    	data.setValue(index, 0, "+" + index * 3 + " horas");
+  	    	data.setValue(index, 0, "+" + index * 3 + " " + GWTUtils.LOCALE_CONSTANTS.hours());
 		}
   	    
 	    for (int spotIndex = 0; spotIndex < spotsIds.size(); spotIndex++) {

@@ -12,7 +12,7 @@ public class MainVerticalPanel extends VerticalPanel {
 	public MainVerticalPanel() {
 		
 		this.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		//this.setWidth(GWTUtils.APLICATION_WIDTH);
+		//TODO agregar un panel antes de este que tenga una leyenda de para que registrarse y un link a la pagina de registro
 		{
 			forecastTabPanel = new ForecastTabPanel();
 			this.add(forecastTabPanel);

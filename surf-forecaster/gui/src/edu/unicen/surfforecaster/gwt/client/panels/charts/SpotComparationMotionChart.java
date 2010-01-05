@@ -15,6 +15,7 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 
 public class SpotComparationMotionChart implements ISurfForecasterChart {
@@ -57,7 +58,8 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 		DataTable data = DataTable.create();	    
 	    data.addColumn(ColumnType.STRING, "Spot");
 	    data.addColumn(ColumnType.NUMBER, "Hours");
-	    data.addColumn(ColumnType.NUMBER, "Wave Height");
+	    data.addColumn(ColumnType.NUMBER, GWTUtils.LOCALE_CONSTANTS.wave_height());
+	    //data.addColumn(ColumnType.NUMBER, GWTUtils.LOCALE_CONSTANTS.wave_period());
 	    
 	    for (int spotIndex = 0; spotIndex < spotsIds.size(); spotIndex++) {
 	    	Integer spotId = spotsIds.get(spotIndex);
@@ -71,29 +73,17 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 				ForecastGwtDTO forecastDTO = forecasts.get(forecastIndex);
 				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
 				Unit heightUnitTarget = Unit.Meters;
-				Unit speedUnitTarget = Unit.KilometersPerHour;
-				Unit directionUnitTarget = Unit.Degrees;
-				Unit periodUnitTarget = Unit.Seconds;
-				
+
 				//wave height
 				String waveHeight = forecastDTO.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
-				//wind speed
-				String windSpeed = forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
-				//Wave direccion
-				String waveDirection = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue();
-				//Wave period
-				String wavePeriod = forecastDTO.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
 				try {
-					windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
 					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
-					waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
-					wavePeriod = NumberFormat.getFormat("###").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
 				} catch (NeuralitoException e) {
 					// TODO ver como manejar esta exvepcion de conversion de unidades
 					e.printStackTrace();
 				}
 				data.setValue(spotIndex * forecasts.size() + forecastIndex, 0, spotName);
-	    		data.setValue(spotIndex * forecasts.size() + forecastIndex, 1, 2000 + forecastIndex);
+	    		data.setValue(spotIndex * forecasts.size() + forecastIndex, 1, forecastIndex);
 	    		data.setValue(spotIndex * forecasts.size() + forecastIndex, 2, new Double(waveHeight));
 			}
 	    }

@@ -71,6 +71,28 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 		this.addMouseOutHandler(this);
 	}
 	
+	public HTMLButtonGrayGrad(String text, String id, int width, String toolTip) {
+		
+		this.width = width < 40 ? 40 : width;
+		this.setWidth(this.width + "px");
+		
+		int btnWidth = this.width - 18; //real width is width - rounded corners images width left and right
+ 
+		this.setHTML("<div id=\"gwt-surfForecaster-" + id + "-btn-left\" class=\"gwt-HTML-gray-grad-btn-left\"></div>" +
+						"<div id=\"gwt-surfForecaster-" + id + "-btn-center\" class=\"gwt-HTML-gray-grad-btn-center\" style=\"width:" + btnWidth + "px\">" + text + "</div>" +
+					 "<div id=\"gwt-surfForecaster-" + id + "-btn-right\" class=\"gwt-HTML-gray-grad-btn-right\"></div>");
+		this.setWordWrap(false);
+		this.setTitle(toolTip);
+		
+		this.leftId = "gwt-surfForecaster-" + id + "-btn-left";
+		this.centerId = "gwt-surfForecaster-" + id + "-btn-center";
+		this.rightId = "gwt-surfForecaster-" + id + "-btn-right";
+		
+		this.addMouseDownHandler(this);
+		this.addMouseUpHandler(this);
+		this.addMouseOutHandler(this);
+	}
+	
 	//TODO Native code
 	public native String setDownImage() /*-{
 	

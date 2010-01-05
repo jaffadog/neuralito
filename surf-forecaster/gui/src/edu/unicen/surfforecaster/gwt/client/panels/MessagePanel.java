@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MessagePanel extends HorizontalPanel {
-	
+	//TODO alinear bien los mensajes de error contra la izquierda ni bien termina el icono y ver si el guion va o no al principio
 	Image image = null;
 	VerticalPanel messagesVPanel = null;
 	String labelsStyleNames = "";

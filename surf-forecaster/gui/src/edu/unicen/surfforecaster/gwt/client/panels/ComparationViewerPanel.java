@@ -149,7 +149,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 				}
 				//Refrash button
 				{
-					refreshBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.refresh(), "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
+					refreshBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.refresh(), "ComparationViewerPanel-refresh", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX, GWTUtils.LOCALE_CONSTANTS.refreshTip());
 					refreshBtn.addClickHandler(this);
 					spotsForecastersVPanel.add(refreshBtn);
 					spotsForecastersVPanel.setCellHorizontalAlignment(refreshBtn, HasHorizontalAlignment.ALIGN_CENTER);
@@ -159,7 +159,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		}
 		//Back button
 		{
-			backBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.back(), "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+			backBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.back(), "ComparationViewerPanel-back", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX, GWTUtils.LOCALE_CONSTANTS.compBackTip());
 			backBtn.addClickHandler(this);
 			backBtn.setVisible(false);
 			this.setWidget(7, 0, backBtn);
@@ -174,7 +174,7 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		}
 		//Back button2
 		{
-			backBtn2 = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.back(), "ComparationViewerPanel-back2", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+			backBtn2 = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.back(), "ComparationViewerPanel-back2", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX, GWTUtils.LOCALE_CONSTANTS.compBackTip());
 			backBtn2.addClickHandler(this);
 			this.setWidget(9, 0, backBtn2);
 			this.getFlexCellFormatter().setColSpan(9, 0, 4);
@@ -306,18 +306,36 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	}
 	
 	private void drawColumnChart(){
-		SimplePanel chartContainer = new SimplePanel();
+		VerticalPanel chartContainer = new VerticalPanel();
+		
+		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.waveHeightNextHours());
+		lblTitle.addStyleName("gwt-Label-Title");
+		chartContainer.add(lblTitle);
+		
+		Label lblDescription = new Label(GWTUtils.LOCALE_CONSTANTS.waveHeightNextHoursDescr());
+		chartContainer.add(lblDescription);
+		lblDescription.addStyleName("gwt-Label-SectionDescription");
+		
 		ISurfForecasterChart columnChart = new SpotComparationColumnChart(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames);
 		columnChart.render(chartContainer);
-		this.setWidget(5, 0, chartContainer);
+		this.setWidget(1, 0, chartContainer);
 	    this.getFlexCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}
 	
 	private void drawMotionChart(){
-		SimplePanel chartContainer = new SimplePanel();
+		VerticalPanel chartContainer = new VerticalPanel();
+		
+		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.waveHeightAllForecast());
+		lblTitle.addStyleName("gwt-Label-Title");
+		chartContainer.add(lblTitle);
+		
+		Label lblDescription = new Label(GWTUtils.LOCALE_CONSTANTS.waveHeightAllForecastDescr());
+		chartContainer.add(lblDescription);
+		lblDescription.addStyleName("gwt-Label-SectionDescription");
+		
 		ISurfForecasterChart motionChart = new SpotComparationMotionChart(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames);
 		motionChart.render(chartContainer);
-		this.setWidget(6, 0, chartContainer);
+		this.setWidget(2, 0, chartContainer);
 	    this.getFlexCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
 	}
 	
