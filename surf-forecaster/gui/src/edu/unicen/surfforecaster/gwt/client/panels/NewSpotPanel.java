@@ -109,11 +109,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		this.setWidget(2, 0, lblTitle);
 		this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		
-		Label lblNewSpotDescription = new Label("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's " +
-				"standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has " +
-				"survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s " +
-				"with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including " +
-				"versions of Lorem Ipsum.");
+		Label lblNewSpotDescription = new Label(GWTUtils.LOCALE_CONSTANTS.registerNewSpotDesc());
 		lblNewSpotDescription.addStyleName("gwt-Label-SectionDescription");
 		this.setWidget(3, 0, lblNewSpotDescription);
 		this.getFlexCellFormatter().setColSpan(3, 0, 3);
@@ -285,40 +281,50 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	    formTable.getFlexCellFormatter().setColSpan(3, 0, 10);
 	    Label lblFrom = new Label(GWTUtils.LOCALE_CONSTANTS.from());
 	    formTable.setWidget(4, 0, lblFrom);
+	    formTable.getFlexCellFormatter().setWidth(4, 0, "60px");
 	    txtHour = new TextBox();
 	    txtHour.setName("hourFormElement");
 	    txtHour.setText("06");
 	    txtHour.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtHour.setMaxLength(2);
 	    formTable.setWidget(4, 1, txtHour);
+	    formTable.getFlexCellFormatter().setWidth(4, 1, NewSpotPanel.TIME_INPUTS_WIDTH);
 	    Label lblHour = new Label(GWTUtils.LOCALE_CONSTANTS.hour_abbr());
 	    formTable.setWidget(4, 2, lblHour);
+	    formTable.getFlexCellFormatter().setWidth(4, 2, NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtMinutes = new TextBox();
 	    txtMinutes.setName("minutesFormElement");
 	    txtMinutes.setText("30");
 	    txtMinutes.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtMinutes.setMaxLength(2);
 	    formTable.setWidget(4, 3, txtMinutes);
+	    formTable.getFlexCellFormatter().setWidth(4, 3, NewSpotPanel.TIME_INPUTS_WIDTH);
 	    Label lblMinutes = new Label(GWTUtils.LOCALE_CONSTANTS.minutes_abbr());
 	    formTable.setWidget(4, 4, lblMinutes);
+	    formTable.getFlexCellFormatter().setWidth(4, 4, NewSpotPanel.TIME_INPUTS_WIDTH);
 	    Label lblTo = new Label(GWTUtils.LOCALE_CONSTANTS.to());
 	    formTable.setWidget(4, 5, lblTo);
+	    formTable.getFlexCellFormatter().setWidth(4, 5, "60px");
 	    txtHour2 = new TextBox();
 	    txtHour2.setName("hour2FormElement");
 	    txtHour2.setText("19");
 	    txtHour2.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtHour2.setMaxLength(2);
 	    formTable.setWidget(4, 6, txtHour2);
+	    formTable.getFlexCellFormatter().setWidth(4, 6, NewSpotPanel.TIME_INPUTS_WIDTH);
 	    Label lblHour2 = new Label(GWTUtils.LOCALE_CONSTANTS.hour_abbr());
 	    formTable.setWidget(4, 7, lblHour2);
+	    formTable.getFlexCellFormatter().setWidth(4, 7, NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtMinutes2 = new TextBox();
 	    txtMinutes2.setName("minutes2FormElement");
 	    txtMinutes2.setWidth(NewSpotPanel.TIME_INPUTS_WIDTH);
 	    txtMinutes2.setMaxLength(2);
 	    txtMinutes2.setText("30");
 	    formTable.setWidget(4, 8, txtMinutes2);
+	    formTable.getFlexCellFormatter().setWidth(4, 8, NewSpotPanel.TIME_INPUTS_WIDTH);
 	    Label lblMinutes2 = new Label(GWTUtils.LOCALE_CONSTANTS.minutes_abbr());
 	    formTable.setWidget(4, 9, lblMinutes2);
+	    formTable.getFlexCellFormatter().setWidth(4, 9, "100%");
 		spotId = new Hidden();
 	    spotId.setName("spotIdFormElement");
 	    spotId.setID("spotIdFormElement");
