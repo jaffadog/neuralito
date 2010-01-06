@@ -3,19 +3,20 @@ package edu.unicen.surfforecaster.gwt.client.panels;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MessagePanel extends HorizontalPanel {
-	//TODO alinear bien los mensajes de error contra la izquierda ni bien termina el icono y ver si el guion va o no al principio
 	Image image = null;
 	VerticalPanel messagesVPanel = null;
 	String labelsStyleNames = "";
 	
 	public String getLabelsStyleNames() {
-		return labelsStyleNames;
+		return this.labelsStyleNames;
 	}
 
 	public void setLabelsStyleNames(String labelsStyleNames) {
@@ -24,20 +25,24 @@ public class MessagePanel extends HorizontalPanel {
 
 	public MessagePanel(){
 		setSpacing(10);
+		setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		setWidth("100%");
 		{
 			this.image = new Image();
-			image.setSize("40", "40");
-			add(image);
+			this.image.setSize("50px", "50px");
+			add(this.image);
+			setCellWidth(this.image, "40px");
+			setCellVerticalAlignment(this.image, HasVerticalAlignment.ALIGN_MIDDLE);
 		}
 		{
 			this.messagesVPanel = new VerticalPanel();
-			add(messagesVPanel);
+			this.messagesVPanel.setWidth("100%");
+			add(this.messagesVPanel);
 		}
 	}
 
 	public Image getImage() {
-		return image;
+		return this.image;
 	}
 
 	public void setImage(Image image) {
@@ -45,7 +50,7 @@ public class MessagePanel extends HorizontalPanel {
 	}
 
 	public VerticalPanel getMessagesVPanel() {
-		return messagesVPanel;
+		return this.messagesVPanel;
 	}
 
 	public void setMessagesVPanel(VerticalPanel messagesVPanel) {

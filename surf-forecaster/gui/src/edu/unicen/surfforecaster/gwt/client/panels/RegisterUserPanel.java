@@ -6,6 +6,7 @@ import java.util.Vector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -32,8 +33,15 @@ public class RegisterUserPanel extends VerticalPanel {
 	private TextBox userTxt;
 	private PasswordTextBox passTxt;
 	
+	private static final String INPUT_WIDTH = "300px";
+	
 	public RegisterUserPanel() {
 		this.setWidth(GWTUtils.APLICATION_WIDTH);
+		
+		final FlexTable flexTable = new FlexTable();
+		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.registerSectionTitle());
+		lblTitle.addStyleName("gwt-Label-SectionTitle");
+		this.add(lblTitle);
 		
 		final MessagePanel errorPanel = new ErrorMsgPanel();
 		errorPanel.setVisible(false);
@@ -44,11 +52,6 @@ public class RegisterUserPanel extends VerticalPanel {
 		final MessagePanel successPanel = new SuccessMsgPanel(message);
 		successPanel.setVisible(false);
 		this.add(successPanel);
-		
-		final FlexTable flexTable = new FlexTable();
-		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.registerSectionTitle());
-		lblTitle.addStyleName("gwt-Label-SectionTitle");
-		this.add(lblTitle);
 		
 		Label lblRegisterdescription = new Label("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's " +
 				"standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has " +
@@ -87,24 +90,29 @@ public class RegisterUserPanel extends VerticalPanel {
 		flexTable.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		nameTxt = new TextBox();
+		nameTxt.setMaxLength(100);
 		flexTable.setWidget(1, 2, nameTxt);
-		nameTxt.setWidth("300px");
+		nameTxt.setWidth(RegisterUserPanel.INPUT_WIDTH);
 
 		lastNameTxt = new TextBox();
+		lastNameTxt.setMaxLength(100);
 		flexTable.setWidget(2, 2, lastNameTxt);
-		lastNameTxt.setWidth("300px");
+		lastNameTxt.setWidth(RegisterUserPanel.INPUT_WIDTH);
 		
 		emailTxt = new TextBox();
+		emailTxt.setMaxLength(100);
 		flexTable.setWidget(3, 2, emailTxt);
-		emailTxt.setWidth("300px");
+		emailTxt.setWidth(RegisterUserPanel.INPUT_WIDTH);
 
 		userTxt = new TextBox();
+		userTxt.setMaxLength(50);
 		flexTable.setWidget(4, 2, userTxt);
-		userTxt.setWidth("300px");
+		userTxt.setWidth(RegisterUserPanel.INPUT_WIDTH);
 
 		passTxt = new PasswordTextBox();
+		passTxt.setMaxLength(50);
 		flexTable.setWidget(5, 2, passTxt);
-		passTxt.setWidth("300px");
+		passTxt.setWidth(RegisterUserPanel.INPUT_WIDTH);
 
 		final HorizontalPanel btnsPanel = new HorizontalPanel();
 		flexTable.setWidget(6, 0, btnsPanel);
@@ -121,8 +129,8 @@ public class RegisterUserPanel extends VerticalPanel {
 				errorPanel.setVisible(false);
 				successPanel.setVisible(false);
 				
-				if (nameTxt.getText().trim() != "" && lastNameTxt.getText().trim() != "" && emailTxt.getText().trim() != "" 
-					&& userTxt.getText().trim() != "" && passTxt.getText().trim() != ""){
+				messages.addAll(validateForm());
+				if (messages.isEmpty()){
 					
 					UserServices.Util.getInstance().addUser(nameTxt.getText().trim(), lastNameTxt.getText().trim(), 
 							emailTxt.getText().trim(), userTxt.getText().trim(), passTxt.getText().trim(), UserType.REGISTERED_USER, new AsyncCallback<Integer>(){
@@ -138,9 +146,9 @@ public class RegisterUserPanel extends VerticalPanel {
 						});
 				}
 				else{
-					messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_FIELDS());
 					errorPanel.setMessages(messages);
 					errorPanel.setVisible(true);
+					Window.scrollTo(0, 0);
 				}
 			}
 		});
@@ -162,6 +170,42 @@ public class RegisterUserPanel extends VerticalPanel {
 		this.lastNameTxt.setText("");
 		this.userTxt.setText("");
 		this.passTxt.setText("");
+	}
+	
+	private Vector<String> validateForm() {
+		Vector<String> messages = new Vector<String>();
+		
+		if (this.nameTxt.getText().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_MESSAGES.MANDATORY_FIELD(GWTUtils.LOCALE_CONSTANTS.name()));
+		
+		if (!this.nameTxt.getText().trim().equals("") && !this.nameTxt.getText().trim().matches(GWTUtils.ALPHANUM_SPACES_NOT_START_WITH_NUM))
+			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_SPACES_NOT_START_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.name()));
+		
+		if (this.lastNameTxt.getText().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_MESSAGES.MANDATORY_FIELD(GWTUtils.LOCALE_CONSTANTS.lastName()));
+		
+		if (!this.lastNameTxt.getText().trim().equals("") && !this.lastNameTxt.getText().trim().matches(GWTUtils.ALPHANUM_SPACES_NOT_START_WITH_NUM))
+			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_SPACES_NOT_START_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.lastName()));
+		
+		if (this.emailTxt.getText().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_MESSAGES.MANDATORY_FIELD(GWTUtils.LOCALE_CONSTANTS.email()));
+		
+		if (!this.emailTxt.getText().trim().equals("") && !this.emailTxt.getText().trim().matches(GWTUtils.REGEX_EMAIL))
+			messages.add(GWTUtils.LOCALE_MESSAGES.REGEX_EMAIL(GWTUtils.LOCALE_CONSTANTS.email()));
+		
+		if (this.userTxt.getText().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_MESSAGES.MANDATORY_FIELD(GWTUtils.LOCALE_CONSTANTS.userName()));
+		
+		if (!this.userTxt.getText().trim().equals("") && !this.userTxt.getText().trim().matches(GWTUtils.ALPHANUM_NOT_SPACES_NOT_STARTS_WITH_NUM))
+			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_NOT_SPACES_NOT_STARTS_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.userName()));
+		
+		if (this.passTxt.getText().trim().equals(""))
+			messages.add(GWTUtils.LOCALE_MESSAGES.MANDATORY_FIELD(GWTUtils.LOCALE_CONSTANTS.password()));
+		
+		if (!this.passTxt.getText().trim().equals("") && !this.passTxt.getText().trim().matches(GWTUtils.ALPHANUM_NOT_SPACES_NOT_STARTS_WITH_NUM))
+			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_NOT_SPACES_NOT_STARTS_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.password()));
+		
+		return messages;
 	}
 		
 }

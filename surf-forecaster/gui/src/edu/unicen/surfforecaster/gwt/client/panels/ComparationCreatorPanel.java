@@ -37,7 +37,7 @@ import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
-//TODO show a tooltip with the spot zone country and area in the second listbox
+
 public class ComparationCreatorPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler {
 	
 	private ListBox spotBox = null;
@@ -68,7 +68,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private static final String LISTBOX_WIDTH = "200px";
 	private static final String LISTBOX_HEIGHT = "286px"; //11 rows of the container flextable
 	private static final String COMBOBOX_WIDTH = "300px";
-	private static final int MAX_SPOTS_TO_COMP = 5;
 	private static final String COMP_DEF_TABLE_CELL_HEIGHT = "26px";
 	
 	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
@@ -318,36 +317,41 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	}
 
 	private void addItemsToSelectedSpotsList() {
-		
-		ArrayList<Integer> spotBoxSelectedIndexes = new ArrayList<Integer>();
-		//Add spots to selected list
-		for (int i = 0; i < spotBox.getItemCount(); i++) {
-			if (spotBox.isItemSelected(i)) {
-				selectedSpotsBox.addItem(spotBox.getItemText(i), spotBox.getValue(i));
-				spotBoxSelectedIndexes.add(i);
-				selectedSpots.put(new Integer(spotBox.getValue(i)), this.currentSelectedZone );
+		if (spotBox.getSelectedIndex() == -1)
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectAtLeastOneSpotFromLeftList(), MessageBox.IconType.INFO);
+		else {
+			ArrayList<Integer> spotBoxSelectedIndexes = new ArrayList<Integer>();
+			//Add spots to selected list
+			for (int i = 0; i < spotBox.getItemCount(); i++) {
+				if (spotBox.isItemSelected(i)) {
+					selectedSpotsBox.addItem(spotBox.getItemText(i), spotBox.getValue(i));
+					spotBoxSelectedIndexes.add(i);
+					selectedSpots.put(new Integer(spotBox.getValue(i)), this.currentSelectedZone );
+				}
 			}
-		}
-		
-		//remove from spot list (Inverse order to avoid problems with indexes once an item is deleted and it index is lower than the next item)
-		Collections.sort(spotBoxSelectedIndexes);
-		for (int i = spotBoxSelectedIndexes.size()-1; i >= 0; i--) {
-			spotBox.removeItem(spotBoxSelectedIndexes.get(i));
+			
+			//remove from spot list (Inverse order to avoid problems with indexes once an item is deleted and it index is lower than the next item)
+			Collections.sort(spotBoxSelectedIndexes);
+			for (int i = spotBoxSelectedIndexes.size()-1; i >= 0; i--) {
+				spotBox.removeItem(spotBoxSelectedIndexes.get(i));
+			}
 		}
 	}
 	
 	private void removeSelectedSpot() {
-		for (int i = selectedSpotsBox.getItemCount() - 1 ; i >= 0; i--) {
-			if (selectedSpotsBox.isItemSelected(i)) {
-				Integer selectedSpotZone = selectedSpots.get(new Integer(selectedSpotsBox.getValue(i)));
-				if (selectedSpotZone != null && selectedSpotZone.intValue() == this.currentSelectedZone.intValue())
-					spotBox.addItem(selectedSpotsBox.getItemText(i), selectedSpotsBox.getValue(i));
-				selectedSpots.remove(new Integer(selectedSpotsBox.getValue(i)));
-				selectedSpotsBox.removeItem(i);
-				
+		if (selectedSpotsBox.getSelectedIndex() == -1)
+			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectAtLeastOneSpotFromRightList(), MessageBox.IconType.INFO);
+		else {
+			for (int i = selectedSpotsBox.getItemCount() - 1 ; i >= 0; i--) {
+				if (selectedSpotsBox.isItemSelected(i)) {
+					Integer selectedSpotZone = selectedSpots.get(new Integer(selectedSpotsBox.getValue(i)));
+					if (selectedSpotZone != null && selectedSpotZone.intValue() == this.currentSelectedZone.intValue())
+						spotBox.addItem(selectedSpotsBox.getItemText(i), selectedSpotsBox.getValue(i));
+					selectedSpots.remove(new Integer(selectedSpotsBox.getValue(i)));
+					selectedSpotsBox.removeItem(i);
+					
+				}
 			}
-			//TODO mostrar un message box o algo que indique si que tiene que seleccionar algun alemente antes de apretras este boton (si no lo hizo) idem con demas
-			//botones de este panel
 		}
 	}
 
@@ -378,14 +382,14 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	 * @return boolean
 	 */
 	private boolean validSelectedSpotsCount() {
-		if (selectedSpotsBox.getItemCount() < 2 || selectedSpotsBox.getItemCount() > ComparationCreatorPanel.MAX_SPOTS_TO_COMP)
+		if (selectedSpotsBox.getItemCount() < SpotComparatorPanel.MIN_SPOTS_TO_COMP || selectedSpotsBox.getItemCount() > SpotComparatorPanel.MAX_SPOTS_TO_COMP)
 			return false;
 		
 		return true;
 	}
 	
 	/**
-	 * Checks there are between 2 and 5 spots selected and generates the comparation
+	 * Checks there are between MIN_SPOTS_TO_COMP and MAX_SPOTS_TO_COMP spots selected and generates the comparation
 	 */
 	private void makeComparation() {
 		errorPanel.setVisible(false);
@@ -504,7 +508,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				setSavePanelVisible(false);
 			}
 		});
-		SessionData.getInstance();
 	}
 	
 	private void createSavePanel() {
@@ -529,6 +532,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		{
 			txtCompName = new TextBox();
 			txtCompName.setWidth(txtWidth);
+			txtCompName.setMaxLength(70);
 			savePanel.setWidget(1, 1, txtCompName);
 		}
 		{
@@ -620,7 +624,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		for (int i = 1; i < myCompsBox.getItemCount(); i++) {
 			if (txtCompName.getText().trim().equals(myCompsBox.getItemText(i).trim())) {
 				nameDuplicated = true;
-				//TODO hacer esto en un msg box personalizado
 				SaveCompConfirmMessageBox confirmBox = new SaveCompConfirmMessageBox(GWTUtils.LOCALE_CONSTANTS.askForAnotherName(), MessageBox.IconType.WARNING);
 				confirmBox.setBasePanel(this);
 				break;
@@ -710,11 +713,10 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		if (!validSelectedSpotsCount())
 			messages.add(GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToSaveComparation());
 		
-		//TODO validar aca y entodos los campos de introduccion de texto que no meta caracteres raros (ver como hacer algo generico para todo el sistema)
 		if (txtCompName.getText().trim().equals(""))
-			//messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_AREA_VALUE());
 			messages.add(GWTUtils.LOCALE_CONSTANTS.mandatoryFieldName());
-		
+		if (!txtCompName.getText().trim().matches(GWTUtils.ALPHANUM_SPACES_NOT_START_WITH_NUM))
+			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_SPACES_NOT_START_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.comparationName()));
 		return messages;
 	}
 

@@ -104,8 +104,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			final float buoyLatitudeNum = new Float(buoyLatitude);
 			final Integer userId = super.getLoggedUser().getId();
 			Integer result = null;
-			//TODO: set time zone.
-			TimeZone tz = TimeZone.getTimeZone("Etc/GMT");
+			TimeZone tz = TimeZone.getTimeZone(timezone);
 			if (zoneName.trim().equals("")) {
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - Adding only the spot: '" + spotName + "'...");
 				result = spotService.addSpot(spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public_, tz);
@@ -165,7 +164,6 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			return result;
 		}
 		logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Permissions denied to the current user to perform this action.");
-		// TODO Auto-generated method stub
 		return false;
 	}
 

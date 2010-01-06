@@ -93,7 +93,6 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 		this.addMouseOutHandler(this);
 	}
 	
-	//TODO Native code
 	public native String setDownImage() /*-{
 	
     	var leftId = this.@edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad::leftId;

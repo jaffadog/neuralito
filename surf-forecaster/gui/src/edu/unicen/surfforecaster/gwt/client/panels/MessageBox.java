@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class MessageBox extends DialogBox {
@@ -78,23 +79,23 @@ public class MessageBox extends DialogBox {
 		icon.setSize(MessageBox.ICON_WIDTH, MessageBox.ICON_HEIGHT);
 		switch (iconType) {
 		case WARNING:
-			icon.setUrl("images/Warning.png");
+			icon.setUrl(GWTUtils.IMAGE_WARNING_ICON);
 			break;
 		
 		case INFO:
-			icon.setUrl("images/Info.png");
+			icon.setUrl(GWTUtils.IMAGE_INFO_ICON);
 			break;
 		
 		case ERROR:
-			icon.setUrl("images/Error.png");
+			icon.setUrl(GWTUtils.IMAGE_ERROR_ICON);
 			break;
 		
 		case GOOD:
-			icon.setUrl("images/Good.png");
+			icon.setUrl(GWTUtils.IMAGE_GOOD_ICON);
 			break;
 		
 		case HELP:
-			icon.setUrl("images/Help.png");
+			icon.setUrl(GWTUtils.IMAGE_HELP_ICON);
 			break;
 			
 		}

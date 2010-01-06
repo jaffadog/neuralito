@@ -204,9 +204,8 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		this.spotsIds = spotsIds;
 		this.spotsNames = spotsNames;
 		
-		//TODO hacer que el valor harcodedo 5 de la sig if sea una variable statica bien definida (ya se definio en el comparationCreatorPanel, tal vez habria que 
-		//meterla en otro lado)
-		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
+		if (spotsLatestForecasts.size() >= SpotComparatorPanel.MIN_SPOTS_TO_COMP && spotsLatestForecasts.size() <= SpotComparatorPanel.MAX_SPOTS_TO_COMP 
+				&& spotsNames.size() >= SpotComparatorPanel.MIN_SPOTS_TO_COMP && spotsNames.size() <= SpotComparatorPanel.MAX_SPOTS_TO_COMP) {
 			this.fillSpotProperties();
 			this.drawColumnChart();
 			this.drawMotionChart();
@@ -233,9 +232,8 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	 * Executed when click refresh button to update the comparation after changed the forecasters boxes
 	 */
 	public void refreshComparation() {
-		//TODO hacer que el valor harcodedo 5 de la sig if sea una variable statica bien definida (ya se definio en el comparationCreatorPanel, tal vez habria que 
-		//meterla en otro lado)
-		if (spotsLatestForecasts.size() >= 2 && spotsLatestForecasts.size() <= 5 && spotsNames.size() >= 2 && spotsNames.size() <= 5) {
+		if (spotsLatestForecasts.size() >= SpotComparatorPanel.MIN_SPOTS_TO_COMP && spotsLatestForecasts.size() <= SpotComparatorPanel.MAX_SPOTS_TO_COMP && 
+				spotsNames.size() >= SpotComparatorPanel.MIN_SPOTS_TO_COMP && spotsNames.size() <= SpotComparatorPanel.MAX_SPOTS_TO_COMP) {
 			this.drawColumnChart();
 			this.drawMotionChart();
 			if (detailedCompTable != null && detailedCompTablePanel.isOpen())

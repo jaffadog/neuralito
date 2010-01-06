@@ -20,6 +20,7 @@ import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 
 public class MySpotsPanel extends FlexTable {
 
@@ -124,7 +125,7 @@ public class MySpotsPanel extends FlexTable {
 			while (it.hasNext()) {
 				final SpotGwtDTO spot = it.next();
 				final int rowIndex = index;
-				Image editIcon = new Image(GWTUtils.EDIT_ICON_URL);
+				Image editIcon = new Image(GWTUtils.IMAGE_EDIT_ICON);
 				editIcon.setSize(MySpotsPanel.ACTION_ICON_WIDTH, MySpotsPanel.ACTION_ICON_HEIGHT);
 				editIcon.addStyleName("gwt-Image-ActionIcon");
 				editIcon.addClickHandler(new ClickHandler() {
@@ -134,7 +135,7 @@ public class MySpotsPanel extends FlexTable {
 					}
 				});
 				
-				Image deleteIcon = new Image(GWTUtils.DELETE_ICON_URL);
+				Image deleteIcon = new Image(GWTUtils.IMAGE_DELETE_ICON);
 				deleteIcon.setSize(MySpotsPanel.ACTION_ICON_WIDTH, MySpotsPanel.ACTION_ICON_HEIGHT);
 				deleteIcon.addStyleName("gwt-Image-ActionIcon");
 				deleteIcon.addClickHandler(new ClickHandler() {
@@ -216,6 +217,7 @@ public class MySpotsPanel extends FlexTable {
 			mySpotsTable.clearCell(rowIndex, i);
 		}
 		mySpotsTable.getRowFormatter().setVisible(rowIndex, false);
-		//TODO usar la estructura de observer observable para actualizar los combos de spots de todo el sistema
+		//Calls to localization utils to update all localization components values
+		LocalizationUtils.getInstance().refresh();
 	}
 }

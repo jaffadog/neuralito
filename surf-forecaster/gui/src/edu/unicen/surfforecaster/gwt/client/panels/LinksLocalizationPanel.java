@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -27,6 +26,7 @@ import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.Observable;
+import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class LinksLocalizationPanel extends SimplePanel implements ILocalizationPanel, ISurfForecasterBasePanel, 
 		ClickHandler, ChangeHandler, BlurHandler{
@@ -40,7 +40,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 	//Guaranty initialize spotBox even if showSpots is false, the widget is used by many methods
 	private ListBox spotBox = new ListBox();
 	private Hyperlink spotLink = null;
-	private PushButton actionButton = null;
+	private HTMLButtonGrayGrad actionButton = null;
 	private Widget baseParentPanel = null;
 	private FlexTable localizationForm;
 	private boolean showSpots = true;
@@ -114,8 +114,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 				
 				if (this.showActionButton) {
 					{
-						actionButton = new PushButton(GWTUtils.LOCALE_CONSTANTS.forecast());
-						actionButton.setSize("90px", GWTUtils.PUSHBUTTON_HEIGHT);
+						actionButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LinksLocalizationPanel-action-btn", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 						actionButton.setEnabled(false);
 						actionButton.addClickHandler(this);
 						localizationForm.setWidget(0, 7, actionButton);
