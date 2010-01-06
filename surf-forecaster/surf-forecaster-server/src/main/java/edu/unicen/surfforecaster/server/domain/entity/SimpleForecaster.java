@@ -19,7 +19,7 @@ import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
  * 
  */
 @Entity
-public class WW3Forecaster extends Forecaster {
+public class SimpleForecaster extends Forecaster {
 
 	/**
 	 * Grid point of the model to extract forecasts.
@@ -46,7 +46,7 @@ public class WW3Forecaster extends Forecaster {
 	 * 
 	 */
 
-	public WW3Forecaster() {
+	public SimpleForecaster() {
 
 		// ORM purpose
 	}
@@ -54,7 +54,7 @@ public class WW3Forecaster extends Forecaster {
 	/**
 	 * @param configuration
 	 */
-	public WW3Forecaster(final WaveWatchSystem model, final Point point,
+	public SimpleForecaster(final WaveWatchSystem model, final Point point,
 			final Point location, Spot spot) {
 		this.gridPoint = point;
 		this.location = location;

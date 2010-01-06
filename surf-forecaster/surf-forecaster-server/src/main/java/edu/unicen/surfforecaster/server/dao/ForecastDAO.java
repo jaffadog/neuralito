@@ -4,7 +4,7 @@
 package edu.unicen.surfforecaster.server.dao;
 
 import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster;
 
 /**
  * @author esteban

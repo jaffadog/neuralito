@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server.domain.download;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.util.Date;
 

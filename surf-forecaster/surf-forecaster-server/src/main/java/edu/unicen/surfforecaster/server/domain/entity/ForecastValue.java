@@ -23,7 +23,7 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
  * 
  */
 @Entity
-public class Value {
+public class ForecastValue {
 	/**
 	 * The id for ORM pupose.
 	 */
@@ -66,7 +66,7 @@ public class Value {
 	/**
 	 * 
 	 */
-	public Value() {
+	public ForecastValue() {
 		// ORM purpose.
 	}
 
@@ -74,7 +74,7 @@ public class Value {
 	 * @param string
 	 * @param l
 	 */
-	public Value(final String parameterName, final Double value,
+	public ForecastValue(final String parameterName, final Double value,
 			final Unit unit) {
 		Validate.notNull(value);
 		Validate.notNull(unit);
@@ -87,7 +87,7 @@ public class Value {
 	 * @param string
 	 * @param l
 	 */
-	public Value(final String parameterName,
+	public ForecastValue(final String parameterName,
 			final String value,
 			final Unit unit) {
 		Validate.notNull(value);
@@ -101,7 +101,7 @@ public class Value {
 	 * @param string
 	 * @param l
 	 */
-	public Value(final String parameterName,
+	public ForecastValue(final String parameterName,
 			final Integer value,
 			final Unit unit) {
 		Validate.notNull(value);
@@ -116,7 +116,7 @@ public class Value {
 	 * @param f
 	 * @param unit
 	 */
-	public Value(final String parameterName,
+	public ForecastValue(final String parameterName,
 			final float f,
 			final Unit unit) {
 		Validate.notNull(f);

@@ -7,6 +7,7 @@ import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -109,9 +110,11 @@ public class VisualObservation {
 
 	public boolean equalsDate(Date date){
 		Calendar observationDay = new GregorianCalendar();
+		observationDay.setTimeZone(TimeZone.getTimeZone("UTC"));
 		observationDay.setTime(observationDate);
 		
 		Calendar calendarDate = new GregorianCalendar();
+		calendarDate.setTimeZone(TimeZone.getTimeZone("UTC"));
 		calendarDate.setTime(date);
 		if (observationDay.get(Calendar.YEAR) == calendarDate.get(Calendar.YEAR))
 			if (observationDay.get(Calendar.MONTH) == calendarDate.get(Calendar.MONTH))

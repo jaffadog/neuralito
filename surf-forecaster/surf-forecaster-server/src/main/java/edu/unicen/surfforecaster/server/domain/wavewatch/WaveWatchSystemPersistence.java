@@ -28,7 +28,8 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
-import edu.unicen.surfforecaster.server.domain.entity.Value;
+import edu.unicen.surfforecaster.server.domain.entity.ForecastValue;
+import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
 /**
  * 
@@ -103,6 +104,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 			IllegalStateException, IOException, SQLException,
 			URISyntaxException {
 		super();
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		this.archiveTableName = archiveTableName;
 		this.latestForecastTableName = latestForecastTableName;
 		this.gridPointsTableName = gridPointsTableName;
@@ -145,6 +147,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
+			st.executeQuery("SET time_zone='+00:00'");
 			final Calendar from = new GregorianCalendar(TimeZone
 					.getTimeZone("UTC"));
 			from.setTime(fromDate);
@@ -383,7 +386,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 					partitionEndYear);
 			final String query = "CREATE TABLE " + archiveTableName
 					+ " ( `issuedDate` DATETIME NOT NULL,"
-					+ " `validTime` tinyint(4) unsigned NOT NULL,"
+					+ " `validTime` INTEGER unsigned NOT NULL,"
 					+ " `latitude` float NOT NULL, `longitude` float NOT NULL,"
 					+ columns + " , KEY `location` (`latitude`,`longitude`))"
 					+ " ENGINE=MyISAM DEFAULT CHARSET=utf8" + partitions;
@@ -487,11 +490,24 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 				final float latitude = result.getFloat("latitude");
 				final float longitude = result.getFloat("longitude");
 				Date issuedDate = result.getTimestamp("issuedDate");
+				log.info("time " + result.getTime("issuedDate"));
+				log.info("date " + result.getDate("issuedDate"));
+				log.info("date to date "
+						+ new Date(result.getDate("issuedDate").getTime()));
+				log.info("timestamp " + result.getTimestamp("issuedDate"));
+				log
+						.info("timestamp to date"
+								+ new Date(result.getTimestamp("issuedDate")
+										.getTime()));
+				log.info("formatted"
+						+ Util.getDateFormatter().format(
+								result.getTimestamp("issuedDate")));
+				log.info("OFFSET:" + issuedDate.getTimezoneOffset());
 				Point forecastGridPoint = new Point(latitude, longitude);
-				Map<String, Value> parameters = new HashMap<String, Value>();
+				Map<String, ForecastValue> parameters = new HashMap<String, ForecastValue>();
 				for (int i = 0; i < this.waveParameters.length; i++) {
 					WaveWatchParameter waveWatchParameter = waveParameters[i];
-					parameters.put(waveWatchParameter.getValue(), new Value(
+					parameters.put(waveWatchParameter.getValue(), new ForecastValue(
 							waveWatchParameter.getValue(),
 							result.getFloat(waveWatchParameter.getValue()),
 							Unit.Meters));

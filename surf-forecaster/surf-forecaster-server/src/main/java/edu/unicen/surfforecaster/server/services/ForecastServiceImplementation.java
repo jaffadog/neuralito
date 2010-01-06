@@ -32,7 +32,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
-import edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster;
 import edu.unicen.surfforecaster.server.domain.entity.WekaForecaster;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
@@ -91,7 +91,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			spotDAO.save(point);
 		}
 		final Spot spot = spotDAO.getSpotById(spotId);
-		final WW3Forecaster forecaster = new WW3Forecaster(waveWatchSystem,
+		final SimpleForecaster forecaster = new SimpleForecaster(waveWatchSystem,
 				point, spot.getLocation(), spot);
 		final Integer id = forecastDAO.save(forecaster);
 		spotDAO.addForecasterToSpot(forecaster, spot);
@@ -203,8 +203,9 @@ public class ForecastServiceImplementation implements ForecastService {
 	 */
 	@Override
 	public WekaForecasterEvaluationDTO createWekaForecaster(
-			List<VisualObservationDTO> visualObservationsDTO, Integer spotId,
+					List<VisualObservationDTO> visualObservationsDTO, Integer spotId,
 			HashMap<String, Serializable> dataSetStrategyOptions) {
+		log.info("Creating weka forecaster");	
 		List<VisualObservation> visualObservations = translate(visualObservationsDTO);
 		Classifier classifier;
 		try {
@@ -217,8 +218,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			Map<String, String> evaluations = forecaster.getEvaluation();
 			return new WekaForecasterEvaluationDTO(Double
 					.parseDouble(evaluations.get("correlation")), Double
-					.parseDouble(evaluations.get("meanAbsoluteError")),
- 1, null);
+					.parseDouble(evaluations.get("meanAbsoluteError")), 1, null);
 		} catch (Exception e) {
 			log.error(e);
 		}
@@ -386,6 +386,5 @@ public class ForecastServiceImplementation implements ForecastService {
 	public void setWaveWatchSystem(WaveWatchSystem waveWatchSystem) {
 		this.waveWatchSystem = waveWatchSystem;
 	}
-
 
 }

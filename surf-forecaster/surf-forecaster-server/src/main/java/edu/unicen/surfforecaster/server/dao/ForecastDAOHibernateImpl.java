@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
-import edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster;
+import edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster;
 import edu.unicen.surfforecaster.server.domain.entity.WekaForecaster;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
@@ -29,7 +29,7 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#save(edu.unicen.surfforecaster.server.domain.entity.forecast.WW3Forecaster)
+	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#save(edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster.WW3Forecaster)
 	 */
 	@Override
 	public Integer save(final Forecaster forecaster) {
@@ -39,7 +39,7 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#save(edu.unicen.surfforecaster.server.domain.entity.forecast.WW3Forecaster)
+	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#save(edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster.WW3Forecaster)
 	 */
 	public Integer save(
 			final DataSetGenerationStrategy dataSetGenerationStrategy) {
@@ -56,16 +56,16 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 
 		final Forecaster forecaster = (Forecaster) getHibernateTemplate().get(
 				Forecaster.class, forecasterId);
-		if (forecaster instanceof WW3Forecaster) {
-			WW3Forecaster ww3Forecaster = (WW3Forecaster) forecaster;
+		if (forecaster instanceof SimpleForecaster) {
+			SimpleForecaster ww3Forecaster = (SimpleForecaster) forecaster;
 			Field declaredField;
 			try {
-				declaredField = WW3Forecaster.class
+				declaredField = SimpleForecaster.class
 						.getDeclaredField("modelName");
 				declaredField.setAccessible(true);
 				String string = (String) declaredField.get(ww3Forecaster);
 				declaredField.setAccessible(false);
-				declaredField = WW3Forecaster.class.getDeclaredField("model");
+				declaredField = SimpleForecaster.class.getDeclaredField("model");
 				declaredField.setAccessible(true);
 				declaredField.set(ww3Forecaster, waveWatchSystem);
 				declaredField.setAccessible(false);

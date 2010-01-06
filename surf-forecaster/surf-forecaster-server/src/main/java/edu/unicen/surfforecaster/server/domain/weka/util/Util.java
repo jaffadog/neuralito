@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.server.domain.weka.util;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -14,6 +15,9 @@ import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ArffSaver;
+
+import com.enterprisedt.util.debug.Logger;
 
 
 
@@ -51,7 +55,40 @@ public final class Util {
 	public static final int OCTOBER = 10;
 	public static final int NOBEMBER = 11;
 	public static final int DECEMBER = 12;
-	
+
+	private static Instances trainningInstances;
+	Logger logger = Logger.getLogger(Util.class);
+
+	/**
+	 * Convert the given shore wave height into through to crest scale meters
+	 * (TCS).
+	 * 
+	 * @param wave
+	 *            height observed from shore in hawaiian scale feet (HSF)
+	 */
+	public static Double HSFtoTCS(Double value) {
+		return value * 0.3048 * 2; // *0.30 is to convert foot to meter, and *2
+									// is to convert from Hawaiaan Scale Feet to
+									// Through To Crest Scale Feet.
+	}
+
+	/**
+	 * Creates an ARFF file from the given set of instances.
+	 */
+	public static void createArffFile() {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(trainningInstances);
+		try {
+			saver.setFile(new File("c:/trainning.arff"));
+			// saver.setDestination( new File(".//files//arff//" +
+			// shortDescription + ".arff")); // **not** necessary in 3.5.4
+			// and later
+			saver.writeBatch();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static void printCollection(Collection col){
 		
 		int i = 0;

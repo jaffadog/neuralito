@@ -11,10 +11,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
-import edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoder;
+import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoderNetcdf;
 
 public class ValidGridPointsGenerator {
 
@@ -39,7 +39,7 @@ public class ValidGridPointsGenerator {
 			throws IOException {
 		log.info("Decoding grib file to obtain valid grid points.");
 		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
-		parameters.add(WaveWatchParameterV3.WaveWatchParameter);
+		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2);
 		final Collection<Forecast> forecastForTime = gribDecoder
 				.decodeForecastForTime(new File(gridFile), parameters
 						, 0);
