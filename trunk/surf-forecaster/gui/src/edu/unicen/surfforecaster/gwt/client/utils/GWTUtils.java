@@ -22,9 +22,8 @@ public final class GWTUtils {
 	
 	//WIDGETS MEASURES
 	public final static String APLICATION_WIDTH = "1000px";
-	public final static String PUSHBUTTON_HEIGHT = "20px";
 	
-	//PATH TO IMAGES
+	//IMAGES URLS
 	public final static String IMAGE_LOGO = "images/logo2.PNG";
 	public final static String IMAGE_SPOT = "images/wave.png";
 	public final static String IMAGE_BUOY = "images/buoy.png";
@@ -32,8 +31,11 @@ public final class GWTUtils {
 	public final static String IMAGE_BLUE_CIRCLE_LOADER = "images/blue-circle-loader.gif";
 	public final static String IMAGE_ERROR_ICON = "images/Error.png";
 	public final static String IMAGE_GOOD_ICON = "images/Good.png";
-	public final static String EDIT_ICON_URL = "images/edit.png";
-	public final static String DELETE_ICON_URL = "images/delete.png";
+	public final static String IMAGE_WARNING_ICON = "images/Warning.png";
+	public final static String IMAGE_INFO_ICON = "images/Info.png";
+	public final static String IMAGE_HELP_ICON = "images/Help.png";
+	public final static String IMAGE_EDIT_ICON = "images/edit.png";
+	public final static String IMAGE_DELETE_ICON = "images/delete.png";
 	
 	//Translators
 	public static SurfForecasterConstants LOCALE_CONSTANTS;
@@ -44,7 +46,23 @@ public final class GWTUtils {
 	public final static String DEFAULT_HISTORY_TOKEN = "forecastTab";
 	
 	//Default language
-	private static String DEFAULT_LOCALE = "es"; 
+	private static String DEFAULT_LOCALE = "es";
+	
+	//Utils regex
+	//Only digits
+	public final static String REGEX_DIGITS = "[\\d]*";
+	//Alphanumeric with spaces and not starts with numbers
+	public final static String ALPHANUM_SPACES_NOT_START_WITH_NUM = "[^\\d][\\w ]*";
+	//Alphanumeric with spaces and dashes and not starts with numbers
+	public final static String ALPHANUM_SPACES_DASHES_NOT_START_WITH_NUM = "[^\\d][\\w -]*";
+	//Alphanumeric with spaces
+	public final static String ALPHANUM_SPACES = "[\\w ]*";
+	//Alphanumeric, no spaces and not starts with numbers
+	public final static String ALPHANUM_NOT_SPACES_NOT_STARTS_WITH_NUM = "[^\\d][\\w]*";
+	//Alphanumeric, no spaces
+	public final static String ALPHANUM_NOT_SPACES = "[\\w]*";
+	//Email pattern
+	public final static String REGEX_EMAIL = "^[a-zA-Z][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$";
 	
 	   
 	public static boolean isNumeric(String value){

@@ -74,7 +74,7 @@ public class CurrentForecastPanel extends FlexTable {
 			}
 		}
 	}
-	//TODO cuando todas la imagenes se levanten del factory eliminar este metodo que quedaria obsoleto
+	
 	private VerticalPanel createTableItem(String title, String value, String unit){
 		VerticalPanel tableItem = new VerticalPanel();
 		tableItem.addStyleName("gwt-VerticalPanel-ForecastItem");

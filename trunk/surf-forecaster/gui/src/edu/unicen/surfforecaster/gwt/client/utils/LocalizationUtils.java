@@ -41,6 +41,13 @@ public class LocalizationUtils extends Observable{
 		this.setAreas();
 		this.setCountries();
 	}
+	
+	/**
+	 * A wrapper name for initializa method
+	 */
+	public void refresh() {
+		this.initialize();
+	}
 
 	public List<AreaDTO> getAreas() {
 		List<AreaDTO> result = new ArrayList<AreaDTO>();

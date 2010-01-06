@@ -11,7 +11,6 @@ import edu.unicen.surfforecaster.common.services.dto.UserDTO;
  *
  */
 
-//TODO si estaclase se usa solo del lado del server meterla alla. Tb evaluar si hace falta tenerla.
 public class SessionData implements IsSerializable {
 	
 	private UserDTO userDTO;

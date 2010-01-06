@@ -239,5 +239,13 @@ public class MapPanel extends VerticalPanel {
         txtBuoyLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLongitude())));
         txtBuoyLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLatitude())));
 	}
+	
+	public void clearMap(){
+		this.txtBuoyLat.setText("");
+		this.txtSpotLat.setText("");
+		this.txtSpotLong.setText("");
+		this.txtBuoyLong.setText("");
+		this.map.clearOverlays();
+	}
 
 }

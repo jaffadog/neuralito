@@ -290,6 +290,12 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Debe seleccionar una ola para realizar esta acci\u00F3n.")
 	String mustSelectSpot();
 	
+	@DefaultStringValue("Debe seleccionar al menos una ola de la lista de la izquierda para realizar esta acci\u00F3n.")
+	String mustSelectAtLeastOneSpotFromLeftList();
+	
+	@DefaultStringValue("Debe seleccionar al menos una ola de la lista de la derecha para realizar esta acci\u00F3n.")
+	String mustSelectAtLeastOneSpotFromRightList();
+	
 	@DefaultStringValue("Debe elegir entre dos y cinco olas para grabar una comparaci\u00F3n.")
 	String twoToFiveSpotsToSaveComparation();
 	

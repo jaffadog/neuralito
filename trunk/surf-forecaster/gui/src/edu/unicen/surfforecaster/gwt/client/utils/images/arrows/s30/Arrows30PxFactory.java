@@ -9,8 +9,6 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 
 public final class Arrows30PxFactory {
-	//TODO completar flechas faltantes y ponerle a la direccion de ola la flecha chiquita azul
-	//TODO dar vuelta todas las flechas
 	private final static ArrowsSmall30PxImageBundle arrowsSmallImageBundle = (ArrowsSmall30PxImageBundle) GWT.create(ArrowsSmall30PxImageBundle.class);
 	private final static ArrowsMedium30PxImageBundle arrowsMediumImageBundle = (ArrowsMedium30PxImageBundle) GWT.create(ArrowsMedium30PxImageBundle.class);
 	private final static ArrowsMediumBig30PxImageBundle arrowsMediumBigImageBundle = (ArrowsMediumBig30PxImageBundle) GWT.create(ArrowsMediumBig30PxImageBundle.class);
