@@ -73,6 +73,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private RadioButton radioReplaceButton;
 	private MessagePanel errorPanel;
 	private MessagePanel successPanel;
+	private FlexTable formTable;
+	private Label lblTitle;
 	
 	//static fields
 	private static String PANEL_MODE = "create";
@@ -83,7 +85,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private static final String TABLE_COL_2 = "522px";
 	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL() + "FileUploadServices";
 
-	private FlexTable formTable;
+	private Label lblNewSpotDescription;
 	
 	public NewSpotPanel() {
 		NewSpotPanel.PANEL_MODE = "create";
@@ -104,12 +106,12 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		this.getFlexCellFormatter().setColSpan(1, 0, 3);
 		
 		
-		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.newSpotSectionTitle());
+		lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.newSpotSectionTitle());
 		lblTitle.addStyleName("gwt-Label-SectionTitle");
 		this.setWidget(2, 0, lblTitle);
 		this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		
-		Label lblNewSpotDescription = new Label(GWTUtils.LOCALE_CONSTANTS.registerNewSpotDesc());
+		lblNewSpotDescription = new Label(GWTUtils.LOCALE_CONSTANTS.registerNewSpotDesc());
 		lblNewSpotDescription.addStyleName("gwt-Label-SectionDescription");
 		this.setWidget(3, 0, lblNewSpotDescription);
 		this.getFlexCellFormatter().setColSpan(3, 0, 3);
@@ -411,6 +413,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		this();
 		this.spot = spot;
 		NewSpotPanel.PANEL_MODE = "edit";
+		lblTitle.setText(GWTUtils.LOCALE_CONSTANTS.edit() + " " + spot.getName());
+		lblNewSpotDescription.setVisible(false);
 		//set spot name
 		spotTxt.setText(spot.getName());
 		//set timezone

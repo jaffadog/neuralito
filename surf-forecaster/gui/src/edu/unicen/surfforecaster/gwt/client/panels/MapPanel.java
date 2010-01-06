@@ -46,23 +46,10 @@ public class MapPanel extends VerticalPanel {
 		this.add(mapHPanel);
 		
 		LatLng cawkerCity = LatLng.newInstance(39.509,-98.434);
-	    // Open a map centered on Cawker City, KS USA
 
 	    map = new MapWidget(cawkerCity, 2);
 	    map.setSize(MapPanel.MAP_WIDTH, MapPanel.MAP_HEIGHT);
-	    
-	    // Add some controls for the zoom level
-	    //map.addControl(new LargeMapControl());
 	    map.setUIToDefault();
-
-	    
-	    // Add a marker
-	    //map.addOverlay(new Marker(cawkerCity));
-
-	    // Add an info window to highlight a point of interest
-//	    map.getInfoWindow().open(map.getCenter(), 
-//	        new InfoWindowContent("World's Largest Ball of Sisal Twine"));
-	    
 	    map.addMapClickHandler(new MapClickHandler() {
 	        public void onClick(MapClickEvent e) {
 	          MapWidget sender = e.getSender();

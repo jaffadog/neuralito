@@ -441,6 +441,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Todav\u00EDa no a creado ninguna ola.")
 	String noneSpotsCreated();
 	
+	@DefaultStringValue("Confirma que desea eliminar esta ola?")
+	String askForDeleteSpot();
+	
 	/**
 	 * NewSpotPanel
 	 */
