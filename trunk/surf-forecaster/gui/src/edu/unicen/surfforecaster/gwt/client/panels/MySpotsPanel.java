@@ -21,7 +21,7 @@ import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
-public class MySpotsPanel extends FlexTable{
+public class MySpotsPanel extends FlexTable {
 
 	private FlexTable mySpotsTable = null;
 	private MessagePanel errorPanel;
@@ -119,6 +119,7 @@ public class MySpotsPanel extends FlexTable{
 	private void fillSpotsTable(List<SpotGwtDTO> spots) {
 		int index = 1;
 		if (spots.size() > 0) {
+			final MySpotsPanel mySpotsPanel = this;
 			Iterator<SpotGwtDTO> it = spots.iterator();
 			while (it.hasNext()) {
 				final SpotGwtDTO spot = it.next();
@@ -139,7 +140,8 @@ public class MySpotsPanel extends FlexTable{
 				deleteIcon.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						deleteSpot(spot.getId(), rowIndex);	
+						DeleteSpotConfirmMessageBox confirmBox = new DeleteSpotConfirmMessageBox(GWTUtils.LOCALE_CONSTANTS.askForDeleteSpot(), MessageBox.IconType.WARNING, spot.getId(), rowIndex);
+						confirmBox.setBasePanel(mySpotsPanel);	
 					}
 				});
 				
@@ -178,7 +180,7 @@ public class MySpotsPanel extends FlexTable{
 		this.setWidget(4, 0, newSpotPanel);
 	}
 	
-	private void deleteSpot(Integer spotId, final int rowIndex) {
+	public void deleteSpot(Integer spotId, final int rowIndex) {
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
 		SpotServices.Util.getInstance().deleteSpot(spotId, new AsyncCallback<Boolean>(){
