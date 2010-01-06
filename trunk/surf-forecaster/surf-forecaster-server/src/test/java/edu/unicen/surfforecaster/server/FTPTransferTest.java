@@ -17,7 +17,7 @@ import com.enterprisedt.net.ftp.FileTransferClient;
 import com.enterprisedt.util.debug.Level;
 
 
-import edu.unicen.surfforecaster.server.domain.download.DownloaderListener;
+import edu.unicen.surfforecaster.server.domain.wavewatch.FtpDownloaderListener;
 
 /**
  * @author esteban
@@ -46,7 +46,7 @@ public class FTPTransferTest {
 			// create client
 			log.info("Creating FTP client");
 			ftp = new FileTransferClient();
-			final EventListener listener = new DownloaderListener();
+			final EventListener listener = new FtpDownloaderListener();
 			ftp.setEventListener(listener);
 
 			// set remote host
@@ -60,7 +60,7 @@ public class FTPTransferTest {
 			log.info("Connected and logged in to server " + host);
 			// Download file
 			log.info("Downloading file");
-			((DownloaderListener) listener).setFileSize(filename, ftp
+			((FtpDownloaderListener) listener).setFileSize(filename, ftp
 					.getSize(filename));
 			ftp.downloadFile("latestForecast-Test.grb2", filename);
 			log.info("File downloaded");

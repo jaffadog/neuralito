@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Vector;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
-import edu.unicen.surfforecaster.server.domain.weka.VisualObservationsManager;
 
 /**
  * Loads visual observations.
@@ -19,11 +19,8 @@ import edu.unicen.surfforecaster.server.domain.weka.VisualObservationsManager;
  */
 public class VisualObservationsLoader {
 
-	private SpaceDelimitedFileReader fileReader = null;
+	private static SpaceDelimitedFileReader fileReader = new SpaceDelimitedFileReader();
 
-	public VisualObservationsLoader() {
-		this.fileReader = new SpaceDelimitedFileReader();
-	}
 
 //	public Vector<VisualObservationsManager> loadObsData(String year) {
 //		Vector<Vector<String>> linesValues = this.fileReader
@@ -97,10 +94,11 @@ public class VisualObservationsLoader {
 	 * @param unit the unit in which the heights are reported.
 	 * @return
 	 */
-	public List<VisualObservation> loadVisualObservations(File file, Unit unit) {
-		Vector<Vector<String>> lines = this.fileReader
+	public static List<VisualObservationDTO> loadVisualObservations(File file,
+			Unit unit) {
+		Vector<Vector<String>> lines = fileReader
 				.readLines(file.getPath());
-		Vector<VisualObservation> observations = new Vector<VisualObservation>();
+		Vector<VisualObservationDTO> observations = new Vector<VisualObservationDTO>();
 		// For each line, read columns and generate visual observation
 		for (Enumeration<Vector<String>> e = lines.elements(); e
 				.hasMoreElements();) {
@@ -111,9 +109,11 @@ public class VisualObservationsLoader {
 					line.elementAt(1)) - 1, new Integer(line
 					.elementAt(2)));
 			// Obtain wave height info
-			double waveHeight = Double.valueOf(line.elementAt(3));
+			double HSFwaveHeight = Double.valueOf(line.elementAt(3));
+			double throughToCrestWaveHeight = Util.HSFtoTCS(HSFwaveHeight);
 			// Create visual observation.
-			VisualObservation vo = new VisualObservation(waveHeight, date
+			VisualObservationDTO vo = new VisualObservationDTO(
+					throughToCrestWaveHeight, date
 					.getTime(),unit);
 			observations.add(vo);
 		}

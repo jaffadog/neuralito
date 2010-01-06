@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -22,10 +23,9 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
-import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
-import edu.unicen.surfforecaster.server.domain.download.DownloaderJobListener;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoder;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	/**
 	 * The number of forecasts this system produces.
 	 */
-	private static final int forecastTimes = 1;
+	private static final int forecastTimes = 61;
 	/**
 	 * The component to obtain forecasts updates in grib format.
 	 */
@@ -95,13 +95,14 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 		this.gribAccess = gribAccess;
 		this.persister = persister;
 		this.configureScheduler(cronExpression);
+		log.info("Next forecast update time:" + this.trigger.getNextFireTime());
 	}
 
 	private void configureScheduler(String cronExpression) {
 		try {
 			// Create the job
-			JobDetail jobDetail = new JobDetail("ForecastUpdateJob", null, this
-					.getClass());
+			JobDetail jobDetail = new JobDetail("ForecastUpdateJob", null,
+					UpdateForecastsJob.class);
 			// Create the trigger
 			this.trigger = new CronTrigger();
 			this.trigger.setName("NOAA Grib Download Trigger");
@@ -109,6 +110,10 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 			// Create job listener
 			JobListener listener = new DownloaderJobListener(this.name);
 			jobDetail.addJobListener(listener.getName());
+			JobDataMap data = new JobDataMap();
+			data.put("gribAccess", this.gribAccess);
+			data.put("waveWatchSystem", this);
+			jobDetail.setJobDataMap(data);
 			// Create Scheduler, register Job and Listener
 			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
 			this.scheduler.scheduleJob(jobDetail, trigger);
@@ -171,7 +176,13 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 
 	}
 
-	private void updateForecasts(File gribFile) {
+	/**
+	 * Decode the given grib file to obtain latest forecast information. Newly
+	 * forecasts are persisted.
+	 * 
+	 * @param gribFile
+	 */
+	public void updateForecasts(File gribFile) {
 		// Decode forecasts and persist them
 		ForecastFile forecastFile = new ForecastFile("tempFilePath",
 				this.parameters);
@@ -190,12 +201,10 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 
 	}
 
-	/*
-	 * Each file in the collection represents one grib file for one parameter.
-	 * (non-Javadoc)
+	/**
+	 * Input is a collection of grib file. Each grib file contains one
+	 * parameter.s
 	 * 
-	 * @seeedu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem#
-	 * importForecasts(java.util.Collection)
 	 */
 	public void importForecasts(Collection<File> files) throws IOException {
 		ForecastFile forecastFile = new ForecastFile("tempFilePath",
@@ -296,6 +305,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	public String getName() {
 		return this.name;
 	}
+
 
 
 }

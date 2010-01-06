@@ -14,10 +14,10 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import edu.unicen.surfforecaster.server.domain.decoder.GribDecoder;
-import edu.unicen.surfforecaster.server.domain.decoder.GribDecoderNetcdf;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
+import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoder;
+import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoderNetcdf;
 
 /**
  * @author esteban

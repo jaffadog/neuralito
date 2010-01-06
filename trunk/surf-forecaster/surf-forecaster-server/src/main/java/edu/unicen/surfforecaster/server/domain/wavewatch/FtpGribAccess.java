@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 
-import com.enterprisedt.net.ftp.FileTransferClient;
 
 public class FtpGribAccess implements GribAccess {
 
@@ -59,35 +58,30 @@ public class FtpGribAccess implements GribAccess {
 	 * @see org.springframework.scheduling.quartz.QuartzJobBean#executeInternal(org.quartz.JobExecutionContext)
 	 */
 	protected File downloadFile() throws GribAccessException {
-		// System.out.println("THE DOWNLOADER HAS BEEN EXECUTED AND FAILED : ");
-		// System.out.println(context.getMergedJobDataMap().get("esteban"));
-		// System.out.println("refire: " + context.getRefireCount());
-		FileTransferClient ftp = null;
+//		FileTransferClient ftp = null;
 		try {
-			// ftp = new FileTransferClient();
-			// final EventListener listener = new DownloaderListener();
-			// ftp.setEventListener(listener);
-			//
-			// // set remote host
-			// ftp.setRemoteHost(this.getHost());
-			// ftp.setUserName(this.getUserName());
-			// ftp.setPassword(this.getPassword());
-			// // connect to the server
-			// log.info("Connecting to FTP server " + getHost());
-			// ftp.connect();
-			// log.info("Connected and logged in to server " + getHost());
-			// // Download file
-			// log.info("Downloading file: " + getDownloadFilePath());
-			// ((DownloaderListener)
-			// listener).setFileSize(getDownloadFilePath(),
-			// ftp.getSize(getDownloadFilePath()));
-			// ftp.downloadFile(getDestinationFilePath(),
-			// getDownloadFilePath());
-			// log.info("File downloaded");
-			// // Put the downloaded file in the job context. So listeners can
-			// // notify observers.
-			// // Shut down client
-			// ftp.disconnect();
+//			ftp = new FileTransferClient();
+//			final EventListener listener = new FtpDownloaderListener();
+//			ftp.setEventListener(listener);
+//
+//			// set remote host
+//			ftp.setRemoteHost(this.getHost());
+//			ftp.setUserName(this.getUserName());
+//			ftp.setPassword(this.getPassword());
+//			// connect to the server
+//			log.info("Connecting to FTP server " + getHost());
+//			ftp.connect();
+//			log.info("Connected and logged in to server " + getHost());
+//			// Download file
+//			log.info("Downloading file: " + getDownloadFilePath());
+//			((FtpDownloaderListener) listener).setFileSize(getDownloadFilePath(),
+//					ftp.getSize(getDownloadFilePath()));
+//			ftp.downloadFile(getDestinationFilePath(), getDownloadFilePath());
+//			log.info("File downloaded");
+//			// Put the downloaded file in the job context. So listeners can
+//			// notify observers.
+//			// Shut down client
+//			ftp.disconnect();
 			return new File(getDestinationFilePath());
 		} catch (final Exception e) {
 			throw new GribAccessException(e);

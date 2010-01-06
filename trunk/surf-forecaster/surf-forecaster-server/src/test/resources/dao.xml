@@ -82,16 +82,16 @@
 				</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Forecast
 				</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.WW3Forecaster
+				<value>edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster
 				</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.WekaForecaster
 				</value>
 				<value>edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerator
 				</value>
-				<value>edu.unicen.surfforecaster.server.domain.weka.strategy.NoBuoyStrategy
+				<value>edu.unicen.surfforecaster.server.domain.weka.strategy.SimpleDataSetGenerationStrategy
 				</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Point</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.Value</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.ForecastValue</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservation
 				</value>
 			</list>

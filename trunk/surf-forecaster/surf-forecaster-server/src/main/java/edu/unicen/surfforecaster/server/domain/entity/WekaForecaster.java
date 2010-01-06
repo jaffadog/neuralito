@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Transient;
 import org.apache.log4j.Logger;
 
 import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
 import weka.core.Instance;
 import weka.core.Instances;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
@@ -47,7 +49,6 @@ public class WekaForecaster extends Forecaster {
 	/**
 	 * The strategy to generate instances.
 	 */
-
 	private DataSetGenerationStrategy dataSetGenerationStrategy;
 
 	/**
@@ -57,12 +58,12 @@ public class WekaForecaster extends Forecaster {
 	private HashMap<String, Serializable> strategyOptions;
 
 	/**
-	 * The model to obtain wave watch forecast data.
+	 * The component to obtain wave watch forecast data.
 	 */
 	@Transient
-	private WaveWatchSystem waveWatchModel;
+	private WaveWatchSystem waveWatch;
 	/**
-	 * The model name.
+	 * The wave watch system name.
 	 */
 	private String waveWatchModelName;
 
@@ -104,9 +105,10 @@ public class WekaForecaster extends Forecaster {
 			this.classifier = cl;
 			dataSetGenerationStrategy = st;
 			this.strategyOptions = options;
-			this.waveWatchModel = model;
+			this.waveWatch = model;
 			trainningInstances = st.generateTrainningInstances(model,
 					observations, options);
+
 			classifier.buildClassifier(trainningInstances);
 			evaluateForecaster();
 			this.spot = spot;
@@ -149,7 +151,7 @@ public class WekaForecaster extends Forecaster {
 		try {
 			List<Forecast> improvedForecasts = new ArrayList<Forecast>();
 			Map<Forecast, Instance> latestForecastInstances = dataSetGenerationStrategy
-					.generateLatestForecastInstances(this.waveWatchModel,
+					.generateLatestForecastInstances(this.waveWatch,
 							this.strategyOptions);
 			for (Forecast forecast : latestForecastInstances.keySet()) {
 				Instance forecastInstance = latestForecastInstances
@@ -157,7 +159,7 @@ public class WekaForecaster extends Forecaster {
 				double improvedWaveHeight = classifier
 						.classifyInstance(forecastInstance);
 				forecast.addParameter("improvedWaveHeight",
- new Value(
+ new ForecastValue(
 						"improvedWaveHeight",
 								improvedWaveHeight, Unit.Meters));
 				improvedForecasts.add(forecast);
@@ -193,19 +195,17 @@ public class WekaForecaster extends Forecaster {
 	 */
 	private void evaluateForecaster() {
 		try {
-			// Evaluation evaluation = new Evaluation(trainningInstances);
-			// evaluation.crossValidateModel(classifier, trainningInstances, 10,
-			// new Random(1), (Object[]) null);
-			// evaluations = new HashMap<String, String>();
-			// evaluations.put("correlation", Double.toString(evaluation
-			// .correlationCoefficient()));
-			// evaluations.put("meanAbsoluteError", Double.toString(evaluation
-			// .meanAbsoluteError()));
-			// evaluations.put("resume", "resumen de desempenio");
+			Evaluation evaluation = new Evaluation(trainningInstances);
+			evaluation.crossValidateModel(classifier, trainningInstances, 10,
+					new Random(1));
 			evaluations = new HashMap<String, String>();
-			evaluations.put("correlation", Double.toString(0.5));
-			evaluations.put("meanAbsoluteError", Double.toString(0.6));
+			evaluations.put("correlation", Double.toString(evaluation
+					.correlationCoefficient()));
+			evaluations.put("meanAbsoluteError", Double.toString(evaluation
+					.meanAbsoluteError()));
 			evaluations.put("resume", "resumen de desempenio");
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

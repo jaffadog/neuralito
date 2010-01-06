@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.download;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,12 +18,12 @@ import com.enterprisedt.net.ftp.EventListener;
  * @author esteban
  * 
  */
-public class DownloaderListener implements EventListener {
+public class FtpDownloaderListener implements EventListener {
 
 	private final Map<String, Long> map = new HashMap<String, Long>();
-	private Logger log = Logger.getLogger(DownloaderListener.class);
+	private Logger log = Logger.getLogger(FtpDownloaderListener.class);
 	
-	public DownloaderListener(){
+	public FtpDownloaderListener(){
 		
 	}
 	/**

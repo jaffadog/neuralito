@@ -3,9 +3,8 @@
  */
 package edu.unicen.surfforecaster.server.services;
 
+import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +33,7 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl;
+import edu.unicen.surfforecaster.server.domain.weka.util.VisualObservationsLoader;
 
 /**
  * @author esteban
@@ -176,33 +176,41 @@ public class ForecastServiceImplementationTest {
 	public void createWekaForecaster() {
 		try {
 			long initial = System.currentTimeMillis();
-			List<VisualObservationDTO> visualObservations = new ArrayList<VisualObservationDTO>();
-			Calendar cal = new GregorianCalendar();
-			cal.set(2009, 11, 31);
-			VisualObservationDTO vo = new VisualObservationDTO(23D, cal
-					.getTime(),
-					Unit.Degrees);
-			visualObservations.add(vo);
-			cal = new GregorianCalendar(2009, 11, 30);
-			vo = new VisualObservationDTO(23D, cal.getTime(),
-					Unit.Degrees);
-			visualObservations.add(vo);
-			cal = new GregorianCalendar(2010, 0, 1);
-			cal.set(Calendar.HOUR_OF_DAY, 8);
-			vo = new VisualObservationDTO(23D, cal.getTime(),
-					Unit.Degrees);
-
-			visualObservations.add(vo);
+			List<VisualObservationDTO> visualObservations = VisualObservationsLoader
+					.loadVisualObservations(
+							new File(
+									"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu1997.dat"),
+							Unit.Meters);
+			// Calendar cal = new GregorianCalendar();
+			// cal.set(2009, 11, 31);
+			// VisualObservationDTO vo = new VisualObservationDTO(23D, cal
+			// .getTime(),
+			// Unit.Degrees);
+			// visualObservations.add(vo);
+			// cal = new GregorianCalendar(2009, 11, 30);
+			// vo = new VisualObservationDTO(23D, cal.getTime(),
+			// Unit.Degrees);
+			// visualObservations.add(vo);
+			// cal = new GregorianCalendar(2010, 0, 1);
+			// cal.set(Calendar.HOUR_OF_DAY, 8);
+			// vo = new VisualObservationDTO(23D, cal.getTime(),
+			// Unit.Degrees);
+			//
+			// visualObservations.add(vo);
 
 			HashMap<String, Serializable> options = new HashMap<String, Serializable>();
-			options.put("latitudeGridPoint1", 75.0F);
-			options.put("longitudeGridPoint1", 0.5F);
-			options.put("utcSunriseHour", 2);
-			options.put("utcSunriseMinute", 0);
-			options.put("utcSunsetHour", 20);
-			options.put("utcSunsetMinute", 0);
+			options.put("latitudeGridPoint1", 22.0F);
+			options.put("longitudeGridPoint1", -158.75F);
+			options.put("utcSunriseHour", 17);
+			options.put("utcSunriseMinute", 30);
+			options.put("utcSunsetHour", 6);
+			options.put("utcSunsetMinute", 30);
 			WekaForecasterEvaluationDTO createWekaForecaster = forecastService.createWekaForecaster(visualObservations, spot1Id,
 					options);
+			log.info("Correlation: " + createWekaForecaster.getCorrelation());
+			log.info("Mean Absolute error.: "
+					+ createWekaForecaster.getMeanAbsoluteError());
+			log.info("Resume: " + createWekaForecaster.getResume());
 			// final List<ForecastDTO> forecasts = forecastService
 			// .getLatestForecasts(createWekaForecaster.getId());
 			// log.info("Number of forecasts retrieved:" + forecasts.size());
