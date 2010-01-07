@@ -80,21 +80,21 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		lblSectionTitle.addStyleName("gwt-Label-SectionTitle");
 		this.setWidget(0, 0, lblSectionTitle);
 		
-		Label lblSectionDescription = new Label(GWTUtils.LOCALE_CONSTANTS.compSectionDescription());
-		this.setWidget(1, 0, lblSectionDescription);
-		lblSectionDescription.addStyleName("gwt-Label-SectionDescription");
-		
 		errorPanel = new ErrorMsgPanel();
 		errorPanel.setVisible(false);
-		this.setWidget(2, 0, errorPanel);
-		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.setWidget(1, 0, errorPanel);
+		this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		Vector<String> message = new Vector<String>();
 		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
 		successPanel = new SuccessMsgPanel(message);
 		successPanel.setVisible(false);
-		this.setWidget(3, 0, successPanel);
-		this.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.setWidget(2, 0, successPanel);
+		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		
+		Label lblSectionDescription = new Label(GWTUtils.LOCALE_CONSTANTS.compSectionDescription());
+		this.setWidget(3, 0, lblSectionDescription);
+		lblSectionDescription.addStyleName("gwt-Label-SectionDescription");
 		
 		//Define comparations
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.spotsToCompare());
@@ -214,8 +214,11 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			this.showSavePanel();
 		else if (sender == saveCompBtn) 
 			this.saveComparation();
-		else if (sender == cancelSaveCompBtn)
+		else if (sender == cancelSaveCompBtn){
+			errorPanel.setVisible(false);
+			successPanel.setVisible(false);
 			this.setSavePanelVisible(false);
+		}
 		else if (sender == deleteCompBtn) {
 			DeleteCompConfirmMessageBox confirmBox = new DeleteCompConfirmMessageBox(GWTUtils.LOCALE_CONSTANTS.askForDeleteComp(), MessageBox.IconType.WARNING);
 			confirmBox.setBasePanel(this);
@@ -635,7 +638,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	
 	public void deleteComparation() {
 		final Integer selectedCompId = new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue();
-		
+		errorPanel.setVisible(false);
+		successPanel.setVisible(false);
 		UserServices.Util.getInstance().deleteComparation(selectedCompId, new AsyncCallback<Boolean>(){
 			public void onSuccess(Boolean result) {
 				if (result) {
@@ -714,8 +718,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			messages.add(GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToSaveComparation());
 		
 		if (txtCompName.getText().trim().equals(""))
-			messages.add(GWTUtils.LOCALE_CONSTANTS.mandatoryFieldName());
-		if (!txtCompName.getText().trim().matches(GWTUtils.ALPHANUM_SPACES_NOT_START_WITH_NUM))
+			messages.add(GWTUtils.LOCALE_MESSAGES.MANDATORY_FIELD(GWTUtils.LOCALE_CONSTANTS.comparationName()));
+		if (!txtCompName.getText().trim().equals("") && !txtCompName.getText().trim().matches(GWTUtils.ALPHANUM_SPACES_NOT_START_WITH_NUM))
 			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_SPACES_NOT_START_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.comparationName()));
 		return messages;
 	}

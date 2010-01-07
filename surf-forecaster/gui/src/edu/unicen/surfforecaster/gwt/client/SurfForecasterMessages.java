@@ -39,4 +39,11 @@ public interface SurfForecasterMessages extends Messages {
 	
 	@DefaultMessage("El campo \"{0}\" ingresado no tiene un formato v\u00E1lido.")
 	String REGEX_EMAIL(String fieldName);
+	
+	/**
+	 * MySpotsPanel
+	 */
+	
+	@DefaultMessage("Confirma que desea eliminar la ola \"{0}\"?")
+	String askForDeleteSpot(String spotName);
 }
