@@ -3,7 +3,6 @@
  */
 package edu.unicen.surfforecaster.server.dao;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -41,11 +40,10 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 	/**
 	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#save(edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster.WW3Forecaster)
 	 */
-	public Integer save(
+	public void save(
 			final DataSetGenerationStrategy dataSetGenerationStrategy) {
-		Serializable save = getHibernateTemplate().save(
+		getHibernateTemplate().save(
 				dataSetGenerationStrategy);
-		return 1;
 	}
 
 	/**
@@ -57,17 +55,17 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 		final Forecaster forecaster = (Forecaster) getHibernateTemplate().get(
 				Forecaster.class, forecasterId);
 		if (forecaster instanceof SimpleForecaster) {
-			SimpleForecaster ww3Forecaster = (SimpleForecaster) forecaster;
+			SimpleForecaster simpleForecaster = (SimpleForecaster) forecaster;
 			Field declaredField;
 			try {
 				declaredField = SimpleForecaster.class
 						.getDeclaredField("modelName");
 				declaredField.setAccessible(true);
-				String string = (String) declaredField.get(ww3Forecaster);
+				String string = (String) declaredField.get(simpleForecaster);
 				declaredField.setAccessible(false);
 				declaredField = SimpleForecaster.class.getDeclaredField("model");
 				declaredField.setAccessible(true);
-				declaredField.set(ww3Forecaster, waveWatchSystem);
+				declaredField.set(simpleForecaster, waveWatchSystem);
 				declaredField.setAccessible(false);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -85,8 +83,9 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 				String string = (String) declaredField.get(wekaForecaster);
 				declaredField.setAccessible(false);
 				declaredField = WekaForecaster.class
-						.getDeclaredField("waveWatchModel");
+						.getDeclaredField("waveWatch");
 				declaredField.setAccessible(true);
+
 				declaredField.set(wekaForecaster, waveWatchSystem);
 				declaredField.setAccessible(false);
 			} catch (Exception e) {

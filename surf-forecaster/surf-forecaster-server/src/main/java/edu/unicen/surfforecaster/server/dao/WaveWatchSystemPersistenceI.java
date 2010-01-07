@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.wavewatch;
+package edu.unicen.surfforecaster.server.dao;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,6 +11,8 @@ import org.springframework.dao.DataAccessResourceFailureException;
 
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.wavewatch.ForecastFile;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 
 public interface WaveWatchSystemPersistenceI {
 

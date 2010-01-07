@@ -6,6 +6,7 @@ package edu.unicen.surfforecaster.server.domain.entity;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +34,8 @@ public abstract class Forecaster {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(length = 11)
 	private Integer id;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	// @JoinColumn(name = "spot_id", nullable = false)
 	protected Spot spot;
 
 	public Integer getId() {

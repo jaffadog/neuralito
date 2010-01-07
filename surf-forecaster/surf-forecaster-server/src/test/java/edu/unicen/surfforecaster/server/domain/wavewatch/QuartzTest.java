@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;

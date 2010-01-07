@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.weka.util;
+package edu.unicen.surfforecaster.util;
 
 import java.io.File;
 import java.util.Calendar;
@@ -10,6 +10,7 @@ import java.util.Vector;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
+import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
 /**
  * Loads visual observations.

@@ -33,11 +33,11 @@ public class WekaForecasterEvaluationDTO implements Serializable {
 	}
 	
 	public WekaForecasterEvaluationDTO(double correlation,
-			double meanAbsoluteError, Integer forecasterId, HashMap<String,String> resume) {
+			double meanAbsoluteError, Integer forecasterId) {
 		super();
 		this.correlation = correlation;
 		this.meanAbsoluteError = meanAbsoluteError;
-		this.id = id;
+		this.id = forecasterId;
 		this.resume = resume;
 	}
 
@@ -54,7 +54,7 @@ public class WekaForecasterEvaluationDTO implements Serializable {
 	}
 
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
 
 	

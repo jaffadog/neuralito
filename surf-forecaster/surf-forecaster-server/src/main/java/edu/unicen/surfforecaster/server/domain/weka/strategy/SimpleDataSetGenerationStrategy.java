@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import weka.core.Instance;
 import weka.core.Instances;
+import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
@@ -69,7 +70,7 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 		List<Forecast> latestForecasts = model.getForecasts(gridPoint);
 		for (Forecast forecast : latestForecasts) {
 			Map<String, Double> instanceData = generateInstanceData(forecast,
-					null);
+					new VisualObservation(0D, new Date(), Unit.Degrees));
 			Instance instance = Util.createWekaInstance(instanceData,
 					strategyAttributes, classAttributeName);
 			generatedInstances.put(forecast, instance);
@@ -103,7 +104,6 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 			}
 		}	
 		Instances instances = Util.createWekaInstances(dataSetName, instancesData, strategyAttributes, classAttributeName);
-		Util.printWekaInstances(instances);
 		return instances;
 	}
 

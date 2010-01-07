@@ -23,9 +23,12 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
+import edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistenceI;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoder;
+import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.GribAccess;
+import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.GribAccessException;
 
 /**
  * 
@@ -108,7 +111,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 			this.trigger.setName("NOAA Grib Download Trigger");
 			this.trigger.setCronExpression(cronExpression);
 			// Create job listener
-			JobListener listener = new DownloaderJobListener(this.name);
+			JobListener listener = new UpdateForecastsJobListener(this.name);
 			jobDetail.addJobListener(listener.getName());
 			JobDataMap data = new JobDataMap();
 			data.put("gribAccess", this.gribAccess);

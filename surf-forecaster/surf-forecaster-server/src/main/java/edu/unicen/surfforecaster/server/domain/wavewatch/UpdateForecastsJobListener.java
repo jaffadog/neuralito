@@ -20,7 +20,7 @@ import org.quartz.Trigger;
  * @author esteban
  * 
  */
-public class DownloaderJobListener implements JobListener {
+public class UpdateForecastsJobListener implements JobListener {
 	/**
 	 * Max number of times to reschedule the job.
 	 */
@@ -42,7 +42,7 @@ public class DownloaderJobListener implements JobListener {
 	 */
 	private final Logger log = Logger.getLogger(this.getClass());
 
-	public DownloaderJobListener(String listenerName) {
+	public UpdateForecastsJobListener(String listenerName) {
 		this.name = listenerName;
 	}
 
@@ -74,7 +74,7 @@ public class DownloaderJobListener implements JobListener {
 	 * Verify if download job ended successfully. If download was correct, then
 	 * notify observers with the list of downloaded files. If download job
 	 * failed then rescheduled job. Number of rescheduling is limited to:
-	 * {@link DownloaderJobListener#MAX_RESCHEDULINGS}
+	 * {@link UpdateForecastsJobListener#MAX_RESCHEDULINGS}
 	 * 
 	 * @see org.quartz.JobListener#jobWasExecuted(org.quartz.JobExecutionContext,
 	 *      org.quartz.JobExecutionException)

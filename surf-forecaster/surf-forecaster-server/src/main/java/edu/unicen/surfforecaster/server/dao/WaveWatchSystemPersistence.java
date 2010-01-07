@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.wavewatch;
+package edu.unicen.surfforecaster.server.dao;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +27,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
-import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.ForecastValue;
-import edu.unicen.surfforecaster.server.domain.weka.util.Util;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.wavewatch.ForecastFile;
+import edu.unicen.surfforecaster.server.domain.wavewatch.GridPointsFile;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 
 /**
  * 
@@ -490,19 +492,6 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 				final float latitude = result.getFloat("latitude");
 				final float longitude = result.getFloat("longitude");
 				Date issuedDate = result.getTimestamp("issuedDate");
-				log.info("time " + result.getTime("issuedDate"));
-				log.info("date " + result.getDate("issuedDate"));
-				log.info("date to date "
-						+ new Date(result.getDate("issuedDate").getTime()));
-				log.info("timestamp " + result.getTimestamp("issuedDate"));
-				log
-						.info("timestamp to date"
-								+ new Date(result.getTimestamp("issuedDate")
-										.getTime()));
-				log.info("formatted"
-						+ Util.getDateFormatter().format(
-								result.getTimestamp("issuedDate")));
-				log.info("OFFSET:" + issuedDate.getTimezoneOffset());
 				Point forecastGridPoint = new Point(latitude, longitude);
 				Map<String, ForecastValue> parameters = new HashMap<String, ForecastValue>();
 				for (int i = 0; i < this.waveParameters.length; i++) {

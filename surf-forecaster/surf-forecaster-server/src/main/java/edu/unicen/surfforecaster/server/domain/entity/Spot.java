@@ -67,7 +67,7 @@ public class Spot implements Serializable {
 	/**
 	 * The available forecasters for this spot.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "spot")
 	private Collection<Forecaster> forecasters;
 	
 

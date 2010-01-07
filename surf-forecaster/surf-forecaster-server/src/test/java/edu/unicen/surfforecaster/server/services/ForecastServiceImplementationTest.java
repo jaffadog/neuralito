@@ -33,7 +33,8 @@ import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl;
-import edu.unicen.surfforecaster.server.domain.weka.util.VisualObservationsLoader;
+import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
+import edu.unicen.surfforecaster.util.VisualObservationsLoader;
 
 /**
  * @author esteban
@@ -146,7 +147,7 @@ public class ForecastServiceImplementationTest {
 	public void createWW3Forecaster() {
 		try {
 			final int forecasterId = forecastService.createWW3Forecaster(
-					spot1Id, new PointDTO(75.0F, 0.5F));
+					spot1Id, new PointDTO(22.0F, -158.75F));
 			Assert.assertTrue(forecasterId > 0);
 		} catch (final NeuralitoException e) {
 			e.printStackTrace();
@@ -159,7 +160,7 @@ public class ForecastServiceImplementationTest {
 		try {
 			long initial = System.currentTimeMillis();
 			final int forecasterId = forecastService.createWW3Forecaster(
-					spot1Id, new PointDTO(75.0F, 0.5F));
+					spot1Id, new PointDTO(22.0F, -158.75F));
 			final List<ForecastDTO> forecasts = forecastService
 					.getLatestForecasts(forecasterId);
 			log.info("Number of forecasts retrieved:"+forecasts.size());
@@ -181,23 +182,6 @@ public class ForecastServiceImplementationTest {
 							new File(
 									"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu1997.dat"),
 							Unit.Meters);
-			// Calendar cal = new GregorianCalendar();
-			// cal.set(2009, 11, 31);
-			// VisualObservationDTO vo = new VisualObservationDTO(23D, cal
-			// .getTime(),
-			// Unit.Degrees);
-			// visualObservations.add(vo);
-			// cal = new GregorianCalendar(2009, 11, 30);
-			// vo = new VisualObservationDTO(23D, cal.getTime(),
-			// Unit.Degrees);
-			// visualObservations.add(vo);
-			// cal = new GregorianCalendar(2010, 0, 1);
-			// cal.set(Calendar.HOUR_OF_DAY, 8);
-			// vo = new VisualObservationDTO(23D, cal.getTime(),
-			// Unit.Degrees);
-			//
-			// visualObservations.add(vo);
-
 			HashMap<String, Serializable> options = new HashMap<String, Serializable>();
 			options.put("latitudeGridPoint1", 22.0F);
 			options.put("longitudeGridPoint1", -158.75F);
@@ -205,19 +189,27 @@ public class ForecastServiceImplementationTest {
 			options.put("utcSunriseMinute", 30);
 			options.put("utcSunsetHour", 6);
 			options.put("utcSunsetMinute", 30);
-			WekaForecasterEvaluationDTO createWekaForecaster = forecastService.createWekaForecaster(visualObservations, spot1Id,
+			WekaForecasterEvaluationDTO createWekaForecaster = forecastService
+					.createWekaForecaster(visualObservations, spot2Id,
 					options);
-			log.info("Correlation: " + createWekaForecaster.getCorrelation());
-			log.info("Mean Absolute error.: "
-					+ createWekaForecaster.getMeanAbsoluteError());
-			log.info("Resume: " + createWekaForecaster.getResume());
-			// final List<ForecastDTO> forecasts = forecastService
-			// .getLatestForecasts(createWekaForecaster.getId());
-			// log.info("Number of forecasts retrieved:" + forecasts.size());
-			// log.info(forecasts.get(0).getBaseDate());
-			// long end = System.currentTimeMillis();
-			// log.info("Elapsed time:" + (end - initial) / 1000);
-			// Assert.assertTrue(forecasts.size() > 0);
+
+			Integer forecasterId = createWekaForecaster.getId();
+			List<ForecastDTO> latestForecasts = forecastService
+					.getLatestForecasts(forecasterId);
+			for (ForecastDTO forecastDTO : latestForecasts) {
+				log
+						.info("Wave Watch Prediction:"
+								+ forecastDTO
+										.getMap()
+										.get(
+						WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2
+														.getValue()).getValue()
+								+ "|| Weka prediction"
+								+ forecastDTO.getMap()
+										.get(
+"improvedWaveHeight")
+								.getValue());
+			}
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -252,22 +244,5 @@ public class ForecastServiceImplementationTest {
 			e.printStackTrace();
 		}
 	}
-	// @Test
-	// public void addVisualObservations() throws NeuralitoException{
-	// File file = new File("src/test/resources/oahu2003.dat");
-	// forecastService.createVisualObservationSet(file, spot1Id,
-	// "Sunset observations", "Observations Goddard-Caldwell", Unit.Feets);
-	// }
-	//	
-	// @Test
-	// public void wekaSerialization(){
-	// Classifier cl = new LinearRegression();
-	// InstancesGenerator st = new NoBuoyStrategy();
-	// Forecaster weka = new WekaForecaster(cl,st,null,null);
-	// Integer forecasterId = forecastDAO.save(weka);
-	// weka = forecastDAO.getForecasterById(forecasterId);
-	// System.out.println(((WekaForecaster)weka).getClassifier());
-	// System.out.println(((WekaForecaster)weka).getStrategy().getName());
-	//		
-	// }
+
 }

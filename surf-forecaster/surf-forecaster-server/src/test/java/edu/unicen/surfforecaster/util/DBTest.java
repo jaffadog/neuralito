@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server;
+package edu.unicen.surfforecaster.util;
 
 
 /**
