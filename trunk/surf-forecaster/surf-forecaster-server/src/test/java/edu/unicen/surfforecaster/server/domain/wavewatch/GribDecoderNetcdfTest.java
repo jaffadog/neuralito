@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.io.File;
 import java.io.IOException;

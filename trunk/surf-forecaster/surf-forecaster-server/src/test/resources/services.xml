@@ -41,7 +41,7 @@
 		class="edu.unicen.surfforecaster.server.domain.weka.strategy.SimpleDataSetGenerationStrategy" />
 
 	<bean id="ftpGribAccess"
-		class="edu.unicen.surfforecaster.server.domain.wavewatch.FtpGribAccess">
+		class="edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.FtpGribAccess">
 		<property name="host" value="polar.ncep.noaa.gov" />
 		<property name="downloadFilePath"
 			value="/pub/waves/latest_run/nww3.all.grb" />

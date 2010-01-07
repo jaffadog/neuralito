@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.weka.util;
+package edu.unicen.surfforecaster.util;
 
 import java.io.BufferedReader;
 import java.io.File;

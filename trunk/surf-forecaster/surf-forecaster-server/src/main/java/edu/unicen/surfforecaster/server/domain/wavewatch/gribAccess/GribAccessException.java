@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.wavewatch;
+package edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess;
 
 public class GribAccessException extends Exception {
 

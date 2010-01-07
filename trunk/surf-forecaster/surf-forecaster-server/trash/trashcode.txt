@@ -1,0 +1,46 @@
+	// @Test
+	// public void addVisualObservations() throws NeuralitoException{
+	// File file = new File("src/test/resources/oahu2003.dat");
+	// forecastService.createVisualObservationSet(file, spot1Id,
+	// "Sunset observations", "Observations Goddard-Caldwell", Unit.Feets);
+	// }
+	//	
+	// @Test
+	// public void wekaSerialization(){
+	// Classifier cl = new LinearRegression();
+	// InstancesGenerator st = new NoBuoyStrategy();
+	// Forecaster weka = new WekaForecaster(cl,st,null,null);
+	// Integer forecasterId = forecastDAO.save(weka);
+	// weka = forecastDAO.getForecasterById(forecasterId);
+	// System.out.println(((WekaForecaster)weka).getClassifier());
+	// System.out.println(((WekaForecaster)weka).getStrategy().getName());
+	//		
+	// }
+
+// /**
+	// * @see
+	// edu.unicen.surfforecaster.common.services.ForecastService#createVisualObservationSet(File,
+	// * Integer, String, String, Unit)
+	// *
+	// */
+	// @Override
+	// @Transactional
+	// public Integer createVisualObservationSet(File file, Integer spotId,
+	// String setName, String setDescription, Unit unit)
+	// throws NeuralitoException {
+	// validateSpotExists(spotId);
+	// validateUnit(unit);
+	// validateDescription(setDescription);
+	// validateName(setName);
+	// validateFile(file);
+	// VisualObservationsLoader loader = new VisualObservationsLoader();
+	// List<VisualObservation> observations = loader.loadVisualObservations(
+	// file, unit);
+	// Spot spot = spotDAO.getSpotById(spotId);
+	//		
+	// VisualObservationsSet observationsSet = new VisualObservationsSet(
+	// setName, setDescription, observations, unit, spot);
+	// spot.addVisualObservationSet(observationsSet);
+	// Integer id = observationsSetDAO.save(observationsSet);
+	// return id;
+	// }

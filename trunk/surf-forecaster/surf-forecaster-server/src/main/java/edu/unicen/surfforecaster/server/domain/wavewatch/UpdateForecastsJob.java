@@ -8,11 +8,13 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-
+import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.GribAccess;
+import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.GribAccessException;
 
 /**
- * Job that gets fires by Quartz scheduler. On each execution it obtains a new
- * grib file and pass it to the WaveWatchSystem in order to process it.
+ * Job that gets fires by Quartz scheduler. On each execution it downloads the
+ * latest wavewatch forecast issued by NOAA. After download file is given to
+ * {@link WaveWatchSystem} to process it.
  * 
  * @author esteban
  * 

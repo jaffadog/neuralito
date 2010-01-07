@@ -6,7 +6,6 @@ import java.util.Vector;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.weka.filter.Filter;
-import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
 /**
  * Filter to extract the forecast with higher reported wave height on each day.
@@ -48,7 +47,7 @@ public class ForecastMaxWaveHeightFilter extends Filter {
 		}
 		if (currentMaxHeight != null)
 			highestForecasts.add(currentMaxHeight);
-		Util.printCollection(highestForecasts);
+
 		return highestForecasts;
 
 	}

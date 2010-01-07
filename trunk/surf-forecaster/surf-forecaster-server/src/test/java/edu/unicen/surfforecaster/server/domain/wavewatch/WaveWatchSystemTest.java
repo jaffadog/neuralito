@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemImpl;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/services.xml" })
-public class NoaaWaveWatchModelTest {
+public class WaveWatchSystemTest {
 
 	@Autowired
 	WaveWatchSystemImpl model;

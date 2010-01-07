@@ -11,10 +11,10 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 
 import weka.classifiers.Classifier;
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
@@ -30,9 +30,9 @@ import edu.unicen.surfforecaster.server.dao.SpotDAO;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
-import edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster;
 import edu.unicen.surfforecaster.server.domain.entity.WekaForecaster;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
@@ -168,33 +168,7 @@ public class ForecastServiceImplementation implements ForecastService {
 		return forecastsDTOs;
 	}
 
-	// /**
-	// * @see
-	// edu.unicen.surfforecaster.common.services.ForecastService#createVisualObservationSet(File,
-	// * Integer, String, String, Unit)
-	// *
-	// */
-	// @Override
-	// @Transactional
-	// public Integer createVisualObservationSet(File file, Integer spotId,
-	// String setName, String setDescription, Unit unit)
-	// throws NeuralitoException {
-	// validateSpotExists(spotId);
-	// validateUnit(unit);
-	// validateDescription(setDescription);
-	// validateName(setName);
-	// validateFile(file);
-	// VisualObservationsLoader loader = new VisualObservationsLoader();
-	// List<VisualObservation> observations = loader.loadVisualObservations(
-	// file, unit);
-	// Spot spot = spotDAO.getSpotById(spotId);
-	//		
-	// VisualObservationsSet observationsSet = new VisualObservationsSet(
-	// setName, setDescription, observations, unit, spot);
-	// spot.addVisualObservationSet(observationsSet);
-	// Integer id = observationsSetDAO.save(observationsSet);
-	// return id;
-	// }
+
 	/**
 	 * Creates and train a forecaster which uses a machine learner. Inputs are:
 	 * 
@@ -202,6 +176,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	 *      PointDTO)
 	 */
 	@Override
+	@Transactional
 	public WekaForecasterEvaluationDTO createWekaForecaster(
 					List<VisualObservationDTO> visualObservationsDTO, Integer spotId,
 			HashMap<String, Serializable> dataSetStrategyOptions) {
@@ -214,13 +189,19 @@ public class ForecastServiceImplementation implements ForecastService {
 			WekaForecaster forecaster = new WekaForecaster(classifier,
 					dataSetGenerationStrategy, dataSetStrategyOptions,
 					waveWatchSystem, visualObservations, spot);
-			// Integer forecasterId = forecastDAO.save(forecaster);
-			Map<String, String> evaluations = forecaster.getEvaluation();
+			Integer forecasterId = forecastDAO.save(forecaster);
+			String correlation = forecaster.getEvaluation().get("correlation");
+			String mae = forecaster.getEvaluation().get("meanAbsoluteError");
+
+			log.info("Weka Forecaster(Id=" + forecasterId
+					+ ") trained:   Correlation: " + correlation
+					+ "Mean Absolute error.: " + mae);
+
 			return new WekaForecasterEvaluationDTO(Double
-					.parseDouble(evaluations.get("correlation")), Double
-					.parseDouble(evaluations.get("meanAbsoluteError")), 1, null);
+					.parseDouble(correlation), Double.parseDouble(mae),
+					forecasterId);
 		} catch (Exception e) {
-			log.error(e);
+			log.error("Error creating weka forecaster", e);
 		}
 		return null;
 

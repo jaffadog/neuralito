@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.surfforecaster.server;
+package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import com.enterprisedt.net.ftp.FileTransferClient;
 import com.enterprisedt.util.debug.Level;
 
 
-import edu.unicen.surfforecaster.server.domain.wavewatch.FtpDownloaderListener;
+import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.FtpDownloaderListener;
 
 /**
  * @author esteban

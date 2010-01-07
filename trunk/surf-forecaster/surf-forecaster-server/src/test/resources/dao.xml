@@ -38,62 +38,23 @@
 				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.connection.autocommit">true</prop>
 				<prop key="hibernate.jdbc.batch_size">40</prop>
-				<!--				## MySQL-->
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<!--
-					<prop
-					key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
-				-->
-				<!--
-					<prop
-					key="hibernate.connection.url">jdbc:mysql://localhost:3306/test</prop>
-				-->
-				<!--				<prop key="hibernate.connection.username">root</prop>-->
-				<!--				<prop key="hibernate.connection.password">admin</prop>-->
-				<!--				HSQL-->
-				<!--
-					<prop
-					key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-				-->
-				<!--
-					<prop
-					key="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</prop>
-				-->
-				<!--				<prop key="hibernate.connection.url">jdbc:hsqldb:mem:z</prop>-->
-				<!--				<prop key="hibernate.connection.username">sa</prop>-->
-				<!--				<prop key="hibernate.connection.password"></prop>-->
-				<!--				-->
 			</props>
 		</property>
 		<property name="annotatedClasses">
 			<list>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Area</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.Country
-				</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Country</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Zone</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Spot</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.I18n</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.Comparation
-				</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Comparation</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.User</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.Description
-				</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.Forecaster
-				</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.Forecast
-				</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster
-				</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.WekaForecaster
-				</value>
-				<value>edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerator
-				</value>
-				<value>edu.unicen.surfforecaster.server.domain.weka.strategy.SimpleDataSetGenerationStrategy
-				</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Description</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.Forecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.WekaForecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Point</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.ForecastValue</value>
-				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservation
-				</value>
 			</list>
 		</property>
 	</bean>
@@ -113,22 +74,17 @@
 	<bean id="forecastDaoTarget"
 		class="edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl"
 		autowire="byName">
-		<!--		<property name="models">-->
-		<!--			<map>-->
-		<!--				<entry key="GlobalModel" value-ref="waveWatchDaoTarget" />-->
-		<!--			</map>-->
-		<!--		</property>-->
 		<property name="waveWatchSystem" ref="waveWatchSystemV2"></property>
 	</bean><!--sessionFactory will get autowired-->
 
 	<bean id="persisterTarget"
-		class="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersistence"
+		class="edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistence"
 		init-method="init" autowire="byName">
 		<constructor-arg index="0" value="archiveTable"></constructor-arg>
 		<constructor-arg index="1" value="latestForecastTable"></constructor-arg>
 		<constructor-arg index="2" value="validPointsTable"></constructor-arg>
 		<constructor-arg index="3"
-			value="validGridPoints_GlobalModel.csv" />
+			value="grids.csv" />
 		<constructor-arg index="4">
 			<list>
 				<ref bean="peakWaveHeight" />
@@ -177,7 +133,7 @@
 	</bean>
 	<bean id="persister" class="org.springframework.aop.framework.ProxyFactoryBean">
 		<property name="proxyInterfaces">
-			<value>edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersistenceI
+			<value>edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistenceI
 			</value>
 		</property>
 		<property name="interceptorNames">

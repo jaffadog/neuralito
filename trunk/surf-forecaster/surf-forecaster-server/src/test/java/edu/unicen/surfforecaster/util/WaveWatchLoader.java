@@ -1,4 +1,4 @@
-package edu.unicen.surfforecaster.server.domain.weka;
+package edu.unicen.surfforecaster.util;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

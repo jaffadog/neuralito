@@ -1,7 +1,6 @@
 package edu.unicen.surfforecaster.common.services.dto;
 
 import java.io.Serializable;
-import java.security.InvalidParameterException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -55,8 +54,8 @@ public class VisualObservationDTO implements Serializable {
 	}
 
 	private void validateWaveheight(double waveHeight2) {
-		if (waveHeight2< 0 )
-			throw new InvalidParameterException();
+		// if (waveHeight2< 0 )
+		// throw new InvalidParameterException();
 	}
 
 	/**

@@ -75,7 +75,7 @@ public class WekaForecaster extends Forecaster {
 	/**
 	 * Instances used to train the classifier.
 	 */
-	@Column(length = 300)
+	@Column(length = 3000000)
 	private Instances trainningInstances;
 
 	/**
@@ -169,7 +169,7 @@ public class WekaForecaster extends Forecaster {
 
 		} catch (Exception e) {
 			// TODO treat exception
-			log.error(e);
+			e.printStackTrace();
 		}
 		return null;
 	}
