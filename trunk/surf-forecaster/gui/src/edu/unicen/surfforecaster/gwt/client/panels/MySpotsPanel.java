@@ -141,7 +141,7 @@ public class MySpotsPanel extends FlexTable {
 				deleteIcon.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						DeleteSpotConfirmMessageBox confirmBox = new DeleteSpotConfirmMessageBox(GWTUtils.LOCALE_CONSTANTS.askForDeleteSpot(), MessageBox.IconType.WARNING, spot.getId(), rowIndex);
+						DeleteSpotConfirmMessageBox confirmBox = new DeleteSpotConfirmMessageBox(GWTUtils.LOCALE_MESSAGES.askForDeleteSpot(spot.getName()), MessageBox.IconType.WARNING, spot.getId(), rowIndex);
 						confirmBox.setBasePanel(mySpotsPanel);	
 					}
 				});
