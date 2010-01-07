@@ -506,7 +506,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		if (this.spotTxt.getText().trim().equals(""))
 			messages.add(GWTUtils.LOCALE_CONSTANTS.MANDATORY_SPOT_NAME());
 		
-		if (!this.spotTxt.getText().trim().equals("") && !this.zoneTxt.getText().trim().matches(GWTUtils.ALPHANUM_SPACES_DASHES_NOT_START_WITH_NUM))
+		if (!this.spotTxt.getText().trim().equals("") && !this.spotTxt.getText().trim().matches(GWTUtils.ALPHANUM_SPACES_DASHES_NOT_START_WITH_NUM))
 			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_SPACES_DASHES_NOT_START_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.spot()));
 		
 		if (this.mapPanel.getSpotLat().trim().equals("") || this.mapPanel.getSpotLong().trim().equals(""))
