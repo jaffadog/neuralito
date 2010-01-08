@@ -80,11 +80,11 @@
 	<bean id="persisterTarget"
 		class="edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistence"
 		init-method="init" autowire="byName">
-		<constructor-arg index="0" value="archiveTable"></constructor-arg>
-		<constructor-arg index="1" value="latestForecastTable"></constructor-arg>
-		<constructor-arg index="2" value="validPointsTable"></constructor-arg>
+		<constructor-arg index="0" value="waveWatchV2ForecastArchive"></constructor-arg>
+		<constructor-arg index="1" value="waveWatchV2LatestForecast"></constructor-arg>
+		<constructor-arg index="2" value="waveWatchV2validPointsTable"></constructor-arg>
 		<constructor-arg index="3"
-			value="grids.csv" />
+			value="/grids.csv" />
 		<constructor-arg index="4">
 			<list>
 				<ref bean="peakWaveHeight" />
