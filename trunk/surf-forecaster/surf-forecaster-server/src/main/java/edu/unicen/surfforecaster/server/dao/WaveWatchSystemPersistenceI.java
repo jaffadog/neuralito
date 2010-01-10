@@ -12,7 +12,6 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.wavewatch.ForecastFile;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 
 public interface WaveWatchSystemPersistenceI {
 
@@ -58,5 +57,9 @@ public interface WaveWatchSystemPersistenceI {
 	public boolean isGridPoint(Point point);
 
 	public void importIntoArchive(ForecastFile forecastsToArchive);
+
+	public void startImportingForecasts();
+
+	public void stopImportingForecasts();
 
 }

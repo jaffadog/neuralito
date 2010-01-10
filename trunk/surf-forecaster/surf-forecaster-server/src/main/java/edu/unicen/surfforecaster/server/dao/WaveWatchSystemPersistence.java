@@ -26,12 +26,12 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.ForecastValue;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.wavewatch.ForecastFile;
 import edu.unicen.surfforecaster.server.domain.wavewatch.GridPointsFile;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 
 /**
  * 
@@ -39,7 +39,8 @@ import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
  * @author esteban
  * 
  */
-public class WaveWatchSystemPersistence extends HibernateDaoSupport implements WaveWatchSystemPersistenceI {
+public class WaveWatchSystemPersistence extends HibernateDaoSupport implements
+		WaveWatchSystemPersistenceI {
 
 	/**
 	 * 
@@ -50,6 +51,8 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 	 * 
 	 */
 	private static final int partitionEndYear = 2020;
+
+	private static final String ARCHIVE_INDEX_NAME = "location";
 
 	/**
 	 * The logger.
@@ -76,7 +79,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 	 */
 	private final WaveWatchParameter[] waveParameters;
 
-	private String validPointsFilePath;
+	private final String validPointsFilePath;
 
 	/**
 	 * Creates a new persister.
@@ -99,9 +102,10 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 	 * @throws HibernateException
 	 * @throws DataAccessResourceFailureException
 	 */
-	public WaveWatchSystemPersistence(String archiveTableName,
-			String latestForecastTableName, String gridPointsTableName,
-			String validPointsFilePath, WaveWatchParameter[] parameters)
+	public WaveWatchSystemPersistence(final String archiveTableName,
+			final String latestForecastTableName,
+			final String gridPointsTableName, final String validPointsFilePath,
+			final WaveWatchParameter[] parameters)
 			throws DataAccessResourceFailureException, HibernateException,
 			IllegalStateException, IOException, SQLException,
 			URISyntaxException {
@@ -110,21 +114,31 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		this.archiveTableName = archiveTableName;
 		this.latestForecastTableName = latestForecastTableName;
 		this.gridPointsTableName = gridPointsTableName;
-		this.waveParameters = parameters;
+		waveParameters = parameters;
 		this.validPointsFilePath = validPointsFilePath;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI#init()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI
+	 * #init()
 	 */
-	public void init() throws IOException,
-			DataAccessResourceFailureException, HibernateException,
-			IllegalStateException, SQLException, URISyntaxException {
+	public void init() throws IOException, DataAccessResourceFailureException,
+			HibernateException, IllegalStateException, SQLException,
+			URISyntaxException {
 		// Init valid grid points table.
 		if (!tableExists(gridPointsTableName)) {
-			URL resource = ClassLoader.getSystemClassLoader().getResource(
-					this.validPointsFilePath);
-			massiveInsertValidGridPoints(new File(resource.getFile()));
+			log.info("Loading resources from:" + validPointsFilePath);
+			log.info(ClassLoader.getSystemClassLoader());
+			log.info(ClassLoader.getSystemResource("grids.csv"));
+			log.info(ClassLoader.getSystemResource("grids.csv"));
+
+			final URL resource = this.getClass().getResource(
+					validPointsFilePath);
+			final String file = resource.getFile();
+			massiveInsertValidGridPoints(new File(file.replace("%20", " ")));
 		}
 		// Init archive table
 		if (!tableExists(archiveTableName)) {
@@ -136,9 +150,14 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		}
 	}
 
-
-	/* (non-Javadoc)
-	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI#getArchivedForecasts(edu.unicen.surfforecaster.server.domain.entity.Point, java.util.Date, java.util.Date)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI
+	 * #
+	 * getArchivedForecasts(edu.unicen.surfforecaster.server.domain.entity.Point
+	 * , java.util.Date, java.util.Date)
 	 */
 	public List<Forecast> getArchivedForecasts(final Point point,
 			final Date fromDate, final Date toDate) {
@@ -179,8 +198,12 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		return forecasts;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI#getLatestForecasts(edu.unicen.surfforecaster.server.domain.entity.Point)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI
+	 * #getLatestForecasts(edu.unicen.surfforecaster.server.domain.entity.Point)
 	 */
 	public List<Forecast> getLatestForecasts(final Point gridPoint) {
 		log.info("Retrieving latest forecast for: " + gridPoint);
@@ -204,8 +227,12 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		return forecasts;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI#getLatestForecastTime()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI
+	 * #getLatestForecastTime()
 	 */
 	public Date getLatestForecastTime() {
 		log.info("Retrieving latest forecast issued date for: ");
@@ -234,8 +261,12 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		return date;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI#getValidGridPoints()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI
+	 * #getValidGridPoints()
 	 */
 	public List<Point> getValidGridPoints() {
 		log.info("Retrieving valid grid points from DB");
@@ -261,11 +292,16 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		return points;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI#updateLatestForecast(edu.unicen.surfforecaster.server.domain.wavewatch.ForecastFile)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemPersitenceI
+	 * #updateLatestForecast(edu.unicen.surfforecaster.server.domain.wavewatch.
+	 * ForecastFile)
 	 */
-	public void updateLatestForecast(ForecastFile latestForecastsFile) {
-		this.archiveLatestForecasts();
+	public void updateLatestForecast(final ForecastFile latestForecastsFile) {
+		archiveLatestForecasts();
 		log.info("Inserting data from: "
 				+ latestForecastsFile.getAbsolutePath());
 		final long init = System.currentTimeMillis();
@@ -273,7 +309,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
 			st.execute("DROP TABLE " + latestForecastTableName);
-			st.execute(this.getLatestForecastTable());
+			st.execute(getLatestForecastTable());
 			final String query = "LOAD DATA INFILE '"
 					+ latestForecastsFile.getAbsolutePath().replace('\\', '/')
 					+ "' INTO TABLE " + latestForecastTableName
@@ -293,11 +329,12 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 
 	}
 
-	public void importIntoArchive(ForecastFile forecastsToArchive) {
-		log
-				.info("Inserting data from: "
-						+ forecastsToArchive.getAbsolutePath());
+	public void importIntoArchive(final ForecastFile forecastsToArchive) {
+		log.info("Inserting data from: " + forecastsToArchive.getAbsolutePath()
+				+ " file size is: " + forecastsToArchive.getTotalSpace());
 		final long init = System.currentTimeMillis();
+
+		// Insertar los datos.
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
@@ -308,14 +345,18 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 					+ "'  LINES STARTING BY '" + ForecastFile.lineStart
 					+ "' TERMINATED BY '" + ForecastFile.lineEnd + "'";
 			st.execute(query);
-			st.close();
 		} catch (final SQLException e) {
-			log.error(e);
+			log.error("Error al importar desde archivo CSV", e);
+			// End execution.
+			throw new RuntimeException(
+					"DB Error. Could not insert CSV file into DB.");
 		}
+
 		final long end = System.currentTimeMillis();
-		log.info("Elapsed Time To insert data from file: " + (end - init)
+		log.info("Elapsed Time To import data from csv file: " + (end - init)
 				/ 1000);
 	}
+
 	/**
 	 * Move forecasts in latest forecast table to archive table.
 	 */
@@ -382,15 +423,15 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
-			final String columns = this
-					.getWaveParametersColumns(this.waveParameters);
+			final String columns = getWaveParametersColumns(waveParameters);
 			final String partitions = generatePartitions(partitionFromYear,
 					partitionEndYear);
 			final String query = "CREATE TABLE " + archiveTableName
 					+ " ( `issuedDate` DATETIME NOT NULL,"
 					+ " `validTime` INTEGER unsigned NOT NULL,"
 					+ " `latitude` float NOT NULL, `longitude` float NOT NULL,"
-					+ columns + " , KEY `location` (`latitude`,`longitude`))"
+					+ columns + " , KEY `" + ARCHIVE_INDEX_NAME
+					+ "` (`latitude`,`longitude`))"
 					+ " ENGINE=MyISAM DEFAULT CHARSET=utf8" + partitions;
 			st.execute(query);
 			st.close();
@@ -410,14 +451,14 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 	 *            end year of the partitioning.
 	 * @return
 	 */
-	private String generatePartitions(int fromYear, int toYear) {
+	private String generatePartitions(final int fromYear, final int toYear) {
 		String partitions = " PARTITION BY RANGE (TO_DAYS(issuedDate))(";
 		int partitionNumber = 1;
-		NumberFormat instance = NumberFormat.getInstance();
+		final NumberFormat instance = NumberFormat.getInstance();
 		instance.setMinimumIntegerDigits(2);
 		for (int year = fromYear; year <= toYear; year++) {
 			for (int month = 1; month <= 12; month++) {
-				String formatedMonth = instance.format(month);
+				final String formatedMonth = instance.format(month);
 				partitions += " PARTITION	P" + partitionNumber
 						+ "	VALUES LESS THAN (to_days('	" + year + "-"
 						+ formatedMonth + "-01	')), \n ";
@@ -437,9 +478,8 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
-			String waveParametersColumns = getWaveParametersColumns(this.waveParameters);
-			st
-.execute(getLatestForecastTable());
+			final String waveParametersColumns = getWaveParametersColumns(waveParameters);
+			st.execute(getLatestForecastTable());
 			st.close();
 			connection.close();
 		} catch (final SQLException e) {
@@ -447,19 +487,21 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 		}
 	}
 
-	private String getLatestForecastTable(){
-//		"CREATE TABLE "
-//		+ latestForecastTableName
-//		+ "  (  `issuedDate` DATETIME NOT NULL,  `validTime` tinyint(4) unsigned NOT NULL,  `latitude` float NOT NULL,  `longitude` float NOT NULL,"
-//		+ "  `windWaveHeight` float DEFAULT NULL,  `windWavePeriod` float DEFAULT NULL,  `windWaveDirection` float DEFAULT NULL,  `swellWaveHeight` float DEFAULT NULL,  `swellWavePeriod` float DEFAULT NULL,  `swellWaveDirection` float DEFAULT NULL,  `combinedWaveHeight` float DEFAULT NULL,  `peakWavePeriod` float DEFAULT NULL,  `peakWaveDirection` float DEFAULT NULL,  `windSpeed` float DEFAULT NULL,  `windDirection` float DEFAULT NULL,  `windU` float DEFAULT NULL,  `windV` float DEFAULT NULL)"
-//		+ "" + " ENGINE=MyISAM DEFAULT CHARSET=utf8;"
-		String waveParametersColumns = getWaveParametersColumns(this.waveParameters);
+	private String getLatestForecastTable() {
+		// "CREATE TABLE "
+		// + latestForecastTableName
+		// +
+		// "  (  `issuedDate` DATETIME NOT NULL,  `validTime` tinyint(4) unsigned NOT NULL,  `latitude` float NOT NULL,  `longitude` float NOT NULL,"
+		// +
+		// "  `windWaveHeight` float DEFAULT NULL,  `windWavePeriod` float DEFAULT NULL,  `windWaveDirection` float DEFAULT NULL,  `swellWaveHeight` float DEFAULT NULL,  `swellWavePeriod` float DEFAULT NULL,  `swellWaveDirection` float DEFAULT NULL,  `combinedWaveHeight` float DEFAULT NULL,  `peakWavePeriod` float DEFAULT NULL,  `peakWaveDirection` float DEFAULT NULL,  `windSpeed` float DEFAULT NULL,  `windDirection` float DEFAULT NULL,  `windU` float DEFAULT NULL,  `windV` float DEFAULT NULL)"
+		// + "" + " ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		final String waveParametersColumns = getWaveParametersColumns(waveParameters);
 		return "CREATE TABLE "
-		+ latestForecastTableName
+				+ latestForecastTableName
 				+ "  (  `issuedDate` DATETIME NOT NULL,  `validTime` tinyint(4) unsigned NOT NULL,  `latitude` float NOT NULL,  `longitude` float NOT NULL,"
-		+ waveParametersColumns
+				+ waveParametersColumns
 				+ ") ENGINE=MyISAM DEFAULT CHARSET=utf8;";
-		
+
 	}
 
 	/**
@@ -467,10 +509,11 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 	 * @param parameters
 	 * @return
 	 */
-	private String getWaveParametersColumns(WaveWatchParameter[] parameters) {
+	private String getWaveParametersColumns(
+			final WaveWatchParameter[] parameters) {
 		String columns = "";
 		for (int i = 0; i < parameters.length; i++) {
-			WaveWatchParameter waveWatchParameter = parameters[i];
+			final WaveWatchParameter waveWatchParameter = parameters[i];
 			columns += "`" + waveWatchParameter.getValue()
 					+ "` float DEFAULT NULL,";
 		}
@@ -484,29 +527,29 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 	 * @param result
 	 * @return
 	 */
-	private Collection<? extends Forecast> getForecasts(ResultSet result) {
+	private Collection<? extends Forecast> getForecasts(final ResultSet result) {
 		final List<Forecast> forecasts = new ArrayList<Forecast>();
 		try {
 			while (result.next() != false) {
 				final int validTime = result.getInt("validTime");
 				final float latitude = result.getFloat("latitude");
 				final float longitude = result.getFloat("longitude");
-				Date issuedDate = result.getTimestamp("issuedDate");
-				Point forecastGridPoint = new Point(latitude, longitude);
-				Map<String, ForecastValue> parameters = new HashMap<String, ForecastValue>();
-				for (int i = 0; i < this.waveParameters.length; i++) {
-					WaveWatchParameter waveWatchParameter = waveParameters[i];
-					parameters.put(waveWatchParameter.getValue(), new ForecastValue(
-							waveWatchParameter.getValue(),
-							result.getFloat(waveWatchParameter.getValue()),
-							Unit.Meters));
+				final Date issuedDate = result.getTimestamp("issuedDate");
+				final Point forecastGridPoint = new Point(latitude, longitude);
+				final Map<String, ForecastValue> parameters = new HashMap<String, ForecastValue>();
+				for (int i = 0; i < waveParameters.length; i++) {
+					final WaveWatchParameter waveWatchParameter = waveParameters[i];
+					parameters.put(waveWatchParameter.getValue(),
+							new ForecastValue(waveWatchParameter.getValue(),
+									result.getFloat(waveWatchParameter
+											.getValue()), Unit.Meters));
 				}
 
 				final Forecast forecast = new Forecast(issuedDate, validTime,
 						forecastGridPoint, parameters);
 				forecasts.add(forecast);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			log.error(e);
 		}
 		return forecasts;
@@ -518,7 +561,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 	@Override
 	public boolean isGridPoint(final Point point) {
 
-            final long init = System.currentTimeMillis();
+		final long init = System.currentTimeMillis();
 		try {
 			final Connection connection = this.getSession().connection();
 			final Statement st = connection.createStatement();
@@ -542,6 +585,7 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 			return false;
 		}
 	}
+
 	/**
 	 * @return
 	 * @throws SQLException
@@ -559,6 +603,47 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements W
 			return true;
 		else
 			return false;
+
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistenceI#startImportingForecasts()
+	 */
+	@Override
+	public void startImportingForecasts() {
+		// Bajar el indice si existe.
+		try {
+			final Connection connection = this.getSession().connection();
+			final Statement st = connection.createStatement();
+			final String dropIndex = "DROP INDEX " + ARCHIVE_INDEX_NAME
+					+ " ON " + archiveTableName;
+			st.execute(dropIndex);
+		} catch (final SQLException e) {
+			log.error("Error al bajar el INDICE", e);
+		}
+
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistenceI#stopImportingForecasts()
+	 */
+	@Override
+	public void stopImportingForecasts() {
+		// Subir el indice.
+		try {
+			final Connection connection = this.getSession().connection();
+			final Statement st = connection.createStatement();
+			log.info("Creando indice para tabla: " + archiveTableName);
+			final long initIndex = System.currentTimeMillis();
+			final String addIndex = "CREATE INDEX " + ARCHIVE_INDEX_NAME
+					+ " ON " + archiveTableName + "(latitude,longitude)";
+			st.execute(addIndex);
+			final long endIndex = System.currentTimeMillis();
+			log.info("Indice creado en(seg): " + (endIndex - initIndex) / 1000);
+			st.close();
+		} catch (final SQLException e) {
+			log.error("Error al crear indice", e);
+		}
 
 	}
 }

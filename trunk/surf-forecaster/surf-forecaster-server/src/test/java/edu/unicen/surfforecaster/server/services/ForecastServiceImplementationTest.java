@@ -31,9 +31,9 @@ import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 import edu.unicen.surfforecaster.util.VisualObservationsLoader;
 
 /**
@@ -101,7 +101,7 @@ public class ForecastServiceImplementationTest {
 					UserType.ADMINISTRATOR);
 
 			// Create 4 Spots
-			TimeZone timeZone = TimeZone.getTimeZone("UTC");
+			final TimeZone timeZone = TimeZone.getTimeZone("UTC");
 			spot1Id = spotService.addSpot("Guanchhyhaco", 75.0F, 0.5F, zoneId1,
 					userId1, true, timeZone);
 			spot2Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId2,
@@ -155,60 +155,57 @@ public class ForecastServiceImplementationTest {
 	}
 
 	@Test
-
 	public void getForecaster() {
 		try {
-			long initial = System.currentTimeMillis();
+			final long initial = System.currentTimeMillis();
 			final int forecasterId = forecastService.createWW3Forecaster(
 					spot1Id, new PointDTO(22.0F, -158.75F));
 			final List<ForecastDTO> forecasts = forecastService
 					.getLatestForecasts(forecasterId);
-			log.info("Number of forecasts retrieved:"+forecasts.size());
+			log.info("Number of forecasts retrieved:" + forecasts.size());
 			log.info(forecasts.get(0).getBaseDate());
-			long end = System.currentTimeMillis();
-			log.info("Elapsed time:"+(end-initial)/1000);
+			final long end = System.currentTimeMillis();
+			log.info("Elapsed time:" + (end - initial) / 1000);
 			Assert.assertTrue(forecasts.size() > 0);
 		} catch (final NeuralitoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	@Test
 	public void createWekaForecaster() {
 		try {
-			long initial = System.currentTimeMillis();
-			List<VisualObservationDTO> visualObservations = VisualObservationsLoader
+			final long initial = System.currentTimeMillis();
+			final List<VisualObservationDTO> visualObservations = VisualObservationsLoader
 					.loadVisualObservations(
 							new File(
 									"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu1997.dat"),
 							Unit.Meters);
-			HashMap<String, Serializable> options = new HashMap<String, Serializable>();
+			final HashMap<String, Serializable> options = new HashMap<String, Serializable>();
 			options.put("latitudeGridPoint1", 22.0F);
 			options.put("longitudeGridPoint1", -158.75F);
 			options.put("utcSunriseHour", 17);
 			options.put("utcSunriseMinute", 30);
 			options.put("utcSunsetHour", 6);
 			options.put("utcSunsetMinute", 30);
-			WekaForecasterEvaluationDTO createWekaForecaster = forecastService
-					.createWekaForecaster(visualObservations, spot2Id,
-					options);
+			final WekaForecasterEvaluationDTO createWekaForecaster = forecastService
+					.createWekaForecaster(visualObservations, spot2Id, options);
 
-			Integer forecasterId = createWekaForecaster.getId();
-			List<ForecastDTO> latestForecasts = forecastService
+			final Integer forecasterId = createWekaForecaster.getId();
+			final List<ForecastDTO> latestForecasts = forecastService
 					.getLatestForecasts(forecasterId);
-			for (ForecastDTO forecastDTO : latestForecasts) {
+			for (final ForecastDTO forecastDTO : latestForecasts) {
 				log
 						.info("Wave Watch Prediction:"
 								+ forecastDTO
 										.getMap()
 										.get(
-						WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2
+												WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2
 														.getValue()).getValue()
 								+ "|| Weka prediction"
 								+ forecastDTO.getMap()
-										.get(
-"improvedWaveHeight")
-								.getValue());
+										.get("improvedWaveHeight").getValue());
 			}
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block

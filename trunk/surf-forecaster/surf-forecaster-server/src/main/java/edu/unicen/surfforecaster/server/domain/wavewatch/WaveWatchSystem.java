@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 
@@ -56,11 +57,9 @@ public interface WaveWatchSystem {
 	 * 
 	 * @param point
 	 *            the point to look for neighbors.
-	 * @param distance
-	 *            the maximum distance of the neighbors. (In degrees).
 	 * @return the neighbors points
 	 */
-	public List<Point> getPointNeighbors(final Point point, Double distance);
+	public List<Point> getPointNeighbors(final Point point);
 
 	/**
 	 * Determines if the given point belongs to this system grid.
@@ -84,6 +83,7 @@ public interface WaveWatchSystem {
 	 */
 	public String getName();
 
-	public void importForecasts(Collection<File> gribFiles) throws IOException;
+	public void importForecasts(Collection<Collection<File>> gribFiles)
+			throws IOException;
 
 }

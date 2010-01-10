@@ -25,7 +25,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystemImpl;
 
 /**
  * @author esteban
@@ -46,9 +45,9 @@ public class WaveWatchSystemTest {
 	 * @throws JobExecutionException
 	 */
 	@Test
+	@Ignore
 	public void updateLatestForecast() throws JobExecutionException {
 
-		model.execute(null);
 		final Collection<Forecast> latestForecast = model
 				.getForecasts(new Point(75.0F, 125.0F));
 
@@ -60,10 +59,11 @@ public class WaveWatchSystemTest {
 
 		final List<Forecast> latestForecast = model.getForecasts(new Point(
 				-38.5F, -57.5F));
-		Forecast forecast = latestForecast.get(0);
-		Set<String> parameters = forecast.getParameters();
-		for (Iterator iterator = parameters.iterator(); iterator.hasNext();) {
-			String string = (String) iterator.next();
+		final Forecast forecast = latestForecast.get(0);
+		final Set<String> parameters = forecast.getParameters();
+		for (final Iterator iterator = parameters.iterator(); iterator
+				.hasNext();) {
+			final String string = (String) iterator.next();
 			log.info(string + ": " + forecast.getParameter(string));
 		}
 		log.info("Number of latest forecasts:" + latestForecast.size());
@@ -72,7 +72,7 @@ public class WaveWatchSystemTest {
 	@Test
 	public void nearByGridPoints() {
 		final List<Point> nearbyGridPoints = model.getPointNeighbors(new Point(
-				75.0F, 0.6F), 0.5D);
+				75.0F, 0.6F));
 		String points = "";
 		for (final Iterator iterator = nearbyGridPoints.iterator(); iterator
 				.hasNext();) {
@@ -111,25 +111,23 @@ public class WaveWatchSystemTest {
 
 	@Test
 	public void importArchives() throws IOException {
-		Collection<File> files = new ArrayList<File>();
+		final long init = System.currentTimeMillis();
+		final Collection<Collection<File>> files = new ArrayList<Collection<File>>();
 		for (int i = 1997; i <= 2004; i++) {
 			for (int j = 1; j <= 12; j++) {
-				files = generateFile(i, j);
-				model.importForecasts(files);
+				files.add(generateFile(i, j));
 			}
 		}
+		model.importForecasts(files);
 	}
 
-	private Collection<File> generateFile(int i, int j) {
-		Collection<File> files = new ArrayList<File>();
-		DecimalFormat format = new DecimalFormat();
+	private Collection<File> generateFile(final int i, final int j) {
+		final Collection<File> files = new ArrayList<File>();
+		final DecimalFormat format = new DecimalFormat();
 		format.setMinimumIntegerDigits(2);
 
-		String month = format.format(j);
-		String yearMonth = i + month;
-		files.add(new File(
-				"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.wind."
-						+ yearMonth + ".grb"));
+		final String month = format.format(j);
+		final String yearMonth = i + month;
 		files.add(new File(
 				"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.dp."
 						+ yearMonth + ".grb"));

@@ -13,6 +13,7 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 
 /**
@@ -26,7 +27,7 @@ public class ForecastFile extends File {
 	 * The logger
 	 */
 	Logger log = Logger.getLogger(this.getClass());
-	private List<WaveWatchParameter> parameters;
+	private final List<WaveWatchParameter> parameters;
 	/**
 	 * Delimiter characters of massive insert file.
 	 */
@@ -39,7 +40,8 @@ public class ForecastFile extends File {
 	 * 
 	 * @param pathname
 	 */
-	public ForecastFile(String pathname, List<WaveWatchParameter> parameters) {
+	public ForecastFile(final String pathname,
+			final List<WaveWatchParameter> parameters) {
 		super(pathname);
 		this.parameters = parameters;
 	}
@@ -53,44 +55,49 @@ public class ForecastFile extends File {
 	 */
 	public void writeForecasts(final Collection<Forecast> forecasts)
 			throws IOException {
-		final long init = System.currentTimeMillis();
-			final BufferedWriter output = new BufferedWriter(new FileWriter(
-					this, true));
+		final BufferedWriter output = new BufferedWriter(new FileWriter(this,
+				true), 10000);
+		;
 
-			for (final Iterator<Forecast> iterator = forecasts.iterator(); iterator
-					.hasNext();) {
-				final Forecast forecast = (Forecast) iterator.next();
+		for (final Iterator<Forecast> iterator = forecasts.iterator(); iterator
+				.hasNext();) {
+			final Forecast forecast = iterator.next();
 
-				Calendar calendar = new GregorianCalendar(TimeZone
-						.getTimeZone("UTC"));
-				calendar.setTime(forecast.getBaseDate());
-				final int year = calendar.get(Calendar.YEAR);
-				final int month = calendar.get(Calendar.MONTH) + 1;
-				final int day = calendar.get(Calendar.DAY_OF_MONTH);
-				final int hour = calendar.get(Calendar.HOUR_OF_DAY);
-				final int minute = calendar.get(Calendar.MINUTE);
-				final int seconds = calendar.get(Calendar.SECOND);
-				String parameters = getParameters(forecast);
-				final String line = lineStart + year + "-" + month + "-" + day
-						+ " " + hour + ":" + minute + ":" + seconds
-						+ fieldSeparator + forecast.getForecastTime()
-						+ fieldSeparator + forecast.getPoint().getLatitude()
-						+ fieldSeparator + forecast.getPoint().getLongitude()
-						+ parameters + lineEnd;
-				output.append(line);
-				output.newLine();
-			}
-			output.close();
+			final Calendar calendar = new GregorianCalendar(TimeZone
+					.getTimeZone("UTC"));
+			calendar.setTime(forecast.getBaseDate());
+			final int year = calendar.get(Calendar.YEAR);
+			final int month = calendar.get(Calendar.MONTH) + 1;
+			final int day = calendar.get(Calendar.DAY_OF_MONTH);
+			final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			final int minute = calendar.get(Calendar.MINUTE);
+			final int seconds = calendar.get(Calendar.SECOND);
+			final String parameters = getParameters(forecast);
+			final String line = lineStart + year + "-" + month + "-" + day
+					+ " " + hour + ":" + minute + ":" + seconds
+					+ fieldSeparator + forecast.getForecastTime()
+					+ fieldSeparator + forecast.getPoint().getLatitude()
+					+ fieldSeparator + forecast.getPoint().getLongitude()
+					+ parameters + lineEnd;
+			output.append(line);
+			output.newLine();
+		}
+		output.close();
 		final long end = System.currentTimeMillis();
-		log.info("Writing forecasts to file");
-		log.info("Elapsed time: " + (end - init) / 1000);
 	}
 
-	private String getParameters(Forecast forecast) {
+	private String getParameters(final Forecast forecast) {
 		String characterDelimitedParameters = "";
-		for (WaveWatchParameter parameter : parameters) {
-			characterDelimitedParameters += this.fieldSeparator
-					+ forecast.getParameter(parameter.getValue());
+		for (final WaveWatchParameter parameter : parameters) {
+			String value;
+			if (forecast.getParameter(parameter.getValue()) != null) {
+				value = forecast.getParameter(parameter.getValue()).toString();
+
+			} else {
+				value = "-1";
+			}
+
+			characterDelimitedParameters += fieldSeparator + value;
 		}
 		return characterDelimitedParameters;
 	}

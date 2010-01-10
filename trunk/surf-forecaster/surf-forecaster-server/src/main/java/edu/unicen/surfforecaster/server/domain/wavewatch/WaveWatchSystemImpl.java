@@ -13,33 +13,30 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.quartz.CronTrigger;
-import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistenceI;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.GribAccess;
-import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.GribAccessException;
 
 /**
  * 
  * @author esteban wagner.
  * 
  */
-public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
+public class WaveWatchSystemImpl implements WaveWatchSystem {
 	/**
 	 * The logger.
 	 */
-	private Logger log = Logger.getLogger(this.getClass());
+	private final Logger log = Logger.getLogger(this.getClass());
 	/**
 	 * The number of forecasts this system produces.
 	 */
@@ -71,13 +68,27 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	/**
 	 * The name identifying the system.
 	 */
-	private String name;
+	private final String name;
+	/**
+	 * The size of the grid this wave watch system uses.(In degrees)
+	 */
+	private final float gridSizeY;
+	/**
+	 * The size of the grid this wave watch system uses.(In degrees)
+	 */
+	private final float gridSizeX;
+	// 1.5GB
+	private final long maxFileSize = 1610612736;
 
 	/**
 	 * Initialize System.
 	 * 
 	 * @param parameters
 	 *            the wave parameters that this wavewatch system will support.
+	 * @param gridSizeX
+	 *            the size of the grid this wave watch system uses.(In degrees)
+	 * @param gridSizeY
+	 *            the size of the grid this wave watch system uses.(In degrees)
 	 * @param gribDecoder
 	 *            the decoder to decode grib format files.
 	 * @param cronExpression
@@ -88,43 +99,46 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 *            component used to persist forecasts into DB.
 	 * 
 	 */
-	public WaveWatchSystemImpl(String name,
-			List<WaveWatchParameter> parameters,
-			GribDecoder gribDecoder, String cronExpression,
-			GribAccess gribAccess, WaveWatchSystemPersistenceI persister) {
+	public WaveWatchSystemImpl(final String name,
+			final List<WaveWatchParameter> parameters, final float gridSizeX,
+			final float gridSizeY, final GribDecoder gribDecoder,
+			final String cronExpression, final GribAccess gribAccess,
+			final WaveWatchSystemPersistenceI persister) {
 		this.name = name;
 		this.parameters = parameters;
+		this.gridSizeX = gridSizeX;
+		this.gridSizeY = gridSizeY;
 		this.gribDecoder = gribDecoder;
 		this.gribAccess = gribAccess;
 		this.persister = persister;
-		this.configureScheduler(cronExpression);
-		log.info("Next forecast update time:" + this.trigger.getNextFireTime());
+		configureScheduler(cronExpression);
+		log.info("Next forecast update time:" + trigger.getNextFireTime());
 	}
 
-	private void configureScheduler(String cronExpression) {
+	private void configureScheduler(final String cronExpression) {
 		try {
 			// Create the job
-			JobDetail jobDetail = new JobDetail("ForecastUpdateJob", null,
-					UpdateForecastsJob.class);
+			final JobDetail jobDetail = new JobDetail("ForecastUpdateJob",
+					null, UpdateForecastsJob.class);
 			// Create the trigger
-			this.trigger = new CronTrigger();
-			this.trigger.setName("NOAA Grib Download Trigger");
-			this.trigger.setCronExpression(cronExpression);
+			trigger = new CronTrigger();
+			trigger.setName("NOAA Grib Download Trigger");
+			trigger.setCronExpression(cronExpression);
 			// Create job listener
-			JobListener listener = new UpdateForecastsJobListener(this.name);
+			final JobListener listener = new UpdateForecastsJobListener(name);
 			jobDetail.addJobListener(listener.getName());
-			JobDataMap data = new JobDataMap();
-			data.put("gribAccess", this.gribAccess);
+			final JobDataMap data = new JobDataMap();
+			data.put("gribAccess", gribAccess);
 			data.put("waveWatchSystem", this);
 			jobDetail.setJobDataMap(data);
 			// Create Scheduler, register Job and Listener
-			this.scheduler = StdSchedulerFactory.getDefaultScheduler();
-			this.scheduler.scheduleJob(jobDetail, trigger);
-			this.scheduler.addJobListener(listener);
+			scheduler = StdSchedulerFactory.getDefaultScheduler();
+			scheduler.scheduleJob(jobDetail, trigger);
+			scheduler.addJobListener(listener);
 			// Start Scheduler
-			this.scheduler.start();
-		} catch (Exception e) {
-			this.scheduler = null;
+			scheduler.start();
+		} catch (final Exception e) {
+			scheduler = null;
 			log.error(e);
 		}
 	}
@@ -132,11 +146,12 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	/**
 	 * Shuts down the scheduler on object destruction.
 	 */
+	@Override
 	protected void finalize() {
 		// Shutdown scheduler.
 		try {
 			scheduler.shutdown();
-		} catch (SchedulerException e) {
+		} catch (final SchedulerException e) {
 			log.error(e);
 		}
 	}
@@ -162,37 +177,19 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	}
 
 	/**
-	 * Method called by Scheduler when the the trigger is fired. This means that
-	 * its time to obtain new forecasts and persist them into DB.
-	 */
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		// Obtain last forecasts in grib format
-		File gribFile;
-		try {
-			gribFile = this.gribAccess.getLastGrib();
-		} catch (GribAccessException e1) {
-			throw new JobExecutionException();
-		}
-		updateForecasts(gribFile);
-
-
-	}
-
-	/**
 	 * Decode the given grib file to obtain latest forecast information. Newly
 	 * forecasts are persisted.
 	 * 
 	 * @param gribFile
 	 */
-	public void updateForecasts(File gribFile) {
+	public void updateForecasts(final File gribFile) {
 		// Decode forecasts and persist them
-		ForecastFile forecastFile = new ForecastFile("tempFilePath",
-				this.parameters);
+		final ForecastFile forecastFile = new ForecastFile(
+				"updateTempFilePath", parameters);
 		try {
 			for (int time = 0; time < forecastTimes; time++) {
 				final Collection<Forecast> decodedForecasts = gribDecoder
-						.decodeForecastForTime(gribFile, this.parameters, time);
+						.decodeForecastForTime(gribFile, parameters, time);
 				forecastFile.writeForecasts(decodedForecasts);
 			}
 			persister.updateLatestForecast(forecastFile);
@@ -209,24 +206,67 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 * parameter.s
 	 * 
 	 */
-	public void importForecasts(Collection<File> files) throws IOException {
-		ForecastFile forecastFile = new ForecastFile("tempFilePath",
-				this.parameters);
-		int times = this.gribDecoder.getTimes((File) files.toArray()[0]);
-			try {
+
+	public synchronized void importForecasts(
+			final Collection<Collection<File>> files) throws IOException {
+		log.info("Importing forecasts");
+		// Disable automatic download of forecasts while performing import
+		try {
+			scheduler.standby();
+		} catch (final SchedulerException e) {
+			log.error("Error while standby scheduler", e);
+		}
+		// Drop indexes
+		persister.startImportingForecasts();
+		ForecastFile forecastFile = createNewForecastFile();
+		// Decode forecasts and write them to csv file.
+		for (final Iterator iterator = files.iterator(); iterator.hasNext();) {
+			final Collection<File> collection = (Collection<File>) iterator
+					.next();
+			log.info("Writing to csv forecast for files: "
+					+ collection.toArray()[0] + ";" + collection.toArray()[1]
+					+ ";" + collection.toArray()[2]);
+			// Get all available times in file
+			final int times = gribDecoder
+					.getTimes((File) collection.toArray()[0]);
+			log.info("Total number of forecast times in file is:" + times);
+			// Decode and write to file all times
 			for (int time = 0; time < times; time++) {
-					final Collection<Forecast> decodedForecasts = gribDecoder
-						.decodeForecastForTime(files, this.parameters, time);
-					forecastFile.writeForecasts(decodedForecasts);
+				final long init = System.currentTimeMillis();
+				final Collection<Forecast> decodedForecasts = gribDecoder
+						.decodeForecastForTime(collection, parameters, time);
+				// If file reached maximum size insert it into DB and empty
+				// file.
+				final long end = System.currentTimeMillis();
+				forecastFile.writeForecasts(decodedForecasts);
+				log.debug("Writed to csv time:" + time + " of: " + times
+						+ " in: " + (end - init) + "ms.");
+				if (forecastFile.length() > maxFileSize) {
+					log.info("Inserting csv file of size(Bytes):"
+							+ forecastFile.getTotalSpace() + " into DB.");
+					persister.importIntoArchive(forecastFile);
+					log.info("Csv file inserted into DB successfully.");
+					forecastFile = createNewForecastFile();
 				}
 
-			} catch (final IOException e) {
-				log.error(e);
 			}
-
+		}
+		log.info("Inserting csv file of size(Bytes):"
+				+ forecastFile.getTotalSpace() + " into DB.");
 		persister.importIntoArchive(forecastFile);
-		// Delete the temporal forecast file.
-		forecastFile.delete();
+		log.info("Csv file inserted into DB successfully.");
+		forecastFile = createNewForecastFile();
+
+		log.info("Import of forecasts done successfully");
+		// Create indexes
+		persister.stopImportingForecasts();
+		// Enable scheduler
+		try {
+			scheduler.start();
+		} catch (final SchedulerException e) {
+			// TODO Auto-generated catch block
+			log.error("Error while re starting scheduler", e);
+		}
 
 	}
 
@@ -248,24 +288,37 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 * @return the neighbors points
 	 */
 	@Override
-	public List<Point> getPointNeighbors(final Point point, Double distance) {
+	public List<Point> getPointNeighbors(final Point point) {
 		final List<Point> gridPoints = persister.getValidGridPoints();
 		final List<Point> neighbors = new ArrayList<Point>();
 		for (final Iterator<Point> iterator = gridPoints.iterator(); iterator
 				.hasNext();) {
-			final Point gridPoint = (Point) iterator.next();
+			final Point gridPoint = iterator.next();
 
-			if (Math.abs(point.getLatitude() - gridPoint.getLatitude()) < distance
+			if (Math.abs(point.getLatitude() - gridPoint.getLatitude()) < gridSizeY
 					&& Math
 							.abs(point.getLongitude()
-									- gridPoint.getLongitude()) < distance) {
+									- gridPoint.getLongitude()) < gridSizeX) {
 				neighbors.add(gridPoint);
 			}
 		}
 		return neighbors;
 	}
 
-
+	private ForecastFile createNewForecastFile() throws IOException {
+		// create a csv file
+		final ForecastFile forecastFile = new ForecastFile("tempFilePath",
+				parameters);
+		if (forecastFile.exists()) {
+			final boolean deleted = forecastFile.delete();
+			if (!deleted)
+				throw new RuntimeException("Error deleting temporary file("
+						+ forecastFile.getAbsolutePath()
+						+ "). Could not delete. Try removing file manually.");
+		}
+		forecastFile.createNewFile();
+		return forecastFile;
+	}
 
 	/**
 	 * @return the list of {@link WaveWatchParameter} that this system supports.
@@ -273,7 +326,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 */
 	@Override
 	public List<WaveWatchParameter> getParameters() {
-		return this.parameters;
+		return parameters;
 	}
 
 	/**
@@ -292,7 +345,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 * @return
 	 */
 	public Date getNextUpdateTime() {
-		return this.trigger.getNextFireTime();
+		return trigger.getNextFireTime();
 	}
 
 	/**
@@ -301,14 +354,12 @@ public class WaveWatchSystemImpl implements WaveWatchSystem, Job {
 	 * @return
 	 */
 	public Date getLastUpdateTime() {
-		return this.trigger.getPreviousFireTime();
+		return trigger.getPreviousFireTime();
 	}
 
 	@Override
 	public String getName() {
-		return this.name;
+		return name;
 	}
-
-
 
 }

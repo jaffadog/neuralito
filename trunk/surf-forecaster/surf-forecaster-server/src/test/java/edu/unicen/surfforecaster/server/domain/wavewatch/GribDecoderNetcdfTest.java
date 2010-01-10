@@ -14,10 +14,12 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
+import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoder;
 import edu.unicen.surfforecaster.server.domain.wavewatch.decoder.GribDecoderNetcdf;
+import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
 /**
  * @author esteban
@@ -50,7 +52,7 @@ public class GribDecoderNetcdfTest {
 	@Test
 	public void decodeAll() {
 		final GribDecoder dec = new GribDecoderNetcdf();
-		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
+		final List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
 		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2);
 		parameters.add(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2);
 		try {
@@ -69,7 +71,7 @@ public class GribDecoderNetcdfTest {
 	@Test
 	public void decodeAllGribV2() {
 		final GribDecoder dec = new GribDecoderNetcdf();
-		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
+		final List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
 		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2);
 		parameters.add(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2);
 		parameters.add(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2);
@@ -97,13 +99,13 @@ public class GribDecoderNetcdfTest {
 	@Test
 	public void decodeAllGribV2MultipleFiles() {
 		final GribDecoder dec = new GribDecoderNetcdf();
-		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
+		final List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
 		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2);
 		parameters.add(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2);
 		parameters.add(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2);
 		parameters.add(WaveWatchParameter.WINDUComponent_V2);
 		parameters.add(WaveWatchParameter.WINDVComponent_V2);
-		Collection<File> files = new ArrayList<File>();
+		final Collection<File> files = new ArrayList<File>();
 		files
 				.add(new File(
 						"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.wind.199802.grb"));
@@ -126,11 +128,10 @@ public class GribDecoderNetcdfTest {
 		}
 	}
 
-
 	@Test
 	public void decodeAllGribV3() {
 		final GribDecoder dec = new GribDecoderNetcdf();
-		List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
+		final List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
 		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V3);
 		parameters.add(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V3);
 		parameters.add(WaveWatchParameter.WIND_WAVE_HEIGHT_V3);
@@ -145,10 +146,35 @@ public class GribDecoderNetcdfTest {
 		parameters.add(WaveWatchParameter.WINDUComponent_V3);
 		parameters.add(WaveWatchParameter.WINDVComponent_V3);
 		try {
-			for (int i = 1; i < 4; i++) {
-				dec.decodeForecastForTime(new File(
-						"src/test/resources/multi_1.glo_30m.all.grb2"),
-						parameters, i);
+			for (int i = 1; i < 2; i++) {
+				final Collection<Forecast> decodeForecastForTime = dec
+						.decodeForecastForTime(new File(
+								"src/test/resources/multi_1.glo_30m.all.grb2"),
+								parameters, i);
+				for (final Forecast forecast : decodeForecastForTime) {
+
+					final float windU = forecast.getParameter(
+							WaveWatchParameter.WINDUComponent_V3.getValue())
+							.getfValue();
+					final float windV = forecast.getParameter(
+							WaveWatchParameter.WINDVComponent_V3.getValue())
+							.getfValue();
+					final double calculatedWindDirection = Util
+							.calculateWindDirection(windU, windV);
+					final double calculatedWindSpeed = Util.calculateWindSpeed(
+							windU, windV);
+
+					final float windDirection = forecast.getParameter(
+							WaveWatchParameter.WIND_DIRECTION_V3.getValue())
+							.getfValue();
+					final float windSpeed = forecast.getParameter(
+							WaveWatchParameter.WIND_SPEED_V3.getValue())
+							.getfValue();
+					log.info("Real wind direction:" + windDirection
+							+ " calculated: " + calculatedWindDirection);
+					log.info("Real wind speed:" + windSpeed + " calculated: "
+							+ calculatedWindSpeed);
+				}
 			}
 		} catch (final IOException e) {
 			log.error(e);
@@ -162,8 +188,9 @@ public class GribDecoderNetcdfTest {
 		try {
 			parameters = dec.listParameters(new File(
 					"src/test/resources/multi_1.glo_30m.all.grb2"));
-			for (Iterator iterator = parameters.iterator(); iterator.hasNext();) {
-				String string = (String) iterator.next();
+			for (final Iterator iterator = parameters.iterator(); iterator
+					.hasNext();) {
+				final String string = (String) iterator.next();
 				log.info(string);
 			}
 		} catch (final IOException e) {
@@ -179,8 +206,9 @@ public class GribDecoderNetcdfTest {
 			parameters = dec
 					.listParameters(new File(
 							/* "src/test/resources/multi_1.glo_30m.all.grb2" */"src/test/resources/nww3.all.grb"));
-			for (Iterator iterator = parameters.iterator(); iterator.hasNext();) {
-				String string = (String) iterator.next();
+			for (final Iterator iterator = parameters.iterator(); iterator
+					.hasNext();) {
+				final String string = (String) iterator.next();
 				log.info(string);
 			}
 		} catch (final IOException e) {
@@ -196,8 +224,9 @@ public class GribDecoderNetcdfTest {
 			parameters = dec
 					.listParameters(new File(
 							/* "src/test/resources/multi_1.glo_30m.all.grb2" */"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.wind.199808.grb"));
-			for (Iterator iterator = parameters.iterator(); iterator.hasNext();) {
-				String string = (String) iterator.next();
+			for (final Iterator iterator = parameters.iterator(); iterator
+					.hasNext();) {
+				final String string = (String) iterator.next();
 				log.info(string);
 			}
 		} catch (final IOException e) {

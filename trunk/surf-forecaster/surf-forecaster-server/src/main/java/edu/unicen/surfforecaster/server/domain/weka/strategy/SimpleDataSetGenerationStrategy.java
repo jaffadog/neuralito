@@ -13,10 +13,10 @@ import java.util.Vector;
 import weka.core.Instance;
 import weka.core.Instances;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.filter.AndFilter;
 import edu.unicen.surfforecaster.server.domain.weka.filter.Filter;
@@ -29,7 +29,8 @@ import edu.unicen.surfforecaster.server.domain.weka.util.Util;
  * @author esteban
  * 
  */
-public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrategy {
+public class SimpleDataSetGenerationStrategy implements
+		DataSetGenerationStrategy {
 	/**
 	 * Auto-Generated serialVersionUID.
 	 */
@@ -64,14 +65,15 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 
 	@Override
 	public Map<Forecast, Instance> generateLatestForecastInstances(
-			WaveWatchSystem model, Map<String, Serializable> options) {
-		Map<Forecast, Instance> generatedInstances = new HashMap<Forecast, Instance>();
-		Point gridPoint = getGridPoint(options);
-		List<Forecast> latestForecasts = model.getForecasts(gridPoint);
-		for (Forecast forecast : latestForecasts) {
-			Map<String, Double> instanceData = generateInstanceData(forecast,
-					new VisualObservation(0D, new Date(), Unit.Degrees));
-			Instance instance = Util.createWekaInstance(instanceData,
+			final WaveWatchSystem model, final Map<String, Serializable> options) {
+		final Map<Forecast, Instance> generatedInstances = new HashMap<Forecast, Instance>();
+		final Point gridPoint = getGridPoint(options);
+		final List<Forecast> latestForecasts = model.getForecasts(gridPoint);
+		for (final Forecast forecast : latestForecasts) {
+			final Map<String, Double> instanceData = generateInstanceData(
+					forecast, new VisualObservation(0D, new Date(),
+							Unit.Degrees));
+			final Instance instance = Util.createWekaInstance(instanceData,
 					strategyAttributes, classAttributeName);
 			generatedInstances.put(forecast, instance);
 		}
@@ -79,31 +81,35 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	}
 
 	@Override
-	public Instances generateTrainningInstances(WaveWatchSystem model,
-			Collection<VisualObservation> observations,
-			Map<String, Serializable> options) {
-		Point gridPoint = getGridPoint(options);
-		Time sunrise = getSunrise(options);
-		Time sunset = getSunset(options);
-		Date from = oldestObservation(observations);
-		Date to = mostRecentObservation(observations);
-		Collection<Forecast> archivedForecasts = model.getArchivedForecasts(
-				gridPoint, from, to);
-		//For each day filter the forecast with greatest wave height which occur during daylight.
-		Collection<Forecast> filteredForecasts = filterForecasts(archivedForecasts, sunrise, sunset);
+	public Instances generateTrainningInstances(final WaveWatchSystem model,
+			final Collection<VisualObservation> observations,
+			final Map<String, Serializable> options) {
+		final Point gridPoint = getGridPoint(options);
+		final Time sunrise = getSunrise(options);
+		final Time sunset = getSunset(options);
+		final Date from = oldestObservation(observations);
+		final Date to = mostRecentObservation(observations);
+		final Collection<Forecast> archivedForecasts = model
+				.getArchivedForecasts(gridPoint, from, to);
+		// For each day filter the forecast with greatest wave height which
+		// occur during daylight.
+		final Collection<Forecast> filteredForecasts = filterForecasts(
+				archivedForecasts, sunrise, sunset);
 		// Util.printCollection(filteredForecasts);
-		Collection<Map<String, Double>> instancesData = new Vector<Map<String, Double>>();
-		//For each forecast, couple it with the corresponding visual observation to generate the instance.
-		for (Forecast forecast : filteredForecasts) {
-			for (VisualObservation observation : observations) {
+		final Collection<Map<String, Double>> instancesData = new Vector<Map<String, Double>>();
+		// For each forecast, couple it with the corresponding visual
+		// observation to generate the instance.
+		for (final Forecast forecast : filteredForecasts) {
+			for (final VisualObservation observation : observations) {
 				if (observation.equalsDate(forecast.getForecastValidDate())) {
 					instancesData.add(generateInstanceData(forecast,
 							observation));
 					break;
 				}
 			}
-		}	
-		Instances instances = Util.createWekaInstances(dataSetName, instancesData, strategyAttributes, classAttributeName);
+		}
+		final Instances instances = Util.createWekaInstances(dataSetName,
+				instancesData, strategyAttributes, classAttributeName);
 		return instances;
 	}
 
@@ -113,9 +119,9 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	}
 
 	/**
-	 * Filter forecasts using 2 filters:
-	 * 1)Filter those forecasts which occur during daylight.
-	 * 2)Filter the forecasts which has the max wave height during each day.
+	 * Filter forecasts using 2 filters: 1)Filter those forecasts which occur
+	 * during daylight. 2)Filter the forecasts which has the max wave height
+	 * during each day.
 	 * 
 	 * @param forecasts
 	 *            to be filtered
@@ -127,12 +133,14 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	 */
 	@SuppressWarnings("unchecked")
 	private Collection<Forecast> filterForecasts(
-			Collection<Forecast> forecasts, Time sunrise, Time sunset) {
-		Vector<Filter> filters = new Vector<Filter>();
-		Filter dataTimeFilter = new ForecastDayLightFilter(sunrise, sunset);
+			Collection<Forecast> forecasts, final Time sunrise,
+			final Time sunset) {
+		final Vector<Filter> filters = new Vector<Filter>();
+		final Filter dataTimeFilter = new ForecastDayLightFilter(sunrise,
+				sunset);
 		filters.add(dataTimeFilter);
 		filters.add(new ForecastMaxWaveHeightFilter());
-		Filter compuestFilter = new AndFilter(filters);
+		final Filter compuestFilter = new AndFilter(filters);
 		forecasts = (Vector<Forecast>) compuestFilter.executeFilter(new Vector(
 				forecasts));
 		return forecasts;
@@ -149,9 +157,9 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	 *            to obtain observation attribute
 	 * @return
 	 */
-	private Hashtable<String, Double> generateInstanceData(Forecast forecast,
-			VisualObservation observation) {
-		Hashtable<String, Double> instanceData = new Hashtable<String, Double>();
+	private Hashtable<String, Double> generateInstanceData(
+			final Forecast forecast, final VisualObservation observation) {
+		final Hashtable<String, Double> instanceData = new Hashtable<String, Double>();
 		instanceData.put("ww3Direction", (double) forecast.getParameter(
 				WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2.getValue())
 				.getfValue());
@@ -160,10 +168,10 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 				.getfValue());
 		instanceData.put("ww3Height", (double) forecast.getParameter(
 				WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2
-						.getValue())
-				.getfValue());
-		if (observation != null)
+						.getValue()).getfValue());
+		if (observation != null) {
 			instanceData.put("visualObservation", observation.getWaveHeight());
+		}
 		return instanceData;
 	}
 
@@ -173,10 +181,10 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	 * @param options
 	 * @return
 	 */
-	private Point getGridPoint(Map<String, Serializable> options) {
+	private Point getGridPoint(final Map<String, Serializable> options) {
 
-		Float latitude = (Float) options.get("latitudeGridPoint1");
-		Float longitude = (Float) options.get("longitudeGridPoint1");
+		final Float latitude = (Float) options.get("latitudeGridPoint1");
+		final Float longitude = (Float) options.get("longitudeGridPoint1");
 		return new Point(latitude, longitude);
 	}
 
@@ -187,9 +195,9 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	 * @return
 	 */
 	private Date mostRecentObservation(
-			Collection<VisualObservation> observations) {
+			final Collection<VisualObservation> observations) {
 		long mostRecentDate = Long.MIN_VALUE;
-		for (VisualObservation observation : observations) {
+		for (final VisualObservation observation : observations) {
 			if (observation.getDate().getTime() > mostRecentDate) {
 				mostRecentDate = observation.getDate().getTime();
 			}
@@ -204,9 +212,9 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	 * @return
 	 */
 	private Date oldestObservation(
-			Collection<VisualObservation> observations) {
+			final Collection<VisualObservation> observations) {
 		long oldestDate = Long.MAX_VALUE;
-		for (VisualObservation observation : observations) {
+		for (final VisualObservation observation : observations) {
 			if (observation.getDate().getTime() < oldestDate) {
 				oldestDate = observation.getDate().getTime();
 			}
@@ -220,10 +228,10 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	 * @param options
 	 * @return
 	 */
-	private Time getSunset(Map<String, Serializable> options) {
-		int sunsetHour = (Integer) options.get("utcSunsetHour");
-		int sunsetMinute = (Integer) options.get("utcSunsetMinute");
-		Time sunset = new Time(sunsetHour, sunsetMinute, 0);
+	private Time getSunset(final Map<String, Serializable> options) {
+		final int sunsetHour = (Integer) options.get("utcSunsetHour");
+		final int sunsetMinute = (Integer) options.get("utcSunsetMinute");
+		final Time sunset = new Time(sunsetHour, sunsetMinute, 0);
 		return sunset;
 	}
 
@@ -233,12 +241,11 @@ public class SimpleDataSetGenerationStrategy implements DataSetGenerationStrateg
 	 * @param options
 	 * @return
 	 */
-	private Time getSunrise(Map<String, Serializable> options) {
-		int sunriseHour = (Integer) options.get("utcSunriseHour");
-		int sunriseMinute = (Integer) options.get("utcSunriseMinute");
-		Time sunrise = new Time(sunriseHour, sunriseMinute, 0);
+	private Time getSunrise(final Map<String, Serializable> options) {
+		final int sunriseHour = (Integer) options.get("utcSunriseHour");
+		final int sunriseMinute = (Integer) options.get("utcSunriseMinute");
+		final Time sunrise = new Time(sunriseHour, sunriseMinute, 0);
 		return sunrise;
 	}
-
 
 }

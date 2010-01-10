@@ -3,8 +3,8 @@ package edu.unicen.surfforecaster.server.domain.weka.filter.wavewatch;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.weka.filter.Filter;
 
 /**
