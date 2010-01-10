@@ -5,12 +5,16 @@ package edu.unicen.surfforecaster.server.domain.entity;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
+import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
 /**
  * Forecaster which uses a {@link WaveWatchSystem} to obtain forecasts.
@@ -55,11 +59,11 @@ public class SimpleForecaster extends Forecaster {
 	 * @param configuration
 	 */
 	public SimpleForecaster(final WaveWatchSystem model, final Point point,
-			final Point location, Spot spot) {
-		this.gridPoint = point;
+			final Point location, final Spot spot) {
+		gridPoint = point;
 		this.location = location;
 		this.model = model;
-		this.modelName = model.getName();
+		modelName = model.getName();
 		this.spot = spot;
 	}
 
@@ -84,7 +88,45 @@ public class SimpleForecaster extends Forecaster {
 	 */
 	@Override
 	public Collection<Forecast> getLatestForecasts() {
-		return model.getForecasts(gridPoint);
+
+		List<Forecast> forecasts = model.getForecasts(gridPoint);
+		forecasts = addWindDirectionAndSpeed(forecasts);
+		return forecasts;
+	}
+
+	/**
+	 * Adds wind direction and speed parameters to forecasts. Direction and
+	 * speed its derived of the WINDU and WINDV parameters.
+	 * 
+	 * @param forecasts
+	 * @return
+	 */
+	private List<Forecast> addWindDirectionAndSpeed(
+			final List<Forecast> forecasts) {
+
+		// Calculate wind direction and wind speed from WINDU and WINDV
+		// parameters.
+		for (final Forecast forecast : forecasts) {
+			final float windU = forecast.getParameter(
+					WaveWatchParameter.WINDUComponent_V2.getValue())
+					.getfValue();
+			final float windV = forecast.getParameter(
+					WaveWatchParameter.WINDVComponent_V2.getValue())
+					.getfValue();
+			final double windDirection = Util.calculateWindDirection(windU,
+					windV);
+			final double windSpeed = Util.calculateWindSpeed(windU, windV);
+
+			// ADD wind speed and direction parameters to each forecast.
+			forecast.addParameter(WaveWatchParameter.WIND_DIRECTION_V2
+					.getValue(), new ForecastValue(
+					WaveWatchParameter.WIND_DIRECTION_V2.getValue(),
+					windDirection, Unit.KilometersPerHour));
+			forecast.addParameter(WaveWatchParameter.WIND_SPEED_V2.getValue(),
+					new ForecastValue(WaveWatchParameter.WIND_SPEED_V2
+							.getValue(), windSpeed, Unit.KilometersPerHour));
+		}
+		return forecasts;
 	}
 
 	/**

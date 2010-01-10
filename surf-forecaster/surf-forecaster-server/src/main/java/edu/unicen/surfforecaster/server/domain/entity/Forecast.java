@@ -26,7 +26,7 @@ import org.apache.commons.lang.Validate;
 
 import edu.unicen.surfforecaster.common.services.dto.ForecastAttributeDTO;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
-import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
 /**

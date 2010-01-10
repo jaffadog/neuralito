@@ -20,8 +20,10 @@ import weka.classifiers.Evaluation;
 import weka.core.Instance;
 import weka.core.Instances;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
+import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 
 /**
  * Forecaster which uses a Machine Learning scheme to improve wave height of the
@@ -37,13 +39,14 @@ public class WekaForecaster extends Forecaster {
 	 * The logger.
 	 */
 	@Transient
-	private Logger log = Logger.getLogger(this.getClass());
+	private final Logger log = Logger.getLogger(this.getClass());
 
 	/**
 	 * The Machine Learning Classifier used.
 	 */
 	@Column(length = 257)
-	// NOTE: Length is set greater than 256 this is a workaround for 'field too long' error when serializing to DB.
+	// NOTE: Length is set greater than 256 this is a workaround for 'field too
+	// long' error when serializing to DB.
 	private Classifier classifier;
 
 	/**
@@ -98,21 +101,23 @@ public class WekaForecaster extends Forecaster {
 	 * @param model
 	 *            the model to obtain the forecast to be improved by classifier.
 	 */
-	public WekaForecaster(Classifier cl, DataSetGenerationStrategy st,
-			HashMap<String, Serializable> options, WaveWatchSystem model,
-			Collection<VisualObservation> observations, Spot spot) {
+	public WekaForecaster(final Classifier cl,
+			final DataSetGenerationStrategy st,
+			final HashMap<String, Serializable> options,
+			final WaveWatchSystem model,
+			final Collection<VisualObservation> observations, final Spot spot) {
 		try {
-			this.classifier = cl;
+			classifier = cl;
 			dataSetGenerationStrategy = st;
-			this.strategyOptions = options;
-			this.waveWatch = model;
+			strategyOptions = options;
+			waveWatch = model;
 			trainningInstances = st.generateTrainningInstances(model,
 					observations, options);
 
 			classifier.buildClassifier(trainningInstances);
 			evaluateForecaster();
 			this.spot = spot;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -139,7 +144,8 @@ public class WekaForecaster extends Forecaster {
 	 * Obtain past forecasts.
 	 */
 	@Override
-	public Collection<Forecast> getArchivedForecasts(Date from, Date to) {
+	public Collection<Forecast> getArchivedForecasts(final Date from,
+			final Date to) {
 		return null;
 	}
 
@@ -149,29 +155,63 @@ public class WekaForecaster extends Forecaster {
 	@Override
 	public Collection<Forecast> getLatestForecasts() {
 		try {
-			List<Forecast> improvedForecasts = new ArrayList<Forecast>();
-			Map<Forecast, Instance> latestForecastInstances = dataSetGenerationStrategy
-					.generateLatestForecastInstances(this.waveWatch,
-							this.strategyOptions);
-			for (Forecast forecast : latestForecastInstances.keySet()) {
-				Instance forecastInstance = latestForecastInstances
+			final List<Forecast> improvedForecasts = new ArrayList<Forecast>();
+			final Map<Forecast, Instance> latestForecastInstances = dataSetGenerationStrategy
+					.generateLatestForecastInstances(waveWatch, strategyOptions);
+			Collection<Forecast> latestForecasts = latestForecastInstances
+					.keySet();
+			latestForecasts = addWindDirectionAndSpeed(latestForecasts);
+			for (final Forecast forecast : latestForecasts) {
+				final Instance forecastInstance = latestForecastInstances
 						.get(forecast);
-				double improvedWaveHeight = classifier
+				final double improvedWaveHeight = classifier
 						.classifyInstance(forecastInstance);
-				forecast.addParameter("improvedWaveHeight",
- new ForecastValue(
-						"improvedWaveHeight",
-								improvedWaveHeight, Unit.Meters));
+				forecast.addParameter("improvedWaveHeight", new ForecastValue(
+						"improvedWaveHeight", improvedWaveHeight, Unit.Meters));
 				improvedForecasts.add(forecast);
 			}
 
 			return improvedForecasts;
 
-		} catch (Exception e) {
-			// TODO treat exception
-			e.printStackTrace();
+		} catch (final Exception e) {
+			log.error("Error while retrieving latest forecast.", e);
 		}
 		return null;
+	}
+
+	/**
+	 * Adds wind direction and speed parameters to forecasts. Direction and
+	 * speed its derived of the WINDU and WINDV parameters.
+	 * 
+	 * @param forecasts
+	 * @return
+	 */
+	private Collection<Forecast> addWindDirectionAndSpeed(
+			final Collection<Forecast> forecasts) {
+
+		// Calculate wind direction and wind speed from WINDU and WINDV
+		// parameters.
+		for (final Forecast forecast : forecasts) {
+			final float windU = forecast.getParameter(
+					WaveWatchParameter.WINDUComponent_V2.getValue())
+					.getfValue();
+			final float windV = forecast.getParameter(
+					WaveWatchParameter.WINDVComponent_V2.getValue())
+					.getfValue();
+			final double windDirection = Util.calculateWindDirection(windU,
+					windV);
+			final double windSpeed = Util.calculateWindSpeed(windU, windV);
+
+			// ADD wind speed and direction parameters to each forecast.
+			forecast.addParameter(WaveWatchParameter.WIND_DIRECTION_V2
+					.getValue(), new ForecastValue(
+					WaveWatchParameter.WIND_DIRECTION_V2.getValue(),
+					windDirection, Unit.KilometersPerHour));
+			forecast.addParameter(WaveWatchParameter.WIND_SPEED_V2.getValue(),
+					new ForecastValue(WaveWatchParameter.WIND_SPEED_V2
+							.getValue(), windSpeed, Unit.KilometersPerHour));
+		}
+		return forecasts;
 	}
 
 	/**
@@ -186,7 +226,7 @@ public class WekaForecaster extends Forecaster {
 	 * @return the classifier this forecaster uses.
 	 */
 	public Classifier getClassifier() {
-		return this.classifier;
+		return classifier;
 	}
 
 	/**
@@ -195,7 +235,7 @@ public class WekaForecaster extends Forecaster {
 	 */
 	private void evaluateForecaster() {
 		try {
-			Evaluation evaluation = new Evaluation(trainningInstances);
+			final Evaluation evaluation = new Evaluation(trainningInstances);
 			evaluation.crossValidateModel(classifier, trainningInstances, 10,
 					new Random(1));
 			evaluations = new HashMap<String, String>();
@@ -205,8 +245,7 @@ public class WekaForecaster extends Forecaster {
 					.meanAbsoluteError()));
 			evaluations.put("resume", "resumen de desempenio");
 
-
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -217,7 +256,7 @@ public class WekaForecaster extends Forecaster {
 	private void trainForecaster() {
 		try {
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			log.error(e);
 		}
 	}

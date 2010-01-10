@@ -7,15 +7,15 @@
 	<import resource="dao.xml" />
 
 	<util:constant id="peakWaveHeight"
-		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2" />
+		static-field="edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2" />
 	<util:constant id="peakWavePeriod"
-		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2" />
+		static-field="edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2" />
 	<util:constant id="peakWaveDirection"
-		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2" />
+		static-field="edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2" />
 	<util:constant id="windU"
-		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.WINDUComponent_V2" />
+		static-field="edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter.WINDUComponent_V2" />
 	<util:constant id="windV"
-		static-field="edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchParameter.WINDVComponent_V2" />
+		static-field="edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter.WINDVComponent_V2" />
 	
 	<bean id="userService"
 		class="edu.unicen.surfforecaster.server.services.UserServiceImplementation">
@@ -66,11 +66,16 @@
 				<ref bean="windV" />
 			</list>
 		</constructor-arg>
-		<constructor-arg index="2" ref="gribDecoder" />
-		<constructor-arg index="3" value="0 0 0,6,12,18 * * ?" />
-		<constructor-arg index="4" ref="ftpGribAccess" />
-		<constructor-arg index="5" ref="persister"></constructor-arg>
+		<constructor-arg index="2" value="1" />
+		<constructor-arg index="3" value="1.25" />
+		<constructor-arg index="4" ref="gribDecoder" />
+		<constructor-arg index="5" value="0 0 0,6,12,18 * * ?" />
+<!--		<constructor-arg index="3" value="1.25" />-->
+		<constructor-arg index="6" ref="ftpGribAccess" />
+		<constructor-arg index="7" ref="persister"></constructor-arg>
 	</bean>
+	
+	
 
 	
 </beans>

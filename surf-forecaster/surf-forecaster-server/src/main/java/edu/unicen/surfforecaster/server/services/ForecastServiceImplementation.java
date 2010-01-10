@@ -45,7 +45,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	/**
 	 * 
 	 */
-	private Logger log = Logger.getLogger(this.getClass());
+	private final Logger log = Logger.getLogger(this.getClass());
 
 	/**
 	 * The forecast dao.
@@ -91,8 +91,8 @@ public class ForecastServiceImplementation implements ForecastService {
 			spotDAO.save(point);
 		}
 		final Spot spot = spotDAO.getSpotById(spotId);
-		final SimpleForecaster forecaster = new SimpleForecaster(waveWatchSystem,
-				point, spot.getLocation(), spot);
+		final SimpleForecaster forecaster = new SimpleForecaster(
+				waveWatchSystem, point, spot.getLocation(), spot);
 		final Integer id = forecastDAO.save(forecaster);
 		spotDAO.addForecasterToSpot(forecaster, spot);
 		spotDAO.saveSpot(spot);
@@ -106,12 +106,12 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Override
 	public List<ForecastDTO> getLatestForecasts(final Integer forecasterId)
 			throws NeuralitoException {
-		long initial = System.currentTimeMillis();
+		final long initial = System.currentTimeMillis();
 		log.info("Retrieving latest forecast ");
 		final Forecaster forecaster = forecastDAO
 				.getForecasterById(forecasterId);
-		Spot spot = forecaster.getSpot();
-		TimeZone timeZone = spot.getTimeZone();
+		final Spot spot = forecaster.getSpot();
+		final TimeZone timeZone = spot.getTimeZone();
 		final Collection<Forecast> forecasts = forecaster.getLatestForecasts();
 		final List<ForecastDTO> forecastsDtos = new ArrayList<ForecastDTO>();
 		for (final Iterator<Forecast> iterator = forecasts.iterator(); iterator
@@ -119,7 +119,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			final Forecast forecast = iterator.next();
 			forecastsDtos.add(forecast.getDTO(timeZone));
 		}
-		long end = System.currentTimeMillis();
+		final long end = System.currentTimeMillis();
 		log.info("Latest forecasts retrieved in: " + (end - initial) / 1000
 				+ " seconds.");
 		return forecastsDtos;
@@ -134,7 +134,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			final float longitude) throws NeuralitoException {
 
 		final List<Point> surroundingGridPoints = waveWatchSystem
-				.getPointNeighbors(new Point(latitude, longitude), 0.5D);
+				.getPointNeighbors(new Point(latitude, longitude));
 		final List<PointDTO> pointsDTOs = new ArrayList<PointDTO>();
 		for (final Iterator iterator = surroundingGridPoints.iterator(); iterator
 				.hasNext();) {
@@ -154,7 +154,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	public List<ForecastDTO> getArchivedForecasts(final Integer forecasterId,
 			final GregorianCalendar from, final GregorianCalendar to)
 			throws NeuralitoException {
-		TimeZone timeZone = null;
+		final TimeZone timeZone = null;
 		validateForecasterExists(forecasterId);
 		final Forecaster forecaster = forecastDAO
 				.getForecasterById(forecasterId);
@@ -168,7 +168,6 @@ public class ForecastServiceImplementation implements ForecastService {
 		return forecastsDTOs;
 	}
 
-
 	/**
 	 * Creates and train a forecaster which uses a machine learner. Inputs are:
 	 * 
@@ -178,20 +177,23 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Override
 	@Transactional
 	public WekaForecasterEvaluationDTO createWekaForecaster(
-					List<VisualObservationDTO> visualObservationsDTO, Integer spotId,
-			HashMap<String, Serializable> dataSetStrategyOptions) {
-		log.info("Creating weka forecaster");	
-		List<VisualObservation> visualObservations = translate(visualObservationsDTO);
+			final List<VisualObservationDTO> visualObservationsDTO,
+			final Integer spotId,
+			final HashMap<String, Serializable> dataSetStrategyOptions) {
+		log.info("Creating weka forecaster");
+		final List<VisualObservation> visualObservations = translate(visualObservationsDTO);
 		Classifier classifier;
 		try {
 			classifier = Classifier.forName(classifierName, null);
 			final Spot spot = spotDAO.getSpotById(spotId);
-			WekaForecaster forecaster = new WekaForecaster(classifier,
+			final WekaForecaster forecaster = new WekaForecaster(classifier,
 					dataSetGenerationStrategy, dataSetStrategyOptions,
 					waveWatchSystem, visualObservations, spot);
-			Integer forecasterId = forecastDAO.save(forecaster);
-			String correlation = forecaster.getEvaluation().get("correlation");
-			String mae = forecaster.getEvaluation().get("meanAbsoluteError");
+			final Integer forecasterId = forecastDAO.save(forecaster);
+			final String correlation = forecaster.getEvaluation().get(
+					"correlation");
+			final String mae = forecaster.getEvaluation().get(
+					"meanAbsoluteError");
 
 			log.info("Weka Forecaster(Id=" + forecasterId
 					+ ") trained:   Correlation: " + correlation
@@ -200,7 +202,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			return new WekaForecasterEvaluationDTO(Double
 					.parseDouble(correlation), Double.parseDouble(mae),
 					forecasterId);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			log.error("Error creating weka forecaster", e);
 		}
 		return null;
@@ -214,10 +216,10 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * @return
 	 */
 	private List<VisualObservation> translate(
-			List<VisualObservationDTO> visualObservationsDTO) {
-		List<VisualObservation> observations = new ArrayList<VisualObservation>();
-		for (VisualObservationDTO visualObservationDTO : visualObservationsDTO) {
-			VisualObservation visualObservation = new VisualObservation(
+			final List<VisualObservationDTO> visualObservationsDTO) {
+		final List<VisualObservation> observations = new ArrayList<VisualObservation>();
+		for (final VisualObservationDTO visualObservationDTO : visualObservationsDTO) {
+			final VisualObservation visualObservation = new VisualObservation(
 					visualObservationDTO.getWaveHeight(), visualObservationDTO
 							.getObservationDate(), visualObservationDTO
 							.getUnit());
@@ -268,7 +270,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * @param setName
 	 * @throws NeuralitoException
 	 */
-	private void validateName(String setName) throws NeuralitoException {
+	private void validateName(final String setName) throws NeuralitoException {
 		if (setName == null)
 			throw new NeuralitoException(
 					ErrorCode.VISUAL_OBSERVATION_SET_NAME_CANNOT_BE_NULL);
@@ -302,7 +304,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * @param setDescription
 	 * @throws NeuralitoException
 	 */
-	private void validateDescription(String setDescription)
+	private void validateDescription(final String setDescription)
 			throws NeuralitoException {
 		if (setDescription == null)
 			throw new NeuralitoException(
@@ -317,7 +319,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * 
 	 * @param file
 	 */
-	private void validateFile(File file) {
+	private void validateFile(final File file) {
 		// TODO perform validation
 
 	}
@@ -328,7 +330,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	 * @param unit
 	 * @throws NeuralitoException
 	 */
-	private void validateUnit(Unit unit) throws NeuralitoException {
+	private void validateUnit(final Unit unit) throws NeuralitoException {
 		if (unit == null)
 			throw new NeuralitoException(
 					ErrorCode.VISUAL_OBSERVATION_SET_UNIT_CANNOT_BE_NULL);
@@ -336,11 +338,11 @@ public class ForecastServiceImplementation implements ForecastService {
 	}
 
 	public void setDataSetGenerationStrategy(
-			DataSetGenerationStrategy dataSetGenerationStrategy) {
+			final DataSetGenerationStrategy dataSetGenerationStrategy) {
 		this.dataSetGenerationStrategy = dataSetGenerationStrategy;
 	}
 
-	public void setClassifierName(String classifierName) {
+	public void setClassifierName(final String classifierName) {
 		this.classifierName = classifierName;
 	}
 
@@ -364,7 +366,7 @@ public class ForecastServiceImplementation implements ForecastService {
 		this.spotDAO = spotDAO;
 	}
 
-	public void setWaveWatchSystem(WaveWatchSystem waveWatchSystem) {
+	public void setWaveWatchSystem(final WaveWatchSystem waveWatchSystem) {
 		this.waveWatchSystem = waveWatchSystem;
 	}
 
