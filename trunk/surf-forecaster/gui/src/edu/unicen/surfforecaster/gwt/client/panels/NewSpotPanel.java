@@ -70,6 +70,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private TextBox txtHour2;
 	private TextBox txtMinutes2;
 	private Hidden spotId;
+	private Hidden latitudeGridPoint;
+	private Hidden longitudeGridPoint;
 	private RadioButton radioAppendButton;
 	private RadioButton radioReplaceButton;
 	private MessagePanel errorPanel;
@@ -241,6 +243,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			public void onSubmitComplete(SubmitCompleteEvent event) { 
 				String results = event.getResults();
 				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), event.getResults(), MessageBox.IconType.INFO);
+				//TODO el mensaje adecuado, probar en ie porque mepa que no sale el texto y aparece un messagebox vacio lo que queda muy mal
 //				Integer responseStatus = new Integer(results.substring(16, 19));
 //				String responseText = results.substring(results.indexOf("<PRE>") + 5, results.indexOf("</PRE>"));
 //				switch (responseStatus) {
@@ -323,6 +326,18 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	    spotId.setValue("0");
 	    formTable.setWidget(5, 0, spotId);
 	    formTable.getFlexCellFormatter().setColSpan(5, 0, 10);
+	    latitudeGridPoint = new Hidden();
+	    latitudeGridPoint.setName("latitudeGridPointFormElement");
+	    latitudeGridPoint.setID("latitudeGridPointFormElement");
+	    latitudeGridPoint.setValue("0");
+	    formTable.setWidget(6, 0, latitudeGridPoint);
+	    formTable.getFlexCellFormatter().setColSpan(6, 0, 10);
+	    longitudeGridPoint = new Hidden();
+	    longitudeGridPoint.setName("longitudeGridPointFormElement");
+	    longitudeGridPoint.setID("longitudeGridPointFormElement");
+	    longitudeGridPoint.setValue("0");
+	    formTable.setWidget(7, 0, longitudeGridPoint);
+	    formTable.getFlexCellFormatter().setColSpan(7, 0, 10);
 		
 		this.getColumnFormatter().setWidth(0, NewSpotPanel.TABLE_COL_0);
 		this.getColumnFormatter().setWidth(1, NewSpotPanel.TABLE_COL_1);
@@ -353,6 +368,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 							public void onSuccess(Integer result){
 								if (!upload.getFilename().trim().equals("")) {
 									spotId.setValue(result.toString());
+									latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
+									longitudeGridPoint.setValue(mapPanel.getBuoyLong().replace(",", "."));
 									form.submit();
 								}
 								clearFields();
