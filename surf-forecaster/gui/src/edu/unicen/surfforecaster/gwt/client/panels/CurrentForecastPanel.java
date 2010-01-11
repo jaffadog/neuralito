@@ -10,14 +10,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
-import edu.unicen.surfforecaster.common.services.dto.WW3Parameter;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitConverter;
 import edu.unicen.surfforecaster.gwt.client.utils.UnitTranslator;
 import edu.unicen.surfforecaster.gwt.client.utils.images.arrows.s50.Arrows50PxFactory;
 import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50.Waves50PxFactory;
-
 
 public class CurrentForecastPanel extends FlexTable {
 
@@ -43,16 +42,17 @@ public class CurrentForecastPanel extends FlexTable {
 				Unit directionUnitTarget = Unit.Degrees;
 				Unit periodUnitTarget = Unit.Seconds;
 				
+				//TODO sacar los harcodeos del viento y poner bien los parametros
 				//wave height
-				String waveHeight = forecast.getMap().get(WW3Parameter.COMBINED_SWELL_WIND_WAVE_HEIGHT.toString()).getValue();
+				String waveHeight = forecast.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.toString()).getValue();
 				//wind speed
-				String windSpeed = forecast.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
+				String windSpeed = "10";//forecast.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
 				//wind windDirection
-				String windDirection = forecast.getMap().get(WW3Parameter.WIND_DIRECTION.toString()).getValue();
+				String windDirection = "10";//forecast.getMap().get(WW3Parameter.WIND_DIRECTION.toString()).getValue();
 				//Wave direccion
-				String waveDirection = forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_DIRECTION.toString()).getValue();
+				String waveDirection = forecast.getMap().get(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2.toString()).getValue();
 				//Wave period
-				String wavePeriod = forecast.getMap().get(WW3Parameter.PRIMARY_WAVE_PERIOD.toString()).getValue();
+				String wavePeriod = forecast.getMap().get(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2.toString()).getValue();
 				try {
 					windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
 					windDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windDirection, Unit.Degrees, directionUnitTarget));

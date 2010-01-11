@@ -98,10 +98,10 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Trying to add a new spot: '" + spotName + "'...");
 		
 		if (super.hasAccessTo("addSpot")){
-			final float spotLongitudeNum = new Float(spotLongitude);
-			final float spotLatitudeNum = new Float(spotLatitude);
-			final float buoyLongitudeNum = new Float(buoyLongitude);
-			final float buoyLatitudeNum = new Float(buoyLatitude);
+			final float spotLongitudeNum = new Float(spotLongitude.replace(",", "."));
+			final float spotLatitudeNum = new Float(spotLatitude.replace(",", "."));
+			final float buoyLongitudeNum = new Float(buoyLongitude.replace(",", "."));
+			final float buoyLatitudeNum = new Float(buoyLatitude.replace(",", "."));
 			final Integer userId = super.getLoggedUser().getId();
 			Integer result = null;
 			TimeZone tz = TimeZone.getTimeZone(timezone);
