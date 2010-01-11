@@ -12,6 +12,10 @@ insert  into `i18n`(`id`,`language`,`text`) values (5,'es','Argentina');
 insert  into `i18n`(`id`,`language`,`text`) values (6,'en','Argentine');
 insert  into `i18n`(`id`,`language`,`text`) values (7,'en','Brazil');
 insert  into `i18n`(`id`,`language`,`text`) values (8,'es','Brasil');
+insert  into `i18n`(`id`,`language`,`text`) values (9,'en','United States');
+insert  into `i18n`(`id`,`language`,`text`) values (10,'es','Estados Unidos');
+insert  into `i18n`(`id`,`language`,`text`) values (11,'en','Canada');
+insert  into `i18n`(`id`,`language`,`text`) values (12,'es','Canadá');
 
 /*Data for the table `area_i18n` */
 
@@ -28,6 +32,8 @@ insert  into `area_i18n`(`Area_id`,`names_id`) values (2,4);
 
 insert  into `country`(`id`,`area_id`) values (1,1);
 insert  into `country`(`id`,`area_id`) values (2,1);
+insert  into `country`(`id`,`area_id`) values (3,2);
+insert  into `country`(`id`,`area_id`) values (4,2);
 
 /*Data for the table `country_i18n` */
 
@@ -35,6 +41,10 @@ insert  into `country_i18n`(`Country_id`,`names_id`) values (1,5);
 insert  into `country_i18n`(`Country_id`,`names_id`) values (1,6);
 insert  into `country_i18n`(`Country_id`,`names_id`) values (2,7);
 insert  into `country_i18n`(`Country_id`,`names_id`) values (2,8);
+insert  into `country_i18n`(`Country_id`,`names_id`) values (3,9);
+insert  into `country_i18n`(`Country_id`,`names_id`) values (3,10);
+insert  into `country_i18n`(`Country_id`,`names_id`) values (4,11);
+insert  into `country_i18n`(`Country_id`,`names_id`) values (5,12);
 
 /*Data for the table `description` */
 
