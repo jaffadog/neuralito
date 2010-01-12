@@ -69,6 +69,7 @@ public final class Util {
 		return value * 0.3048 * 2; // *0.30 is to convert foot to meter, and *2
 		// is to convert from Hawaiaan Scale Feet to
 		// Through To Crest Scale Feet.
+
 	}
 
 	public static double calculateWindSpeed(final double windU,

@@ -41,9 +41,9 @@ public class GribDecoderNetcdfTest {
 		final GribDecoderNetcdf dec = new GribDecoderNetcdf();
 		final Collection<Point> validPoints = dec.getValidPoints(file);
 		log.info("Points founded:" + validPoints.size());
-		for (final Iterator iterator = validPoints.iterator(); iterator
+		for (final Iterator<Point> iterator = validPoints.iterator(); iterator
 				.hasNext();) {
-			final Point point = (Point) iterator.next();
+			final Point point = iterator.next();
 			log.info("Point. Lat: " + point.getLatitude() + " Lon: "
 					+ point.getLongitude());
 		}
@@ -98,7 +98,7 @@ public class GribDecoderNetcdfTest {
 
 	@Test
 	public void decodeAllGribV2MultipleFiles() {
-		final GribDecoder dec = new GribDecoderNetcdf();
+		final GribDecoderNetcdf dec = new GribDecoderNetcdf();
 		final List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
 		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2);
 		parameters.add(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2);
@@ -118,10 +118,13 @@ public class GribDecoderNetcdfTest {
 		files
 				.add(new File(
 						"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.tp.199802.grb"));
+		final Point point = new Point(22.0F, -158.75F);
+		final Collection<Point> points = new ArrayList<Point>();
+		points.add(point);
 		try {
 			for (int i = 1; i < 4; i++) {
 
-				dec.decodeForecastForTime(files, parameters, 249);
+				dec.decodeForecastForTime(files, parameters, 100, points);
 			}
 		} catch (final IOException e) {
 			log.error(e);
@@ -188,9 +191,9 @@ public class GribDecoderNetcdfTest {
 		try {
 			parameters = dec.listParameters(new File(
 					"src/test/resources/multi_1.glo_30m.all.grb2"));
-			for (final Iterator iterator = parameters.iterator(); iterator
+			for (final Iterator<String> iterator = parameters.iterator(); iterator
 					.hasNext();) {
-				final String string = (String) iterator.next();
+				final String string = iterator.next();
 				log.info(string);
 			}
 		} catch (final IOException e) {
@@ -206,9 +209,9 @@ public class GribDecoderNetcdfTest {
 			parameters = dec
 					.listParameters(new File(
 							/* "src/test/resources/multi_1.glo_30m.all.grb2" */"src/test/resources/nww3.all.grb"));
-			for (final Iterator iterator = parameters.iterator(); iterator
+			for (final Iterator<String> iterator = parameters.iterator(); iterator
 					.hasNext();) {
-				final String string = (String) iterator.next();
+				final String string = iterator.next();
 				log.info(string);
 			}
 		} catch (final IOException e) {
@@ -224,9 +227,9 @@ public class GribDecoderNetcdfTest {
 			parameters = dec
 					.listParameters(new File(
 							/* "src/test/resources/multi_1.glo_30m.all.grb2" */"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.wind.199808.grb"));
-			for (final Iterator iterator = parameters.iterator(); iterator
+			for (final Iterator<String> iterator = parameters.iterator(); iterator
 					.hasNext();) {
-				final String string = (String) iterator.next();
+				final String string = iterator.next();
 				log.info(string);
 			}
 		} catch (final IOException e) {

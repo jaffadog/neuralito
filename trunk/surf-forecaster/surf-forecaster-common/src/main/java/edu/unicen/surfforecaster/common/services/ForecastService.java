@@ -3,7 +3,6 @@
  */
 package edu.unicen.surfforecaster.common.services;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -12,10 +11,8 @@ import java.util.List;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
-import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
-
 
 /**
  * Services for creating new forecasters and obtaining forecasts.
@@ -70,16 +67,16 @@ public interface ForecastService {
 			GregorianCalendar from, GregorianCalendar to)
 			throws NeuralitoException;
 
-//	/**
-//	 * @param gridPoint
-//	 * @param from
-//	 * @param to
-//	 * @return
-//	 * @throws NeuralitoException
-//	 */
-//	public Integer createVisualObservationSet(File file, Integer spotId,
-//			String setName, String spotDescription, Unit unit)
-//			throws NeuralitoException;
+	// /**
+	// * @param gridPoint
+	// * @param from
+	// * @param to
+	// * @return
+	// * @throws NeuralitoException
+	// */
+	// public Integer createVisualObservationSet(File file, Integer spotId,
+	// String setName, String spotDescription, Unit unit)
+	// throws NeuralitoException;
 
 	/**
 	 * Create a weka forecaster. This forecaster will use a machine learning
@@ -104,6 +101,11 @@ public interface ForecastService {
 	 *         evaluation of the trained classifier and the id of the created
 	 *         forecasters.
 	 */
-	public WekaForecasterEvaluationDTO createWekaForecaster(List<VisualObservationDTO> visualObservations,Integer spotId,HashMap<String,Serializable> options);
+	public WekaForecasterEvaluationDTO createWekaForecaster(
+			List<VisualObservationDTO> visualObservations, Integer spotId,
+			HashMap<String, Serializable> options);
+
+	public List<WekaForecasterEvaluationDTO> getWekaForecasters(Integer spotId)
+			throws NeuralitoException;
 
 }

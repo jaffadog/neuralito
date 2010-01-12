@@ -207,6 +207,11 @@ public class ForecastServiceImplementationTest {
 								+ forecastDTO.getMap()
 										.get("improvedWaveHeight").getValue());
 			}
+			final List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService
+					.getWekaForecasters(spot2Id);
+			Assert.assertTrue(wekaForecasters.size() >= 1);
+			Assert.assertTrue(!wekaForecasters.get(0).getClassifierName()
+					.isEmpty());
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
