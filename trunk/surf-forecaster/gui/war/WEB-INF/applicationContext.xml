@@ -18,5 +18,9 @@
 	    <property name="forecastService" ref="forecastService"></property>
 	    <property name="spotService" ref="spotService"></property>
     </bean>
+    
+    <bean id="FileUploadServices" class="edu.unicen.surfforecaster.gwt.server.FileUploadServicesImpl">
+	    <property name="forecastService" ref="forecastService"></property>
+    </bean>
 
 </beans>

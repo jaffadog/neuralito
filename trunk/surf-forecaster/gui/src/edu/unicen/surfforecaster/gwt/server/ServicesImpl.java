@@ -53,7 +53,7 @@ public class ServicesImpl extends SpringGWTServlet {
 	 * @return HttpSession session
 	 */
 	protected HttpSession getSession() {
-		final HttpServletRequest request = getThreadLocalRequest();
+		final HttpServletRequest request = /*new ThreadLocal<HttpServletRequest>().get();*/getThreadLocalRequest();
 		final HttpSession session = request.getSession();
 		if (session.getMaxInactiveInterval() != MAX_INACTIVE_INTERVAL)
 			session.setMaxInactiveInterval(MAX_INACTIVE_INTERVAL); 
