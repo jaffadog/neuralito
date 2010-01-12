@@ -267,7 +267,7 @@ public class WgTableB extends FlexTable {
 		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height
-		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.toString()).getValue();
+		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
 		try {
 			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 		} catch (NeuralitoException e) {
@@ -303,15 +303,15 @@ public class WgTableB extends FlexTable {
 		
 		//TODO sacar los harcodeos del viento y poner bien los parametros
 		//wave height
-		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.toString()).getValue();
+		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
 		//wind speed
-		String windSpeed = "10";//forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.toString()).getValue();
+		String windSpeed = "10";//forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.getValue()).getValue();
 		//wind windDirection
-		String windDirection = "10";//forecastDTO.getMap().get(WW3Parameter.WIND_DIRECTION.toString()).getValue();
+		String windDirection = "10";//forecastDTO.getMap().get(WW3Parameter.WIND_DIRECTION.getValue()).getValue();
 		//Wave direccion
-		String waveDirection = forecastDTO.getMap().get(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2.toString()).getValue();
+		String waveDirection = forecastDTO.getMap().get(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2.getValue()).getValue();
 		//Wave period
-		String wavePeriod = forecastDTO.getMap().get(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2.toString()).getValue();
+		String wavePeriod = forecastDTO.getMap().get(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2.getValue()).getValue();
 		try {
 			windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
 			windDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windDirection, Unit.Degrees, directionUnitTarget));
