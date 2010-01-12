@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.common.services.dto;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class WekaForecasterEvaluationDTO implements Serializable {
 
@@ -26,18 +27,22 @@ public class WekaForecasterEvaluationDTO implements Serializable {
 	 */
 	private String classifierName;
 
+	private Map<String, Serializable> trainningOptions;
+
 	public WekaForecasterEvaluationDTO() {
 		// GWT purpose.
 	}
 
 	public WekaForecasterEvaluationDTO(final double correlation,
 			final double meanAbsoluteError, final Integer forecasterId,
-			final String classifierName) {
+			final String classifierName,
+			final Map<String, Serializable> trainningOptions) {
 		super();
 		this.correlation = correlation;
 		this.meanAbsoluteError = meanAbsoluteError;
 		id = forecasterId;
 		this.classifierName = classifierName;
+		this.trainningOptions = trainningOptions;
 	}
 
 	public double getCorrelation() {
@@ -57,6 +62,13 @@ public class WekaForecasterEvaluationDTO implements Serializable {
 	 */
 	public String getClassifierName() {
 		return classifierName;
+	}
+
+	/**
+	 * @return the trainningOptions
+	 */
+	public Map<String, Serializable> getTrainningOptions() {
+		return trainningOptions;
 	}
 
 }
