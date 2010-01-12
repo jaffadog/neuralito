@@ -260,4 +260,11 @@ public class WekaForecaster extends Forecaster {
 			log.error(e);
 		}
 	}
+
+	/**
+	 * @return the strategyOptions
+	 */
+	public HashMap<String, Serializable> getTrainningOptions() {
+		return strategyOptions;
+	}
 }

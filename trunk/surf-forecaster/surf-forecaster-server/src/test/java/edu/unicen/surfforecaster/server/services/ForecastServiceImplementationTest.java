@@ -212,6 +212,9 @@ public class ForecastServiceImplementationTest {
 			Assert.assertTrue(wekaForecasters.size() >= 1);
 			Assert.assertTrue(!wekaForecasters.get(0).getClassifierName()
 					.isEmpty());
+			Assert.assertEquals(wekaForecasters.get(0).getTrainningOptions()
+					.get("utcSunsetHour"), 6);
+
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

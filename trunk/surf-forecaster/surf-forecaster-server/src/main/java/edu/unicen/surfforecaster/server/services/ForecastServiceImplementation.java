@@ -202,7 +202,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			return new WekaForecasterEvaluationDTO(Double
 					.parseDouble(correlation), Double.parseDouble(mae),
 					forecasterId, forecaster.getClassifier().getClass()
-							.getName());
+							.getName(), forecaster.getTrainningOptions());
 		} catch (final Exception e) {
 			log.error("Error creating weka forecaster", e);
 		}
@@ -400,10 +400,10 @@ public class ForecastServiceImplementation implements ForecastService {
 				dtos.add(new WekaForecasterEvaluationDTO(Double
 						.parseDouble(correlation), Double.parseDouble(mae),
 						wekaForecaster.getId(), wekaForecaster.getClassifier()
-								.getClass().getName()));
+								.getClass().getName(), wekaForecaster
+								.getTrainningOptions()));
 			}
 		}
 		return dtos;
 	}
-
 }
