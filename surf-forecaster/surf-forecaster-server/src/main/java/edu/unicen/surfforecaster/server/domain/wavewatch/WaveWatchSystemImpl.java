@@ -79,6 +79,8 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 	private final float gridSizeX;
 	// 1.5GB
 	private final long maxFileSize = 1610612736;
+	private final String updateTempFilePath = "updateTempFile";
+	private final String importTempFile = "importTempFile";
 
 	/**
 	 * Initialize System.
@@ -181,11 +183,11 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 	 * forecasts are persisted.
 	 * 
 	 * @param gribFile
+	 * @throws IOException
 	 */
-	public void updateForecasts(final File gribFile) {
+	public void updateForecasts(final File gribFile) throws IOException {
 		// Decode forecasts and persist them
-		final ForecastFile forecastFile = new ForecastFile(
-				"updateTempFilePath", parameters);
+		final ForecastFile forecastFile = createNewForecastFile(updateTempFilePath);
 		try {
 			for (int time = 0; time < forecastTimes; time++) {
 				final Collection<Forecast> decodedForecasts = gribDecoder
@@ -197,7 +199,10 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 			log.error(e);
 		}
 		// Delete the temporal forecast file.
-		forecastFile.delete();
+		if (!forecastFile.delete()) {
+			log.warn("Temporary file:" + forecastFile.getAbsolutePath()
+					+ " could not be deleted.");
+		}
 
 	}
 
@@ -218,7 +223,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 		}
 		// Drop indexes
 		persister.startImportingForecasts();
-		ForecastFile forecastFile = createNewForecastFile();
+		ForecastFile forecastFile = createNewForecastFile(importTempFile);
 		// Decode forecasts and write them to csv file.
 		for (final Iterator iterator = files.iterator(); iterator.hasNext();) {
 			final Collection<File> collection = (Collection<File>) iterator
@@ -242,20 +247,24 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 				log.debug("Writed to csv time:" + time + " of: " + times
 						+ " in: " + (end - init) + "ms.");
 				if (forecastFile.length() > maxFileSize) {
-					log.info("Inserting csv file of size(Bytes):"
-							+ forecastFile.getTotalSpace() + " into DB.");
+					log.info("Inserting csv file of size(KBytes):"
+							+ forecastFile.length() / 1024 + " into DB.");
 					persister.importIntoArchive(forecastFile);
 					log.info("Csv file inserted into DB successfully.");
-					forecastFile = createNewForecastFile();
+					forecastFile = createNewForecastFile(importTempFile);
 				}
 
 			}
 		}
-		log.info("Inserting csv file of size(Bytes):"
-				+ forecastFile.getTotalSpace() + " into DB.");
+		log.info("Inserting csv file of size(KBytes):" + forecastFile.length()
+				/ 1024 + " into DB.");
 		persister.importIntoArchive(forecastFile);
 		log.info("Csv file inserted into DB successfully.");
-		forecastFile = createNewForecastFile();
+		// Delete the temporal forecast file.
+		if (!forecastFile.delete()) {
+			log.warn("Temporary file:" + forecastFile.getAbsolutePath()
+					+ " could not be deleted.");
+		}
 
 		log.info("Import of forecasts done successfully");
 		// Create indexes
@@ -264,7 +273,6 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 		try {
 			scheduler.start();
 		} catch (final SchedulerException e) {
-			// TODO Auto-generated catch block
 			log.error("Error while re starting scheduler", e);
 		}
 
@@ -305,10 +313,11 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 		return neighbors;
 	}
 
-	private ForecastFile createNewForecastFile() throws IOException {
+	private ForecastFile createNewForecastFile(final String filePath)
+			throws IOException {
 		// create a csv file
-		final ForecastFile forecastFile = new ForecastFile("tempFilePath",
-				parameters);
+		final ForecastFile forecastFile = new ForecastFile(filePath, parameters);
+		// Delete if file exists
 		if (forecastFile.exists()) {
 			final boolean deleted = forecastFile.delete();
 			if (!deleted)
@@ -316,6 +325,7 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 						+ forecastFile.getAbsolutePath()
 						+ "). Could not delete. Try removing file manually.");
 		}
+		// Create new file
 		forecastFile.createNewFile();
 		return forecastFile;
 	}

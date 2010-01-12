@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.server.domain.wavewatch;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.quartz.Job;
@@ -21,22 +22,28 @@ import edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.GribAccessEx
  */
 public class UpdateForecastsJob implements Job {
 
-	private Logger log = Logger.getLogger(this.getClass());
+	private final Logger log = Logger.getLogger(this.getClass());
 
 	@Override
-	public void execute(JobExecutionContext jobContext) throws JobExecutionException {
+	public void execute(final JobExecutionContext jobContext)
+			throws JobExecutionException {
 		// Obtain last forecasts in grib format
-		JobDataMap data = jobContext.getJobDetail().getJobDataMap();
-		GribAccess gribAccess = (GribAccess) data.get("gribAccess");
-		WaveWatchSystemImpl waveWatchSystem = (WaveWatchSystemImpl) data
+		final JobDataMap data = jobContext.getJobDetail().getJobDataMap();
+		final GribAccess gribAccess = (GribAccess) data.get("gribAccess");
+		final WaveWatchSystemImpl waveWatchSystem = (WaveWatchSystemImpl) data
 				.get("waveWatchSystem");
 		File gribFile;
 		try {
 			gribFile = gribAccess.getLastGrib();
-		} catch (GribAccessException e1) {
+		} catch (final GribAccessException e1) {
 			throw new JobExecutionException();
 		}
-		waveWatchSystem.updateForecasts(gribFile);
+		try {
+			waveWatchSystem.updateForecasts(gribFile);
+		} catch (final IOException e) {
+			log.error("IO exception while updating forecasts.", e);
+			throw new JobExecutionException(e);
+		}
 		gribFile.delete();
 		log
 				.info("Forecasts were updated successfully. Next update will be on: "

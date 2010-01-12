@@ -201,7 +201,8 @@ public class ForecastServiceImplementation implements ForecastService {
 
 			return new WekaForecasterEvaluationDTO(Double
 					.parseDouble(correlation), Double.parseDouble(mae),
-					forecasterId);
+					forecasterId, forecaster.getClassifier().getClass()
+							.getName());
 		} catch (final Exception e) {
 			log.error("Error creating weka forecaster", e);
 		}
@@ -368,6 +369,41 @@ public class ForecastServiceImplementation implements ForecastService {
 
 	public void setWaveWatchSystem(final WaveWatchSystem waveWatchSystem) {
 		this.waveWatchSystem = waveWatchSystem;
+	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getWekaForecasters(java.lang.Integer)
+	 */
+	@Override
+	@Transactional
+	public List<WekaForecasterEvaluationDTO> getWekaForecasters(
+			final Integer spotId) throws NeuralitoException {
+		validateSpotExists(spotId);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		final Collection<Forecaster> forecasters = spot.getForecasters();
+		final List<WekaForecasterEvaluationDTO> dtos = new ArrayList<WekaForecasterEvaluationDTO>();
+		for (final Iterator iterator = forecasters.iterator(); iterator
+				.hasNext();) {
+			final Forecaster forecaster = (Forecaster) iterator.next();
+			if (forecaster instanceof WekaForecaster) {
+				final WekaForecaster wekaForecaster = (WekaForecaster) forecaster;
+				final String correlation = wekaForecaster.getEvaluation().get(
+						"correlation");
+				final String mae = wekaForecaster.getEvaluation().get(
+						"meanAbsoluteError");
+
+				log.info("Retrieving Weka Forecaster(Id="
+						+ wekaForecaster.getId() + ") :   Correlation: "
+						+ correlation + "Mean Absolute error.: " + mae);
+
+				dtos.add(new WekaForecasterEvaluationDTO(Double
+						.parseDouble(correlation), Double.parseDouble(mae),
+						wekaForecaster.getId(), wekaForecaster.getClassifier()
+								.getClass().getName()));
+			}
+		}
+		return dtos;
 	}
 
 }

@@ -19,6 +19,7 @@ import java.util.TimeZone;
 import org.apache.log4j.Logger;
 
 import ucar.ma2.Array;
+import ucar.ma2.IndexIterator;
 import ucar.nc2.dt.GridCoordSystem;
 import ucar.nc2.dt.GridDatatype;
 import ucar.nc2.dt.grid.GridDataset;
@@ -95,6 +96,7 @@ public class GribDecoderNetcdf implements GribDecoder {
 		int imax = 0;
 		int jmax = 0;
 		Date startDate = null;
+
 		for (final File file : files) {
 			// log.info("Decoding forecasts from file: " +
 			// file.getAbsolutePath());
@@ -140,7 +142,78 @@ public class GribDecoderNetcdf implements GribDecoder {
 		}
 
 		final long end = System.currentTimeMillis();
-		// log.info("Decoded and created: " + decodedForecasts.size()
+		log.info("Decoded and created: " + decodedForecasts.size());
+		// + " forecasts.");
+		// log.info("Elapsed Time: " + (end - init) / 1000);
+		return decodedForecasts;
+	}
+
+	public Collection<Forecast> decodeForecastForTime(
+			final Collection<File> files,
+			final List<WaveWatchParameter> parameters, final int time,
+			final Collection<Point> points) throws IOException {
+		// final long init = System.currentTimeMillis();
+
+		final List<GridDatatype> grids = new ArrayList<GridDatatype>();
+		GridCoordSystem pwdGcs = null;
+		final HashMap<String, float[]> arrays = new HashMap<String, float[]>();
+		final Collection<Forecast> decodedForecasts = new ArrayList<Forecast>();
+		final int imax = 0;
+		final int jmax = 0;
+		Date startDate = null;
+		for (final Point point : points) {
+
+			for (final File file : files) {
+				// log.info("Decoding forecasts from file: " +
+				// file.getAbsolutePath());
+				final GridDataset gridDataSet = GridDataset.open(file
+						.getAbsolutePath());
+				grids.addAll(getGridsForParameters(gridDataSet, parameters));
+				startDate = gridDataSet.getStartDate();
+
+			}
+			// For each parameter
+			final int[] result = null;
+			for (final Iterator<GridDatatype> iterator = grids.iterator(); iterator
+					.hasNext();) {
+
+				final GridDatatype grid = iterator.next();
+				pwdGcs = grid.getCoordinateSystem();
+				final int[] xyIndex = pwdGcs.findXYindexFromLatLon(point
+						.getLatitude(), point.getLongitude(), result);
+
+				final Array array = grid.readDataSlice(time, -1, xyIndex[1],
+						xyIndex[0]);
+				// log.info("Read parameter: " + grid.getName());
+				final IndexIterator iter = array.getIndexIterator();
+				while (iter.hasNext()) {
+					final float val = iter.getFloatNext();
+					System.out.println(val);
+
+				}
+				final float[] data = (float[]) array.copyTo1DJavaArray();
+				arrays.put(grid.getName(), data);
+				// imax = array.getShape()[0];
+				// jmax = array.getShape()[1];
+				// log.info(imax);
+				// log.info(jmax);
+			}
+			final Map<String, ForecastValue> parameter = new HashMap<String, ForecastValue>();
+			for (final GridDatatype gridDatatype : grids) {
+				Float value = arrays.get(gridDatatype.getName())[0];
+				if (value.isNaN()) {
+					value = -1F;
+				}
+				parameter.put(gridDatatype.getName(), new ForecastValue(
+						gridDatatype.getName(), value, Unit.Meters));
+			}
+			final Forecast forecast = new Forecast(startDate, time * 3, point,
+					parameter);
+			decodedForecasts.add(forecast);
+
+		}
+		final long end = System.currentTimeMillis();
+		log.info("Decoded and created: " + decodedForecasts.size());
 		// + " forecasts.");
 		// log.info("Elapsed Time: " + (end - init) / 1000);
 		return decodedForecasts;

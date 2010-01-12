@@ -33,7 +33,7 @@
 		<property name="forecastDAO" ref="forecastDAO"></property>
 		<property name="spotDAO" ref="spotDAO"></property>
 		<property name="waveWatchSystem" ref="waveWatchSystemV2"></property>
-		<property name="classifierName" value="weka.classifiers.functions.LinearRegression"></property>
+		<property name="classifierName" value="weka.classifiers.functions.LinearRegression"/>
 		<property name="dataSetGenerationStrategy" ref="dataSetGenerationStrategy"></property>
 	</bean>
 	

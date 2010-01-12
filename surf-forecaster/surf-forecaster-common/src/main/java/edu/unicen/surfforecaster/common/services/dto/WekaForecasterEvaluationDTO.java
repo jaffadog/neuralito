@@ -1,7 +1,6 @@
 package edu.unicen.surfforecaster.common.services.dto;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 public class WekaForecasterEvaluationDTO implements Serializable {
 
@@ -9,7 +8,7 @@ public class WekaForecasterEvaluationDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * The correlation of the classifier used by the forecaster.
 	 */
@@ -23,26 +22,22 @@ public class WekaForecasterEvaluationDTO implements Serializable {
 	 */
 	private Integer id;
 	/**
-	 * The resume of the classifier. In different languages.
+	 * The classifier name;
 	 */
-	private HashMap<String,String> resume;
-	
-	
+	private String classifierName;
+
 	public WekaForecasterEvaluationDTO() {
-		//GWT purpose.
+		// GWT purpose.
 	}
-	
-	public WekaForecasterEvaluationDTO(double correlation,
-			double meanAbsoluteError, Integer forecasterId) {
+
+	public WekaForecasterEvaluationDTO(final double correlation,
+			final double meanAbsoluteError, final Integer forecasterId,
+			final String classifierName) {
 		super();
 		this.correlation = correlation;
 		this.meanAbsoluteError = meanAbsoluteError;
-		this.id = forecasterId;
-		this.resume = resume;
-	}
-
-	public HashMap<String, String> getResume() {
-		return resume;
+		id = forecasterId;
+		this.classifierName = classifierName;
 	}
 
 	public double getCorrelation() {
@@ -54,9 +49,14 @@ public class WekaForecasterEvaluationDTO implements Serializable {
 	}
 
 	public Integer getId() {
-		return this.id;
+		return id;
 	}
 
-	
-	
+	/**
+	 * @return the classifierName
+	 */
+	public String getClassifierName() {
+		return classifierName;
+	}
+
 }
