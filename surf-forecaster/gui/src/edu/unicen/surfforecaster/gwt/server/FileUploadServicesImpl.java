@@ -32,18 +32,17 @@ import edu.unicen.surfforecaster.server.services.ForecastServiceImplementation;
  * @author maxi
  * 
  */
-public class FileUploadServicesImpl extends HttpServlet {
+public class FileUploadServicesImpl extends ServicesImpl {
 
 	private static final long serialVersionUID = 1L;
-	private ForecastService forecastService = new ForecastServiceImplementation();
+	private ForecastService forecastService;
 	/**
 	 * Logger.
 	 */
 	Logger logger = Logger.getLogger(FileUploadServicesImpl.class);
 
 	/**
-	 * @param service
-	 *            the service to set
+	 * @param service the service to set
 	 */
 	public void setForecastService(final ForecastService service) {
 		forecastService = service;
@@ -61,8 +60,7 @@ public class FileUploadServicesImpl extends HttpServlet {
 		super.doGet(req, resp);
 	}
 
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
 		Integer spotId = null;
 		Integer hour = null;
@@ -152,7 +150,7 @@ public class FileUploadServicesImpl extends HttpServlet {
 		
 		WekaForecasterEvaluationDTO result = forecastService.createWekaForecaster(obsData, spotId, options);
 		
-		
+		logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster created!.");
 		
 		return "Correlation: " + result.getCorrelation() + "|Mean absolute error: " + result.getMeanAbsoluteError();
 

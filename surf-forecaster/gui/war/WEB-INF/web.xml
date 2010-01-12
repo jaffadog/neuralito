@@ -47,7 +47,7 @@
    <!-- File uploader Servlet -->
   <servlet>
     <servlet-name>FileUploadServices</servlet-name>
-    <servlet-class>edu.unicen.surfforecaster.gwt.server.FileUploadServicesImpl</servlet-class>
+    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
   </servlet>
   
   <servlet-mapping>
