@@ -173,9 +173,12 @@ public interface SpotService {
 
 	/**
 	 * 
-	 * @return -> retrieve just public spots
+	 * @return -> retrieve the spots the user has created.
 	 * @throws NeuralitoException
 	 */
 	public List<SpotDTO> getSpots(Integer idZone) throws NeuralitoException;
+
+	public List<SpotDTO> getSpotsCreatedByUser(Integer userId)
+			throws NeuralitoException;
 
 }

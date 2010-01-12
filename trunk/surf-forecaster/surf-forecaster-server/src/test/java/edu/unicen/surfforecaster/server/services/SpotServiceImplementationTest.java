@@ -38,7 +38,7 @@ import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/services.xml" })
 public class SpotServiceImplementationTest {
-	private Logger log = Logger.getLogger(this.getClass());
+	private final Logger log = Logger.getLogger(this.getClass());
 	@Autowired
 	protected SpotService spotService;
 	@Autowired
@@ -99,9 +99,9 @@ public class SpotServiceImplementationTest {
 					UserType.ADMINISTRATOR);
 
 			// Create 6 Spots
-			TimeZone timeZone = TimeZone.getTimeZone("UTC");
-			spot1Id = spotService.addSpot("Guanchaco", 52.6963610F, 52.6963677777F, zoneId1,
-					userId1, true, timeZone);
+			final TimeZone timeZone = TimeZone.getTimeZone("UTC");
+			spot1Id = spotService.addSpot("Guanchaco", 52.6963610F,
+					52.6963677777F, zoneId1, userId1, true, timeZone);
 			spot2Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId2,
 					userId1, false, timeZone);
 			spot3Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId3,
@@ -148,12 +148,23 @@ public class SpotServiceImplementationTest {
 
 	}
 
+	@Test
+	public void getSpotsCreatedByUser() throws NeuralitoException {
+		final List<SpotDTO> spotsCreatedByUser1 = spotService
+				.getSpotsCreatedByUser(userId1);
+		Assert.assertEquals(2, spotsCreatedByUser1.size());
+		final List<SpotDTO> spotsCreatedByUser2 = spotService
+				.getSpotsCreatedByUser(userId2);
+		Assert.assertEquals(4, spotsCreatedByUser2.size());
+	}
+
 	/**
 	 * Try to delete an area which has spots. This should not be allowed and
 	 * DATABASE_ERROR should be thrown.
 	 */
 	@Test
-	@Ignore //Ignored till AOP for exceptions configured
+	@Ignore
+	// Ignored till AOP for exceptions configured
 	public void testDeleteRestrictions() {
 		try {
 			spotService.removeArea(areaId);
@@ -264,7 +275,8 @@ public class SpotServiceImplementationTest {
 		try {
 			final String zoneName = "one zone";
 			final Integer spotId = spotService.addZoneAndSpot(zoneName,
-					countryId, "some spot name", 1L, 2L, userId1, true, TimeZone.getTimeZone("UTC"));
+					countryId, "some spot name", 1L, 2L, userId1, true,
+					TimeZone.getTimeZone("UTC"));
 			final SpotDTO spot = spotService.getSpotById(spotId);
 			Assert.assertEquals(zoneName, spot.getZone().getName());
 			Assert.assertEquals(countryId, spot.getCountry().getId());
@@ -280,7 +292,8 @@ public class SpotServiceImplementationTest {
 	public void addZoneAndSpot2() {
 		try {
 			final Integer spotId = spotService.addZoneAndSpot(zoneName1,
-					countryId, "some spot name", 1L, 2L, userId1, true,TimeZone.getTimeZone("UTC"));
+					countryId, "some spot name", 1L, 2L, userId1, true,
+					TimeZone.getTimeZone("UTC"));
 
 			final SpotDTO spot = spotService.getSpotById(spotId);
 
@@ -337,7 +350,8 @@ public class SpotServiceImplementationTest {
 					.size();
 			final String zoneName = "one zone";
 			final Integer spotId = spotService.addZoneAndSpot(zoneName,
-					countryId, "some spot name", 1L, 2L, userId1, true, TimeZone.getTimeZone("UTC"));
+					countryId, "some spot name", 1L, 2L, userId1, true,
+					TimeZone.getTimeZone("UTC"));
 			final SpotDTO spot = spotService.getSpotById(spotId);
 			Assert.assertEquals(zoneName, spot.getZone().getName());
 			Assert.assertEquals(countryId, spot.getCountry().getId());
