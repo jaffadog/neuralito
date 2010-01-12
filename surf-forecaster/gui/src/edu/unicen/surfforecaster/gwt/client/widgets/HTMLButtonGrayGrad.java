@@ -17,10 +17,13 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 	public final static int BUTTON_GRAY_GRAD_150PX = 150;
 	public final static int BUTTON_GRAY_GRAD_180PX = 180;
 	
-	String leftId = "";
-	String rightId = "";
-	String centerId = "";
-	int width = -999; //undefined
+	private boolean isEnabled = true;
+	
+	private String leftId = "";
+	private String rightId = "";
+	private String centerId = "";
+	
+	private int width = -999; //undefined
 	
 	public String getWidth() {
 		if (this.width == -999)
@@ -141,6 +144,10 @@ public class HTMLButtonGrayGrad extends HTML implements MouseDownHandler, MouseU
 	}
 	
 	public void setEnabled(boolean isEnabled){
-		
+		this.isEnabled = isEnabled;
+	}
+	
+	public boolean isEnabled() {
+		return this.isEnabled;
 	}
 }

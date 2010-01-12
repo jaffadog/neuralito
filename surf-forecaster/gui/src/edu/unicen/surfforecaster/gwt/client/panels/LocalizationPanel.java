@@ -116,13 +116,16 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 					}
 					{
 						//TODO hacer que si no hay spot seleccionado el boton este desabilidato
-						//As button id added at the end the current time in milliseconds to avoid duplicated ids along all of this panels creation in the app.
+						//For button id appended at the end the current time in milliseconds to avoid duplicated ids along all of this panels creation in the app.
 						forecastButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LocalizationPanel-Forecast" + (new Date()).getTime() , HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_150PX);
 						//forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
-						//forecastButton.setEnabled(false);
+						forecastButton.setEnabled(false);
 						forecastButton.addClickHandler(new ClickHandler() {
 							public void onClick(ClickEvent event) {
-								renderSpotInfo();
+								if (forecastButton.isEnabled())
+									renderSpotInfo();
+								else
+									new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectSpot(), MessageBox.IconType.INFO);
 							}
 						});
 						localizationForm.setWidget(2, 0, forecastButton);
