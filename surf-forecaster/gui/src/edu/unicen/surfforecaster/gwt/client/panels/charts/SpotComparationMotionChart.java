@@ -75,7 +75,7 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 				Unit heightUnitTarget = Unit.Meters;
 
 				//wave height
-				String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.toString()).getValue();
+				String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
 				try {
 					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 				} catch (NeuralitoException e) {

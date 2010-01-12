@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.panels.ErrorMsgPanel;
+import edu.unicen.surfforecaster.gwt.client.panels.MessagePanel;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
@@ -39,11 +41,17 @@ public class DetailedForecastWgStrategyC implements IRenderDetailedForecastStrat
 
 	@Override
 	public Widget renderDetailedForecast() {
-		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 0, 3));
-		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 23, 46));
-//		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
-//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 46, null));
+		if (this.forecasters != null && this.forecasters.size() > 0) {
+			completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 0, 3));
+			completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
+	//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 23, 46));
+	//		completeDetailedForecastVPanel.add(new Label(GWTUtils.LOCALE_CONSTANTS.continue_() + "..."));
+	//		completeDetailedForecastVPanel.add(new WgTableC(forecasters, spotsIds, spotsNames, forecastersNames, 46, null));
+		} else {
+			final MessagePanel errorPanel = new ErrorMsgPanel();
+			errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.NOT_SPOT_FORECASTERS_DEFINED());
+			completeDetailedForecastVPanel.add(errorPanel);
+		}
 		
 		return completeDetailedForecastVPanel;
 	}

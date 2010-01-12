@@ -86,6 +86,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Error al intentar guardar la comparaci\u00F3n, por favor intente nuevamente en unos minutos.")
 	String ERROR_SAVING_COMPARATION();
 	
+	@DefaultStringValue("La ola seleccionada no tiene ningun pronosticador definido.")
+	String NOT_SPOT_FORECASTERS_DEFINED();
+	
 	/**
 	 * Commons translates for more than one panel
 	 */

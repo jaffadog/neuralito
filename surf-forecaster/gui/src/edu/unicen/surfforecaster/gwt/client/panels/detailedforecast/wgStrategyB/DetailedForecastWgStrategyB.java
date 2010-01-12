@@ -71,7 +71,7 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 			completeDetailedForecastVPanel.add(new WgTableB(forecasters, 46, null));
 		} else {
 			final MessagePanel errorPanel = new ErrorMsgPanel();
-			errorPanel.setMessage("Este spot no tiene pronosticadores definidos");
+			errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.NOT_SPOT_FORECASTERS_DEFINED());
 			completeDetailedForecastVPanel.add(errorPanel);
 		}
 		
