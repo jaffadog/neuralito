@@ -124,20 +124,17 @@ public class FileUploadServicesImpl extends ServicesImpl {
 			} catch (Exception e) {
 				logger.log(Level.INFO, "FileUploadServicesImpl - doPost - An error occurred while parsing the file : " + e.getMessage());
 				sendResponseToClient(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "ERROR", "An error occurred while parsing the observations file");
-				//resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while parsing the observations file");
 			}
 
 		} else {
 			logger.log(Level.INFO, "Request contents type is not supported by the servlet.");
 			sendResponseToClient(resp, HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "ERROR", "Request contents type is not supported by the servlet.");
-			//resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Request contents type is not supported by the servlet.");
 		}
 	}
 
 	private String sendData(Integer spotId, Vector<VisualObservationDTO> obsData,
 			Integer hour, Integer hour2, Integer minutes, Integer minutes2, Float latitudeGridPoint, Float longitudeGridPoint) {
 		logger.log(Level.INFO,"FileUploadServicesImpl - sendData - Sending observation data to forecastServices from spot: " + spotId + "...");
-		// TODO send data to forecast service
 		HashMap<String, Serializable> options = new HashMap<String, Serializable>();
 		options.put("latitudeGridPoint1", latitudeGridPoint);
 		options.put("longitudeGridPoint1", longitudeGridPoint);
@@ -146,13 +143,11 @@ public class FileUploadServicesImpl extends ServicesImpl {
 		options.put("utcSunsetHour", hour2);
 		options.put("utcSunsetMinute", minutes2);
 		
-		logger.log(Level.INFO, "FileUploadServicesImpl - sendData - " + spotId + " >> " + hour + " >> " + minutes + " >> " + hour2 + " >> " + minutes2 + " >> " + obsData + " >> " + latitudeGridPoint + " >> " + longitudeGridPoint);
-		
 		WekaForecasterEvaluationDTO result = forecastService.createWekaForecaster(obsData, spotId, options);
 		
-		logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster created!.");
+		logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster successfully created.");
 		
-		return "Correlation: " + result.getCorrelation() + "|Mean absolute error: " + result.getMeanAbsoluteError();
+		return "correlation=" + result.getCorrelation() + "|meanAbsoluteError=" + result.getMeanAbsoluteError() + "|classifierName=" + result.getClassifierName();
 
 	}
 	

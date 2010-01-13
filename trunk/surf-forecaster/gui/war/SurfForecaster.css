@@ -13,7 +13,8 @@
     cursor:default;
 }
 
-.gwt-Label, .gwt-HyperLink, .gwt-PushButton, .gwt-ListBox, .gwt-RadioButton, .gwt-MapInfoText, .gwt-TextArea, .gwt-DisclosurePanel .header td{
+.gwt-Label, .gwt-HyperLink, .gwt-PushButton, .gwt-ListBox, .gwt-RadioButton, .gwt-MapInfoText,
+.gwt-TextArea, .gwt-DisclosurePanel .header td, .gwt-TextBox{
     font-family: 'Trebuchet MS', Helvetica, sans-serif;
     font-size:9pt;
 }
@@ -216,6 +217,10 @@ div#closeLoginBoxDiv a{
     height: 26px;
 }
 
+.gwt-FlexTable-MySpotsRowColor{
+    background-color: #C0C0C0;
+}
+
 /*****************************************************************************/
 /*********************** RegisterUserPanel ***************************************/
 /*****************************************************************************/
@@ -285,6 +290,20 @@ div#closeLoginBoxDiv a{
 }
 
 /*****************************************************************************/
+/*********************** WekaEvaluationResultsPanel ***************************************/
+/*****************************************************************************/
+.gwt-Label-WekaPanelTitle{
+    font-weight:bold;
+}
+.gwt-Label-WekaPanel-ClassifierName{
+    color:#3B5998;
+}
+
+.gwt-Label-WekaPanelLabel{
+    margin-left:10px;
+}
+
+/*****************************************************************************/
 /*********************** WgTableB and WgTableC ***************************************/
 /*****************************************************************************/
 .gwt-FlexTable-WgTable{
@@ -323,7 +342,7 @@ div#closeLoginBoxDiv a{
 }
 
 .gwt-ForecasterName-Row{
-    background-color:silver;
+    background-color: #C0C0C0;
 }
 
 .gwt-ForecasterName-Row-0{

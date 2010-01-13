@@ -31,9 +31,12 @@ import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
+import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
+import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.WekaForecasterEvaluationGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
@@ -105,9 +108,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		this.getFlexCellFormatter().setColSpan(1, 0, 3);
 		
-		Vector<String> message = new Vector<String>();
-		message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
-		successPanel = new SuccessMsgPanel(message);
+		successPanel = new SuccessMsgPanel();
 		successPanel.setVisible(false);
 		this.setWidget(2, 0, successPanel);
 		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
@@ -228,8 +229,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		this.getFlexCellFormatter().setColSpan(13, 0, 3);
 		
 		form = new FormPanel();
-		this.setWidget(14, 0, form);
-		this.getFlexCellFormatter().setColSpan(14, 0, 3);
+		this.setWidget(15, 0, form);
+		this.getFlexCellFormatter().setColSpan(15, 0, 3);
 		form.setAction(UPLOAD_ACTION_URL);
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 	    form.setMethod(FormPanel.METHOD_POST);
@@ -241,21 +242,25 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	    form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) { 
+				//TODO revisar estos carteles en ie
 				String results = event.getResults();
-				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), event.getResults(), MessageBox.IconType.INFO);
-				//TODO el mensaje adecuado, probar en ie porque mepa que no sale el texto y aparece un messagebox vacio lo que queda muy mal
-//				Integer responseStatus = new Integer(results.substring(16, 19));
-//				String responseText = results.substring(results.indexOf("<PRE>") + 5, results.indexOf("</PRE>"));
-//				switch (responseStatus) {
-//				case 200:
-//					Window.alert("Status: " + responseStatus + " - Text: " + responseText);
-//					break;
-//				case 500:
-//					Window.alert("Status: " + responseStatus + " - Text: " + responseText);
-//				default:
-//					break;
-//				}
+				String sCorrelation = results.substring(results.indexOf("correlation=") + 12, results.indexOf("|", results.indexOf("correlation=")));
+				String sMeanAbsoluteError = results.substring(results.indexOf("|", results.indexOf("correlation=")) + 19, results.indexOf("|", results.indexOf("meanAbsoluteError=")));
+				String classifierName = results.substring(results.indexOf("|", results.indexOf("meanAbsoluteError=")) + 16);
+				double dCorrelation = new Double(sCorrelation);
+				String correlationExpresion = "";
+				if (dCorrelation <= 0.2)
+					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryBad();
+				else if (dCorrelation <= 0.4)
+					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.bad();
+				else if (dCorrelation <= 0.6)
+					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.good();
+				else if (dCorrelation <= 0.8)
+					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryGood();
+				else
+					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryBad();
 				
+				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_MESSAGES.wekaTrainingResults(correlationExpresion), MessageBox.IconType.INFO);
 			}
 		});
 	    
@@ -345,9 +350,9 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		
 		//Save Button	
 		final HTMLButtonGrayGrad saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.save(), "NewSpotDataPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
-		this.setWidget(15, 0, saveBtn);
-		this.getFlexCellFormatter().setColSpan(15, 0, 3);
-		this.getFlexCellFormatter().setHorizontalAlignment(15, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.setWidget(16, 0, saveBtn);
+		this.getFlexCellFormatter().setColSpan(16, 0, 3);
+		this.getFlexCellFormatter().setHorizontalAlignment(16, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		
 		saveBtn.addClickHandler(new ClickHandler() {
@@ -366,15 +371,19 @@ public class NewSpotPanel extends FlexTable implements Observer{
 								zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
 								timeZoneBox.getValue(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
 							public void onSuccess(Integer result){
+								String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
 								if (!upload.getFilename().trim().equals("")) {
 									spotId.setValue(result.toString());
 									latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
 									longitudeGridPoint.setValue(mapPanel.getBuoyLong().replace(",", "."));
+									message += " " + GWTUtils.LOCALE_CONSTANTS.trainingClassifier();
 									form.submit();
 								}
 								clearFields();
+								successPanel.setMessage(message);
 								successPanel.setVisible(true);
 								Window.scrollTo(0, 0);
+								//TODO hacer que se actualizen los combos observer al dar de alta una ola
 				            }
 							
 							public void onFailure(Throwable caught){
@@ -422,6 +431,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	public NewSpotPanel(SpotGwtDTO spot) {
 		this();
 		this.spot = spot;
+		this.getWekaForecasters();
 		NewSpotPanel.PANEL_MODE = "edit";
 		lblTitle.setText(GWTUtils.LOCALE_CONSTANTS.edit() + " " + spot.getName());
 		lblNewSpotDescription.setVisible(false);
@@ -442,10 +452,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			radioPublicButton.setValue(false);
 		}
 		
-		//set spot and gridpoint location
+		//set spot and location
 		mapPanel.setSpotLocation(spot.getPoint());
-		//TODO poner el point de la grilla
-		mapPanel.setGridPointLocation(spot.getPoint());
 		
 		HorizontalPanel radioObsPanel = new HorizontalPanel();
 	    radioObsPanel.setSpacing(5);
@@ -461,6 +469,39 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			update(LocalizationUtils.getInstance(), null);
 	}
 	
+	private void getWekaForecasters() {
+		ForecastServices.Util.getInstance().getWekaForecasters(this.spot.getId(), new AsyncCallback<List<WekaForecasterEvaluationGwtDTO>>(){
+			public void onSuccess(List<WekaForecasterEvaluationGwtDTO> result){
+				if (result.size() > 0) {
+					WekaEvaluationResultsPanel wekaEvaluationResultsPanel = new WekaEvaluationResultsPanel(result);
+					//put it in main table
+					setWidget(14, 0, wekaEvaluationResultsPanel);
+					getFlexCellFormatter().setColSpan(14, 0, 3);
+					//TODO esto esta mal porque si tiene muchos forecasters no se de cual sacar los horarios de luz solar, ahora lo saco del unico que tiene, el primero
+					//set forecaster lightday hours and gridpoint
+					txtHour.setText(result.get(0).getTrainningOptions().get("utcSunriseHour"));
+					txtHour2.setText(result.get(0).getTrainningOptions().get("utcSunsetHour"));
+					txtMinutes.setText(result.get(0).getTrainningOptions().get("utcSunriseMinute"));
+					txtMinutes2.setText(result.get(0).getTrainningOptions().get("utcSunsetMinute"));
+					PointDTO point = new PointDTO(new Float(result.get(0).getTrainningOptions().get("latitudeGridPoint1")), new Float(result.get(0).getTrainningOptions().get("longitudeGridPoint1")));
+					mapPanel.setGridPointLocation(point);
+				}
+            }
+			
+			public void onFailure(Throwable caught){
+            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+						Cookies.getCookie("surfForecaster-Username") != null) {
+					GWTUtils.showSessionExpiredLoginBox();
+				} else {
+					errorPanel.setMessage(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+					errorPanel.setVisible(true);
+				}
+            	Window.scrollTo(0, 0);
+            }
+		});
+		
+	}
+
 	/**
 	 * Invoked when clicks chooseZoneBtn
 	 */

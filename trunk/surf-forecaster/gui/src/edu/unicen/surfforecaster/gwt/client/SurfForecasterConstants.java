@@ -23,7 +23,7 @@ public interface SurfForecasterConstants extends Constants {
 	/**
 	 * ErrorMessages
 	 */
-	@DefaultStringValue("Los cambios se guardaron exitosamente !!!")
+	@DefaultStringValue("Los cambios se guardaron correctamente.")
 	String CHANGES_SAVED_SUCCESFULLY();
 	
 	@DefaultStringValue("Los campos marcados con (*) son obligatorios.")
@@ -474,7 +474,7 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Visibilidad de ola")
 	String spotVisibility();
 	
-	@DefaultStringValue("Entrenar un clasificador (Opcional)")
+	@DefaultStringValue("Entrenar un pronosticador especializado (Opcional)")
 	String trainClassifier();
 	
 	@DefaultStringValue("Observaciones visuales")
@@ -509,6 +509,24 @@ public interface SurfForecasterConstants extends Constants {
 			"(una observaci\u00F3n diaria de altura m\u00E1xima), podr\u00E1 entrenar un pronosticador especializado ubicado exactamente en las coordenadas de la ola registrada.")
 	String registerNewSpotDesc();
 	
+	@DefaultStringValue("Excelente")
+	String excelent();
+	
+	@DefaultStringValue("Muy bueno")
+	String veryGood();
+	
+	@DefaultStringValue("Bueno")
+	String good();
+	
+	@DefaultStringValue("Malo")
+	String bad();
+	
+	@DefaultStringValue("Muy malo")
+	String veryBad();
+	
+	@DefaultStringValue("En este momento se esta entrenando un pronosticador especializado, los resultados le ser\u00E1n informados una vez finalizado el entrenamiento. Esta operaci\u00F3n puede demorar unos minutos, sin embargo usted puede continuar utilizando el sistema.")
+	String trainingClassifier();
+	
 	/**
 	 * RegisterNewUserPanel
 	 */
@@ -527,6 +545,18 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Administrador")
 	String administrator();
 	
+	//TODO traducir esto
+	@DefaultStringValue("Puedes utilizar el sistema en forma anonima sin tener una cuenta de usuario, pero de esta manera solo tendras acceso a olas " +
+			"creadas y declaradas como PUBLICAS por otros usuarios que tienen la intencion de compartir esas predicciones. Como usuario anonimo " +
+			"podras ver los pronosticos y descripciones de olas publicas, como tambien realizar comparaciones entre dichas olas. Registrarse en el sistema " +
+			"lleva apenas un instante, llenando un simple formulario el cual no requiere datos personales ni privados. Como usuario registrados podras " +
+			"dar de alta tus olas preferidas en el sistema, de cualquier parte del mundo, para poder tener acceso a un pronostico detallado cercano a esa " +
+			"ubicacion, ademas si dispones de informacion historica con la altura de las olas que arribaron a esa costa, podras entrenar un pronosticador " +
+			"especializado para obtener una prediccion aun mas certera exactamente donde rompe esa ola. Por otra parte como usuario registrado podras " +
+			"generar tus propias comparaciones entre olas y guardarlas en el sistema, para tenerlas disponibles en cualquier momento, evitandote el trabajo " +
+			"de tener que generarlas continuamente.")
+	String whyRegister();
+	
 	/**
 	 * UserStatePanel
 	 */
@@ -541,6 +571,18 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Configuraci\u00F3n")
 	String settings();
+	
+	/**
+	 * WekaEvaluationResultsPanel
+	 */
+	@DefaultStringValue("Esta ola ha sido entrenada con los siguientes pronosticadores")
+	String wekaEvaluationPanelTitle();
+	
+	@DefaultStringValue("Correlaci\u00F3n")
+	String correlation();
+	
+	@DefaultStringValue("Error absoluto medio")
+	String meanAbsoluteError();
 	
 	/**
 	 * WgTableB and WgTableC
