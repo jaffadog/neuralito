@@ -159,6 +159,10 @@ public class MySpotsPanel extends FlexTable {
 				mySpotsTable.getFlexCellFormatter().setHorizontalAlignment(index, 5, HasHorizontalAlignment.ALIGN_CENTER);
 				mySpotsTable.getFlexCellFormatter().setHorizontalAlignment(index, 6, HasHorizontalAlignment.ALIGN_CENTER);
 				
+				//row color
+				if (index % 2 == 0)
+					mySpotsTable.getRowFormatter().addStyleName(index, "gwt-FlexTable-MySpotsRowColor");
+				
 				index++;
 			}
 		} else {
@@ -177,11 +181,15 @@ public class MySpotsPanel extends FlexTable {
 	private void editSpot(SpotGwtDTO spot) {
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
+		this.getRowFormatter().setVisible(4, true);
 		NewSpotPanel newSpotPanel = new NewSpotPanel(spot); 
 		this.setWidget(4, 0, newSpotPanel);
 	}
 	
 	public void deleteSpot(Integer spotId, final int rowIndex) {
+		//clear edit spot panel
+		this.clearCell(4, 0);
+		this.getRowFormatter().setVisible(4, false);
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
 		SpotServices.Util.getInstance().deleteSpot(spotId, new AsyncCallback<Boolean>(){

@@ -1,10 +1,12 @@
 package edu.unicen.surfforecaster.gwt.server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Level;
 
@@ -14,8 +16,10 @@ import edu.unicen.surfforecaster.common.services.ForecasterDTO;
 import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.WekaForecasterEvaluationGwtDTO;
 
 @SuppressWarnings("serial")
 public class ForecastServicesImpl extends ServicesImpl implements ForecastServices {
@@ -112,5 +116,32 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 	
 	private ForecastGwtDTO getForecastGwtDTO(ForecastDTO forecastDTO) {
 		return new ForecastGwtDTO(forecastDTO.getBaseDate().getTime(), forecastDTO.getForecastTime(), forecastDTO.getMap());
+	}
+
+	@Override
+	public List<WekaForecasterEvaluationGwtDTO> getWekaForecasters(Integer spotId) throws NeuralitoException {
+		logger.log(Level.INFO,"ForecastServicesImpl - getWekaForecasters - Retrieving Weka forecasters evaluations for spot: " + spotId + "...");
+		List<WekaForecasterEvaluationDTO> wekaForecasterEvaluationDTOs = forecastService.getWekaForecasters(spotId);
+		List<WekaForecasterEvaluationGwtDTO> result = new ArrayList<WekaForecasterEvaluationGwtDTO>();
+		Iterator<WekaForecasterEvaluationDTO> i = wekaForecasterEvaluationDTOs.iterator();
+		while (i.hasNext()) {
+			WekaForecasterEvaluationDTO wekaForecasterEvaluationDTO = i.next();
+			result.add(this.getWekaForecasterEvaluationGwtDTO(wekaForecasterEvaluationDTO));
+		}
+		logger.log(Level.INFO,"ForecastServicesImpl - getWekaForecasters - " + result.size() + " Weka forecasters evaluations retrieved successfully.");
+		return result; 
+	}
+	
+	private WekaForecasterEvaluationGwtDTO getWekaForecasterEvaluationGwtDTO(WekaForecasterEvaluationDTO wekaForecasterEvaluationDTO) {
+		Map<String, String> options = new HashMap<String, String>();
+		Map<String, Serializable> trainingOptions = wekaForecasterEvaluationDTO.getTrainningOptions();
+		Iterator<String> keys = trainingOptions.keySet().iterator();
+		while (keys.hasNext()) {
+			String key = keys.next();
+			options.put(key, trainingOptions.get(key).toString());
+		}
+		
+		return new WekaForecasterEvaluationGwtDTO(wekaForecasterEvaluationDTO.getCorrelation(), wekaForecasterEvaluationDTO.getMeanAbsoluteError(), 
+				wekaForecasterEvaluationDTO.getId(), wekaForecasterEvaluationDTO.getClassifierName(), options);
 	}
 }

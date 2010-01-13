@@ -46,4 +46,11 @@ public interface SurfForecasterMessages extends Messages {
 	
 	@DefaultMessage("Confirma que desea eliminar la ola \"{0}\"?")
 	String askForDeleteSpot(String spotName);
+	
+	/**
+	 * newSpotPanel
+	 */
+	
+	@DefaultMessage("El entrenamiento del pronosticador a finalizado. El resultado del entrenamiento en contraste con los datos suministrados fue: {0}")
+	String wekaTrainingResults(String correlationExpresion);
 }
