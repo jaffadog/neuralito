@@ -203,4 +203,60 @@ public class ComparationServiceImplementationTest {
 		}
 
 	}
+
+	@Test
+	public void removeComparation() throws NeuralitoException {
+		final String comparationName = "Willa Comparation";
+		final String comparationDescription = "A test comparation";
+		final List<Integer> spotsIds = new ArrayList<Integer>();
+		spotsIds.add(spot1Id);
+		spotsIds.add(spot2Id);
+
+		final ComparationDTO originalComparation = comparationService
+				.addComparation(comparationName, comparationDescription,
+						userId1, spotsIds);
+
+		comparationService.removeComparation(originalComparation.getId());
+		// Check that comparation doesnt exist anymore
+		final ComparationDTO comparation = comparationService
+				.getComparationById(originalComparation.getId());
+
+		Assert.assertNull(comparation);
+
+		final List<ComparationDTO> comparations = comparationService
+				.getComparationsForUserId(userId1);
+		// Check that association between comparation and user was removed.
+		for (final ComparationDTO comparationDTO : comparations) {
+			if (comparationDTO.getId().equals(originalComparation.getId())) {
+				Assert.fail();
+			}
+		}
+	}
+
+	@Test
+	public void getComparationsForUserId() throws NeuralitoException {
+		final String comparationName = "Willa Comparation";
+		final String comparationDescription = "A test comparation";
+		final List<Integer> spotsIds = new ArrayList<Integer>();
+		spotsIds.add(spot1Id);
+		spotsIds.add(spot2Id);
+
+		final ComparationDTO originalComparation = comparationService
+				.addComparation(comparationName, comparationDescription,
+						userId1, spotsIds);
+
+		final List<ComparationDTO> comparationsForUserId = comparationService
+				.getComparationsForUserId(userId1);
+
+		Assert.assertEquals(1, comparationsForUserId.size());
+		Assert.assertEquals(comparationName, comparationsForUserId.get(0)
+				.getName());
+		Assert.assertEquals(originalComparation.getId(), comparationsForUserId
+				.get(0).getId());
+		//
+		final List<ComparationDTO> comparationsForUserId2 = comparationService
+				.getComparationsForUserId(userId2);
+		Assert.assertEquals(0, comparationsForUserId2.size());
+	}
+
 }
