@@ -148,21 +148,17 @@ public class GribDecoderNetcdf implements GribDecoder {
 		return decodedForecasts;
 	}
 
-	public Collection<Forecast> decodeForecastForTime(
+	public Collection<Forecast> decodeForecastForTimeAndGridPoints(
 			final Collection<File> files,
 			final List<WaveWatchParameter> parameters, final int time,
-			final Collection<Point> points) throws IOException {
-		// final long init = System.currentTimeMillis();
-
+			final Collection<Point> gridPoints) throws IOException {
 		final List<GridDatatype> grids = new ArrayList<GridDatatype>();
 		GridCoordSystem pwdGcs = null;
 		final HashMap<String, float[]> arrays = new HashMap<String, float[]>();
 		final Collection<Forecast> decodedForecasts = new ArrayList<Forecast>();
-		final int imax = 0;
-		final int jmax = 0;
 		Date startDate = null;
-		for (final Point point : points) {
-
+		for (final Point point : gridPoints) {
+			log.info("Decoding forecasts for point: " + point);
 			for (final File file : files) {
 				// log.info("Decoding forecasts from file: " +
 				// file.getAbsolutePath());
@@ -193,10 +189,6 @@ public class GribDecoderNetcdf implements GribDecoder {
 				}
 				final float[] data = (float[]) array.copyTo1DJavaArray();
 				arrays.put(grid.getName(), data);
-				// imax = array.getShape()[0];
-				// jmax = array.getShape()[1];
-				// log.info(imax);
-				// log.info(jmax);
 			}
 			final Map<String, ForecastValue> parameter = new HashMap<String, ForecastValue>();
 			for (final GridDatatype gridDatatype : grids) {
@@ -207,6 +199,7 @@ public class GribDecoderNetcdf implements GribDecoder {
 				parameter.put(gridDatatype.getName(), new ForecastValue(
 						gridDatatype.getName(), value, Unit.Meters));
 			}
+			log.info("Decoded date: " + startDate);
 			final Forecast forecast = new Forecast(startDate, time * 3, point,
 					parameter);
 			decodedForecasts.add(forecast);

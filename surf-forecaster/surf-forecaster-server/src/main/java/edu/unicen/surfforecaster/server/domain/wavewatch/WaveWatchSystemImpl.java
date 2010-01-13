@@ -372,4 +372,76 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 		return name;
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem#importForecasts(java.util.Collection,
+	 *      java.util.Collection)
+	 */
+	@Override
+	public void importForecasts(final Collection<Collection<File>> files,
+			final Collection<Point> gridPoints) throws IOException {
+		log.info("Importing forecasts");
+		// Disable automatic download of forecasts while performing import
+		try {
+			scheduler.standby();
+		} catch (final SchedulerException e) {
+			log.error("Error while standby scheduler", e);
+		}
+		// Drop indexes
+		persister.startImportingForecasts();
+		ForecastFile forecastFile = createNewForecastFile(importTempFile);
+		// Decode forecasts and write them to csv file.
+		for (final Iterator iterator = files.iterator(); iterator.hasNext();) {
+			final Collection<File> collection = (Collection<File>) iterator
+					.next();
+			log.info("Writing to csv forecast for files: "
+					+ collection.toArray()[0] + ";" + collection.toArray()[1]
+					+ ";" + collection.toArray()[2]);
+			// Get all available times in file
+			final int times = gribDecoder
+					.getTimes((File) collection.toArray()[0]);
+			log.info("Total number of forecast times in file is:" + times);
+			// Decode and write to file all times
+			for (int time = 0; time < times; time++) {
+				final long init = System.currentTimeMillis();
+				final Collection<Forecast> decodedForecasts = gribDecoder
+						.decodeForecastForTimeAndGridPoints(collection,
+								parameters, time, gridPoints);
+				// If file reached maximum size insert it into DB and empty
+				// file.
+				final long end = System.currentTimeMillis();
+				forecastFile.writeForecasts(decodedForecasts);
+				log.debug("Writed to csv time:" + time + " of: " + times
+						+ " in: " + (end - init) + "ms.");
+				if (forecastFile.length() > maxFileSize) {
+					log.info("Inserting csv file of size(KBytes):"
+							+ forecastFile.length() / 1024 + " into DB.");
+					persister.importIntoArchive(forecastFile);
+					log.info("Csv file inserted into DB successfully.");
+					forecastFile = createNewForecastFile(importTempFile);
+				}
+
+			}
+		}
+		log.info("Inserting csv file of size(KBytes):" + forecastFile.length()
+				/ 1024 + " into DB.");
+		persister.importIntoArchive(forecastFile);
+		log.info("Csv file inserted into DB successfully.");
+		// Delete the temporal forecast file.
+		if (!forecastFile.delete()) {
+			log.warn("Temporary file:" + forecastFile.getAbsolutePath()
+					+ " could not be deleted.");
+		}
+
+		log.info("Import of forecasts done successfully");
+		// Create indexes
+		persister.stopImportingForecasts();
+		// Enable scheduler
+		try {
+			scheduler.start();
+		} catch (final SchedulerException e) {
+			log.error("Error while re starting scheduler", e);
+		}
+
+	}
+
 }

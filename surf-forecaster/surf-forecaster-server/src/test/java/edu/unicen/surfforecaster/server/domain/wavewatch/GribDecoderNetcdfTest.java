@@ -97,7 +97,7 @@ public class GribDecoderNetcdfTest {
 	}
 
 	@Test
-	public void decodeAllGribV2MultipleFiles() {
+	public void decodeForecastForTimeAndGridPoints() throws IOException {
 		final GribDecoderNetcdf dec = new GribDecoderNetcdf();
 		final List<WaveWatchParameter> parameters = new ArrayList<WaveWatchParameter>();
 		parameters.add(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2);
@@ -118,17 +118,17 @@ public class GribDecoderNetcdfTest {
 		files
 				.add(new File(
 						"C:\\Users\\esteban\\workspace\\arfgen\\files\\WW3.gribs\\nww3.tp.199802.grb"));
-		final Point point = new Point(22.0F, -158.75F);
+		final Point point1 = new Point(22.0F, -158.75F);
+		final Point point2 = new Point(21.0F, -158.75F);
+		final Point point3 = new Point(22.0F, -157.50F);
+		final Point point4 = new Point(21.0F, -157.50F);
 		final Collection<Point> points = new ArrayList<Point>();
-		points.add(point);
-		try {
-			for (int i = 1; i < 4; i++) {
+		points.add(point1);
+		points.add(point2);
+		points.add(point3);
+		points.add(point4);
+		dec.decodeForecastForTimeAndGridPoints(files, parameters, 100, points);
 
-				dec.decodeForecastForTime(files, parameters, 100, points);
-			}
-		} catch (final IOException e) {
-			log.error(e);
-		}
 	}
 
 	@Test

@@ -11,6 +11,7 @@ import java.util.List;
 
 import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
+import edu.unicen.surfforecaster.server.domain.entity.Point;
 
 /**
  * Interface to a GRIB decoder.
@@ -18,7 +19,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Forecast;
  * @author esteban
  * 
  */
-public interface GribDecoder extends Serializable{
+public interface GribDecoder extends Serializable {
 
 	/**
 	 * List all the parameters that the grib file contains.
@@ -61,4 +62,16 @@ public interface GribDecoder extends Serializable{
 	 * @throws IOException
 	 */
 	public int getTimes(File file) throws IOException;
+
+	/**
+	 * @param files
+	 * @param parameters
+	 * @param time
+	 * @param gridPoints
+	 * @return
+	 * @throws IOException
+	 */
+	Collection<Forecast> decodeForecastForTimeAndGridPoints(
+			Collection<File> files, List<WaveWatchParameter> parameters,
+			int time, Collection<Point> gridPoints) throws IOException;
 }

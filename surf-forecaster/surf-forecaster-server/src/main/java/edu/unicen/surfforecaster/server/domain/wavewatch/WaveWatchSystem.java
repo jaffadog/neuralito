@@ -86,4 +86,7 @@ public interface WaveWatchSystem {
 	public void importForecasts(Collection<Collection<File>> gribFiles)
 			throws IOException;
 
+	public void importForecasts(Collection<Collection<File>> gribFiles,
+			Collection<Point> gridPoints) throws IOException;
+
 }
