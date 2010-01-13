@@ -5,9 +5,11 @@ package edu.unicen.surfforecaster.server.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ComparationService;
 import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
@@ -53,38 +55,54 @@ public class ComparationServiceImplementation implements ComparationService {
 
 	/**
 	 * @param spotsIds
+	 * @throws NeuralitoException
 	 */
-	private void validateSpotsExists(final List<Integer> spotsIds) {
-		// TODO Auto-generated method stub
-
+	private void validateSpotsExists(final List<Integer> spotsIds)
+			throws NeuralitoException {
+		for (final Integer integer : spotsIds) {
+			if (spotDAO.getSpotById(integer) == null)
+				throw new NeuralitoException(ErrorCode.SPOT_ID_DOES_NOT_EXISTS);
+		}
 	}
 
 	/**
 	 * @param userId
+	 * @throws NeuralitoException
 	 */
-	private void validateUserIdExists(final Integer userId) {
-		// TODO Auto-generated method stub
+	private void validateUserIdExists(final Integer userId)
+			throws NeuralitoException {
+		if (userDAO.getUserByUserId(userId) == null)
+			throw new NeuralitoException(ErrorCode.USER_ID_DOES_NOT_EXIST);
 
 	}
 
 	/**
-	 * @see edu.unicen.surfforecaster.common.services.ComparationService#getComparations(java.lang.Integer)
+	 * @see edu.unicen.surfforecaster.common.services.ComparationService#getComparationsForUserId(java.lang.Integer)
 	 */
 	@Override
-	public List<ComparationDTO> getComparations(final Integer userId)
+	@Transactional
+	public List<ComparationDTO> getComparationsForUserId(final Integer userId)
 			throws NeuralitoException {
-		// TODO Auto-generated method stub
-		return null;
+		validateUserIdExists(userId);
+		final User user = userDAO.getUserByUserId(userId);
+		final Set<Comparation> comparations = user.getComparations();
+		final List<ComparationDTO> dtos = new ArrayList<ComparationDTO>();
+		for (final Comparation comparation : comparations) {
+			dtos.add(comparation.getDTO());
+		}
+		return dtos;
 	}
 
 	/**
 	 * @see edu.unicen.surfforecaster.common.services.ComparationService#removeComparation(java.lang.Integer)
 	 */
 	@Override
+	@Transactional
 	public void removeComparation(final Integer comparationId)
 			throws NeuralitoException {
-		// TODO Auto-generated method stub
-
+		final Comparation comparation = comparationDAO
+				.getComparationById(comparationId);
+		comparationDAO.remove(comparation);
 	}
 
 	/**
@@ -144,6 +162,20 @@ public class ComparationServiceImplementation implements ComparationService {
 	 */
 	public void setComparationDAO(final ComparationDAO comparationDAO) {
 		this.comparationDAO = comparationDAO;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.ComparationService#getComparationById(java.lang.Integer)
+	 */
+	@Override
+	@Transactional
+	public ComparationDTO getComparationById(final Integer comparationId) {
+		final Comparation comparation = comparationDAO
+				.getComparationById(comparationId);
+		if (comparation != null)
+			return comparation.getDTO();
+		return null;
+
 	}
 
 }

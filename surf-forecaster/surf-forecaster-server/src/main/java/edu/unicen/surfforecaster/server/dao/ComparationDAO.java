@@ -17,4 +17,9 @@ public interface ComparationDAO {
 	 * @return
 	 */
 	public Comparation getComparationById(Integer comparationId);
+
+	/**
+	 * @param comparation
+	 */
+	public void remove(Comparation comparation);
 }

@@ -55,7 +55,9 @@ public interface ComparationService {
 	 * @return
 	 * @throws NeuralitoException
 	 */
-	public List<ComparationDTO> getComparations(Integer userId)
+	public List<ComparationDTO> getComparationsForUserId(Integer userId)
 			throws NeuralitoException;
+
+	public ComparationDTO getComparationById(Integer comparationId);
 
 }

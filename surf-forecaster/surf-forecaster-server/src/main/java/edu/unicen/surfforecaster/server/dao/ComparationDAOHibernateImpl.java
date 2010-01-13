@@ -28,4 +28,12 @@ public class ComparationDAOHibernateImpl extends HibernateDaoSupport implements
 				comparationId);
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.ComparationDAO#remove(edu.unicen.surfforecaster.server.domain.entity.Comparation)
+	 */
+	@Override
+	public void remove(final Comparation comparation) {
+		getHibernateTemplate().delete(comparation);
+	}
+
 }
