@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -69,7 +70,9 @@ public class Spot implements Serializable {
 	 */
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "spot")
 	private Collection<Forecaster> forecasters;
-	
+
+	@ManyToMany(mappedBy = "spots", cascade = CascadeType.ALL)
+	private Collection<Comparation> comparations;
 
 	// /**
 	// * The available visual observations for this spot.
@@ -191,7 +194,7 @@ public class Spot implements Serializable {
 				new PointDTO(location.getLatitude(), location.getLongitude()),
 				spot.getZone().getDTO(), spot.getZone().getCountry().getDTO(),
 				spot.getZone().getCountry().getArea().getDTO(), spot.getUser()
-						.getId(), spot.isPublik(), this.getTimeZone());
+						.getId(), spot.isPublik(), getTimeZone());
 		return spotDTO;
 	}
 

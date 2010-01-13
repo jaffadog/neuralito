@@ -118,7 +118,16 @@ public class WaveWatchSystemTest {
 				files.add(generateFile(i, j));
 			}
 		}
-		model.importForecasts(files);
+		final Point point1 = new Point(22.0F, -158.75F);
+		final Point point2 = new Point(21.0F, -158.75F);
+		final Point point3 = new Point(22.0F, -157.50F);
+		final Point point4 = new Point(21.0F, -157.50F);
+		final Collection<Point> points = new ArrayList<Point>();
+		points.add(point1);
+		points.add(point2);
+		points.add(point3);
+		points.add(point4);
+		model.importForecasts(files, points);
 	}
 
 	private Collection<File> generateFile(final int i, final int j) {

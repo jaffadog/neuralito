@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang.Validate;
+
+import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
+import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 
 /**
  * Class used to represent a comparation between several spots.
@@ -35,16 +37,33 @@ public class Comparation {
 	/**
 	 * the spots to be compared.
 	 */
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL)
 	List<Spot> spots = new ArrayList<Spot>();
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
 	User user;
+	private String name;
+	private String description;
 
 	/**
 	 * 
 	 */
 	public Comparation() {
+	}
+
+	/**
+	 * @param comparationName
+	 * @param comparationDescription
+	 * @param user
+	 * @param spots
+	 */
+	public Comparation(final String comparationName,
+			final String comparationDescription, final User user,
+			final List<Spot> spots2) {
+		name = comparationName;
+		description = comparationDescription;
+		this.user = user;
+		spots = spots2;
 	}
 
 	/**
@@ -82,10 +101,48 @@ public class Comparation {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @return the name
 	 */
-	public void setId(final Integer id) {
-		this.id = id;
+	public String getName() {
+		return name;
 	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	public ComparationDTO getDTO() {
+		final List<SpotDTO> spotDtos = new ArrayList<SpotDTO>();
+		for (final Spot spot : spots) {
+			spotDtos.add(spot.getDTO(spot));
+		}
+		return new ComparationDTO(id, name, spotDtos, description, user.getId());
+	}
+
+	/**
+	 * @param spots
+	 *            the spots to set
+	 */
+	public void setSpots(final List<Spot> spots) {
+		this.spots = spots;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(final String description) {
+		this.description = description;
+	}
+
 }

@@ -36,7 +36,16 @@
 		<property name="classifierName" value="weka.classifiers.functions.LinearRegression"/>
 		<property name="dataSetGenerationStrategy" ref="dataSetGenerationStrategy"></property>
 	</bean>
-	
+	<bean id="comparationService"
+		class="edu.unicen.surfforecaster.server.services.ComparationServiceImplementation">
+		<property name="userDAO" ref="userDAO"></property>
+<!--		<property name="forecastDAO" ref="forecastDAO"></property>-->
+		<property name="spotDAO" ref="spotDAO"></property>
+		<property name="comparationDAO" ref="comparationDAO"></property>
+<!--		<property name="waveWatchSystem" ref="waveWatchSystemV2"></property>-->
+<!--		<property name="classifierName" value="weka.classifiers.functions.LinearRegression"/>-->
+<!--		<property name="dataSetGenerationStrategy" ref="dataSetGenerationStrategy"></property>-->
+	</bean>
 	<bean id="dataSetGenerationStrategy"
 		class="edu.unicen.surfforecaster.server.domain.weka.strategy.SimpleDataSetGenerationStrategy" />
 
