@@ -19,6 +19,10 @@
 	    <property name="spotService" ref="spotService"></property>
     </bean>
     
+    <bean id="ComparationServices" class="edu.unicen.surfforecaster.gwt.server.ComparationServicesImpl">
+	    <property name="comparationService" ref="comparationService"></property>
+    </bean>
+    
     <bean id="FileUploadServices" class="edu.unicen.surfforecaster.gwt.server.FileUploadServicesImpl">
 	    <property name="forecastService" ref="forecastService"></property>
     </bean>

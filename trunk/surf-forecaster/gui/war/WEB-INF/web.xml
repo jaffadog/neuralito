@@ -44,6 +44,16 @@
   	<url-pattern>/surfforecaster/ForecastServices</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>ComparationServices</servlet-name>
+  	<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ComparationServices</servlet-name>
+  	<url-pattern>/surfforecaster/ComparationServices</url-pattern>
+  </servlet-mapping>
+  
    <!-- File uploader Servlet -->
   <servlet>
     <servlet-name>FileUploadServices</servlet-name>

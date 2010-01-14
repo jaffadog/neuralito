@@ -1,7 +1,5 @@
 package edu.unicen.surfforecaster.gwt.client;
 
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -9,7 +7,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
-import edu.unicen.surfforecaster.gwt.client.dto.ComparationGwtDTO;
 
 @RemoteServiceRelativePath("UserServices")
 public interface UserServices extends RemoteService {
@@ -35,12 +32,6 @@ public interface UserServices extends RemoteService {
 
 	void closeSession();
 	
-	List<ComparationGwtDTO> getSpotsComparations() throws NeuralitoException;
-	
-	Integer saveComparation(String name, String description, List<Integer> spotsIds) throws NeuralitoException;
-	
 	UserDTO getLoggedUser();
-	
-	boolean deleteComparation(Integer comparationId) throws NeuralitoException;
 
 }
