@@ -8,7 +8,9 @@ import org.apache.log4j.Logger;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.server.util.SpringGWTServlet;
 import edu.unicen.surfforecaster.gwt.server.util.UserRoles;
@@ -91,5 +93,10 @@ public class ServicesImpl extends SpringGWTServlet {
 			return UserRoles.getInstance().hasPermission(sessionData.getUserDTO().getType(), action);
 		
 		return false;
+	}
+	
+	protected SpotGwtDTO getSpotGwtDTO(SpotDTO spotDTO) {
+		return new SpotGwtDTO(spotDTO.getId(), spotDTO.getName(), spotDTO.getPoint(), spotDTO.getZone(), 
+				spotDTO.getCountry(), spotDTO.getArea(), spotDTO.getUserId(), spotDTO.isPublik(), spotDTO.getTimeZone().getID());
 	}
 }

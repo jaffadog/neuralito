@@ -28,14 +28,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.gwt.client.ComparationServices;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
-import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ComparationGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
-import edu.unicen.surfforecaster.gwt.client.utils.SessionData;
 import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class ComparationCreatorPanel extends FlexTable implements ISurfForecasterBasePanel, ClickHandler {
@@ -64,6 +63,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private TextArea txtCompDescription;
 	private MessagePanel errorPanel;
 	private MessagePanel successPanel;
+	private Integer selectedCompId;
 	
 	private static final String LISTBOX_WIDTH = "200px";
 	private static final String LISTBOX_HEIGHT = "286px"; //11 rows of the container flextable
@@ -73,6 +73,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	//A hash with the current selectedSpotsBox items ids and zoneId of each one (filled when addItemsToSelectedSpotsList method is called)
 	private Map<Integer, Integer> selectedSpots = new HashMap<Integer, Integer>();
 	private Integer currentSelectedZone = null;
+	private boolean nameDuplicated;
 	
 	public ComparationCreatorPanel() {
 		
@@ -420,7 +421,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	 * 
 	 */
 	private void showAllowedPanels() {
-		UserServices.Util.getInstance().getSpotsComparations(new AsyncCallback<List<ComparationGwtDTO>>(){
+		ComparationServices.Util.getInstance().getComparationsForUserId(new AsyncCallback<List<ComparationGwtDTO>>(){
 			public void onSuccess(List<ComparationGwtDTO> result) {
 				if (result != null) {
 					showMyComparationsPanel(result);
@@ -488,10 +489,10 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			ComparationGwtDTO comparationDTO = i.next();
 			myCompsBox.addItem(comparationDTO.getName(), comparationDTO.getId().toString());
 		}
-		
+		//TODO cuando guardo una comparacion se tiene que agregar en el combobox, similar en el resto del sistema luego de altas y bajas
 		myCompsBox.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
-				Integer selectedCompId = new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue();
+				selectedCompId = new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue();
 				lblComparationDescription.setText("");
 				selectedSpotsBox.clear();
 				selectedSpots.clear();
@@ -622,7 +623,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private void saveComparation() {
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
-		boolean nameDuplicated = false;
+		nameDuplicated = false;
 		//check if comparation name already exists
 		for (int i = 1; i < myCompsBox.getItemCount(); i++) {
 			if (txtCompName.getText().trim().equals(myCompsBox.getItemText(i).trim())) {
@@ -640,7 +641,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		final Integer selectedCompId = new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue();
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
-		UserServices.Util.getInstance().deleteComparation(selectedCompId, new AsyncCallback<Boolean>(){
+		ComparationServices.Util.getInstance().removeComparation(selectedCompId, new AsyncCallback<Boolean>(){
 			public void onSuccess(Boolean result) {
 				if (result) {
 					
@@ -684,27 +685,51 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			for (int i = 0; i < selectedSpotsBox.getItemCount(); i++) {
 				selectedSpots.add(new Integer(selectedSpotsBox.getValue(i)));
 			}
-			UserServices.Util.getInstance().saveComparation(txtCompName.getText().trim(), txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
-				public void onSuccess(Integer result) {
-					if (result != null && result > 0) {
-						successPanel.setVisible(true);
-					} else {
-						errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_SAVING_COMPARATION());
-						errorPanel.setVisible(true);
+			if (!nameDuplicated) {
+				ComparationServices.Util.getInstance().addComparation(txtCompName.getText().trim(), txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
+					public void onSuccess(Integer result) {
+						if (result != null && result > 0) {
+							successPanel.setVisible(true);
+						} else {
+							errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_SAVING_COMPARATION());
+							errorPanel.setVisible(true);
+						}
 					}
-				}
-	
-				public void onFailure(Throwable caught) {
-					if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
-							Cookies.getCookie("surfForecaster-Username") != null) {
-						GWTUtils.showSessionExpiredLoginBox();
-					} else {
-						messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
-						errorPanel.setMessages(messages);
-						errorPanel.setVisible(true);
+		
+					public void onFailure(Throwable caught) {
+						if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+								Cookies.getCookie("surfForecaster-Username") != null) {
+							GWTUtils.showSessionExpiredLoginBox();
+						} else {
+							messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+							errorPanel.setMessages(messages);
+							errorPanel.setVisible(true);
+						}
 					}
-				}
-			});
+				});
+			} else {
+				ComparationServices.Util.getInstance().updateComparation(selectedCompId, txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
+					public void onSuccess(Integer result) {
+						if (result != null && result > 0) {
+							successPanel.setVisible(true);
+						} else {
+							errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_SAVING_COMPARATION());
+							errorPanel.setVisible(true);
+						}
+					}
+		
+					public void onFailure(Throwable caught) {
+						if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+								Cookies.getCookie("surfForecaster-Username") != null) {
+							GWTUtils.showSessionExpiredLoginBox();
+						} else {
+							messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+							errorPanel.setMessages(messages);
+							errorPanel.setVisible(true);
+						}
+					}
+				});
+			}
 		} else {
 			errorPanel.setMessages(messages);
 			errorPanel.setVisible(true);
