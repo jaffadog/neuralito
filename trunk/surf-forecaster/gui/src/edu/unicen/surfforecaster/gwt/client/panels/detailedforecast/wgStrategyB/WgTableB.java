@@ -305,9 +305,9 @@ public class WgTableB extends FlexTable {
 		//wave height
 		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
 		//wind speed
-		String windSpeed = "10";//forecastDTO.getMap().get(WW3Parameter.WIND_SPEED.getValue()).getValue();
+		String windSpeed = forecastDTO.getMap().get(WaveWatchParameter.WIND_SPEED_V2.getValue()).getValue();
 		//wind windDirection
-		String windDirection = "10";//forecastDTO.getMap().get(WW3Parameter.WIND_DIRECTION.getValue()).getValue();
+		String windDirection = forecastDTO.getMap().get(WaveWatchParameter.WIND_DIRECTION_V2.getValue()).getValue();
 		//Wave direccion
 		String waveDirection = forecastDTO.getMap().get(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2.getValue()).getValue();
 		//Wave period
