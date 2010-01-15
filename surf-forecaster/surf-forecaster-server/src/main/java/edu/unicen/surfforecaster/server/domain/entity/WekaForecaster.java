@@ -3,6 +3,7 @@ package edu.unicen.surfforecaster.server.domain.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -170,7 +171,7 @@ public class WekaForecaster extends Forecaster {
 						"improvedWaveHeight", improvedWaveHeight, Unit.Meters));
 				improvedForecasts.add(forecast);
 			}
-
+			Collections.sort(improvedForecasts);
 			return improvedForecasts;
 
 		} catch (final Exception e) {
@@ -267,4 +268,5 @@ public class WekaForecaster extends Forecaster {
 	public HashMap<String, Serializable> getTrainningOptions() {
 		return strategyOptions;
 	}
+
 }

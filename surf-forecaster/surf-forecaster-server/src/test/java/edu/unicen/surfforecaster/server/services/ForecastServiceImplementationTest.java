@@ -34,6 +34,7 @@ import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.server.dao.ForecastDAOHibernateImpl;
+import edu.unicen.surfforecaster.server.domain.weka.util.Util;
 import edu.unicen.surfforecaster.util.VisualObservationsLoader;
 
 /**
@@ -197,7 +198,13 @@ public class ForecastServiceImplementationTest {
 					.getLatestForecasts(forecasterId);
 			for (final ForecastDTO forecastDTO : latestForecasts) {
 				log
-						.info("Wave Watch Prediction:"
+						.info("time:"
+								+ forecastDTO.getForecastTime()
+								+ "Date:"
+								+ Util.getDateFormatter().format(
+										forecastDTO.getForecastValidTime()
+												.getTime())
+								+ "---Wave Watch Prediction:"
 								+ forecastDTO
 										.getMap()
 										.get(
@@ -209,6 +216,7 @@ public class ForecastServiceImplementationTest {
 			}
 			final List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService
 					.getWekaForecasters(spot2Id);
+
 			Assert.assertTrue(wekaForecasters.size() >= 1);
 			Assert.assertTrue(!wekaForecasters.get(0).getClassifierName()
 					.isEmpty());
