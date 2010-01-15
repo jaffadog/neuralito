@@ -1,5 +1,6 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class MapPanel extends VerticalPanel {
 	private static final String MAP_COORDINATE_FORMAT = "##0.0#";
 	private static final String INPUT_WIDTH = "70px";
 	
+	private List<Marker> spotGridPoints = null;
+	
 	
 	public MapPanel() {
 		Label lblMapDescription = new Label(GWTUtils.LOCALE_CONSTANTS.mapHelpTip());
@@ -65,6 +68,9 @@ public class MapPanel extends VerticalPanel {
 		            info.open(marker, content);
 	        	} else {
 	        		if (marker.getTitle().equals(GWTUtils.LOCALE_CONSTANTS.ww3GridPoint())) {
+	        			for (int i = 0; i < spotGridPoints.size(); i++)
+							spotGridPoints.get(i).setImage(GWTUtils.IMAGE_BUOY_DISABLED);
+	        			marker.setImage(GWTUtils.IMAGE_BUOY_SELECTED);
 	        			InfoWindow info = sender.getInfoWindow();
 			            info.setMaximizeEnabled(false);
 			            InfoWindowContent content = new InfoWindowContent(getInfoWindowContent(GWTUtils.LOCALE_CONSTANTS.selectedForecaster(), marker.getLatLng()));
@@ -163,6 +169,7 @@ public class MapPanel extends VerticalPanel {
 			public void onSuccess(List<PointDTO> result) {
 				if (result != null) {
 					if (result.size() > 0) {
+						spotGridPoints = new ArrayList<Marker>();
 						MarkerOptions options = MarkerOptions.newInstance();
 						options.setTitle(GWTUtils.LOCALE_CONSTANTS.ww3GridPoint());
 						
@@ -171,16 +178,20 @@ public class MapPanel extends VerticalPanel {
 						while (i.hasNext()) {
 							PointDTO point = i.next();
 							marker = new Marker(LatLng.newInstance(new Double(point.getLatitude()), new Double(point.getLongitude())), options);
-					    	marker.getIcon().setImageURL(GWTUtils.IMAGE_BUOY);
+					    	marker.getIcon().setImageURL(GWTUtils.IMAGE_BUOY_DISABLED);
 					    	map.addOverlay(marker);
+					    	spotGridPoints.add(marker);
 						}
+						map.setZoomLevel(8);
 					} else {
+						spotGridPoints = new ArrayList<Marker>();
 						new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.notAvailableGridPoints(), MessageBox.IconType.ERROR);
 					}
 				}
 			}
 				
 			public void onFailure(Throwable caught) {
+				spotGridPoints = new ArrayList<Marker>();
 				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.getNearbyGridPointsServiceFailed(), MessageBox.IconType.ERROR);
 			}
 		});
