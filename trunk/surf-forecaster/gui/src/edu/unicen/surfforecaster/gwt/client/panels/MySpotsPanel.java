@@ -188,8 +188,10 @@ public class MySpotsPanel extends FlexTable {
 	
 	public void deleteSpot(Integer spotId, final int rowIndex) {
 		//clear edit spot panel
-		this.clearCell(4, 0);
-		this.getRowFormatter().setVisible(4, false);
+		if (this.isCellPresent(4, 0)) {
+			this.clearCell(4, 0);
+			this.getRowFormatter().setVisible(4, false);
+		}
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
 		SpotServices.Util.getInstance().deleteSpot(spotId, new AsyncCallback<Boolean>(){
