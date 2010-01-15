@@ -150,6 +150,7 @@ public class ComparationServiceImplementationTest {
 		final String comparationName = "Willa Comparation";
 		final String comparationDescription = "A test comparation";
 		final List<Integer> spotsIds = new ArrayList<Integer>();
+
 		spotsIds.add(spot1Id);
 		spotsIds.add(spot2Id);
 
@@ -160,8 +161,11 @@ public class ComparationServiceImplementationTest {
 		Assert.assertEquals(comparationName, addComparation.getName());
 		Assert.assertEquals(comparationDescription, addComparation
 				.getDescription());
+
 		Assert.assertEquals(spotsIds.size(), addComparation.getSpots().size());
+
 		final List<SpotDTO> spots = addComparation.getSpots();
+
 		for (int i = 0; i < spots.size(); i++) {
 			Assert.assertEquals(spotsIds.toArray()[i], ((SpotDTO) spots
 					.toArray()[i]).getId());

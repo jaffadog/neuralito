@@ -5,7 +5,6 @@ package edu.unicen.surfforecaster.common.services.dto;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -23,6 +22,7 @@ public class ForecastDTO implements Serializable {
 	private Map<String, ForecastAttributeDTO> forecastParameters;
 	private Integer forecastTime;
 	private Calendar baseDate;
+	private Calendar forecastValidTime;
 
 	/**
 	 * 
@@ -39,10 +39,13 @@ public class ForecastDTO implements Serializable {
 	 * @param map
 	 */
 	public ForecastDTO(final Calendar baseDate, final Integer forecastTime,
+			final Calendar forecastValidTime,
 			final Map<String, ForecastAttributeDTO> map) {
 		this.baseDate = baseDate;
 		this.forecastTime = forecastTime;
+		this.forecastValidTime = forecastValidTime;
 		forecastParameters = map;
+
 	}
 
 	/**
@@ -64,6 +67,13 @@ public class ForecastDTO implements Serializable {
 	 */
 	public Integer getForecastTime() {
 		return forecastTime;
+	}
+
+	/**
+	 * @return the forecastValidTime
+	 */
+	public Calendar getForecastValidTime() {
+		return forecastValidTime;
 	}
 
 }

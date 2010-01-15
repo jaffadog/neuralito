@@ -47,8 +47,8 @@ public class Forecast implements Comparable<Forecast> {
 	private Date issuedDate;
 
 	/**
-	 * The time ahead base date to which this forecast applies. This corresponds to Hours since
-	 * the baseDate.
+	 * The time ahead base date to which this forecast applies. This corresponds
+	 * to Hours since the baseDate.
 	 */
 	private Integer forecastTime;
 
@@ -119,27 +119,31 @@ public class Forecast implements Comparable<Forecast> {
 	public Integer getForecastTime() {
 		return forecastTime;
 	}
-	 public Date getForecastValidDate(){
-		 long minutes = this.getForecastTime()*60;
-		 long seconds = minutes*60;
-		 long milliseconds = seconds*1000;
-		 return new Date (this.getBaseDate().getTime()+milliseconds);
-	 }
+
+	public Date getForecastValidDate() {
+		final long minutes = getForecastTime() * 60;
+		final long seconds = minutes * 60;
+		final long milliseconds = seconds * 1000;
+		return new Date(getBaseDate().getTime() + milliseconds);
+	}
 
 	/**
 	 * @return
 	 */
-	public ForecastDTO getDTO(TimeZone timeZone) {
+	public ForecastDTO getDTO(final TimeZone timeZone) {
 		final Collection<String> keys = parameters.keySet();
 		final Map<String, ForecastAttributeDTO> map = new HashMap<String, ForecastAttributeDTO>();
 		for (final Iterator iterator = keys.iterator(); iterator.hasNext();) {
-			final String key = (String) iterator
-					.next();
+			final String key = (String) iterator.next();
 			map.put(key, parameters.get(key).getDTO());
 		}
-		Calendar cal = new GregorianCalendar(timeZone);
+		final Calendar cal = new GregorianCalendar(timeZone);
 		cal.setTime(getBaseDate());
-		return new ForecastDTO(cal, getForecastTime(), map);
+
+		final Calendar cal2 = new GregorianCalendar(timeZone);
+		cal2.setTime(getForecastValidDate());
+
+		return new ForecastDTO(cal, getForecastTime(), cal2, map);
 	}
 
 	/**
@@ -148,25 +152,25 @@ public class Forecast implements Comparable<Forecast> {
 	public Point getPoint() {
 		return point;
 	}
-	
-	public Date getForecastDate(){
-		long hoursInMillis = this.forecastTime * 60 * 60 * 1000;
-		return new Date(this.issuedDate.getTime()+ hoursInMillis);
+
+	public Date getForecastDate() {
+		final long hoursInMillis = forecastTime * 60 * 60 * 1000;
+		return new Date(issuedDate.getTime() + hoursInMillis);
 	}
 
-	public void addParameter(String name, ForecastValue parameter){
-		this.parameters.put(name, parameter);
+	public void addParameter(final String name, final ForecastValue parameter) {
+		parameters.put(name, parameter);
 	}
 
 	public Set<String> getParameters() {
-		return this.parameters.keySet();
+		return parameters.keySet();
 	}
 
-	public boolean equalsDate(Date date) {
-		Calendar cal = new GregorianCalendar();
-		Calendar cal2 = new GregorianCalendar();
+	public boolean equalsDate(final Date date) {
+		final Calendar cal = new GregorianCalendar();
+		final Calendar cal2 = new GregorianCalendar();
 		cal2.setTime(date);
-		cal.setTime(this.getForecastValidDate());
+		cal.setTime(getForecastValidDate());
 		if (cal.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
 			if (cal.get(Calendar.MONTH) == cal2.get(Calendar.MONTH))
 				if (cal.get(Calendar.DAY_OF_MONTH) == cal2
@@ -176,9 +180,9 @@ public class Forecast implements Comparable<Forecast> {
 	}
 
 	@Override
-	public int compareTo(Forecast o) {
-		Forecast ww3Data = (Forecast) o;
-		int result = this.getForecastValidDate().compareTo(
+	public int compareTo(final Forecast o) {
+		final Forecast ww3Data = o;
+		final int result = getForecastValidDate().compareTo(
 				ww3Data.getForecastValidDate());
 
 		if (result < 0)
@@ -193,26 +197,24 @@ public class Forecast implements Comparable<Forecast> {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "WW3: "
-				+ Util.getDateFormatter().format(this.getForecastValidDate())
+				+ Util.getDateFormatter().format(getForecastValidDate())
 				+ " WvH:"
 				+ Util
 						.getDecimalFormatter()
 						.format(
-								this.parameters
-										.get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2
+								parameters
+										.get(
+												WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2
 														.getValue())
 										.getfValue())
 				+ " WvP:"
 				+ Util.getDecimalFormatter().format(
-						this.parameters
-								.get(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2
+						parameters.get(
+								WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2
 										.getValue()).getfValue())
 				+ " WvD:"
-				+ Util
-						.getDecimalFormatter()
-						.format(
-								this.parameters
-.get(
+				+ Util.getDecimalFormatter().format(
+						parameters.get(
 								WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2
 										.getValue()).getfValue());
 		// + " WnD:"
