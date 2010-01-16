@@ -1,7 +1,9 @@
 package edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgStrategyB;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -50,11 +52,28 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 			
 			//Current forecast
 			FlexTable flexTable = new FlexTable();
-			//TODO decidir como elijo y cual elijo de los forecasters del spot para mostrar los currentpanels, por ahora harcodeo para recuperar el ww3
-			List<ForecastGwtDTO> ww3Forecaster = forecasters.get("WW3 Noaa Forecaster");
-			CurrentForecastPanel current = new CurrentForecastPanel(GWTUtils.LOCALE_CONSTANTS.now(), ww3Forecaster.size() > 0 ? ww3Forecaster.get(0) : null);
+			List<ForecastGwtDTO> forecaster = null;
+			String selectedForecasterName = null;
+			//if spot have more than one forecaster, use the first diffenrent than ww3 forecaster, else use ww3
+			if (this.forecasters.size() > 1){
+				Set<String> keys = forecasters.keySet();
+				Iterator<String> i = keys.iterator();
+				while (i.hasNext()) {
+					String forecasterName = i.next();
+					if (!forecasterName.equals(GWTUtils.WW3_FORECASTER_NAME)) {
+						forecaster = forecasters.get(forecasterName);
+						selectedForecasterName = forecasterName;
+						break;
+					}
+				}
+			} else {
+				forecaster = forecasters.get(GWTUtils.WW3_FORECASTER_NAME);
+				selectedForecasterName = GWTUtils.WW3_FORECASTER_NAME;
+			}
+			
+			CurrentForecastPanel current = new CurrentForecastPanel(selectedForecasterName, GWTUtils.LOCALE_CONSTANTS.now(), forecaster.size() > 0 ? forecaster.get(0) : null);
 			flexTable.setWidget(0, 0, current);
-			CurrentForecastPanel nextHours = new CurrentForecastPanel("+" + GWTUtils.LOCALE_CONSTANTS.num_3() + " " + GWTUtils.LOCALE_CONSTANTS.hours(), ww3Forecaster.size() > 1 ? ww3Forecaster.get(1) : null);
+			CurrentForecastPanel nextHours = new CurrentForecastPanel(selectedForecasterName, "+" + GWTUtils.LOCALE_CONSTANTS.num_3() + " " + GWTUtils.LOCALE_CONSTANTS.hours(), forecaster.size() > 1 ? forecaster.get(1) : null);
 			flexTable.setWidget(0, 1, nextHours);
 			completeDetailedForecastVPanel.add(flexTable);
 			completeDetailedForecastVPanel.setCellHorizontalAlignment(flexTable, HasHorizontalAlignment.ALIGN_CENTER);

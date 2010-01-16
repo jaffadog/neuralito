@@ -41,6 +41,8 @@ public class WgTableB extends FlexTable {
 	Integer to = null;
 	Map<String, List<ForecastGwtDTO>> forecasters = null;
 	
+	private String currentForecasterName = null;
+	
 	//Layout consts
 	private static final String LABELS_COL_WIDTH = "145px";
 	private static final String DETAILED_FORECAST_COL_WIDTH = "30px";
@@ -79,8 +81,9 @@ public class WgTableB extends FlexTable {
 		/*******************************************************************/
 		/****************** WW3 FORECASTS **********************************/
 		/*******************************************************************/
-		List<ForecastGwtDTO> forecasts = forecasters.get("WW3 Noaa Forecaster");
-		this.generateAllForecastersTable("WW3 Noaa Forecaster", forecasts, 0, true, true);
+		List<ForecastGwtDTO> forecasts = forecasters.get(GWTUtils.WW3_FORECASTER_NAME);
+		this.currentForecasterName = GWTUtils.WW3_FORECASTER_NAME;
+		this.generateAllForecastersTable(forecasts, 0, true, true);
 		
 		/*******************************************************************/
 		/****************** OTHER FORECASTERS ******************************/
@@ -90,10 +93,11 @@ public class WgTableB extends FlexTable {
 		int forecasterIndex = 1;
 		while (i.hasNext()) {
 			String key = i.next();
-			if (!key.equals("WW3 Noaa Forecaster")) 
+			if (!key.equals(GWTUtils.WW3_FORECASTER_NAME)) 
 			{
 				forecasts = forecasters.get(key);
-				this.generateAllForecastersTable(key, forecasts, forecasterIndex, false, false);
+				this.currentForecasterName = key;
+				this.generateAllForecastersTable(forecasts, forecasterIndex, false, false);
 				forecasterIndex++;
 			}
 		}
@@ -106,14 +110,12 @@ public class WgTableB extends FlexTable {
 	 * @param forecasterIndex - The index row where the detailed forecaster flexTable will be located
 	 * @param Generate detailedForecastPanel?
 	 */
-	private void generateAllForecastersTable(String forecasterName, List<ForecastGwtDTO> forecasts, final int forecasterIndex, 
+	private void generateAllForecastersTable(List<ForecastGwtDTO> forecasts, final int forecasterIndex, 
 			boolean fillDatesPanel, boolean generateDetailed) {
 		
 		//Horizontal panel for ww3 miniForecasts
 		final FlexTable miniForecastPanel = new FlexTable();
 		miniForecastPanel.setVisible(false);
-
-		//this.setWidget(1 + (forecasterIndex * 2), 1, miniForecastHPanel);
 		
 		//FlexTable for detailed forecast
 		final FlexTable detailedForecastPanel;
@@ -134,7 +136,7 @@ public class WgTableB extends FlexTable {
 		this.setWidget(1 + (forecasterIndex * 2), 0, forecastHPanel);
 		this.getFlexCellFormatter().setColSpan(1 + (forecasterIndex * 2), 0, 2);
 		this.getFlexCellFormatter().addStyleName(1 + (forecasterIndex * 2), 0, "gwt-ForecasterName-Row");
-		Label lblForecasterName = new Label(forecasterName);
+		Label lblForecasterName = new Label(this.currentForecasterName);
 		lblForecasterName.addStyleName("gwt-Label-Forecaster-Name");
 		forecastHPanel.add(lblForecasterName);
 		
@@ -159,9 +161,8 @@ public class WgTableB extends FlexTable {
 			forecastHPanel.add(lnkForecaster);
 		}
 		forecastHPanel.setSpacing(5);
-		//this.getCellFormatter().setWidth(1 + (forecasterIndex * 2), 0, "145");
 		
-		//Print forecasts from WW3 forecaster
+		//Print forecasts
 		this.printForecast(forecasts, detailedForecastPanel, miniForecastPanel, fillDatesPanel, forecasterIndex);
 		
 		
@@ -263,11 +264,24 @@ public class WgTableB extends FlexTable {
 		return lblDate;
 	}
 	
+	/**
+	 * Returns the waveHeight if the forecast is from ww3 forecaster or the improved wave height if the forecast is from a skilled predictor 
+	 * @param forecastDTO
+	 * @return String waveHeight
+	 */
+	private String getWaveHeight(ForecastGwtDTO forecastDTO) {
+		if (this.currentForecasterName.equals(GWTUtils.WW3_FORECASTER_NAME))
+			return forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		else
+			return forecastDTO.getMap().get("improvedWaveHeight").getValue();
+	}
+	
 	private Image getWaveIcon(final ForecastGwtDTO forecastDTO, boolean showPopup) {
 		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height
-		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		
+		String waveHeight = this.getWaveHeight(forecastDTO);
 		try {
 			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 		} catch (NeuralitoException e) {
@@ -303,7 +317,7 @@ public class WgTableB extends FlexTable {
 		
 		//TODO sacar los harcodeos del viento y poner bien los parametros
 		//wave height
-		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		String waveHeight = this.getWaveHeight(forecastDTO);
 		//wind speed
 		String windSpeed = forecastDTO.getMap().get(WaveWatchParameter.WIND_SPEED_V2.getValue()).getValue();
 		//wind windDirection
@@ -322,7 +336,6 @@ public class WgTableB extends FlexTable {
 			// TODO ver como manejar esta exvepcion de conversion de unidades
 			e.printStackTrace();
 		}
-		
 		
 		//detailed Forecast table
 		if (detailedForecastPanel != null) {

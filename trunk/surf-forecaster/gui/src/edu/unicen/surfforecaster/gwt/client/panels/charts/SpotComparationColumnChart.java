@@ -26,6 +26,7 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 	private List<Integer> spotsIds = null;
 	private List<String> spotsNames = null;
 	private List<String> forecastersNames = null;
+	private String currentForecasterName = null;
 	
 	public SpotComparationColumnChart(final Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, 
 			final List<String> spotsNames, final List<String> forecastersNames) {
@@ -85,31 +86,17 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 	    for (int spotIndex = 0; spotIndex < spotsIds.size(); spotIndex++) {
 	    	Integer spotId = spotsIds.get(spotIndex);
 	    	String forecasterName = this.forecastersNames.get(spotIndex);
+	    	this.currentForecasterName = forecasterName;
 	    	List<ForecastGwtDTO> forecasts = spotsLatestForecasts.get(spotId).get(forecasterName);
 	    	for (int forecastIndex = 0; forecastIndex < data.getNumberOfRows(); forecastIndex++) {
 				ForecastGwtDTO forecastDTO = forecasts.get(forecastIndex);
 				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
 				Unit heightUnitTarget = Unit.Meters;
-				Unit speedUnitTarget = Unit.KilometersPerHour;
-				Unit directionUnitTarget = Unit.Degrees;
-				Unit periodUnitTarget = Unit.Seconds;
 				
-				//TODO sacar los harcodeos del viento y poner bien los parametros
 				//wave height
-				String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
-				//wind speed
-				String windSpeed = forecastDTO.getMap().get(WaveWatchParameter.WIND_SPEED_V2.getValue()).getValue();
-				//wind windDirection
-				String windDirection = forecastDTO.getMap().get(WaveWatchParameter.WIND_DIRECTION_V2.getValue()).getValue();
-				//Wave direccion
-				String waveDirection = forecastDTO.getMap().get(WaveWatchParameter.PRIMARY_WAVE_DIRECTION_V2.getValue()).getValue();
-				//Wave period
-				String wavePeriod = forecastDTO.getMap().get(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2.getValue()).getValue();
+				String waveHeight = this.getWaveHeight(forecastDTO);
 				try {
-					windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
 					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
-					waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
-					wavePeriod = NumberFormat.getFormat("###").format(UnitConverter.convertValue(wavePeriod, Unit.Seconds, periodUnitTarget));
 				} catch (NeuralitoException e) {
 					// TODO ver como manejar esta exvepcion de conversion de unidades
 					e.printStackTrace();
@@ -120,5 +107,17 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 	    }
   	    
 		return data;
+	}
+	
+	/**
+	 * Returns the waveHeight if the forecast is from ww3 forecaster or the improved wave height if the forecast is from a skilled predictor 
+	 * @param forecastDTO
+	 * @return String waveHeight
+	 */
+	private String getWaveHeight(ForecastGwtDTO forecastDTO) {
+		if (this.currentForecasterName.equals(GWTUtils.WW3_FORECASTER_NAME))
+			return forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		else
+			return forecastDTO.getMap().get("improvedWaveHeight").getValue();
 	}
 }

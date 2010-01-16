@@ -16,6 +16,7 @@ import edu.unicen.surfforecaster.common.services.ForecasterDTO;
 import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
@@ -85,12 +86,10 @@ public class ForecastServicesImpl extends ServicesImpl implements ForecastServic
 			List<ForecastDTO> latestForecasts = forecastService.getLatestForecasts(forecaster.getId());
 			List<ForecastGwtDTO> latestGwtForecasts = new ArrayList<ForecastGwtDTO>();
 			Iterator<ForecastDTO> j = latestForecasts.iterator();
-			System.out.println(forecaster.getName());
 			while (j.hasNext()) {
 				ForecastDTO forecastDTO = j.next();
 				ForecastGwtDTO forecastGwtDTO = this.getForecastGwtDTO(forecastDTO);
 				latestGwtForecasts.add(forecastGwtDTO);
-				System.out.println(forecastDTO.getBaseDate().getTime() + " -> " + forecastDTO.getForecastTime());
 			}
 			result.put(forecaster.getName(), latestGwtForecasts);
 		}

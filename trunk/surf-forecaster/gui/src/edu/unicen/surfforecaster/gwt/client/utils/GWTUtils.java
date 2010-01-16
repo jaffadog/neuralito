@@ -49,6 +49,9 @@ public final class GWTUtils {
 	//Default language
 	private static String DEFAULT_LOCALE = "es";
 	
+	//WW3 Forecaster name
+	public final static String WW3_FORECASTER_NAME = "WW3 Noaa Forecaster";
+	
 	//Utils regex
 	//Only digits
 	public final static String REGEX_DIGITS = "[\\d]*";
