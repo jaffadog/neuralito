@@ -11,6 +11,7 @@ import java.util.List;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.common.services.dto.SimpleForecasterDTO;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 
@@ -106,6 +107,18 @@ public interface ForecastService {
 			HashMap<String, Serializable> options);
 
 	public List<WekaForecasterEvaluationDTO> getWekaForecasters(Integer spotId)
+			throws NeuralitoException;
+
+	public List<SimpleForecasterDTO> getSimpleForecastersForSpot(Integer spotId)
+			throws NeuralitoException;
+
+	/**
+	 * Returns the number of forecasts available for each month on a specific
+	 * grid point.
+	 * 
+	 * @return
+	 */
+	public List<ArchiveDetailDTO> getAvailableWekaArchive(PointDTO point)
 			throws NeuralitoException;
 
 }

@@ -30,6 +30,7 @@ import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.ForecastValue;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.wavewatch.ArchiveDetail;
 import edu.unicen.surfforecaster.server.domain.wavewatch.ForecastFile;
 import edu.unicen.surfforecaster.server.domain.wavewatch.GridPointsFile;
 
@@ -645,5 +646,39 @@ public class WaveWatchSystemPersistence extends HibernateDaoSupport implements
 			log.error("Error al crear indice", e);
 		}
 
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.WaveWatchSystemPersistenceI#getArchiveDetail()
+	 */
+	@Override
+	public Collection<ArchiveDetail> getArchiveDetail(final Point point) {
+		try {
+			final Connection connection = this.getSession().connection();
+			final Statement st = connection.createStatement();
+			final String query = "SELECT MONTH(issuedDate), YEAR(issuedDate), COUNT(*) FROM "
+					+ archiveTableName
+					+ " WHERE latitude = '"
+					+ point.getLatitude()
+					+ "' and longitude = '"
+					+ point.getLongitude()
+					+ "' GROUP BY MONTH(issuedDate), YEAR(issuedDate) ;";
+			final boolean execute = st.execute(query);
+			final ResultSet result = st.getResultSet();
+			final List<ArchiveDetail> details = new ArrayList<ArchiveDetail>();
+			while (result.next() != false) {
+				final int month = result.getInt("MONTH(issuedDate)");
+				final int year = result.getInt("YEAR(issuedDate)");
+				// Divided by 8 because each day has 8 forecasts
+				final int availableForecasts = result.getInt("COUNT") / 8;
+				details.add(new ArchiveDetail(year, month, availableForecasts));
+
+			}
+			st.close();
+			return details;
+		} catch (final SQLException e) {
+			log.error("Error al crear indice", e);
+		}
+		return null;
 	}
 }

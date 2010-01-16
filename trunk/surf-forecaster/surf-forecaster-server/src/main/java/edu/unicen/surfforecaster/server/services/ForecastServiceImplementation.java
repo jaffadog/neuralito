@@ -19,9 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import weka.classifiers.Classifier;
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.common.services.ArchiveDetailDTO;
 import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.common.services.dto.SimpleForecasterDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
@@ -34,6 +36,7 @@ import edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
 import edu.unicen.surfforecaster.server.domain.entity.WekaForecaster;
+import edu.unicen.surfforecaster.server.domain.wavewatch.ArchiveDetail;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
 import edu.unicen.surfforecaster.server.domain.weka.strategy.DataSetGenerationStrategy;
 
@@ -189,6 +192,7 @@ public class ForecastServiceImplementation implements ForecastService {
 			final WekaForecaster forecaster = new WekaForecaster(classifier,
 					dataSetGenerationStrategy, dataSetStrategyOptions,
 					waveWatchSystem, visualObservations, spot);
+			spot.addForecaster(forecaster);
 			final Integer forecasterId = forecastDAO.save(forecaster);
 			final String correlation = forecaster.getEvaluation().get(
 					"correlation");
@@ -405,5 +409,41 @@ public class ForecastServiceImplementation implements ForecastService {
 			}
 		}
 		return dtos;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getSimpleForecastersForSpot(java.lang.Integer)
+	 */
+	@Override
+	@Transactional
+	public List<SimpleForecasterDTO> getSimpleForecastersForSpot(
+			final Integer spotId) throws NeuralitoException {
+		validateSpotExists(spotId);
+		final Spot spotById = spotDAO.getSpotById(spotId);
+		final Collection<Forecaster> forecasters = spotById.getForecasters();
+		final List<SimpleForecasterDTO> simpleForecastersForSpot = new ArrayList<SimpleForecasterDTO>();
+		for (final Forecaster forecaster : forecasters) {
+			if (forecaster instanceof SimpleForecaster) {
+				final SimpleForecaster sForecaster = (SimpleForecaster) forecaster;
+				simpleForecastersForSpot.add(sForecaster.getDTO());
+			}
+		}
+		return simpleForecastersForSpot;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.common.services.ForecastService#getAvailableWekaArchive(edu.unicen.surfforecaster.common.services.dto.PointDTO)
+	 */
+	@Override
+	public List<ArchiveDetailDTO> getAvailableWekaArchive(final PointDTO point)
+			throws NeuralitoException {
+		final Collection<ArchiveDetail> archiveDetail = waveWatchSystem
+				.getArchiveDetail(new Point(point.getLatitude(), point
+						.getLongitude()));
+		// ArrayList<>
+		for (final ArchiveDetail archiveDetail2 : archiveDetail) {
+
+		}
+		return null;
 	}
 }
