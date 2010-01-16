@@ -21,14 +21,15 @@ import edu.unicen.surfforecaster.gwt.client.utils.images.waves.s50.Waves50PxFact
 public class CurrentForecastPanel extends FlexTable {
 
 	private static final String ICON_SIZE = "50";
+	private String currentForecasterName = null;
 	
 	public CurrentForecastPanel(){}
-	
-	public CurrentForecastPanel(String title, ForecastGwtDTO forecast){
+	//TODO aca tendria que mostrar el entrenado a menos que no tenga y mostrar el ww3, para esto tengo que ver que key de altura de ola uso del hash
+	public CurrentForecastPanel(String forecasterName, String title, ForecastGwtDTO forecast){
 		{
 			//Panel stylename
 			this.addStyleName("gwt-FlexTable-CurrentForecast");
-			
+			this.currentForecasterName = forecasterName;
 			Label lblTitle = new Label(title);
 			lblTitle.addStyleName("gwt-Label-CurrentForecast-Title");
 			this.setWidget(0,0, lblTitle);
@@ -44,7 +45,7 @@ public class CurrentForecastPanel extends FlexTable {
 				
 				//TODO sacar los harcodeos del viento y poner bien los parametros
 				//wave height
-				String waveHeight = forecast.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+				String waveHeight = this.getWaveHeight(forecast);
 				//wind speed
 				String windSpeed = forecast.getMap().get(WaveWatchParameter.WIND_SPEED_V2.getValue()).getValue();
 				//wind windDirection
@@ -114,5 +115,17 @@ public class CurrentForecastPanel extends FlexTable {
 		tableItem.add(tableItemValue);
 		
 		return tableItem;
+	}
+	
+	/**
+	 * Returns the waveHeight if the forecast is from ww3 forecaster or the improved wave height if the forecast is from a skilled predictor 
+	 * @param forecastDTO
+	 * @return String waveHeight
+	 */
+	private String getWaveHeight(ForecastGwtDTO forecastDTO) {
+		if (this.currentForecasterName.equals(GWTUtils.WW3_FORECASTER_NAME))
+			return forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		else
+			return forecastDTO.getMap().get("improvedWaveHeight").getValue();
 	}
 }

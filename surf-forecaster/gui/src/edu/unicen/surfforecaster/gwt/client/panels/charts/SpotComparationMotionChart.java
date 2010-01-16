@@ -24,6 +24,7 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 	private List<Integer> spotsIds = null;
 	private List<String> spotsNames = null;
 	private List<String> forecastersNames = null;
+	private String currentForecasterName = null;
 	
 	public SpotComparationMotionChart(final Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, 
 			final List<String> spotsNames, final List<String> forecastersNames) {
@@ -65,6 +66,7 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 	    	Integer spotId = spotsIds.get(spotIndex);
 	    	String spotName = spotsNames.get(spotIndex);
 	    	String forecasterName = this.forecastersNames.get(spotIndex);
+	    	this.currentForecasterName = forecasterName;
 	    	List<ForecastGwtDTO> forecasts = spotsLatestForecasts.get(spotId).get(forecasterName);
 	    	if (data.getNumberOfRows() == 0)
 	    		data.addRows(spotsIds.size() * forecasts.size());
@@ -75,7 +77,7 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 				Unit heightUnitTarget = Unit.Meters;
 
 				//wave height
-				String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+				String waveHeight = this.getWaveHeight(forecastDTO);
 				try {
 					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 				} catch (NeuralitoException e) {
@@ -89,5 +91,17 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 	    }
 	    
 		return data;
+	}
+	
+	/**
+	 * Returns the waveHeight if the forecast is from ww3 forecaster or the improved wave height if the forecast is from a skilled predictor 
+	 * @param forecastDTO
+	 * @return String waveHeight
+	 */
+	private String getWaveHeight(ForecastGwtDTO forecastDTO) {
+		if (this.currentForecasterName.equals(GWTUtils.WW3_FORECASTER_NAME))
+			return forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		else
+			return forecastDTO.getMap().get("improvedWaveHeight").getValue();
 	}
 }

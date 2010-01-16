@@ -32,6 +32,7 @@ public class WgTableC extends FlexTable {
 	Map<Integer, Map<String, List<ForecastGwtDTO>>> forecasters = null;
 	boolean isDatesAlreadyPrinted = false;
 	Integer currentRow = 1;
+	private String currentForecasterName = null;
 	
 	//Layout consts
 	private static final String LABELS_COL_WIDTH = "145px";
@@ -76,7 +77,8 @@ public class WgTableC extends FlexTable {
 
 	private void renderForecastsRow(Map<String, List<ForecastGwtDTO>> spotForecasters, String spotName, String forecasterName, int spotIndex) {
 		List<ForecastGwtDTO> forecasts = spotForecasters.get(forecasterName);
-		List<ForecastGwtDTO> ww3Forecasts = spotForecasters.get("WW3 Noaa Forecaster");
+		this.currentForecasterName = forecasterName;
+		List<ForecastGwtDTO> ww3Forecasts = spotForecasters.get(GWTUtils.WW3_FORECASTER_NAME);
 		int forecastIndex = 1;
 		int max = (this.to != null) ? this.to : forecasts.size();
 		//Spot and Forecaster name
@@ -129,11 +131,23 @@ public class WgTableC extends FlexTable {
 			this.getFlexCellFormatter().setWidth(rowIndex + 1, 0, WgTableC.LABELS_COL_WIDTH);
 	}
 	
+	/**
+	 * Returns the waveHeight if the forecast is from ww3 forecaster or the improved wave height if the forecast is from a skilled predictor 
+	 * @param forecastDTO
+	 * @return String waveHeight
+	 */
+	private String getWaveHeight(ForecastGwtDTO forecastDTO) {
+		if (this.currentForecasterName.equals(GWTUtils.WW3_FORECASTER_NAME))
+			return forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		else
+			return forecastDTO.getMap().get("improvedWaveHeight").getValue();
+	}
+	
 	private void setDetailedForecast(ForecastGwtDTO forecastDTO, ForecastGwtDTO ww3ForecastDTO, int rowIndex, int colIndex) {
 		Unit heightUnitTarget = Unit.Meters;
 
 		//wave height
-		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		String waveHeight = this.getWaveHeight(forecastDTO);
 		try {
 			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 		} catch (NeuralitoException e) {
@@ -155,7 +169,7 @@ public class WgTableC extends FlexTable {
 		
 		Unit heightUnitTarget = Unit.Meters;
 		//wave height
-		String waveHeight = forecastDTO.getMap().get(WaveWatchParameter.COMBINED_SWELL_WIND_WAVE_HEIGHT_V2.getValue()).getValue();
+		String waveHeight = this.getWaveHeight(forecastDTO);
 		try {
 			waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 		} catch (NeuralitoException e) {
