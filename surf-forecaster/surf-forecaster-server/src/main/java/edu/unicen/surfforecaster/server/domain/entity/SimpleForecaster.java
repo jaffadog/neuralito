@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import edu.unicen.surfforecaster.common.services.dto.SimpleForecasterDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
@@ -144,6 +145,12 @@ public class SimpleForecaster extends Forecaster {
 	public Collection<Forecast> getArchivedForecasts(final Date from,
 			final Date to) {
 		return model.getArchivedForecasts(gridPoint, from, to);
+	}
+
+	@Override
+	public SimpleForecasterDTO getDTO() {
+		return new SimpleForecasterDTO(getId(), getName(), getDescription(),
+				getLocation().getDTO());
 	}
 
 }

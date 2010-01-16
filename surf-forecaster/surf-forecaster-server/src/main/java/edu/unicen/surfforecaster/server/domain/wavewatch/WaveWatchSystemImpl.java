@@ -444,4 +444,12 @@ public class WaveWatchSystemImpl implements WaveWatchSystem {
 
 	}
 
+	/**
+	 * @see edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem#getArchiveDetail(edu.unicen.surfforecaster.common.services.dto.PointDTO)
+	 */
+	@Override
+	public Collection<ArchiveDetail> getArchiveDetail(final Point point) {
+		return persister.getArchiveDetail(point);
+	}
+
 }

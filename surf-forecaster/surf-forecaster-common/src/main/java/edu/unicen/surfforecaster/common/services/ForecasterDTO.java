@@ -18,15 +18,15 @@ public class ForecasterDTO implements Serializable {
 	/**
 	 * The id of the forecaster.
 	 */
-	private Integer id;
+	protected Integer id;
 	/**
 	 * The name of the forecaster.
 	 */
-	private String name;
+	protected String name;
 	/**
 	 * The description of the forecaster.
 	 */
-	private String description;
+	protected String description;
 	/**
 	 * The serial version.
 	 */

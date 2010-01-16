@@ -3,6 +3,7 @@ package edu.unicen.surfforecaster.server.dao;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.dao.DataAccessResourceFailureException;
 
 import edu.unicen.surfforecaster.server.domain.entity.Forecast;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
+import edu.unicen.surfforecaster.server.domain.wavewatch.ArchiveDetail;
 import edu.unicen.surfforecaster.server.domain.wavewatch.ForecastFile;
 
 public interface WaveWatchSystemPersistenceI {
@@ -61,5 +63,11 @@ public interface WaveWatchSystemPersistenceI {
 	public void startImportingForecasts();
 
 	public void stopImportingForecasts();
+
+	/**
+	 * @param point
+	 * @return
+	 */
+	public Collection<ArchiveDetail> getArchiveDetail(Point point);
 
 }

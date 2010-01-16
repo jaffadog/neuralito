@@ -28,6 +28,7 @@ import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.common.services.dto.SimpleForecasterDTO;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
@@ -255,6 +256,53 @@ public class ForecastServiceImplementationTest {
 		} catch (final NeuralitoException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+	}
+
+	@Test
+	public void getSimpleForecasterForSpot() throws NeuralitoException {
+
+		final PointDTO point = new PointDTO(22.0F, -158.75F);
+
+		// Number of simple forecasters before creating a new one.
+		final int forecastersBefore = forecastService
+				.getSimpleForecastersForSpot(spot1Id).size();
+		// create a simple forecaster
+		final Integer simpleForecasterId = forecastService.createWW3Forecaster(
+				spot1Id, point);
+
+		final long initial = System.currentTimeMillis();
+		final List<VisualObservationDTO> visualObservations = VisualObservationsLoader
+				.loadVisualObservations(
+						new File(
+								"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu1997.dat"),
+						Unit.Meters);
+		final HashMap<String, Serializable> options = new HashMap<String, Serializable>();
+		options.put("latitudeGridPoint1", 22.0F);
+		options.put("longitudeGridPoint1", -158.75F);
+		options.put("utcSunriseHour", 17);
+		options.put("utcSunriseMinute", 30);
+		options.put("utcSunsetHour", 6);
+		options.put("utcSunsetMinute", 30);
+		// create a weka forecaster
+		forecastService.createWekaForecaster(visualObservations, spot1Id,
+				options);
+
+		final List<SimpleForecasterDTO> simpleForecastersForSpot = forecastService
+				.getSimpleForecastersForSpot(spot1Id);
+
+		Assert.assertEquals(forecastersBefore + 1, simpleForecastersForSpot
+				.size());
+		for (final SimpleForecasterDTO simpleForecasterDTO : simpleForecastersForSpot) {
+
+			if (simpleForecasterDTO.getId() == simpleForecasterId) {
+				Assert.assertEquals(point.getLatitude(), simpleForecasterDTO
+						.getGridPoint().getLatitude());
+				Assert.assertEquals(point.getLongitude(), simpleForecasterDTO
+						.getGridPoint().getLongitude());
+			}
+
 		}
 	}
 
