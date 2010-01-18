@@ -202,6 +202,9 @@ public class MySpotsPanel extends FlexTable {
 			public void onSuccess(Boolean result){
 				if (result) {
 					successPanel.setVisible(true);
+					//refresh localization lists
+					LocalizationUtils.getInstance().checkCallsAndNotify();
+					
 					deleteMySpotsTableRow(rowIndex);
 				} else {
 					errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_DELETING_SPOT());

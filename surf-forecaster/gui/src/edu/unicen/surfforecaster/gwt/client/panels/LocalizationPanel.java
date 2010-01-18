@@ -219,6 +219,7 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 	}
 	
 	private void setAreaListItems() {
+		this.areaBox.clear();
 		Iterator<AreaDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
 		while (i.hasNext()){
 			AreaDTO area = i.next();

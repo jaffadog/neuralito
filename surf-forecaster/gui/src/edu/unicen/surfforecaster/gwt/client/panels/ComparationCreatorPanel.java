@@ -31,6 +31,7 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.gwt.client.ComparationServices;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.SurfForecaster;
+import edu.unicen.surfforecaster.gwt.client.UserServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ComparationGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
@@ -415,23 +416,43 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		
 	}
 	
+	private void getComparationsForUser() {
+		ComparationServices.Util.getInstance().getComparationsForUserId(new AsyncCallback<List<ComparationGwtDTO>>(){
+			public void onSuccess(List<ComparationGwtDTO> result) {
+				if (result != null) {
+					fillCompsBox(result);
+				}
+				
+			}
+
+			public void onFailure(Throwable caught) {
+				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+						Cookies.getCookie("surfForecaster-Username") != null) {
+					GWTUtils.showSessionExpiredLoginBox();
+				}
+				SurfForecaster.getInstance().gotoHistoryToken();
+			}
+		});
+	}
+	
 	/**
 	 * Made a request to the server for the loggedin user comparations.
 	 * If exist a user loggedin shows the comparation components in the view, with the comparations retrieved.
 	 * 
 	 */
 	private void showAllowedPanels() {
-		ComparationServices.Util.getInstance().getComparationsForUserId(new AsyncCallback<List<ComparationGwtDTO>>(){
-			public void onSuccess(List<ComparationGwtDTO> result) {
-				if (result != null) {
-					showMyComparationsPanel(result);
+		UserServices.Util.getInstance().hasAccessTo("getComparations", new AsyncCallback<Boolean>(){
+			public void onSuccess(Boolean result) {
+				if (result) {
+					showMyComparationsPanel();
 					createSavePanel();
 					saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.showSave(), "CreateComparationPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX, GWTUtils.LOCALE_CONSTANTS.saveTip());
 					compDefTable.setWidget(12, 3, saveBtn);
 					compDefTable.getFlexCellFormatter().setHeight(12, 3, ComparationCreatorPanel.COMP_DEF_TABLE_CELL_HEIGHT);
 					setSaveBtnClickHandler();
+					getComparationsForUser();
 				}
-				
+				SurfForecaster.getInstance().gotoHistoryToken();
 			}
 
 			public void onFailure(Throwable caught) {
@@ -449,7 +470,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		saveBtn.addClickHandler(this);
 	}
 	
-	private void showMyComparationsPanel(List<ComparationGwtDTO> comparations) {
+	private void showMyComparationsPanel() {
 		//My comparations
 		myComparations = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.myComparations(), true);
 		myComparations.setAnimationEnabled(true);
@@ -459,6 +480,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			myComparations.setContent(myCompsTable);
 			{
 				myCompsBox = new ListBox();
+				myCompsBox.addItem("<" + GWTUtils.LOCALE_CONSTANTS.chooseComparation() + ">", "-1");
 				myCompsBox.setWidth(ComparationCreatorPanel.COMBOBOX_WIDTH);
 				myCompsTable.setWidget(0, 0, myCompsBox);
 				myCompsTable.getFlexCellFormatter().setWidth(0, 0, ComparationCreatorPanel.COMBOBOX_WIDTH);
@@ -478,11 +500,10 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				myCompsTable.getFlexCellFormatter().setColSpan(1, 0, 2);
 			}
 		}
-		
-		this.fillCompsBox(comparations);
 	}
 	
 	private void fillCompsBox(final List<ComparationGwtDTO> comparations) {
+		myCompsBox.clear();
 		myCompsBox.addItem("<" + GWTUtils.LOCALE_CONSTANTS.chooseComparation() + ">", "-1");
 		Iterator<ComparationGwtDTO> i = comparations.iterator();
 		while (i.hasNext()) {
@@ -644,7 +665,6 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		ComparationServices.Util.getInstance().removeComparation(selectedCompId, new AsyncCallback<Boolean>(){
 			public void onSuccess(Boolean result) {
 				if (result) {
-					
 					//remove item from listbox
 					for (int i = 0; i < myCompsBox.getItemCount(); i++) {
 						if (selectedCompId.toString().equals(myCompsBox.getValue(i))) {
@@ -689,6 +709,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				ComparationServices.Util.getInstance().addComparation(txtCompName.getText().trim(), txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
 					public void onSuccess(Integer result) {
 						if (result != null && result > 0) {
+							//refresh comparations list
+							getComparationsForUser();
 							successPanel.setVisible(true);
 						} else {
 							errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_SAVING_COMPARATION());
@@ -711,6 +733,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				ComparationServices.Util.getInstance().updateComparation(selectedCompId, txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
 					public void onSuccess(Integer result) {
 						if (result != null && result > 0) {
+							//refresh comparations list
+							getComparationsForUser();
 							successPanel.setVisible(true);
 						} else {
 							errorPanel.setMessage(GWTUtils.LOCALE_CONSTANTS.ERROR_SAVING_COMPARATION());
