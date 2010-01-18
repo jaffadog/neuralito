@@ -121,7 +121,7 @@ public class LocalizationUtils extends Observable{
 		return countries;
 	}
 	
-	private void checkCallsAndNotify() {
+	public void checkCallsAndNotify() {
 		if (this.callsQueue.allFinished()) {
 			setChanged();
 			notifyObservers();

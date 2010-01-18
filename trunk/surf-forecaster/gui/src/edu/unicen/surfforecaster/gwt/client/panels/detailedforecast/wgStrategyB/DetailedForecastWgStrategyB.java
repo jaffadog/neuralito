@@ -52,7 +52,7 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 			
 			//Current forecast
 			FlexTable flexTable = new FlexTable();
-			List<ForecastGwtDTO> forecaster = null;
+			List<ForecastGwtDTO> forecasts = null;
 			String selectedForecasterName = null;
 			//if spot have more than one forecaster, use the first diffenrent than ww3 forecaster, else use ww3
 			if (this.forecasters.size() > 1){
@@ -61,19 +61,20 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 				while (i.hasNext()) {
 					String forecasterName = i.next();
 					if (!forecasterName.equals(GWTUtils.WW3_FORECASTER_NAME)) {
-						forecaster = forecasters.get(forecasterName);
+						forecasts = forecasters.get(forecasterName);
 						selectedForecasterName = forecasterName;
 						break;
 					}
 				}
 			} else {
-				forecaster = forecasters.get(GWTUtils.WW3_FORECASTER_NAME);
+				forecasts = forecasters.get(GWTUtils.WW3_FORECASTER_NAME);
 				selectedForecasterName = GWTUtils.WW3_FORECASTER_NAME;
 			}
-			
-			CurrentForecastPanel current = new CurrentForecastPanel(selectedForecasterName, GWTUtils.LOCALE_CONSTANTS.now(), forecaster.size() > 0 ? forecaster.get(0) : null);
+			int currentForecastIndex = GWTUtils.getCurrentForecastIndex(forecasts);
+			CurrentForecastPanel current = new CurrentForecastPanel(selectedForecasterName, GWTUtils.LOCALE_CONSTANTS.now(), currentForecastIndex != -1 ? forecasts.get(currentForecastIndex) : null);
 			flexTable.setWidget(0, 0, current);
-			CurrentForecastPanel nextHours = new CurrentForecastPanel(selectedForecasterName, "+" + GWTUtils.LOCALE_CONSTANTS.num_3() + " " + GWTUtils.LOCALE_CONSTANTS.hours(), forecaster.size() > 1 ? forecaster.get(1) : null);
+			CurrentForecastPanel nextHours = new CurrentForecastPanel(selectedForecasterName, "+" + GWTUtils.LOCALE_CONSTANTS.num_3() + " " + GWTUtils.LOCALE_CONSTANTS.hours(), 
+					currentForecastIndex != -1 && forecasts.size() >= currentForecastIndex + 2 ? forecasts.get(currentForecastIndex + 1) : null);
 			flexTable.setWidget(0, 1, nextHours);
 			completeDetailedForecastVPanel.add(flexTable);
 			completeDetailedForecastVPanel.setCellHorizontalAlignment(flexTable, HasHorizontalAlignment.ALIGN_CENTER);
@@ -96,4 +97,5 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 		
 		return completeDetailedForecastVPanel;
 	}
+	
 }

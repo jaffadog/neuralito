@@ -2,6 +2,8 @@ package edu.unicen.surfforecaster.gwt.client.utils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -12,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.gwt.client.SurfForecasterConstants;
 import edu.unicen.surfforecaster.gwt.client.SurfForecasterMessages;
+import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.LoginBox;
 import edu.unicen.surfforecaster.gwt.client.panels.TransparentPanel;
 
@@ -132,6 +135,56 @@ public final class GWTUtils {
 	  }
 	
 	  return map;
+	}
+	
+	/**
+	 * Returns the client clock hours
+	 * @return String datetime as YYYY-MM-DD hh:mm
+	 */
+	private static native String getJSClientDate() /*-{
+		var now = new Date();
+		return now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes();
+	}-*/;
+	
+	private static Map<String, Integer> getClientDate() {
+		HashMap<String, Integer> date = new HashMap<String, Integer>();
+		String sDate = getJSClientDate();
+		date.put("year", new Integer(sDate.substring(0, 4)));
+		date.put("month", new Integer(sDate.substring(5, sDate.indexOf("-", 5))));
+		date.put("day", new Integer(sDate.substring(sDate.indexOf("-", 5) + 1, sDate.indexOf(" "))));
+		date.put("hours", new Integer(sDate.substring(sDate.indexOf(" ") + 1, sDate.indexOf(":"))));
+		date.put("minutes", new Integer(sDate.substring(sDate.indexOf(":") + 1)));
+		return date;
+	}
+	
+	/**
+	 * Returns true if the difference between the first hour and the second is less than one
+	 * @returns boolean
+	 */
+	private static boolean isCurrentHour(int clientHour, int forecastHour) {
+		int diff = clientHour - forecastHour;
+		diff = diff < 0 ? diff * (-1) : diff; //get diff absolute value
+		return diff <= 1 ? true : false;
+	}
+	
+	/**
+	 * Returns the index of the forecasts list whose datetime is closest to the current (+- one hour) or -1 if nothing found
+	 * @return int index 
+	 */
+	public static int getCurrentForecastIndex(List<ForecastGwtDTO> forecasts) {
+		Map<String, Integer> date = getClientDate();
+		for (int j = 0; j < forecasts.size(); j++) {
+			ForecastGwtDTO forecastDTO = forecasts.get(j);
+			long miliDate = forecastDTO.getBaseDate().getTime() + (forecastDTO.getForecastTime() * 3600000);
+			Date realDate = new Date(miliDate);
+			if (realDate.getYear() + 1900 == date.get("year").intValue() && realDate.getMonth() == date.get("month").intValue() && 
+					realDate.getDate() == date.get("day").intValue()){
+				if (isCurrentHour(new Integer(date.get("hours").intValue()), realDate.getHours()))
+					return j;
+			}
+		}
+		
+		return -1;
 	}
 	
 	/**

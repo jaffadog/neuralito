@@ -64,7 +64,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 					add(newSpotPanel, GWTUtils.LOCALE_CONSTANTS.newSpot());					
 					historyTokens.add("newSpotTab");
 					
-					MySpotsPanel mySpotsPanel = new MySpotsPanel();
+					MySpotsPanel mySpotsPanel = MySpotsPanel.getInstance();
 					add(mySpotsPanel, GWTUtils.LOCALE_CONSTANTS.mySpots());					
 					historyTokens.add("mySpotsTab");
 				}

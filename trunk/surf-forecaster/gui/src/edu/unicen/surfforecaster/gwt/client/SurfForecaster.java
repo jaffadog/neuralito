@@ -1,5 +1,7 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+import java.util.Calendar;
+import java.util.Date;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -37,7 +39,6 @@ public class SurfForecaster implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		
 		//Set this instance of SurfForecaster
 		SurfForecaster.instance = this;
 		
