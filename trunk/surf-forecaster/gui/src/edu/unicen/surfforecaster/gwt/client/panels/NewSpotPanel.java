@@ -380,9 +380,10 @@ public class NewSpotPanel extends FlexTable implements Observer{
 									form.submit();
 								}
 								clearFields();
-								//To refresh localization combos on whole application
+								//refresh localization lists on whole application
 								LocalizationUtils.getInstance().checkCallsAndNotify();
 								MySpotsPanel.getInstance().retrieveMySpots();
+								
 								successPanel.setMessage(message);
 								successPanel.setVisible(true);
 								Window.scrollTo(0, 0);
