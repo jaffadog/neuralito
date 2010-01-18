@@ -88,22 +88,28 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 	    	String forecasterName = this.forecastersNames.get(spotIndex);
 	    	this.currentForecasterName = forecasterName;
 	    	List<ForecastGwtDTO> forecasts = spotsLatestForecasts.get(spotId).get(forecasterName);
-	    	for (int forecastIndex = 0; forecastIndex < data.getNumberOfRows(); forecastIndex++) {
-				ForecastGwtDTO forecastDTO = forecasts.get(forecastIndex);
-				//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
-				Unit heightUnitTarget = Unit.Meters;
-				
-				//wave height
-				String waveHeight = this.getWaveHeight(forecastDTO);
-				try {
-					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
-				} catch (NeuralitoException e) {
-					// TODO ver como manejar esta exvepcion de conversion de unidades
-					e.printStackTrace();
+	    	int currentForecastIndex = GWTUtils.getCurrentForecastIndex(forecasts);
+	    	if (currentForecastIndex != -1) {
+		    	for (int forecastIndex = currentForecastIndex; forecastIndex < currentForecastIndex + data.getNumberOfRows(); forecastIndex++) {
+		    		ForecastGwtDTO forecastDTO = null;
+		    		if (forecasts.size() > forecastIndex){
+		    			forecastDTO = forecasts.get(forecastIndex);
+						//TODO generar las unidades en que se ve el sitio como alguna setting de usuario o usando cookies o algo y emprolijar la manera de levantarlo
+						Unit heightUnitTarget = Unit.Meters;
+						
+						//wave height
+						String waveHeight = this.getWaveHeight(forecastDTO);
+						try {
+							waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
+						} catch (NeuralitoException e) {
+							// TODO ver como manejar esta exvepcion de conversion de unidades
+							e.printStackTrace();
+						}
+						
+			    		data.setValue(forecastIndex - currentForecastIndex, spotIndex + 1, new Double(waveHeight));
+		    		}
 				}
-				
-	    		data.setValue(forecastIndex, spotIndex + 1, new Double(waveHeight));
-			}
+	    	}
 	    }
   	    
 		return data;

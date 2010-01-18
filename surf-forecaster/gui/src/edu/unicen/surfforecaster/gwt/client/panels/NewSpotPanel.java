@@ -31,7 +31,6 @@ import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
-import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
@@ -381,10 +380,12 @@ public class NewSpotPanel extends FlexTable implements Observer{
 									form.submit();
 								}
 								clearFields();
+								//To refresh localization combos on whole application
+								LocalizationUtils.getInstance().checkCallsAndNotify();
+								MySpotsPanel.getInstance().retrieveMySpots();
 								successPanel.setMessage(message);
 								successPanel.setVisible(true);
 								Window.scrollTo(0, 0);
-								//TODO hacer que se actualizen los combos observer al dar de alta una ola
 				            }
 							
 							public void onFailure(Throwable caught){
@@ -440,9 +441,10 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		spotTxt.setText(spot.getName());
 		//set timezone
 		for (int i = 0; i < timeZoneBox.getItemCount(); i++) {
-			if (timeZoneBox.getValue(i) == spot.getTimeZone())
+			if (timeZoneBox.getValue(i).equals(spot.getTimeZone())) {
 				timeZoneBox.setSelectedIndex(i);
 				break;
+			}
 		}
 		//set public or private
 		if (spot.isPublik()) {
@@ -453,8 +455,9 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			radioPublicButton.setValue(false);
 		}
 		
-		//set spot and location
+		//set spot location and gridpoint location
 		mapPanel.setSpotLocation(spot.getPoint());
+		mapPanel.setGridPointLocation(spot.getGridPoint());
 		
 		HorizontalPanel radioObsPanel = new HorizontalPanel();
 	    radioObsPanel.setSpacing(5);
@@ -484,8 +487,6 @@ public class NewSpotPanel extends FlexTable implements Observer{
 					txtHour2.setText(result.get(0).getTrainningOptions().get("utcSunsetHour"));
 					txtMinutes.setText(result.get(0).getTrainningOptions().get("utcSunriseMinute"));
 					txtMinutes2.setText(result.get(0).getTrainningOptions().get("utcSunsetMinute"));
-					PointDTO point = new PointDTO(new Float(result.get(0).getTrainningOptions().get("latitudeGridPoint1")), new Float(result.get(0).getTrainningOptions().get("longitudeGridPoint1")));
-					mapPanel.setGridPointLocation(point);
 				}
             }
 			

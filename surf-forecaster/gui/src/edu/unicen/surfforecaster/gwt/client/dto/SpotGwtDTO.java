@@ -14,13 +14,7 @@ import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
  * 
  */
 public class SpotGwtDTO implements Serializable {
-	/**
-	 * 
-	 */
-	public SpotGwtDTO() {
-		// gwt purpose
-	}
-
+	
 	/**
 	 * 
 	 */
@@ -62,7 +56,16 @@ public class SpotGwtDTO implements Serializable {
 	 * Timezone ID
 	 */
 	private String timeZone;
+	
+	private PointDTO gridPoint;
 
+	/**
+	 * Empty constructor 
+	 */
+	public SpotGwtDTO() {
+		// gwt purpose
+	}
+	
 	/**
 	 * @param id
 	 * @param name
@@ -87,6 +90,14 @@ public class SpotGwtDTO implements Serializable {
 		this.userId = userId;
 		this.publik = publik;
 		this.timeZone = timeZone;
+	}
+	
+	public PointDTO getGridPoint() {
+		return gridPoint;
+	}
+
+	public void setGridPoint(PointDTO gridPoint) {
+		this.gridPoint = gridPoint;
 	}
 
 	/**

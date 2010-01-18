@@ -23,7 +23,8 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 import edu.unicen.surfforecaster.gwt.client.utils.LocalizationUtils;
 
 public class MySpotsPanel extends FlexTable {
-
+	
+	private static MySpotsPanel instance = null;
 	private FlexTable mySpotsTable = null;
 	private MessagePanel errorPanel;
 	private MessagePanel successPanel;
@@ -31,9 +32,16 @@ public class MySpotsPanel extends FlexTable {
 	//Static properties
 	private final static String ACTION_ICON_HEIGHT = "20px";
 	private final static String ACTION_ICON_WIDTH = "20px";
+	private DisclosurePanel mySpotsTableContainer;
 	
+	public static MySpotsPanel getInstance() {
+        if (instance == null) {
+            instance = new MySpotsPanel();
+        }
+        return instance;
+    }
 	
-	public MySpotsPanel() {
+	private MySpotsPanel() {
 		this.setWidth("100%");
 		{
 			errorPanel = new ErrorMsgPanel();
@@ -52,19 +60,10 @@ public class MySpotsPanel extends FlexTable {
 			this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		}
 		{
-			DisclosurePanel mySpotsTableContainer = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.mySpots(), true);
+			mySpotsTableContainer = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.mySpots(), true);
 			mySpotsTableContainer.setWidth("100%");
 			mySpotsTableContainer.setAnimationEnabled(true);
-			{
-				mySpotsTable = new FlexTable();
-				mySpotsTableContainer.setContent(mySpotsTable);
-				this.setWidget(3, 0, mySpotsTableContainer);
-				//First row style
-				mySpotsTable.getRowFormatter().addStyleName(0, "gwt-FlexTable-MySpotsTable-Titles");
-				
-				this.setSpotsTableTitles();
-				this.retrieveMySpots();
-			}
+			this.retrieveMySpots();
 		}
 	}
 
@@ -98,9 +97,15 @@ public class MySpotsPanel extends FlexTable {
 	/**
 	 * Calls to spots service to get the logged in user spots
 	 */
-	private void retrieveMySpots() {
+	public void retrieveMySpots() {
 		SpotServices.Util.getInstance().getSpotsCreatedBy(new AsyncCallback<List<SpotGwtDTO>>(){
 			public void onSuccess(List<SpotGwtDTO> result){
+				mySpotsTable = new FlexTable();
+				mySpotsTableContainer.setContent(mySpotsTable);
+				setWidget(3, 0, mySpotsTableContainer);
+				//First row style
+				mySpotsTable.getRowFormatter().addStyleName(0, "gwt-FlexTable-MySpotsTable-Titles");
+				setSpotsTableTitles();
 				fillSpotsTable(result);
             }
             
@@ -120,7 +125,6 @@ public class MySpotsPanel extends FlexTable {
 	private void fillSpotsTable(List<SpotGwtDTO> spots) {
 		int index = 1;
 		if (spots.size() > 0) {
-			final MySpotsPanel mySpotsPanel = this;
 			Iterator<SpotGwtDTO> it = spots.iterator();
 			while (it.hasNext()) {
 				final SpotGwtDTO spot = it.next();
@@ -142,7 +146,7 @@ public class MySpotsPanel extends FlexTable {
 					@Override
 					public void onClick(ClickEvent event) {
 						DeleteSpotConfirmMessageBox confirmBox = new DeleteSpotConfirmMessageBox(GWTUtils.LOCALE_MESSAGES.askForDeleteSpot(spot.getName()), MessageBox.IconType.WARNING, spot.getId(), rowIndex);
-						confirmBox.setBasePanel(mySpotsPanel);	
+						confirmBox.setBasePanel(MySpotsPanel.getInstance());	
 					}
 				});
 				

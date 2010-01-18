@@ -13,6 +13,7 @@ import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
+import edu.unicen.surfforecaster.common.services.dto.SimpleForecasterDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
@@ -133,14 +134,16 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			List<SpotDTO> spots = new ArrayList<SpotDTO>();
 			List<SpotGwtDTO> spotsGwt = new ArrayList<SpotGwtDTO>();
 			final Integer userId = super.getLoggedUser().getId();
-			// TODO change getSpotForUser call for a specific service that retrieves only the spots created by de logged user
-			//with out public spots
 			spots = spotService.getSpotsCreatedByUser(userId);
-			
 			Iterator<SpotDTO> i = spots.iterator();
 			while (i.hasNext()) {
 				SpotDTO spot = i.next();
-				spotsGwt.add(super.getSpotGwtDTO(spot));
+				SpotGwtDTO spotGwtDTO = super.getSpotGwtDTO(spot);
+				//Retrieve gridpoint of the spot (right now we are using the first simple forecaster(ww3) from the list because we know that we have just one for spot)
+				//If this changes we need a litle more complex logic for this
+				SimpleForecasterDTO simpleForecasterDTO = forecastService.getSimpleForecastersForSpot(spot.getId()).get(0);
+				spotGwtDTO.setGridPoint(simpleForecasterDTO.getGridPoint());
+				spotsGwt.add(spotGwtDTO);
 			}
 			logger.log(Level.INFO,"SpotServicesImpl - getSpotsCreatedBy - Retrieved " + spotsGwt.size() + " for the current logged in user.");
 			return spotsGwt;
