@@ -30,6 +30,7 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 	
 	public SpotComparationColumnChart(final Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts, final List<Integer> spotsIds, 
 			final List<String> spotsNames, final List<String> forecastersNames) {
+		
 		this.spotsIds = spotsIds;
 		this.spotsLatestForecasts = spotsLatestForecasts;
 		this.spotsNames = spotsNames;
