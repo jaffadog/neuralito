@@ -150,7 +150,7 @@ public class SimpleForecaster extends Forecaster {
 	@Override
 	public SimpleForecasterDTO getDTO() {
 		return new SimpleForecasterDTO(getId(), getName(), getDescription(),
-				getLocation().getDTO());
+				gridPoint.getDTO());
 	}
 
 }
