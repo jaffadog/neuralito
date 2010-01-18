@@ -109,6 +109,14 @@ public interface ForecastService {
 	public List<WekaForecasterEvaluationDTO> getWekaForecasters(Integer spotId)
 			throws NeuralitoException;
 
+	/**
+	 * Obtain all the forecasts belonging to SimpleForecaster class associated
+	 * with the given spot.
+	 * 
+	 * @param spotId
+	 * @return
+	 * @throws NeuralitoException
+	 */
 	public List<SimpleForecasterDTO> getSimpleForecastersForSpot(Integer spotId)
 			throws NeuralitoException;
 
