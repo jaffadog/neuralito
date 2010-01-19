@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -60,17 +61,17 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	
 	private void fillSpotInfo(SpotGwtDTO spot) {
 		Label spotLat = new Label(GWTUtils.LOCALE_CONSTANTS.spot() + " " + GWTUtils.LOCALE_CONSTANTS.lat_abbr() + ": ");
-		Label spotLatValue = new Label(spot.getPoint().getLatitude() + "");
+		Label spotLatValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getPoint().getLatitude()));
 		spotLatValue.addStyleName("gwt-Label-SpotDataValue");
 		Label spotLon = new Label(", " + GWTUtils.LOCALE_CONSTANTS.lon_abbr() + ": ");
-		Label spotLonValue = new Label(spot.getPoint().getLongitude() + "");
+		Label spotLonValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getPoint().getLongitude()));
 		spotLonValue.addStyleName("gwt-Label-SpotDataValue");
 		
 		Label ww3Lat = new Label(", " + GWTUtils.LOCALE_CONSTANTS.justWW3GridPoint() + " " + GWTUtils.LOCALE_CONSTANTS.lat_abbr() + ": ");
-		Label ww3LatValue = new Label(spot.getGridPoint().getLatitude() + "");
+		Label ww3LatValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getGridPoint().getLatitude()));
 		ww3LatValue.addStyleName("gwt-Label-SpotDataValue");
 		Label ww3Lon = new Label(", " + GWTUtils.LOCALE_CONSTANTS.lon_abbr() + ": ");
-		Label ww3LonValue = new Label(spot.getGridPoint().getLongitude() + "");
+		Label ww3LonValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getGridPoint().getLongitude()));
 		ww3LonValue.addStyleName("gwt-Label-SpotDataValue");
 		
 		Label timezone = new Label(", " + GWTUtils.LOCALE_CONSTANTS.timeZone() + ": ");
