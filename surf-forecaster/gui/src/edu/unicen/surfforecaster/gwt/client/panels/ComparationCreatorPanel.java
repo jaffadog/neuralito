@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
@@ -64,6 +65,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	private TextArea txtCompDescription;
 	private MessagePanel errorPanel;
 	private MessagePanel successPanel;
+	private LoadingPanel loadingCompPanel;
 	private Integer selectedCompId;
 	
 	private static final String LISTBOX_WIDTH = "200px";
@@ -94,17 +96,22 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		this.setWidget(2, 0, successPanel);
 		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
+		loadingCompPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.savingComparation());
+		loadingCompPanel.setVisible(false);
+		this.setWidget(3, 0, loadingCompPanel);
+		this.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		
 		Label lblSectionDescription = new Label(GWTUtils.LOCALE_CONSTANTS.compSectionDescription());
-		this.setWidget(3, 0, lblSectionDescription);
+		this.setWidget(4, 0, lblSectionDescription);
 		lblSectionDescription.addStyleName("gwt-Label-SectionDescription");
 		
 		//Define comparations
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.spotsToCompare());
 		lblTitle.addStyleName("gwt-Label-Title");
-		this.setWidget(5, 0, lblTitle);
+		this.setWidget(6, 0, lblTitle);
 		
 		SimplePanel comparationDefinition = new SimplePanel();
-		this.setWidget(6, 0, comparationDefinition);
+		this.setWidget(7, 0, comparationDefinition);
 		{
 			compDefTable = new FlexTable();
 			comparationDefinition.setWidget(compDefTable);
@@ -474,7 +481,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		//My comparations
 		myComparations = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.myComparations(), true);
 		myComparations.setAnimationEnabled(true);
-		this.setWidget(4, 0, myComparations);
+		this.setWidget(5, 0, myComparations);
 		{
 			FlexTable myCompsTable = new FlexTable();
 			myComparations.setContent(myCompsTable);
@@ -541,7 +548,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		
 		savePanel = new FlexTable();
 		savePanel.setVisible(false);
-		this.setWidget(7, 0, savePanel);
+		this.setWidget(8, 0, savePanel);
 		{
 			//Panel title
 			Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.saveComparation());
@@ -662,8 +669,11 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		final Integer selectedCompId = new Integer(myCompsBox.getValue(myCompsBox.getSelectedIndex())).intValue();
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
+		loadingCompPanel.setText(GWTUtils.LOCALE_CONSTANTS.deletingComparation());
+		loadingCompPanel.setVisible(true);
 		ComparationServices.Util.getInstance().removeComparation(selectedCompId, new AsyncCallback<Boolean>(){
 			public void onSuccess(Boolean result) {
+				loadingCompPanel.setVisible(false);
 				if (result) {
 					//remove item from listbox
 					for (int i = 0; i < myCompsBox.getItemCount(); i++) {
@@ -683,6 +693,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			}
 
 			public void onFailure(Throwable caught) {
+				loadingCompPanel.setVisible(false);
 				if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 						Cookies.getCookie("surfForecaster-Username") != null) {
 					GWTUtils.showSessionExpiredLoginBox();
@@ -699,6 +710,8 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 		final Vector<String> messages = new Vector<String>();
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
+		loadingCompPanel.setText(GWTUtils.LOCALE_CONSTANTS.savingComparation());
+		loadingCompPanel.setVisible(true);
 		messages.addAll(validateForm());
 		if (messages.isEmpty()){
 			List<Integer> selectedSpots = new ArrayList<Integer>();
@@ -708,6 +721,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			if (!nameDuplicated) {
 				ComparationServices.Util.getInstance().addComparation(txtCompName.getText().trim(), txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
 					public void onSuccess(Integer result) {
+						loadingCompPanel.setVisible(false);
 						if (result != null && result > 0) {
 							//refresh comparations list
 							getComparationsForUser();
@@ -719,6 +733,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 					}
 		
 					public void onFailure(Throwable caught) {
+						loadingCompPanel.setVisible(false);
 						if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 								Cookies.getCookie("surfForecaster-Username") != null) {
 							GWTUtils.showSessionExpiredLoginBox();
@@ -732,6 +747,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			} else {
 				ComparationServices.Util.getInstance().updateComparation(selectedCompId, txtCompDescription.getText().trim(), selectedSpots, new AsyncCallback<Integer>(){
 					public void onSuccess(Integer result) {
+						loadingCompPanel.setVisible(false);
 						if (result != null && result > 0) {
 							//refresh comparations list
 							getComparationsForUser();
@@ -743,6 +759,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 					}
 		
 					public void onFailure(Throwable caught) {
+						loadingCompPanel.setVisible(false);
 						if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 								Cookies.getCookie("surfForecaster-Username") != null) {
 							GWTUtils.showSessionExpiredLoginBox();
@@ -755,6 +772,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 				});
 			}
 		} else {
+			loadingCompPanel.setVisible(false);
 			errorPanel.setMessages(messages);
 			errorPanel.setVisible(true);
 		}

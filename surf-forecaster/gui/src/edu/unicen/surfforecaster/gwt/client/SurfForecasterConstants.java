@@ -333,6 +333,12 @@ public interface SurfForecasterConstants extends Constants {
 			"podr\u00E1 incluso guardar sus comparaciones para visualizarlas cuando lo desee.")
 	String compSectionDescription();
 	
+	@DefaultStringValue("Guardando la comparaci\u00F3n...")
+	String savingComparation();
+	
+	@DefaultStringValue("Eliminando la comparaci\u00F3n...")
+	String deletingComparation();
+	
 	/**
 	 * ComparationViewerPanel
 	 */
@@ -368,6 +374,12 @@ public interface SurfForecasterConstants extends Constants {
 			"la semana pr\u00F3xima. Los datos de cada ola son pronosticados con el pronosticador seleccionado previamente.")
 	String waveHeightAllForecastDescr();
 	
+	@DefaultStringValue("Cargando pron\u00F3sticos detallados...")
+	String loadingDetailedForecasts();
+	
+	@DefaultStringValue("Cargando gr\u00E1fico...")
+	String loadingChart();
+	
 	/**
 	 * CurrentForecastPanel
 	 */
@@ -385,6 +397,12 @@ public interface SurfForecasterConstants extends Constants {
 	 */
 	@DefaultStringValue("Continuaci\u00F3n")
 	String continue_();
+	
+	/**
+	 * ForecastPanel
+	 */
+	@DefaultStringValue("Cargando \u00FAltimos pron\u00F3sticos de la ola...")
+	String loadingSpotForecast();
 	
 	/**
 	 * ForecastTabPanel
@@ -449,6 +467,12 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Todav\u00EDa no a creado ninguna ola.")
 	String noneSpotsCreated();
+	
+	@DefaultStringValue("Cargando informaci\u00F3n de la ola...")
+	String loadingSpotData();
+	
+	@DefaultStringValue("Eliminando la ola...")
+	String deletingSpot();
 	
 	/**
 	 * NewSpotPanel
@@ -526,6 +550,9 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("En este momento se esta entrenando un pronosticador especializado, los resultados le ser\u00E1n informados una vez finalizado el entrenamiento. Esta operaci\u00F3n puede demorar unos minutos, sin embargo usted puede continuar utilizando el sistema.")
 	String trainingClassifier();
+	
+	@DefaultStringValue("Guardando nueva ola...")
+	String savingNewSpot();
 	
 	/**
 	 * RegisterNewUserPanel

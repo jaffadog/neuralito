@@ -79,6 +79,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private RadioButton radioReplaceButton;
 	private MessagePanel errorPanel;
 	private MessagePanel successPanel;
+	private LoadingPanel loadingAddingSpotPanel = null;
 	private FlexTable formTable;
 	private Label lblTitle;
 	
@@ -113,14 +114,20 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		
+		loadingAddingSpotPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.savingNewSpot());
+		loadingAddingSpotPanel.setVisible(false);
+		this.setWidget(3, 0, loadingAddingSpotPanel);
+		this.getCellFormatter().setHorizontalAlignment(3, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.getFlexCellFormatter().setColSpan(3, 0, 3);
+		
 		lblNewSpotDescription = new Label(GWTUtils.LOCALE_CONSTANTS.registerNewSpotDesc());
 		lblNewSpotDescription.addStyleName("gwt-Label-SectionDescription");
-		this.setWidget(3, 0, lblNewSpotDescription);
-		this.getFlexCellFormatter().setColSpan(3, 0, 3);
+		this.setWidget(4, 0, lblNewSpotDescription);
+		this.getFlexCellFormatter().setColSpan(4, 0, 3);
 
 		final Label lblArea = new Label(GWTUtils.LOCALE_CONSTANTS.area() + ":");
-		this.setWidget(4, 0, lblArea);
-		this.getCellFormatter().setHorizontalAlignment(4, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		this.setWidget(5, 0, lblArea);
+		this.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		areaBox = new ListBox();
 		areaBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
@@ -129,11 +136,11 @@ public class NewSpotPanel extends FlexTable implements Observer{
 				setCountryListItems(new Integer(areaBox.getValue(areaBox.getSelectedIndex())));
 			}
 		});
-		this.setWidget(4, 1, areaBox);
+		this.setWidget(5, 1, areaBox);
 
 		final Label lblCountry = new Label(GWTUtils.LOCALE_CONSTANTS.country() + ":");
-		this.setWidget(5, 0, lblCountry);
-		this.getCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		this.setWidget(6, 0, lblCountry);
+		this.getCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		countryBox = new ListBox();
 		countryBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
@@ -142,29 +149,29 @@ public class NewSpotPanel extends FlexTable implements Observer{
 				setZoneListItems(new Integer(countryBox.getValue(countryBox.getSelectedIndex())));
 			}
 		});
-		this.setWidget(5, 1, countryBox);
+		this.setWidget(6, 1, countryBox);
 		
 		final Label lblZone = new Label("* " + GWTUtils.LOCALE_CONSTANTS.zone() + ":");
-		this.setWidget(6, 0, lblZone);
-		this.getCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		this.setWidget(7, 0, lblZone);
+		this.getCellFormatter().setHorizontalAlignment(7, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		final Label lblSpot = new Label("* " + GWTUtils.LOCALE_CONSTANTS.spot() + ":");
-		this.setWidget(8, 0, lblSpot);
-		this.getCellFormatter().setHorizontalAlignment(8, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		this.setWidget(9, 0, lblSpot);
+		this.getCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
 		final Label lblTimeZone = new Label(GWTUtils.LOCALE_CONSTANTS.timeZone() + ":");
-		this.setWidget(9, 0, lblTimeZone);
-		this.getCellFormatter().setHorizontalAlignment(9, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		this.setWidget(10, 0, lblTimeZone);
+		this.getCellFormatter().setHorizontalAlignment(10, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		zoneBox = new ListBox();
 		zoneBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
-		this.setWidget(6, 1, zoneBox);
+		this.setWidget(7, 1, zoneBox);
 		
 		zoneTxt = new TextBox();
 		zoneTxt.setMaxLength(50);
 		zoneTxt.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		zoneTxt.setVisible(false);
-		this.setWidget(7, 1, zoneTxt);
+		this.setWidget(8, 1, zoneTxt);
 		
 		createZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.createZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
 		createZoneBtn.addClickHandler(new ClickHandler() {
@@ -175,8 +182,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 					createZoneBtn.setVisible(false);
 			}
 		});
-		this.setWidget(6, 2, createZoneBtn);
-		this.getCellFormatter().setHorizontalAlignment(6, 2, HasHorizontalAlignment.ALIGN_LEFT);
+		this.setWidget(7, 2, createZoneBtn);
+		this.getCellFormatter().setHorizontalAlignment(7, 2, HasHorizontalAlignment.ALIGN_LEFT);
 		
 		chooseZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.chooseZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
 		chooseZoneBtn.addClickHandler(new ClickHandler() {
@@ -185,25 +192,25 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			}
 		});
 		chooseZoneBtn.setVisible(false);
-		this.setWidget(7, 2, chooseZoneBtn);
-		this.getCellFormatter().setHorizontalAlignment(7, 2, HasHorizontalAlignment.ALIGN_LEFT);
+		this.setWidget(8, 2, chooseZoneBtn);
+		this.getCellFormatter().setHorizontalAlignment(8, 2, HasHorizontalAlignment.ALIGN_LEFT);
 
 		spotTxt = new TextBox();
 		spotTxt.setMaxLength(50);
-		this.setWidget(8, 1, spotTxt);
+		this.setWidget(9, 1, spotTxt);
 		spotTxt.setWidth(NewSpotPanel.INPUTS_WIDTH);
 		
 		timeZoneBox = new ListBox();
 		timeZoneBox.setWidth(NewSpotPanel.INPUTS_WIDTH);
-		this.setWidget(9, 1, timeZoneBox);
+		this.setWidget(10, 1, timeZoneBox);
 		
 		Label lblSpotVisibility = new Label(GWTUtils.LOCALE_CONSTANTS.spotVisibility() + ":");
-		this.setWidget(10, 0, lblSpotVisibility);
-		this.getCellFormatter().setHorizontalAlignment(10, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+		this.setWidget(11, 0, lblSpotVisibility);
+		this.getCellFormatter().setHorizontalAlignment(11, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		HorizontalPanel radioPanel = new HorizontalPanel();
 		radioPanel.setSpacing(5);
-		this.setWidget(10, 1, radioPanel);
+		this.setWidget(11, 1, radioPanel);
 		
 		radioPrivateButton = new RadioButton("visibilityRadioGroup", GWTUtils.LOCALE_CONSTANTS.private_());
 		radioPrivateButton.setValue(true);
@@ -214,22 +221,22 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		
 		Label lblLocalization = new Label(GWTUtils.LOCALE_CONSTANTS.geographicLocalization());
 		lblLocalization.addStyleName("gwt-Label-Title");
-		this.setWidget(11, 0, lblLocalization);
-		this.getFlexCellFormatter().setColSpan(11, 0, 3);
+		this.setWidget(12, 0, lblLocalization);
+		this.getFlexCellFormatter().setColSpan(12, 0, 3);
 		
 		mapPanel = new MapPanel();
-		this.setWidget(12, 0, mapPanel);
-		this.getCellFormatter().setHorizontalAlignment(12, 0, HasHorizontalAlignment.ALIGN_CENTER);
-		this.getFlexCellFormatter().setColSpan(12, 0, 3);
+		this.setWidget(13, 0, mapPanel);
+		this.getCellFormatter().setHorizontalAlignment(13, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.getFlexCellFormatter().setColSpan(13, 0, 3);
 		
 		Label lblTrainClassifier = new Label(GWTUtils.LOCALE_CONSTANTS.trainClassifier());
 		lblTrainClassifier.addStyleName("gwt-Label-Title");
-		this.setWidget(13, 0, lblTrainClassifier);
-		this.getFlexCellFormatter().setColSpan(13, 0, 3);
+		this.setWidget(14, 0, lblTrainClassifier);
+		this.getFlexCellFormatter().setColSpan(14, 0, 3);
 		
 		form = new FormPanel();
-		this.setWidget(15, 0, form);
-		this.getFlexCellFormatter().setColSpan(15, 0, 3);
+		this.setWidget(16, 0, form);
+		this.getFlexCellFormatter().setColSpan(16, 0, 3);
 		form.setAction(UPLOAD_ACTION_URL);
 		form.setEncoding(FormPanel.ENCODING_MULTIPART);
 	    form.setMethod(FormPanel.METHOD_POST);
@@ -349,17 +356,18 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		
 		//Save Button	
 		final HTMLButtonGrayGrad saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.save(), "NewSpotDataPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
-		this.setWidget(16, 0, saveBtn);
-		this.getFlexCellFormatter().setColSpan(16, 0, 3);
-		this.getFlexCellFormatter().setHorizontalAlignment(16, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		this.setWidget(17, 0, saveBtn);
+		this.getFlexCellFormatter().setColSpan(17, 0, 3);
+		this.getFlexCellFormatter().setHorizontalAlignment(17, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		
 		saveBtn.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				
+				Window.scrollTo(0, 0);
 				final Vector<String> messages = new Vector<String>();
 				errorPanel.setVisible(false);
 				successPanel.setVisible(false);
+				loadingAddingSpotPanel.setVisible(true);
 				int countryId = countryBox.getItemCount() == 0 ? 0 : new Integer(countryBox.getValue(countryBox.getSelectedIndex()));
 				messages.addAll(validateForm());
 				if (messages.isEmpty()){
@@ -371,7 +379,10 @@ public class NewSpotPanel extends FlexTable implements Observer{
 								zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
 								timeZoneBox.getValue(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
 							public void onSuccess(Integer result){
+								loadingAddingSpotPanel.setVisible(false);
 								String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
+								successPanel.setMessage(message);
+								successPanel.setVisible(true);
 								if (!upload.getFilename().trim().equals("")) {
 									spotId.setValue(result.toString());
 									latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
@@ -383,13 +394,10 @@ public class NewSpotPanel extends FlexTable implements Observer{
 								//refresh localization lists on whole application
 								LocalizationUtils.getInstance().checkCallsAndNotify();
 								MySpotsPanel.getInstance().retrieveMySpots();
-								
-								successPanel.setMessage(message);
-								successPanel.setVisible(true);
-								Window.scrollTo(0, 0);
 				            }
 							
 							public void onFailure(Throwable caught){
+								loadingAddingSpotPanel.setVisible(false);
 				            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 										Cookies.getCookie("surfForecaster-Username") != null) {
 									GWTUtils.showSessionExpiredLoginBox();
@@ -398,16 +406,15 @@ public class NewSpotPanel extends FlexTable implements Observer{
 									errorPanel.setMessages(messages);
 									errorPanel.setVisible(true);
 								}
-				            	Window.scrollTo(0, 0);
 				            }
 						});
 					else
 						saveEditedSpot(zoneId, countryId);
 				}
 				else{
+					loadingAddingSpotPanel.setVisible(false);
 					errorPanel.setMessages(messages);
 					errorPanel.setVisible(true);
-					Window.scrollTo(0, 0);
 				}
 			}
 		});

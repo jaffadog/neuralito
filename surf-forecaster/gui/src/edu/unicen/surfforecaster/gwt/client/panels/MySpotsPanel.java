@@ -28,6 +28,7 @@ public class MySpotsPanel extends FlexTable {
 	private FlexTable mySpotsTable = null;
 	private MessagePanel errorPanel;
 	private MessagePanel successPanel;
+	private LoadingPanel loadingDeleteSpotPanel = null;
 	
 	//Static properties
 	private final static String ACTION_ICON_HEIGHT = "20px";
@@ -46,17 +47,23 @@ public class MySpotsPanel extends FlexTable {
 		{
 			errorPanel = new ErrorMsgPanel();
 			errorPanel.setVisible(false);
-			this.setWidget(1, 0, errorPanel);
-			this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
-			this.getFlexCellFormatter().setColSpan(1, 0, 3);
+			this.setWidget(0, 0, errorPanel);
+			this.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			this.getFlexCellFormatter().setColSpan(0, 0, 3);
 		}
 		{
 			Vector<String> message = new Vector<String>();
 			message.add(ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY"));
 			successPanel = new SuccessMsgPanel(message);
 			successPanel.setVisible(false);
-			this.setWidget(2, 0, successPanel);
-			this.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			this.setWidget(1, 0, successPanel);
+			this.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_CENTER);
+			this.getFlexCellFormatter().setColSpan(1, 0, 3);
+		}
+		{
+			loadingDeleteSpotPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.deletingSpot());
+			loadingDeleteSpotPanel.setVisible(false);
+			this.setWidget(2, 0, loadingDeleteSpotPanel);
 			this.getFlexCellFormatter().setColSpan(2, 0, 3);
 		}
 		{
@@ -186,6 +193,10 @@ public class MySpotsPanel extends FlexTable {
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
 		this.getRowFormatter().setVisible(4, true);
+		
+		LoadingPanel loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotData()) ;
+		this.setWidget(4, 0, loadingPanel);
+		
 		NewSpotPanel newSpotPanel = new NewSpotPanel(spot); 
 		this.setWidget(4, 0, newSpotPanel);
 	}
@@ -198,8 +209,10 @@ public class MySpotsPanel extends FlexTable {
 		}
 		errorPanel.setVisible(false);
 		successPanel.setVisible(false);
+		loadingDeleteSpotPanel.setVisible(true);
 		SpotServices.Util.getInstance().deleteSpot(spotId, new AsyncCallback<Boolean>(){
 			public void onSuccess(Boolean result){
+				loadingDeleteSpotPanel.setVisible(false);
 				if (result) {
 					successPanel.setVisible(true);
 					//refresh localization lists
@@ -213,6 +226,7 @@ public class MySpotsPanel extends FlexTable {
             }
 
 			public void onFailure(Throwable caught){
+				loadingDeleteSpotPanel.setVisible(false);
             	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 						Cookies.getCookie("surfForecaster-Username") != null) {
 					GWTUtils.showSessionExpiredLoginBox();

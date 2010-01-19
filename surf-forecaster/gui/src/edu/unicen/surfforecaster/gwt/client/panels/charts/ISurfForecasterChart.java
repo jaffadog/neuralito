@@ -10,6 +10,12 @@ public interface ISurfForecasterChart {
 	 * @param parent Widget - The widget whose contains the generated chart
 	 */
 	void render(Panel parent);
+	/**
+	 * Load and render the chart
+	 * @param parent Widget - The widget whose contains the generated chart
+	 * @param loadingPanel - A panel to shows an icon when the chart is loading. 
+	 */
+	void render(Panel parent, Panel loadingPanel);
 	
 	/**
 	 * Create the options parameters to setup the chart
