@@ -155,7 +155,6 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	public boolean deleteSpot(Integer spotId) throws NeuralitoException {
 		logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Trying to delete spot: " + spotId + "...");
 		if (super.hasAccessTo("deleteSpot")){
-			final Integer userId = super.getLoggedUser().getId();
 			spotService.removeSpot(spotId);
 			logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Spot removed successfully.");
 			return true;
@@ -177,10 +176,14 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	@Override
 	public SpotGwtDTO getSpot(Integer spotId) throws NeuralitoException {
 		logger.log(Level.INFO,"SpotServicesImpl - getSpot - Trying to retrieve the spot: " + spotId + "...");
-		// TODO hacer que use el metodo correcto y sacar esta harcodeada
-		List<SpotGwtDTO> spots = this.getSpotsCreatedBy();
+		SpotDTO spotDTO = spotService.getSpotById(spotId);
+		SpotGwtDTO spotGwtDTO = super.getSpotGwtDTO(spotDTO);
+		//Retrieve gridpoint of the spot (right now we are using the first simple forecaster(ww3) from the list because we know that we have just one for spot)
+		//If this changes we need a litle more complex logic for this
+		SimpleForecasterDTO simpleForecasterDTO = forecastService.getSimpleForecastersForSpot(spotDTO.getId()).get(0);
+		spotGwtDTO.setGridPoint(simpleForecasterDTO.getGridPoint());
 		logger.log(Level.INFO,"SpotServicesImpl - getSpot - Spot retrieved successfully.");
-		return spots.get(0);
+		return spotGwtDTO;
 	}
 
 }
