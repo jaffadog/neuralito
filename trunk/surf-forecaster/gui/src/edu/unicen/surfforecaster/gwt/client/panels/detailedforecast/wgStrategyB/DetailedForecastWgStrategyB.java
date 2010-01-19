@@ -5,25 +5,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.unicen.surfforecaster.gwt.client.SpotServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.CurrentForecastPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.ErrorMsgPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.ILocalizationPanel;
 import edu.unicen.surfforecaster.gwt.client.panels.MessagePanel;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.IRenderDetailedForecastStrategy;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.utils.TimeZones;
 
 public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrategy {
 	
 	private VerticalPanel completeDetailedForecastVPanel = null;
 	private Map<String, List<ForecastGwtDTO>> forecasters = null;
 	private ILocalizationPanel localizationPanel = null;
+	private HorizontalPanel spotDataHPanel = null;
 	
 	/**
 	 * This Strategy shows 2 panels with the next two forecasts (now and +3 hours), and shows below a detalied forecast
@@ -31,11 +37,56 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	 * @param forecasters
 	 * @param localizationPanel
 	 */
-	public DetailedForecastWgStrategyB(Map<String, List<ForecastGwtDTO>> forecasters, ILocalizationPanel localizationPanel) {
+	public DetailedForecastWgStrategyB(Map<String, List<ForecastGwtDTO>> forecasters, ILocalizationPanel localizationPanel, Integer spotId) {
 		this.forecasters = forecasters;
 		this.localizationPanel = localizationPanel;
 		this.completeDetailedForecastVPanel = new VerticalPanel();
 		this.completeDetailedForecastVPanel.setWidth("100%");
+		this.spotDataHPanel = new HorizontalPanel();
+		this.retrieveSpotData(spotId);
+	}
+
+	private void retrieveSpotData(Integer spotId) {
+		SpotServices.Util.getInstance().getSpot(spotId, new AsyncCallback<SpotGwtDTO>(){
+			public void onSuccess(SpotGwtDTO result) {
+				fillSpotInfo(result);
+			}
+				
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
+	}
+	
+	private void fillSpotInfo(SpotGwtDTO spot) {
+		Label spotLat = new Label(GWTUtils.LOCALE_CONSTANTS.spot() + " " + GWTUtils.LOCALE_CONSTANTS.lat_abbr() + ": ");
+		Label spotLatValue = new Label(spot.getPoint().getLatitude() + "");
+		spotLatValue.addStyleName("gwt-Label-SpotDataValue");
+		Label spotLon = new Label(", " + GWTUtils.LOCALE_CONSTANTS.lon_abbr() + ": ");
+		Label spotLonValue = new Label(spot.getPoint().getLongitude() + "");
+		spotLonValue.addStyleName("gwt-Label-SpotDataValue");
+		
+		Label ww3Lat = new Label(", " + GWTUtils.LOCALE_CONSTANTS.justWW3GridPoint() + " " + GWTUtils.LOCALE_CONSTANTS.lat_abbr() + ": ");
+		Label ww3LatValue = new Label(spot.getGridPoint().getLatitude() + "");
+		ww3LatValue.addStyleName("gwt-Label-SpotDataValue");
+		Label ww3Lon = new Label(", " + GWTUtils.LOCALE_CONSTANTS.lon_abbr() + ": ");
+		Label ww3LonValue = new Label(spot.getGridPoint().getLongitude() + "");
+		ww3LonValue.addStyleName("gwt-Label-SpotDataValue");
+		
+		Label timezone = new Label(", " + GWTUtils.LOCALE_CONSTANTS.timeZone() + ": ");
+		Label timezoneValue = new Label(TimeZones.getInstance().getKey(spot.getTimeZone()));
+		timezoneValue.addStyleName("gwt-Label-SpotDataValue");
+		
+		this.spotDataHPanel.add(spotLat);
+		this.spotDataHPanel.add(spotLatValue);
+		this.spotDataHPanel.add(spotLon);
+		this.spotDataHPanel.add(spotLonValue);
+		this.spotDataHPanel.add(ww3Lat);
+		this.spotDataHPanel.add(ww3LatValue);
+		this.spotDataHPanel.add(ww3Lon);
+		this.spotDataHPanel.add(ww3LonValue);
+		this.spotDataHPanel.add(timezone);
+		this.spotDataHPanel.add(timezoneValue);
 	}
 
 	@Override
@@ -46,9 +97,7 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 		completeDetailedForecastVPanel.add(lblTitle);
 		
 		if (this.forecasters != null && this.forecasters.size() > 0) {
-			//Subtitle
-			Label lblSubTitle = new Label("04-10-09 > [UTC-10] Pacific/Rarotonga, CKT");
-			completeDetailedForecastVPanel.add(lblSubTitle);
+			completeDetailedForecastVPanel.add(this.spotDataHPanel);
 			
 			//Current forecast
 			FlexTable flexTable = new FlexTable();

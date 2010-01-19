@@ -66,13 +66,14 @@ public class WgTableB extends FlexTable {
 		this.addStyleName("gwt-FlexTable-WgTable");
 		
 		//FirstRow style
-		this.getCellFormatter().addStyleName(0, 1, "gwt-FlexTable-datesTable");
+		this.getRowFormatter().addStyleName(0, "gwt-FlexTable-datesTable");
+		//this.getCellFormatter().addStyleName(0, 1, "gwt-FlexTable-datesTable");
 		
 		//First cell
-		VerticalPanel forecastInfo = new VerticalPanel();
-		forecastInfo.add(new Label("04-10-09"));
-		forecastInfo.add(new Label("UTC-10"));
-		this.setWidget(0, 0, forecastInfo);
+//		VerticalPanel forecastInfo = new VerticalPanel();
+//		forecastInfo.add(new Label("04-10-09"));
+//		forecastInfo.add(new Label("UTC-10"));
+		this.setWidget(0, 0, new Label());
 		this.getCellFormatter().setWidth(0, 0, WgTableB.LABELS_COL_WIDTH);
 		
 		//Dates panel

@@ -2,6 +2,8 @@ package edu.unicen.surfforecaster.gwt.client.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class TimeZones {
 	
@@ -542,5 +544,22 @@ public class TimeZones {
 	
 	public HashMap<String, Object> getTimeZones(){
 		return this.timeZones;
+	}
+	
+	/**
+	 * Returns the first key, which value is equals than the value as param
+	 * @param value
+	 * @return String Hashmap key
+	 */
+	public String getKey(String value) {
+		Set<String> keys = this.timeZones.keySet();
+		Iterator<String> i = keys.iterator();
+		while (i.hasNext()) {
+			String key = i.next();
+			String mapValue = this.timeZones.get(key).toString();
+			if (value.equals(mapValue)) 
+				return key;
+		}
+		return null;
 	}
 }

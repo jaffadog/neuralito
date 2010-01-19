@@ -44,21 +44,20 @@ public class ForecastPanel extends LazyPanel {
 		this.detailedForecast = new Widget();
 		this.loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotForecast()); 
 		container.add(this.loadingPanel);
-		ForecastServices.Util.getInstance().getLatestForecasts(new Integer(localizationPanel.getSpotBoxDisplayValue()), new AsyncCallback<Map<String, List<ForecastGwtDTO>>>(){
+		final Integer spotId = new Integer(localizationPanel.getSpotBoxDisplayValue());
+		ForecastServices.Util.getInstance().getLatestForecasts(spotId, new AsyncCallback<Map<String, List<ForecastGwtDTO>>>(){
 			public void onSuccess(Map<String, List<ForecastGwtDTO>> result) {
-				showSpotLatestForecast(result);
+				showSpotLatestForecast(result, spotId);
 			}
 				
 			public void onFailure(Throwable caught) {
 				
 			}
 		});
-		
-		
 	}
 	
-	private void showSpotLatestForecast(Map<String, List<ForecastGwtDTO>> forecasters) {
-		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters, localizationPanel));
+	private void showSpotLatestForecast(Map<String, List<ForecastGwtDTO>> forecasters, Integer spotId) {
+		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters, localizationPanel, spotId));
 		this.detailedForecast = renderContext.executeRenderStrategy(); 
 		container.add(this.detailedForecast);
 		this.loadingPanel.removeFromParent();
