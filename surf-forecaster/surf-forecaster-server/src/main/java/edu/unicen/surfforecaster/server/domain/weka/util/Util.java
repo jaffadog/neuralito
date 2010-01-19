@@ -76,7 +76,10 @@ public final class Util {
 			final double windV) {
 		if (windU == -1 || windV == -1)
 			return -1;
-		return Math.sqrt(Math.pow(windU, 2) + Math.pow(windV, 2));
+		double windSpeed = Math.sqrt(Math.pow(windU, 2) + Math.pow(windV, 2));
+		// Translate windspeed from M/sec to Km/Hr. 1 m/s = 3.6 km/h
+		windSpeed = windSpeed * 3.6;
+		return windSpeed;
 	}
 
 	/**
