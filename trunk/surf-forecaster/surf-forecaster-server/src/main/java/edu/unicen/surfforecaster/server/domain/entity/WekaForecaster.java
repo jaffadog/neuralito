@@ -202,7 +202,6 @@ public class WekaForecaster extends Forecaster {
 			final double windDirection = Util.calculateWindDirection(windU,
 					windV);
 			final double windSpeed = Util.calculateWindSpeed(windU, windV);
-
 			// ADD wind speed and direction parameters to each forecast.
 			forecast.addParameter(WaveWatchParameter.WIND_DIRECTION_V2
 					.getValue(), new ForecastValue(

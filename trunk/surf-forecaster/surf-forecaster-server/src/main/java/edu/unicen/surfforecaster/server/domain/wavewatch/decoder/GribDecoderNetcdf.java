@@ -196,6 +196,7 @@ public class GribDecoderNetcdf implements GribDecoder {
 				if (value.isNaN()) {
 					value = -1F;
 				}
+				// TODO put the real unit of the parameter.
 				parameter.put(gridDatatype.getName(), new ForecastValue(
 						gridDatatype.getName(), value, Unit.Meters));
 			}
