@@ -174,4 +174,13 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return null;
 	}
 
+	@Override
+	public SpotGwtDTO getSpot(Integer spotId) throws NeuralitoException {
+		logger.log(Level.INFO,"SpotServicesImpl - getSpot - Trying to retrieve the spot: " + spotId + "...");
+		// TODO hacer que use el metodo correcto y sacar esta harcodeada
+		List<SpotGwtDTO> spots = this.getSpotsCreatedBy();
+		logger.log(Level.INFO,"SpotServicesImpl - getSpot - Spot retrieved successfully.");
+		return spots.get(0);
+	}
+
 }

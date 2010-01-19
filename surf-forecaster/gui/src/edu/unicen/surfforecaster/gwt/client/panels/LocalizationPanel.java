@@ -43,14 +43,12 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 			disclosurePanel.setWidth("100%");
 			disclosurePanel.setAnimationEnabled(true);
 			initWidget(disclosurePanel);
+			this.setWidth("100%");
 			{
 				VerticalPanel verticalPanel = new VerticalPanel();
+				verticalPanel.setWidth("100%");
+				verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 				disclosurePanel.setContent(verticalPanel);
-				{
-					Label lblMessage = new Label("");
-					lblMessage.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-					verticalPanel.add(lblMessage);
-				}
 				{
 					FlexTable localizationForm = new FlexTable();
 					localizationForm.setCellSpacing(5);
@@ -58,7 +56,6 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 					{
 						Label lblArea = new Label(GWTUtils.LOCALE_CONSTANTS.area() + ": ");
 						localizationForm.setWidget(0, 0, lblArea);
-						lblArea.setWidth("90");
 					}
 					{
 						areaBox = new ListBox();
@@ -88,7 +85,6 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 					{
 						Label lblZone = new Label(GWTUtils.LOCALE_CONSTANTS.zone() + ": ");
 						localizationForm.setWidget(1, 0, lblZone);
-						lblZone.setWidth("90");
 					}
 					{
 						zoneBox = new ListBox();
@@ -113,30 +109,25 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 						});
 						localizationForm.setWidget(1, 3, spotBox);
 						spotBox.setWidth("300");
-					}
-					{
-						//TODO hacer que si no hay spot seleccionado el boton este desabilidato
-						//For button id appended at the end the current time in milliseconds to avoid duplicated ids along all of this panels creation in the app.
-						forecastButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LocalizationPanel-Forecast" + (new Date()).getTime() , HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_150PX);
-						//forecastButton.setSize("90", GWTUtils.PUSHBUTTON_HEIGHT);
-						forecastButton.setEnabled(false);
-						forecastButton.addClickHandler(new ClickHandler() {
-							public void onClick(ClickEvent event) {
-								if (forecastButton.isEnabled())
-									renderSpotInfo();
-								else
-									new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectSpot(), MessageBox.IconType.INFO);
-							}
-						});
-						localizationForm.setWidget(2, 0, forecastButton);
-						localizationForm.getFlexCellFormatter().setColSpan(2, 0, 4);
-					}
-					
-					localizationForm.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);		
+					}		
 					localizationForm.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 					localizationForm.getCellFormatter().setHorizontalAlignment(1, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 					localizationForm.getCellFormatter().setHorizontalAlignment(0, 2, HasHorizontalAlignment.ALIGN_RIGHT);
 					localizationForm.getCellFormatter().setHorizontalAlignment(1, 2, HasHorizontalAlignment.ALIGN_RIGHT);
+				}
+				{
+					//For button id appended at the end the current time in milliseconds to avoid duplicated ids along all of this panels creation in the app.
+					forecastButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LocalizationPanel-Forecast" + (new Date()).getTime() , HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_150PX);
+					forecastButton.setEnabled(false);
+					forecastButton.addClickHandler(new ClickHandler() {
+						public void onClick(ClickEvent event) {
+							if (forecastButton.isEnabled())
+								renderSpotInfo();
+							else
+								new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.mustSelectSpot(), MessageBox.IconType.INFO);
+						}
+					});
+					verticalPanel.add(forecastButton);
 				}
 			}
 		}

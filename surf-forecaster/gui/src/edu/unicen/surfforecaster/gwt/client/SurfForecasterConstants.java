@@ -398,6 +398,15 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Continuaci\u00F3n")
 	String continue_();
 	
+	@DefaultStringValue("WW3GridPoint")
+	String justWW3GridPoint();
+	
+	@DefaultStringValue("Lat")
+	String lat_abbr();
+	
+	@DefaultStringValue("Lon")
+	String lon_abbr();
+	
 	/**
 	 * ForecastPanel
 	 */
