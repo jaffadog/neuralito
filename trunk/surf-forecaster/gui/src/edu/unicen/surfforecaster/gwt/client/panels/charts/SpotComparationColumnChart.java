@@ -39,11 +39,18 @@ public class SpotComparationColumnChart implements ISurfForecasterChart {
 	
 	@Override
 	public void render(final Panel parent) {
+		this.render(parent, null);
+	}
+	
+	@Override
+	public void render(final Panel parent, final Panel loadingPanel) {
 		VisualizationUtils.loadVisualizationApi("1.1",
 	            new Runnable() {
 	              public void run() {
 		          	  ColumnChart chart = new ColumnChart(createTable(), createOptions());
 		          	  parent.add(chart);
+		          	  if (loadingPanel != null)
+		          		  parent.remove(loadingPanel);
 	              }
         }, ColumnChart.PACKAGE);
 	}

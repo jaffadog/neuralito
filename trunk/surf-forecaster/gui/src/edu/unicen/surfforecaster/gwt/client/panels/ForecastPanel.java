@@ -12,12 +12,14 @@ import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetailedForecastContext;
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgStrategyB.DetailedForecastWgStrategyB;
+import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
 public class ForecastPanel extends LazyPanel {
 	
 	private LocalizationPanel localizationPanel = null;;
 	private VerticalPanel container = null;
 	private Widget detailedForecast = new Widget();
+	private LoadingPanel loadingPanel = null;
 	
 	public ForecastPanel() {
 	}
@@ -40,6 +42,8 @@ public class ForecastPanel extends LazyPanel {
 	public void getSpotLastestForecast(){
 		this.detailedForecast.removeFromParent();
 		this.detailedForecast = new Widget();
+		this.loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotForecast()); 
+		container.add(this.loadingPanel);
 		ForecastServices.Util.getInstance().getLatestForecasts(new Integer(localizationPanel.getSpotBoxDisplayValue()), new AsyncCallback<Map<String, List<ForecastGwtDTO>>>(){
 			public void onSuccess(Map<String, List<ForecastGwtDTO>> result) {
 				showSpotLatestForecast(result);
@@ -57,6 +61,7 @@ public class ForecastPanel extends LazyPanel {
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters, localizationPanel));
 		this.detailedForecast = renderContext.executeRenderStrategy(); 
 		container.add(this.detailedForecast);
+		this.loadingPanel.removeFromParent();
 	}
 
 }

@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -211,8 +210,10 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 			this.drawMotionChart();
 			detailedCompTablePanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
 				public void onOpen(OpenEvent<DisclosurePanel> event) {
-					if (detailedCompTable == null)
+					if (detailedCompTable == null) {
+						detailedCompTablePanel.setContent(new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingDetailedForecasts()));
 						renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
+					}
 					backBtn.setVisible(true);
 				}
 			});
@@ -305,7 +306,9 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 	
 	private void drawColumnChart(){
 		VerticalPanel chartContainer = new VerticalPanel();
-		
+		this.setWidget(1, 0, chartContainer);
+	    this.getFlexCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER);
+	    
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.waveHeightNextHours());
 		lblTitle.addStyleName("gwt-Label-Title");
 		chartContainer.add(lblTitle);
@@ -314,14 +317,18 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		chartContainer.add(lblDescription);
 		lblDescription.addStyleName("gwt-Label-SectionDescription");
 		
+		LoadingPanel loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingChart()) ;
+		chartContainer.add(loadingPanel);
+		
 		ISurfForecasterChart columnChart = new SpotComparationColumnChart(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames);
-		columnChart.render(chartContainer);
-		this.setWidget(1, 0, chartContainer);
-	    this.getFlexCellFormatter().setHorizontalAlignment(5, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		columnChart.render(chartContainer, loadingPanel);
+		
 	}
 	
 	private void drawMotionChart(){
 		VerticalPanel chartContainer = new VerticalPanel();
+		this.setWidget(2, 0, chartContainer);
+	    this.getFlexCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.waveHeightAllForecast());
 		lblTitle.addStyleName("gwt-Label-Title");
@@ -331,10 +338,11 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		chartContainer.add(lblDescription);
 		lblDescription.addStyleName("gwt-Label-SectionDescription");
 		
+		LoadingPanel loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingChart()) ;
+		chartContainer.add(loadingPanel);
+		
 		ISurfForecasterChart motionChart = new SpotComparationMotionChart(spotsLatestForecasts, spotsIds, spotsNames, forecastersNames);
-		motionChart.render(chartContainer);
-		this.setWidget(2, 0, chartContainer);
-	    this.getFlexCellFormatter().setHorizontalAlignment(6, 0, HasHorizontalAlignment.ALIGN_CENTER);
+		motionChart.render(chartContainer, loadingPanel);
 	}
 	
 	private void renderDetailedCompTable(Map<Integer, Map<String, List<ForecastGwtDTO>>> spotsLatestForecasts, List<Integer> spotsIds, List<String> spotsNames) {

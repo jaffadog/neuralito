@@ -36,11 +36,18 @@ public class SpotComparationMotionChart implements ISurfForecasterChart {
 	
 	@Override
 	public void render(final Panel parent) {
+		this.render(parent, null);
+	}
+	
+	@Override
+	public void render(final Panel parent, final Panel loadingPanel) {
 		VisualizationUtils.loadVisualizationApi("1.1",
 	            new Runnable() {
 	              public void run() {
 		          	  MotionChart chart = new MotionChart(createTable(), createOptions());
 	          	      parent.add(chart);
+	          	      if (loadingPanel != null)
+	          	    	  parent.remove(loadingPanel);
 	              }				
         }, MotionChart.PACKAGE);
 	}

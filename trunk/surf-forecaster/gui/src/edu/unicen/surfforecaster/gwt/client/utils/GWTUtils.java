@@ -160,9 +160,12 @@ public final class GWTUtils {
 	
 	/**
 	 * Returns true if the difference between the first hour and the second is less than one
+	 * @param clientHour The client system hours in 24h format
+	 * @param foreastHour Forecast hours in 24h format
 	 * @returns boolean
 	 */
 	private static boolean isCurrentHour(int clientHour, int forecastHour) {
+		clientHour = clientHour == 23 ? 21 : clientHour; //This is an exception because if clienthour is 23, this method always return false (due midnight is 0 and not 24) 
 		int diff = clientHour - forecastHour;
 		diff = diff < 0 ? diff * (-1) : diff; //get diff absolute value
 		return diff <= 1 ? true : false;
