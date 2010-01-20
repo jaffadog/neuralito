@@ -211,6 +211,7 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 	
 	private void setAreaListItems() {
 		this.areaBox.clear();
+		forecastButton.setEnabled(false);
 		Iterator<AreaDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
 		while (i.hasNext()){
 			AreaDTO area = i.next();
@@ -222,6 +223,7 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 		this.countryBox.clear();
 		this.zoneBox.clear();
 		this.spotBox.clear();
+		forecastButton.setEnabled(false);
 		Iterator<CountryDTO> i = LocalizationUtils.getInstance().getCountries(areaId).iterator(); 
 		while (i.hasNext()){
 			CountryDTO country = i.next();
@@ -235,6 +237,7 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 	private void setZoneListItems(Integer countryId){
 		this.zoneBox.clear();
 		this.spotBox.clear();
+		forecastButton.setEnabled(false);
 		SpotServices.Util.getInstance().getZones(countryId, new AsyncCallback<List<ZoneDTO>>(){
 			public void onSuccess(List<ZoneDTO> result) {
 				Iterator<ZoneDTO> i = result.iterator(); 
@@ -254,6 +257,7 @@ public class LocalizationPanel extends Composite implements ILocalizationPanel, 
 	
 	private void setSpotListItems(Integer zoneId){
 		this.spotBox.clear();
+		forecastButton.setEnabled(false);
 		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotGwtDTO>>(){
 			public void onSuccess(List<SpotGwtDTO> result) {
 				Iterator<SpotGwtDTO> i = result.iterator(); 
