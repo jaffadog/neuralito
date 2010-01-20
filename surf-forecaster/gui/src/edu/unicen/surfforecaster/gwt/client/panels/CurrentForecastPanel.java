@@ -55,7 +55,7 @@ public class CurrentForecastPanel extends FlexTable {
 				//Wave period
 				String wavePeriod = forecast.getMap().get(WaveWatchParameter.PRIMARY_WAVE_PERIOD_V2.getValue()).getValue();
 				try {
-					windSpeed = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
+					windSpeed = NumberFormat.getFormat("###").format(UnitConverter.convertValue(windSpeed, Unit.KilometersPerHour, speedUnitTarget));
 					windDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(windDirection, Unit.Degrees, directionUnitTarget));
 					waveHeight = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveHeight, Unit.Meters, heightUnitTarget));
 					waveDirection = NumberFormat.getFormat("###.#").format(UnitConverter.convertValue(waveDirection, Unit.Degrees, directionUnitTarget));
