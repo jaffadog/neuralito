@@ -44,7 +44,7 @@ insert  into `country_i18n`(`Country_id`,`names_id`) values (2,8);
 insert  into `country_i18n`(`Country_id`,`names_id`) values (3,9);
 insert  into `country_i18n`(`Country_id`,`names_id`) values (3,10);
 insert  into `country_i18n`(`Country_id`,`names_id`) values (4,11);
-insert  into `country_i18n`(`Country_id`,`names_id`) values (5,12);
+insert  into `country_i18n`(`Country_id`,`names_id`) values (4,12);
 
 /*Data for the table `description` */
 
