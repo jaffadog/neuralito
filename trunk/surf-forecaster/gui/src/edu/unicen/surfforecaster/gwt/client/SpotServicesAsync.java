@@ -13,7 +13,7 @@ public interface SpotServicesAsync {
 			String zoneName, boolean public_, String timezone, AsyncCallback<Integer> callback);
 	
 	void editSpot(Integer spotId, String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
-			String zoneName, boolean public_, String timezone, AsyncCallback<Integer> callback);
+			String zoneName, boolean public_, String timezone, boolean changedGridPoint, AsyncCallback<Integer> callback);
 	
 	void getAreas(AsyncCallback<List<AreaDTO>> callback);
 	

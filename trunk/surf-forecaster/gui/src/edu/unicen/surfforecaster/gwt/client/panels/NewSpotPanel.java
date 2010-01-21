@@ -90,8 +90,16 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private static final String TABLE_COL_1 = "310px";
 	private static final String TABLE_COL_2 = "522px";
 	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL() + "FileUploadServices";
+	
+	//only for edit mode to know if day light time was edited
+	private int hour;
+	private int hour2;
+	private int minutes;
+	private int minutes2;
 
 	private Label lblNewSpotDescription;
+	private Hidden dayHoursChanged;
+	private Hidden gridPointChanged;
 	
 	public NewSpotPanel() {
 		this.panelMode = "create";
@@ -381,8 +389,6 @@ public class NewSpotPanel extends FlexTable implements Observer{
 							public void onSuccess(Integer result){
 								loadingAddingSpotPanel.setVisible(false);
 								String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
-								successPanel.setMessage(message);
-								successPanel.setVisible(true);
 								if (!upload.getFilename().trim().equals("")) {
 									spotId.setValue(result.toString());
 									latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
@@ -391,6 +397,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 									form.submit();
 								}
 								clearFields();
+								successPanel.setMessage(message);
+								successPanel.setVisible(true);
 								//refresh localization lists on whole application
 								LocalizationUtils.getInstance().checkCallsAndNotify();
 								MySpotsPanel.getInstance().retrieveMySpots();
@@ -463,19 +471,39 @@ public class NewSpotPanel extends FlexTable implements Observer{
 			radioPublicButton.setValue(false);
 		}
 		
-		//set spot location and gridpoint location
-		mapPanel.setSpotLocation(spot.getPoint());
+		//set spot location and gridpoint location. Gridpoint location must be first, due that spotlocation call async to get ww3 gridpoints and needs the gridpoint
+		//location to know which color of buoy must choose
 		mapPanel.setGridPointLocation(spot.getGridPoint());
+		mapPanel.setSpotLocation(spot.getPoint());
+		
 		
 		HorizontalPanel radioObsPanel = new HorizontalPanel();
 	    radioObsPanel.setSpacing(5);
 		formTable.setWidget(2, 0, radioObsPanel);
 		formTable.getFlexCellFormatter().setColSpan(2, 0, 10);
-		radioReplaceButton = new RadioButton("obsRadioGroup", GWTUtils.LOCALE_CONSTANTS.replaceObservations());
+		radioReplaceButton = new RadioButton("obsRadioGroupFormElement", GWTUtils.LOCALE_CONSTANTS.replaceObservations());
 		radioReplaceButton.setValue(true);
+		radioReplaceButton.setFormValue("replace");
 		radioObsPanel.add(radioReplaceButton);
-		radioAppendButton = new RadioButton("obsRadioGroup", GWTUtils.LOCALE_CONSTANTS.appendObservations());
+		radioAppendButton = new RadioButton("obsRadioGroupFormElement", GWTUtils.LOCALE_CONSTANTS.appendObservations());
+		radioAppendButton.setFormValue("append");
 		radioObsPanel.add(radioAppendButton);
+		
+		//Change hours hidden
+		dayHoursChanged = new Hidden();
+		dayHoursChanged.setName("dayHoursChangedFormElement");
+		dayHoursChanged.setID("dayHoursChangedFormElement");
+		dayHoursChanged.setValue("false");
+	    formTable.setWidget(8, 0, dayHoursChanged);
+	    formTable.getFlexCellFormatter().setColSpan(8, 0, 10);
+	    
+	    //Change gridPoint hidden
+		gridPointChanged = new Hidden();
+		gridPointChanged.setName("gridPointChangedFormElement");
+		gridPointChanged.setID("gridPointChangedFormElement");
+		gridPointChanged.setValue("false");
+	    formTable.setWidget(9, 0, gridPointChanged);
+	    formTable.getFlexCellFormatter().setColSpan(9, 0, 10);
 		
 		if (LocalizationUtils.getInstance().getCallsQueue().allFinished())
 			update(LocalizationUtils.getInstance(), null);
@@ -495,6 +523,11 @@ public class NewSpotPanel extends FlexTable implements Observer{
 					txtHour2.setText(result.get(0).getTrainningOptions().get("utcSunsetHour"));
 					txtMinutes.setText(result.get(0).getTrainningOptions().get("utcSunriseMinute"));
 					txtMinutes2.setText(result.get(0).getTrainningOptions().get("utcSunsetMinute"));
+					//this fields will be used to know if this values were edited
+					hour = new Integer(txtHour.getText());
+					hour2 = new Integer(txtHour2.getText());
+					minutes = new Integer(txtMinutes.getText());
+					minutes2 = new Integer(txtMinutes2.getText());
 				}
             }
 			
@@ -691,31 +724,48 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		//TODO este getpoint del if en realidad tendria que ser el getGridPoint, pero aun no esta hecho, cambiarlo cuando este , agregar tb al if que si cambio
 		//las horas de luz de dia tambien tiene que reentrenar
 		
-			SpotServices.Util.getInstance().editSpot(spot.getId(), spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
-					mapPanel.getBuoyLat(), mapPanel.getBuoyLong(), zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
-					timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
-				public void onSuccess(Integer result){
-					if (!upload.getFilename().trim().equals("") /*|| cambio de horas*/) {
-						spotId.setValue(result.toString());
-						form.submit();
-						//This force a retrain
-					} else if (spot.getPoint().getLatitude() != new Float(mapPanel.getBuoyLat()) || spot.getPoint().getLongitude() != new Float(mapPanel.getBuoyLong())) {
-						//TODO call to a retrain service with the new grid coordinates
-					}
-					//clearFields();
-					successPanel.setVisible(true);
+		//check if gridPoint changed
+		boolean changedBuoy = false;
+		if (spot.getGridPoint().getLatitude() != new Float(mapPanel.getBuoyLat()).floatValue() || spot.getGridPoint().getLongitude() != new Float(mapPanel.getBuoyLong()).floatValue()) {
+			changedBuoy = true;
+			gridPointChanged.setValue("true");
+		}
+		final boolean changedGridPoint = changedBuoy;
+		
+		//check if dayLight hours changed
+		boolean changedDayLight = false;
+		if (hour != new Integer(txtHour.getText()).intValue() || hour2 != new Integer(txtHour2.getText()).intValue() || 
+				minutes != new Integer(txtMinutes.getText()).intValue() || minutes2 != new Integer(txtMinutes2.getText()).intValue()) {
+			changedDayLight = true;
+			dayHoursChanged.setValue("true");
+		}
+		final boolean changedDayLightHours = changedDayLight;
+		
+		SpotServices.Util.getInstance().editSpot(spot.getId(), spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
+				mapPanel.getBuoyLat(), mapPanel.getBuoyLong(), zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
+				timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), changedGridPoint, new AsyncCallback<Integer>(){
+			public void onSuccess(Integer result){
+				if (changedGridPoint || !upload.getFilename().trim().equals("") || changedDayLightHours) {
+					//This force a retrain
+					spotId.setValue(result.toString());
+					latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
+					longitudeGridPoint.setValue(mapPanel.getBuoyLong().replace(",", "."));
+					form.submit();
 					
-	            }
-	            public void onFailure(Throwable caught){
-	            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
-							Cookies.getCookie("surfForecaster-Username") != null) {
-						GWTUtils.showSessionExpiredLoginBox();
-					} else {
-						errorPanel.setMessage(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
-						errorPanel.setVisible(true);
-					}
-	            }
-			});
+				}
+				successPanel.setVisible(true);
+				
+            }
+            public void onFailure(Throwable caught){
+            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+						Cookies.getCookie("surfForecaster-Username") != null) {
+					GWTUtils.showSessionExpiredLoginBox();
+				} else {
+					errorPanel.setMessage(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+					errorPanel.setVisible(true);
+				}
+            }
+		});
 		
 		
 	}

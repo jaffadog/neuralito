@@ -90,8 +90,6 @@ public class MapPanel extends VerticalPanel {
 	            InfoWindow info = sender.getInfoWindow();
 	            info.setMaximizeEnabled(false);
 	            InfoWindowContent content = new InfoWindowContent(getInfoWindowContent(GWTUtils.LOCALE_CONSTANTS.spotLocation(), point));
-	            //content.setMaxContent("Hello Maps - more content");
-	            //content.setMaxTitle("Hello Maps");
 	            info.open(marker, content);
 	            txtSpotLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude())));
 	            txtSpotLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude())));
@@ -178,7 +176,12 @@ public class MapPanel extends VerticalPanel {
 						while (i.hasNext()) {
 							PointDTO point = i.next();
 							marker = new Marker(LatLng.newInstance(new Double(point.getLatitude()), new Double(point.getLongitude())), options);
-					    	marker.getIcon().setImageURL(GWTUtils.IMAGE_BUOY_DISABLED);
+							//choose icon foreach gridpoint
+							if (NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude()).equals(txtBuoyLat.getText().trim()) && 
+									NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude()).equals(txtBuoyLong.getText().trim()))
+								marker.getIcon().setImageURL(GWTUtils.IMAGE_BUOY_SELECTED);
+							else
+								marker.getIcon().setImageURL(GWTUtils.IMAGE_BUOY_DISABLED);
 					    	map.addOverlay(marker);
 					    	spotGridPoints.add(marker);
 						}
@@ -236,19 +239,16 @@ public class MapPanel extends VerticalPanel {
         InfoWindowContent content = new InfoWindowContent(getInfoWindowContent(GWTUtils.LOCALE_CONSTANTS.spotLocation(), point));
 
         info.open(marker, content);
-        txtSpotLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude())));
-        txtSpotLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude())));
+        txtSpotLong.setText(NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLongitude()));
+        txtSpotLat.setText(NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(marker.getLatLng().getLatitude()));
         
-        showWW3Buoys(map, point);
-        //TODO nose si aca o en showww3buoys pero cuando el spotDTO tenga el punto de ww3 incorporado tengo que marcar la boya selecionada (tal vez solo completar 
-        //los campos de texto que llevan esta info, o si el icono de la boya seleccionada va a ser distinto del de las no seleccionadas entonces tendre que hacer
-        //algo visual)
+        this.showWW3Buoys(map, point);
 	}
 
 	public void setGridPointLocation(PointDTO pointDTO) {
 		LatLng point = LatLng.newInstance(new Double(pointDTO.getLatitude()), new Double(pointDTO.getLongitude()));
-        txtBuoyLong.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLongitude())));
-        txtBuoyLat.setText(("" + NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLatitude())));
+        txtBuoyLong.setText(NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLongitude()));
+        txtBuoyLat.setText(NumberFormat.getFormat(MapPanel.MAP_COORDINATE_FORMAT).format(point.getLatitude()));
 	}
 	
 	public void clearMap(){
