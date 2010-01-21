@@ -167,10 +167,40 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	public Integer editSpot(Integer spotId, String spotName,
 			String spotLatitude, String spotLongitude, String buoyLatitude,
 			String buoyLongitude, Integer zoneId, Integer countryId,
-			String zoneName, boolean public1, String timezone)
+			String zoneName, boolean public1, String timezone, boolean changedGridPoint)
 			throws NeuralitoException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		logger.log(Level.INFO,"SpotServicesImpl - editSpot - Trying to edit spot: '" + spotId + "'...");
+		if (super.hasAccessTo("editSpot")){
+			final float spotLongitudeNum = new Float(spotLongitude.replace(",", "."));
+			final float spotLatitudeNum = new Float(spotLatitude.replace(",", "."));
+			final float buoyLongitudeNum = new Float(buoyLongitude.replace(",", "."));
+			final float buoyLatitudeNum = new Float(buoyLatitude.replace(",", "."));
+			final Integer userId = super.getLoggedUser().getId();
+			Integer result = null;
+			TimeZone tz = TimeZone.getTimeZone(timezone);
+			if (zoneName.trim().equals("")) {
+				logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
+//				result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public1, tz);
+			} else {
+				logger.log(Level.INFO,"SpotServicesImpl - editSpot - Adding zone: '"  + zoneName.trim() + "'...");	
+//				zoneId = spotService.addZone(zoneName.trim(), countryId);
+				logger.log(Level.INFO,"SpotServicesImpl - editSpot - Zone: '"  + zoneName.trim() + "' added.");
+				logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
+//				result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public1, tz);
+			}
+			
+			if (result != null && changedGridPoint) {
+//				forecastService.removeWW3Forecaster(result);
+//				forecastService.createWW3Forecaster(result, new PointDTO(buoyLatitudeNum, buoyLongitudeNum));
+				logger.log(Level.INFO,"SpotServicesImpl - addSpot - New spot '" + spotName + "' added");
+			}
+			//TODO sacar este uno poner result
+			return 1;
+		}
+		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Permissions denied to the current user to perform this action.");
+		//TODO sacar este uno poner un null
+		return 1;
 	}
 
 	@Override

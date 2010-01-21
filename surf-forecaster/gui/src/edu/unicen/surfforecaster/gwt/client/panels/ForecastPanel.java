@@ -40,8 +40,9 @@ public class ForecastPanel extends LazyPanel {
 	}
 	
 	public void getSpotLastestForecast(){
-		this.detailedForecast.removeFromParent();
 		this.detailedForecast = new Widget();
+		if (this.loadingPanel != null)
+			this.loadingPanel.removeFromParent();
 		this.loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotForecast()); 
 		container.add(this.loadingPanel);
 		final Integer spotId = new Integer(localizationPanel.getSpotBoxDisplayValue());
@@ -57,10 +58,11 @@ public class ForecastPanel extends LazyPanel {
 	}
 	
 	private void showSpotLatestForecast(Map<String, List<ForecastGwtDTO>> forecasters, Integer spotId) {
+		this.container.clear();
+		this.container.add(this.localizationPanel);
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters, localizationPanel, spotId));
 		this.detailedForecast = renderContext.executeRenderStrategy(); 
-		container.add(this.detailedForecast);
-		this.loadingPanel.removeFromParent();
+		this.container.add(this.detailedForecast);
 	}
 
 }

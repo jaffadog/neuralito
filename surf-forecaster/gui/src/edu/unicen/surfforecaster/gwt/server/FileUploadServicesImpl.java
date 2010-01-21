@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,7 +23,6 @@ import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.gwt.server.util.VisualObsDTOsLoader;
-import edu.unicen.surfforecaster.server.services.ForecastServiceImplementation;
 
 /**
  * servlet to handle file upload requests
@@ -69,6 +67,9 @@ public class FileUploadServicesImpl extends ServicesImpl {
 		Integer minutes2 = null;
 		Float latitudeGridPoint = null;
 		Float longitudeGridPoint = null;
+		String obsAction = null;
+		Boolean dayLightChanged = false;
+		Boolean gridPointChanged = false;
 		Vector<VisualObservationDTO> obsData = null;
 		// process only multipart requests
 		if (ServletFileUpload.isMultipartContent(req)) {
@@ -98,6 +99,12 @@ public class FileUploadServicesImpl extends ServicesImpl {
 							latitudeGridPoint = new Float(item.getString());
 						if (item.getFieldName().trim().equals("longitudeGridPointFormElement"))
 							longitudeGridPoint = new Float(item.getString());
+						if (item.getFieldName().trim().equals("obsRadioGroupFormElement"))
+							obsAction = item.getString();
+						if (item.getFieldName().trim().equals("dayHoursChangedFormElement"))
+							dayLightChanged = new Boolean(item.getString());
+						if (item.getFieldName().trim().equals("gridPointChangedFormElement"))
+							gridPointChanged = new Boolean(item.getString());
 					}
 
 					if (!item.isFormField()&& item.getFieldName().trim().equals("uploadFormElement")) {
@@ -115,11 +122,14 @@ public class FileUploadServicesImpl extends ServicesImpl {
 					}
 				}
 
-				if (obsData != null && spotId != null && hour != null && minutes != null && hour2 != null && minutes2 != null && latitudeGridPoint != null && longitudeGridPoint != null) {
-					String trainningResp = this.sendData(spotId, obsData, hour, hour2, minutes, minutes2, latitudeGridPoint, longitudeGridPoint);
+				if (spotId != null && hour != null && minutes != null && hour2 != null && minutes2 != null && 
+						latitudeGridPoint != null && longitudeGridPoint != null) {
+					
+					String trainningResp = this.sendData(spotId, obsData, hour, hour2, minutes, minutes2, latitudeGridPoint, longitudeGridPoint, obsAction, 
+							gridPointChanged, dayLightChanged);
 					sendResponseToClient(resp, HttpServletResponse.SC_OK, "OK", trainningResp);
 				} else
-					logger.log(Level.INFO, "FileUploadServicesImpl - doPost - Couldn't send observation data. Some form data or the obsData are null...");
+					logger.log(Level.INFO, "FileUploadServicesImpl - doPost - Couldn't send observation data. Some required form data is missing...");
 
 			} catch (Exception e) {
 				logger.log(Level.INFO, "FileUploadServicesImpl - doPost - An error occurred while parsing the file : " + e.getMessage());
@@ -132,9 +142,8 @@ public class FileUploadServicesImpl extends ServicesImpl {
 		}
 	}
 
-	private String sendData(Integer spotId, Vector<VisualObservationDTO> obsData,
-			Integer hour, Integer hour2, Integer minutes, Integer minutes2, Float latitudeGridPoint, Float longitudeGridPoint) {
-		logger.log(Level.INFO,"FileUploadServicesImpl - sendData - Sending observation data to forecastServices from spot: " + spotId + "...");
+	private String sendData(Integer spotId, Vector<VisualObservationDTO> obsData, Integer hour, Integer hour2, Integer minutes, Integer minutes2, 
+			Float latitudeGridPoint, Float longitudeGridPoint, String obsAction, boolean gridPointChanged, boolean dayLightChanged) {
 		HashMap<String, Serializable> options = new HashMap<String, Serializable>();
 		options.put("latitudeGridPoint1", latitudeGridPoint);
 		options.put("longitudeGridPoint1", longitudeGridPoint);
@@ -143,11 +152,44 @@ public class FileUploadServicesImpl extends ServicesImpl {
 		options.put("utcSunsetHour", hour2);
 		options.put("utcSunsetMinute", minutes2);
 		
-		WekaForecasterEvaluationDTO result = forecastService.createWekaForecaster(obsData, spotId, options);
+		WekaForecasterEvaluationDTO result = null;
+		if (obsData != null && obsAction == null) { 
+			//This case is when creates a new spot
+			//This branch should persist observations for the spot and train a forcaster
+			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (1st if branch) Creating wekaForecaster for spot: " + spotId + "...");
+			result = forecastService.createWekaForecaster(obsData, spotId, options);
 		
-		logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster successfully created.");
+		} else if (obsData != null && obsAction.equals("replace")){ 
+			//This case is when edit the spot and want to replace the observations and retrain	
+			//This branch should persist the new observations for the spot, remove the oldest and retrain
+			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (2nd if branch) Creating wekaForecaster for spot: " + spotId + "...");
+//			forecastService.removeWekaForecaster(spotId);
+//			forecastService.removeObservations(spotId);
+//			result = forecastService.createWekaForecaster(obsData, spotId, options);
 		
-		return "correlation=" + result.getCorrelation() + "|meanAbsoluteError=" + result.getMeanAbsoluteError() + "|classifierName=" + result.getClassifierName();
+		} else if (obsData != null && obsAction.equals("append")){ 
+			//This case is when edit the spot and want to append observations and retrein
+			//This branch should append the new observations for the spot and retrain
+			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (3rd if branch) Creating wekaForecaster for spot: " + spotId + "...");
+//			forecastService.removeWekaForecaster(spotId);
+//			forecastService.addObservations(spotId, obsData);
+//			result = forecastService.createWekaForecaster(spotId, options);
+		
+		} else if (obsData == null && (gridPointChanged || dayLightChanged)){ 
+			//This case is when edit the spot, don't sent observations but gridpoint or daylight changes and must retrain 
+			//This branch should retrain
+			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (4th if branch) Creating wekaForecaster for spot: " + spotId + "...");
+//			forecastService.removeWekaForecaster(spotId);
+//			result = forecastService.createWekaForecaster(spotId, options);
+		}
+		
+		if (result != null) {
+			logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster successfully created.");
+			return "correlation=" + result.getCorrelation() + "|meanAbsoluteError=" + result.getMeanAbsoluteError() + "|classifierName=" + result.getClassifierName();
+		} else {
+			logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster could be created but result is null, something wrong occurs.");
+			return "correlation=" + 0.0 + "|meanAbsoluteError=" + 0.0 + "|classifierName=N/A";
+		}
 
 	}
 	
