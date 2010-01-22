@@ -92,10 +92,11 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private static final String UPLOAD_ACTION_URL = GWT.getModuleBaseURL() + "FileUploadServices";
 	
 	//only for edit mode to know if day light time was edited
-	private int hour;
-	private int hour2;
-	private int minutes;
-	private int minutes2;
+	private Integer hour = null;
+	private Integer hour2 = null;
+	private Integer minutes = null;
+	private Integer minutes2 = null;
+	private boolean hasWekaForecaster = false;
 
 	private Label lblNewSpotDescription;
 	private Hidden dayHoursChanged;
@@ -275,6 +276,9 @@ public class NewSpotPanel extends FlexTable implements Observer{
 					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryBad();
 				
 				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_MESSAGES.wekaTrainingResults(correlationExpresion), MessageBox.IconType.INFO);
+				String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
+				successPanel.setMessage(message);
+				successPanel.setVisible(true);
 			}
 		});
 	    
@@ -528,6 +532,8 @@ public class NewSpotPanel extends FlexTable implements Observer{
 					hour2 = new Integer(txtHour2.getText());
 					minutes = new Integer(txtMinutes.getText());
 					minutes2 = new Integer(txtMinutes2.getText());
+					
+					hasWekaForecaster = true;
 				}
             }
 			
@@ -734,10 +740,12 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		
 		//check if dayLight hours changed
 		boolean changedDayLight = false;
-		if (hour != new Integer(txtHour.getText()).intValue() || hour2 != new Integer(txtHour2.getText()).intValue() || 
-				minutes != new Integer(txtMinutes.getText()).intValue() || minutes2 != new Integer(txtMinutes2.getText()).intValue()) {
-			changedDayLight = true;
-			dayHoursChanged.setValue("true");
+		if (hasWekaForecaster) {
+			if (hour.intValue() != new Integer(txtHour.getText()).intValue() || hour2.intValue() != new Integer(txtHour2.getText()).intValue() || 
+					minutes.intValue() != new Integer(txtMinutes.getText()).intValue() || minutes2.intValue() != new Integer(txtMinutes2.getText()).intValue()) {
+				changedDayLight = true;
+				dayHoursChanged.setValue("true");
+			}
 		}
 		final boolean changedDayLightHours = changedDayLight;
 		
@@ -745,18 +753,23 @@ public class NewSpotPanel extends FlexTable implements Observer{
 				mapPanel.getBuoyLat(), mapPanel.getBuoyLong(), zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
 				timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), changedGridPoint, new AsyncCallback<Integer>(){
 			public void onSuccess(Integer result){
-				if (changedGridPoint || !upload.getFilename().trim().equals("") || changedDayLightHours) {
+				loadingAddingSpotPanel.setVisible(false);
+				String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
+				if ((hasWekaForecaster && changedGridPoint) || !upload.getFilename().trim().equals("") || changedDayLightHours) {
 					//This force a retrain
+					message += " " + GWTUtils.LOCALE_CONSTANTS.trainingClassifier();
 					spotId.setValue(result.toString());
 					latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
 					longitudeGridPoint.setValue(mapPanel.getBuoyLong().replace(",", "."));
 					form.submit();
 					
 				}
+				successPanel.setMessage(message);
 				successPanel.setVisible(true);
-				
+				MySpotsPanel.getInstance().retrieveMySpots();
             }
             public void onFailure(Throwable caught){
+            	loadingAddingSpotPanel.setVisible(false);
             	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
 						Cookies.getCookie("surfForecaster-Username") != null) {
 					GWTUtils.showSessionExpiredLoginBox();

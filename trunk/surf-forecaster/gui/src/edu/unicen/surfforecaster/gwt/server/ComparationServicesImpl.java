@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Level;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ComparationService;
 import edu.unicen.surfforecaster.common.services.dto.ComparationDTO;
@@ -86,7 +87,7 @@ public class ComparationServicesImpl extends ServicesImpl implements Comparation
 				return true;
 			} else {
 				logger.log(Level.INFO,"ComparationServicesImpl - removeComparation - The current user is not the owner of this comparation.");
-				return false;
+				throw new NeuralitoException(ErrorCode.USER_NOT_COMPARISON_OWNER);
 			}
 		}
 		logger.log(Level.INFO,"ComparationServicesImpl - removeComparation - Permissions denied to the current user to perform this action.");
@@ -104,7 +105,7 @@ public class ComparationServicesImpl extends ServicesImpl implements Comparation
 				return comparation.getId();
 			} else {
 				logger.log(Level.INFO,"ComparationServicesImpl - updateComparation - The current user is not the owner of this comparation.");
-				return null;
+				throw new NeuralitoException(ErrorCode.USER_NOT_COMPARISON_OWNER);
 			}
 		}
 		logger.log(Level.INFO,"ComparationServicesImpl - updateComparation - Permissions denied to the current user to perform this action.");
