@@ -22,8 +22,7 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 
 	private WaveWatchSystem waveWatchSystem;
 
-
-	public void setWaveWatchSystem(WaveWatchSystem waveWatchSystem) {
+	public void setWaveWatchSystem(final WaveWatchSystem waveWatchSystem) {
 		this.waveWatchSystem = waveWatchSystem;
 	}
 
@@ -40,10 +39,8 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 	/**
 	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#save(edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster.WW3Forecaster)
 	 */
-	public void save(
-			final DataSetGenerationStrategy dataSetGenerationStrategy) {
-		getHibernateTemplate().save(
-				dataSetGenerationStrategy);
+	public void save(final DataSetGenerationStrategy dataSetGenerationStrategy) {
+		getHibernateTemplate().save(dataSetGenerationStrategy);
 	}
 
 	/**
@@ -55,32 +52,35 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 		final Forecaster forecaster = (Forecaster) getHibernateTemplate().get(
 				Forecaster.class, forecasterId);
 		if (forecaster instanceof SimpleForecaster) {
-			SimpleForecaster simpleForecaster = (SimpleForecaster) forecaster;
+			final SimpleForecaster simpleForecaster = (SimpleForecaster) forecaster;
 			Field declaredField;
 			try {
 				declaredField = SimpleForecaster.class
 						.getDeclaredField("modelName");
 				declaredField.setAccessible(true);
-				String string = (String) declaredField.get(simpleForecaster);
+				final String string = (String) declaredField
+						.get(simpleForecaster);
 				declaredField.setAccessible(false);
-				declaredField = SimpleForecaster.class.getDeclaredField("model");
+				declaredField = SimpleForecaster.class
+						.getDeclaredField("model");
 				declaredField.setAccessible(true);
 				declaredField.set(simpleForecaster, waveWatchSystem);
 				declaredField.setAccessible(false);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
 		if (forecaster instanceof WekaForecaster) {
-			WekaForecaster wekaForecaster = (WekaForecaster) forecaster;
+			final WekaForecaster wekaForecaster = (WekaForecaster) forecaster;
 			Field declaredField;
 			try {
 				declaredField = WekaForecaster.class
 						.getDeclaredField("waveWatchModelName");
 				declaredField.setAccessible(true);
-				String string = (String) declaredField.get(wekaForecaster);
+				final String string = (String) declaredField
+						.get(wekaForecaster);
 				declaredField.setAccessible(false);
 				declaredField = WekaForecaster.class
 						.getDeclaredField("waveWatch");
@@ -88,13 +88,22 @@ public class ForecastDAOHibernateImpl extends HibernateDaoSupport implements
 
 				declaredField.set(wekaForecaster, waveWatchSystem);
 				declaredField.setAccessible(false);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
 		return forecaster;
+	}
+
+	/**
+	 * @see edu.unicen.surfforecaster.server.dao.ForecastDAO#removeForecaster(java.lang.Integer)
+	 */
+	@Override
+	public void removeForecaster(final Integer forecasterId) {
+		final Forecaster forecasterById = getForecasterById(forecasterId);
+		getHibernateTemplate().delete(forecasterById);
 	}
 
 }

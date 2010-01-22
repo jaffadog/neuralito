@@ -157,6 +157,28 @@ public class ForecastServiceImplementationTest {
 	}
 
 	@Test
+	public void removeForecaster() {
+		try {
+			final int forecasterId = forecastService.createWW3Forecaster(
+					spot1Id, new PointDTO(22.0F, -158.75F));
+			Assert.assertTrue(forecasterId > 0);
+
+			forecastService.removeForecaster(forecasterId);
+
+			final List<SimpleForecasterDTO> simpleForecastersForSpot = forecastService
+					.getSimpleForecastersForSpot(spot1Id);
+			for (final SimpleForecasterDTO simpleForecasterDTO : simpleForecastersForSpot) {
+				if (simpleForecasterDTO.getId() == forecasterId) {
+					Assert.fail();
+				}
+			}
+
+		} catch (final NeuralitoException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
 	public void getForecaster() {
 		try {
 			final long initial = System.currentTimeMillis();

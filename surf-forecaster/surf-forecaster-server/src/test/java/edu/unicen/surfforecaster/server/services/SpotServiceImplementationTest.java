@@ -149,6 +149,24 @@ public class SpotServiceImplementationTest {
 	}
 
 	@Test
+	public void updateSpot() throws NeuralitoException {
+		final String spotName = "updated name";
+		final float latitude = 23.0F;
+		final float longitude = 22.0F;
+		final Integer zoneId = zoneId2;
+		final boolean publik = true;
+		final TimeZone timeZone = TimeZone.getTimeZone("UTC");
+		final SpotDTO updateSpot = spotService.updateSpot(spot1Id, spotName,
+				latitude, longitude, zoneId, publik, timeZone);
+		Assert.assertEquals(spotName, updateSpot.getName());
+		Assert.assertEquals(latitude, updateSpot.getPoint().getLatitude(),
+				0.01F);
+		Assert.assertEquals(longitude, updateSpot.getPoint().getLongitude(),
+				0.01F);
+		Assert.assertEquals(zoneId, updateSpot.getZone().getId());
+	}
+
+	@Test
 	public void getSpotsCreatedByUser() throws NeuralitoException {
 		final List<SpotDTO> spotsCreatedByUser1 = spotService
 				.getSpotsCreatedByUser(userId1);
