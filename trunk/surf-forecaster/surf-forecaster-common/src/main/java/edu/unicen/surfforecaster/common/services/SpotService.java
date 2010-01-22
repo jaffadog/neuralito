@@ -181,4 +181,20 @@ public interface SpotService {
 	public List<SpotDTO> getSpotsCreatedByUser(Integer userId)
 			throws NeuralitoException;
 
+	/**
+	 * Updates the given spot
+	 * 
+	 * @param spotId
+	 * @param spotName
+	 * @param latitude
+	 * @param longitude
+	 * @param zoneId
+	 * @param publik
+	 * @param timeZone
+	 * @return
+	 * @throws NeuralitoException
+	 */
+	public SpotDTO updateSpot(Integer spotId, String spotName, float latitude,
+			float longitude, Integer zoneId, boolean publik, TimeZone timeZone)
+			throws NeuralitoException;
 }

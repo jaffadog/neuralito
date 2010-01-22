@@ -446,4 +446,16 @@ public class ForecastServiceImplementation implements ForecastService {
 		}
 		return null;
 	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.ForecastService#removeForecaster(java.lang.Integer)
+	 */
+	@Override
+	@Transactional
+	public void removeForecaster(final Integer forecasterId)
+			throws NeuralitoException {
+		validateForecasterExists(forecasterId);
+		forecastDAO.removeForecaster(forecasterId);
+	}
 }

@@ -644,4 +644,34 @@ public class SpotServiceImplementation implements SpotService {
 		}
 		return dtos;
 	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#updateSpot(java.lang.Integer,
+	 *      java.lang.String, float, float, java.lang.Integer,
+	 *      java.lang.Integer, boolean, java.util.TimeZone)
+	 */
+	@Override
+	@Transactional
+	public SpotDTO updateSpot(final Integer spotId, final String spotName,
+			final float latitude, final float longitude, final Integer zoneId,
+			final boolean publik, final TimeZone timeZone)
+			throws NeuralitoException {
+		validateSpotExists(spotId);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		validate(spotName, longitude, latitude, zoneId, spot.getUser().getId(),
+				publik, timeZone);
+		Point point = spotDAO.getPoint(new Float(latitude),
+				new Float(longitude));
+		if (point == null) {
+			point = new Point(latitude, longitude);
+			spotDAO.save(point);
+		}
+		spot.setLocation(point);
+		spot.setName(spotName);
+		spot.setPublik(publik);
+		spot.setTimeZone(timeZone);
+		spot.setZone(spotDAO.getZoneById(zoneId));
+		return spot.getDTO(spot);
+	}
 }

@@ -129,4 +129,13 @@ public interface ForecastService {
 	public List<ArchiveDetailDTO> getAvailableWekaArchive(PointDTO point)
 			throws NeuralitoException;
 
+	/**
+	 * Delete the given forecaster.
+	 * 
+	 * @param forecasterId
+	 * @throws NeuralitoException
+	 */
+	public void removeForecaster(Integer forecasterId)
+			throws NeuralitoException;
+
 }
