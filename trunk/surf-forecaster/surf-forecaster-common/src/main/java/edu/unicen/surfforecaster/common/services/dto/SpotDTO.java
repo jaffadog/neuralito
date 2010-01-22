@@ -70,7 +70,7 @@ public class SpotDTO implements Serializable {
 	 */
 	public SpotDTO(final Integer id, final String name, final PointDTO point,
 			final ZoneDTO zone, final CountryDTO country, final AreaDTO area,
-			final Integer userId, final boolean publik, TimeZone timeZone) {
+			final Integer userId, final boolean publik, final TimeZone timeZone) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -80,7 +80,7 @@ public class SpotDTO implements Serializable {
 		this.area = area;
 		this.userId = userId;
 		this.publik = publik;
-		this.setTimeZone(timeZone);
+		this.timeZone = timeZone;
 	}
 
 	/**
@@ -132,19 +132,15 @@ public class SpotDTO implements Serializable {
 		return userId;
 	}
 
-	public void setTimeZone(TimeZone timeZone) {
-		this.timeZone = timeZone;
-	}
-
 	public TimeZone getTimeZone() {
 		return timeZone;
 	}
-	
+
 	public PointDTO getPoint() {
 		return point;
 	}
 
-	public void setPoint(PointDTO point) {
+	public void setPoint(final PointDTO point) {
 		this.point = point;
 	}
 }

@@ -155,15 +155,22 @@ public class SpotServiceImplementationTest {
 		final float longitude = 22.0F;
 		final Integer zoneId = zoneId2;
 		final boolean publik = true;
-		final TimeZone timeZone = TimeZone.getTimeZone("UTC");
-		final SpotDTO updateSpot = spotService.updateSpot(spot1Id, spotName,
-				latitude, longitude, zoneId, publik, timeZone);
-		Assert.assertEquals(spotName, updateSpot.getName());
-		Assert.assertEquals(latitude, updateSpot.getPoint().getLatitude(),
-				0.01F);
-		Assert.assertEquals(longitude, updateSpot.getPoint().getLongitude(),
-				0.01F);
-		Assert.assertEquals(zoneId, updateSpot.getZone().getId());
+		final TimeZone timeZone = TimeZone.getTimeZone("GMT-8");
+		SpotDTO spot = spotService.updateSpot(spot1Id, spotName, latitude,
+				longitude, zoneId, publik, timeZone);
+		Assert.assertEquals(spotName, spot.getName());
+		Assert.assertEquals(latitude, spot.getPoint().getLatitude(), 0.01F);
+		Assert.assertEquals(longitude, spot.getPoint().getLongitude(), 0.01F);
+		Assert.assertEquals(zoneId, spot.getZone().getId());
+		Assert.assertEquals(timeZone.getID(), spot.getTimeZone().getID());
+
+		spot = spotService.getSpotById(spot1Id);
+
+		Assert.assertEquals(spotName, spot.getName());
+		Assert.assertEquals(latitude, spot.getPoint().getLatitude(), 0.01F);
+		Assert.assertEquals(longitude, spot.getPoint().getLongitude(), 0.01F);
+		Assert.assertEquals(zoneId, spot.getZone().getId());
+		Assert.assertEquals(timeZone.getID(), spot.getTimeZone().getID());
 	}
 
 	@Test
