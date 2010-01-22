@@ -77,7 +77,7 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Ocurri\u00F3 un error al intentar eliminar la ola seleccionada, por favor intente nuevamente en unos minutos.")
 	String ERROR_DELETING_SPOT();
 	
-	@DefaultStringValue("El usuario registrado no tiene permisos suficientes para ejecutar esta operaci\u00F3n.")
+	@DefaultStringValue("Usted no tiene permisos suficientes para ejecutar esta operaci\u00F3n.")
 	String USER_ROLE_INSUFFICIENT();
 	
 	@DefaultStringValue("Error al intentar eliminar la comparaci\u00F3n, por favor intente nuevamente en unos minutos.")
@@ -88,6 +88,12 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("La ola seleccionada no tiene ningun pronosticador definido.")
 	String NOT_SPOT_FORECASTERS_DEFINED();
+	
+	@DefaultStringValue("Usted no tiene permisos para modificar o eliminar esta ola.")
+	String USER_NOT_SPOT_OWNER();
+	
+	@DefaultStringValue("Usted no tiene permisos para modificar o eliminar esta comparaci\u00F3n.")
+	String USER_NOT_COMPARISON_OWNER();
 	
 	/**
 	 * Commons translates for more than one panel

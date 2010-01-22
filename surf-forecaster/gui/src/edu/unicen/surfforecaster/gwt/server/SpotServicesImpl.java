@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Level;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.SpotService;
@@ -155,9 +156,15 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 	public boolean deleteSpot(Integer spotId) throws NeuralitoException {
 		logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Trying to delete spot: " + spotId + "...");
 		if (super.hasAccessTo("deleteSpot")){
-			spotService.removeSpot(spotId);
-			logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Spot removed successfully.");
-			return true;
+			final Integer userId = super.getLoggedUser().getId();
+			if (spotService.getSpotById(spotId).getUserId().intValue() == userId.intValue()) {
+				spotService.removeSpot(spotId);
+				logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Spot removed successfully.");
+				return true;
+			} else {
+				logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - The current user is not the owner of this spot.");
+				throw new NeuralitoException(ErrorCode.USER_NOT_SPOT_OWNER);
+			}
 		}
 		logger.log(Level.INFO,"SpotServicesImpl - deleteSpot - Permissions denied to the current user to perform this action.");
 		return false;
@@ -172,35 +179,42 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		
 		logger.log(Level.INFO,"SpotServicesImpl - editSpot - Trying to edit spot: '" + spotId + "'...");
 		if (super.hasAccessTo("editSpot")){
-			final float spotLongitudeNum = new Float(spotLongitude.replace(",", "."));
-			final float spotLatitudeNum = new Float(spotLatitude.replace(",", "."));
-			final float buoyLongitudeNum = new Float(buoyLongitude.replace(",", "."));
-			final float buoyLatitudeNum = new Float(buoyLatitude.replace(",", "."));
 			final Integer userId = super.getLoggedUser().getId();
-			Integer result = null;
-			TimeZone tz = TimeZone.getTimeZone(timezone);
-			if (zoneName.trim().equals("")) {
-				logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
-//				result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public1, tz);
+			if (spotService.getSpotById(spotId).getUserId().intValue() == userId.intValue()) {
+				final float spotLongitudeNum = new Float(spotLongitude.replace(",", "."));
+				final float spotLatitudeNum = new Float(spotLatitude.replace(",", "."));
+				final float buoyLongitudeNum = new Float(buoyLongitude.replace(",", "."));
+				final float buoyLatitudeNum = new Float(buoyLatitude.replace(",", "."));
+				Integer result = null;
+				TimeZone tz = TimeZone.getTimeZone(timezone);
+				if (zoneName.trim().equals("")) {
+					logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
+					result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, public1, tz).getId();
+				} else {
+					logger.log(Level.INFO,"SpotServicesImpl - editSpot - Adding zone: '"  + zoneName.trim() + "'...");	
+					zoneId = spotService.addZone(zoneName.trim(), countryId);
+					logger.log(Level.INFO,"SpotServicesImpl - editSpot - Zone: '"  + zoneName.trim() + "' added.");
+					logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
+					result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, public1, tz).getId();
+				}
+				
+				if (result != null && changedGridPoint) {
+					//Retrieving the first ww3forecaster for the spot, assuming that had just one spot
+					logger.log(Level.INFO,"SpotServicesImpl - editSpot - Gridpoint changed, updating ww3 forecaster...");
+					Integer ww3ForecasterId = forecastService.getSimpleForecastersForSpot(result).get(0).getId();
+					forecastService.removeForecaster(ww3ForecasterId);
+					forecastService.createWW3Forecaster(result, new PointDTO(buoyLatitudeNum, buoyLongitudeNum));
+					logger.log(Level.INFO,"SpotServicesImpl - editSpot - ww3 forecaster updated.");
+				}
+				logger.log(Level.INFO,"SpotServicesImpl - editSpot - Spot '" + spotName + "' updated.");
+				return result;
 			} else {
-				logger.log(Level.INFO,"SpotServicesImpl - editSpot - Adding zone: '"  + zoneName.trim() + "'...");	
-//				zoneId = spotService.addZone(zoneName.trim(), countryId);
-				logger.log(Level.INFO,"SpotServicesImpl - editSpot - Zone: '"  + zoneName.trim() + "' added.");
-				logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
-//				result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, userId, public1, tz);
+				logger.log(Level.INFO,"SpotServicesImpl - editSpot - The current user is not the owner of this spot.");
+				throw new NeuralitoException(ErrorCode.USER_NOT_SPOT_OWNER);
 			}
-			
-			if (result != null && changedGridPoint) {
-//				forecastService.removeWW3Forecaster(result);
-//				forecastService.createWW3Forecaster(result, new PointDTO(buoyLatitudeNum, buoyLongitudeNum));
-				logger.log(Level.INFO,"SpotServicesImpl - addSpot - New spot '" + spotName + "' added");
-			}
-			//TODO sacar este uno poner result
-			return 1;
 		}
-		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Permissions denied to the current user to perform this action.");
-		//TODO sacar este uno poner un null
-		return 1;
+		logger.log(Level.INFO,"SpotServicesImpl - editSpot - Permissions denied to the current user to perform this action.");
+		return null;
 	}
 
 	@Override
