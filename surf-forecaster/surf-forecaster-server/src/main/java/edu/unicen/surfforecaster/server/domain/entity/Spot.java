@@ -1,8 +1,10 @@
 package edu.unicen.surfforecaster.server.domain.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.persistence.CascadeType;
@@ -74,11 +76,6 @@ public class Spot implements Serializable {
 	@ManyToMany(mappedBy = "spots", cascade = CascadeType.ALL)
 	private Collection<Comparation> comparations;
 
-	// /**
-	// * The available visual observations for this spot.
-	// */
-	// @OneToMany()
-	// private List<VisualObservationsSet> visualObservationsSet;
 	/**
 	 * The id for ORM pupose.
 	 */
@@ -91,6 +88,11 @@ public class Spot implements Serializable {
 	 */
 	@Column(nullable = false)
 	private TimeZone timeZone;
+	/**
+	 * The Visual Observations available for this spot.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	private final List<VisualObservation> visualObservations = new ArrayList<VisualObservation>();
 
 	public Integer getId() {
 		return id;
@@ -244,9 +246,35 @@ public class Spot implements Serializable {
 	public void setLocation(final Point location) {
 		this.location = location;
 	}
-	// public void addVisualObservationSet(VisualObservationsSet set){
-	// Validate.notNull(set);
-	// this.visualObservationsSet.add(set);
-	// }
+
+	/**
+	 * @param observations
+	 */
+	public void addVisualObservations(final List<VisualObservation> observations) {
+		validate(observations);
+		visualObservations.addAll(observations);
+	}
+
+	/**
+	 * @param observations
+	 */
+	private void validate(final List<VisualObservation> observations) {
+		// TODO validate observations are not empty or null.
+
+	}
+
+	/**
+	 * Retrieves the visual observations associated to this spot.
+	 */
+	public List<VisualObservation> getVisualObservations() {
+		return visualObservations;
+	}
+
+	/**
+	 * 
+	 */
+	public void removeVisualObservations() {
+		visualObservations.clear();
+	}
 
 }

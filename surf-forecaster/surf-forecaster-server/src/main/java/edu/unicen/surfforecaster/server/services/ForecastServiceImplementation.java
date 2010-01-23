@@ -180,15 +180,16 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Override
 	@Transactional
 	public WekaForecasterEvaluationDTO createWekaForecaster(
-			final List<VisualObservationDTO> visualObservationsDTO,
 			final Integer spotId,
 			final HashMap<String, Serializable> dataSetStrategyOptions) {
 		log.info("Creating weka forecaster");
-		final List<VisualObservation> visualObservations = translate(visualObservationsDTO);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		final List<VisualObservation> visualObservations = spot
+				.getVisualObservations();
 		Classifier classifier;
 		try {
 			classifier = Classifier.forName(classifierName, null);
-			final Spot spot = spotDAO.getSpotById(spotId);
+
 			final WekaForecaster forecaster = new WekaForecaster(classifier,
 					dataSetGenerationStrategy, dataSetStrategyOptions,
 					waveWatchSystem, visualObservations, spot);

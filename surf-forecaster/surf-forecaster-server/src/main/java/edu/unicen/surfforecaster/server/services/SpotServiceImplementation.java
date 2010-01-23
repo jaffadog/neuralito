@@ -22,6 +22,7 @@ import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.server.dao.SpotDAO;
 import edu.unicen.surfforecaster.server.dao.UserDAO;
@@ -31,6 +32,7 @@ import edu.unicen.surfforecaster.server.domain.entity.Forecaster;
 import edu.unicen.surfforecaster.server.domain.entity.Point;
 import edu.unicen.surfforecaster.server.domain.entity.Spot;
 import edu.unicen.surfforecaster.server.domain.entity.User;
+import edu.unicen.surfforecaster.server.domain.entity.VisualObservation;
 import edu.unicen.surfforecaster.server.domain.entity.Zone;
 
 /**
@@ -423,7 +425,7 @@ public class SpotServiceImplementation implements SpotService {
 	/**
 	 * @param spotId
 	 */
-	private void validateSpotId(final Integer spotId) {
+	private void validateSpotId(final Integer spotId) throws NeuralitoException {
 		// TODO Auto-generated method stub
 
 	}
@@ -673,5 +675,63 @@ public class SpotServiceImplementation implements SpotService {
 		spot.setTimeZone(timeZone);
 		spot.setZone(spotDAO.getZoneById(zoneId));
 		return spot.getDTO(spot);
+	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#addVisualObservations(java.lang.Integer,
+	 *      java.util.List)
+	 */
+	@Override
+	@Transactional
+	public void addVisualObservations(final Integer spotId,
+			final List<VisualObservationDTO> observationsDTO)
+			throws NeuralitoException {
+		validateSpotId(spotId);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		final List<VisualObservation> observations = new ArrayList<VisualObservation>();
+		// translate each observationDTO into observation.
+		for (final VisualObservationDTO visualObservationDTO : observationsDTO) {
+			final VisualObservation vo = new VisualObservation(
+					visualObservationDTO.getWaveHeight(), visualObservationDTO
+							.getObservationDate(), visualObservationDTO
+							.getUnit());
+			observations.add(vo);
+		}
+		spot.addVisualObservations(observations);
+		spotDAO.saveSpot(spot);
+	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#getVisualObservations(java.lang.Integer)
+	 */
+	@Override
+	@Transactional
+	public List<VisualObservationDTO> getVisualObservations(final Integer spotId)
+			throws NeuralitoException {
+		validateSpotId(spotId);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		final List<VisualObservationDTO> visualObservationsDTO = new ArrayList<VisualObservationDTO>();
+		final List<VisualObservation> visualObservations = spot
+				.getVisualObservations();
+		for (final VisualObservation visualObservation : visualObservations) {
+			visualObservationsDTO.add(visualObservation.getDTO());
+		}
+		return visualObservationsDTO;
+	}
+
+	/**
+	 * @throws NeuralitoException
+	 * @see edu.unicen.surfforecaster.common.services.SpotService#removeVisualObservations(java.lang.Integer)
+	 */
+	@Override
+	@Transactional
+	public void removeVisualObservations(final Integer spotId)
+			throws NeuralitoException {
+		validateSpotId(spotId);
+		final Spot spot = spotDAO.getSpotById(spotId);
+		spot.removeVisualObservations();
+		spotDAO.saveSpot(spot);
 	}
 }

@@ -55,6 +55,7 @@
 				<value>edu.unicen.surfforecaster.server.domain.entity.SimpleForecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.WekaForecaster</value>
 				<value>edu.unicen.surfforecaster.server.domain.entity.Point</value>
+				<value>edu.unicen.surfforecaster.server.domain.entity.VisualObservation</value>
 			</list>
 		</property>
 	</bean>

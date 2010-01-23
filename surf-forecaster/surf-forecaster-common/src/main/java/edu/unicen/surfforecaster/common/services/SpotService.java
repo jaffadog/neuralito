@@ -11,6 +11,7 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 
 /**
@@ -197,4 +198,33 @@ public interface SpotService {
 	public SpotDTO updateSpot(Integer spotId, String spotName, float latitude,
 			float longitude, Integer zoneId, boolean publik, TimeZone timeZone)
 			throws NeuralitoException;
+
+	/**
+	 * Add the given observations to the given spot.
+	 * 
+	 * @param spotId
+	 * @param observations
+	 * @throws NeuralitoException
+	 */
+	public void addVisualObservations(Integer spotId,
+			List<VisualObservationDTO> observations) throws NeuralitoException;
+
+	/**
+	 * Clear the list of visual observations associated with the spot.
+	 * 
+	 * @param spotId
+	 * @throws NeuralitoException
+	 */
+	public void removeVisualObservations(Integer spotId)
+			throws NeuralitoException;
+
+	/**
+	 * List the visualObservations associated with the spot.
+	 * 
+	 * @param spot1Id
+	 * @throws NeuralitoException
+	 */
+	public List<VisualObservationDTO> getVisualObservations(Integer spot1Id)
+			throws NeuralitoException;
+
 }
