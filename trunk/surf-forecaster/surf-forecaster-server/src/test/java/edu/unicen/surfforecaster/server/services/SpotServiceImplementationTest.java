@@ -3,7 +3,9 @@
  */
 package edu.unicen.surfforecaster.server.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +30,9 @@ import edu.unicen.surfforecaster.common.services.UserService;
 import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
 import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
+import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
+import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 
 /**
@@ -146,6 +150,41 @@ public class SpotServiceImplementationTest {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Test
+	public void addVisualObservations() throws NeuralitoException {
+		final List<VisualObservationDTO> observations = new ArrayList<VisualObservationDTO>();
+		final VisualObservationDTO visualObservation1 = new VisualObservationDTO(
+				22.3F, new Date(), Unit.Meters);
+		observations.add(visualObservation1);
+		final VisualObservationDTO visualObservation2 = new VisualObservationDTO(
+				21.3F, new Date(), Unit.Meters);
+		observations.add(visualObservation2);
+		spotService.removeVisualObservations(spot1Id);
+		List<VisualObservationDTO> visualObservations = spotService
+				.getVisualObservations(spot1Id);
+		Assert.assertEquals(0, visualObservations.size());
+
+		spotService.addVisualObservations(spot1Id, observations);
+
+		visualObservations = spotService.getVisualObservations(spot1Id);
+		Assert.assertEquals(2, visualObservations.size());
+		Assert.assertEquals(visualObservation1.getWaveHeight(),
+				visualObservations.get(0).getWaveHeight(), 0.1F);
+		Assert.assertEquals(visualObservation2.getWaveHeight(),
+				visualObservations.get(1).getWaveHeight(), 0.1F);
+
+		observations.clear();
+		final VisualObservationDTO visualObservation3 = new VisualObservationDTO(
+				22.3F, new Date(), Unit.Meters);
+		observations.add(visualObservation3);
+		final VisualObservationDTO visualObservation4 = new VisualObservationDTO(
+				21.3F, new Date(), Unit.Meters);
+		observations.add(visualObservation4);
+		spotService.addVisualObservations(spot1Id, observations);
+		visualObservations = spotService.getVisualObservations(spot1Id);
+		Assert.assertEquals(4, visualObservations.size());
 	}
 
 	@Test

@@ -112,6 +112,15 @@ public class ForecastServiceImplementationTest {
 					userId2, false, timeZone);
 			spot4Id = spotService.addSpot("Guanchaco", 2.0F, 1.0F, zoneId4,
 					userId2, true, timeZone);
+
+			final List<VisualObservationDTO> visualObservations = VisualObservationsLoader
+					.loadVisualObservations(
+							new File(
+									"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu1997.dat"),
+							Unit.Meters);
+
+			spotService.addVisualObservations(spot2Id, visualObservations);
+			spotService.addVisualObservations(spot1Id, visualObservations);
 		} catch (final NeuralitoException e) {
 			log.error(e);
 			Assert.fail(e.toString());
@@ -201,11 +210,7 @@ public class ForecastServiceImplementationTest {
 	public void createWekaForecaster() {
 		try {
 			final long initial = System.currentTimeMillis();
-			final List<VisualObservationDTO> visualObservations = VisualObservationsLoader
-					.loadVisualObservations(
-							new File(
-									"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu1997.dat"),
-							Unit.Meters);
+
 			final HashMap<String, Serializable> options = new HashMap<String, Serializable>();
 			options.put("latitudeGridPoint1", 22.0F);
 			options.put("longitudeGridPoint1", -158.75F);
@@ -214,7 +219,7 @@ public class ForecastServiceImplementationTest {
 			options.put("utcSunsetHour", 6);
 			options.put("utcSunsetMinute", 30);
 			final WekaForecasterEvaluationDTO createWekaForecaster = forecastService
-					.createWekaForecaster(visualObservations, spot2Id, options);
+					.createWekaForecaster(spot2Id, options);
 
 			final Integer forecasterId = createWekaForecaster.getId();
 			final List<ForecastDTO> latestForecasts = forecastService
@@ -308,8 +313,7 @@ public class ForecastServiceImplementationTest {
 		options.put("utcSunsetHour", 6);
 		options.put("utcSunsetMinute", 30);
 		// create a weka forecaster
-		forecastService.createWekaForecaster(visualObservations, spot1Id,
-				options);
+		forecastService.createWekaForecaster(spot1Id, options);
 
 		final List<SimpleForecasterDTO> simpleForecastersForSpot = forecastService
 				.getSimpleForecastersForSpot(spot1Id);

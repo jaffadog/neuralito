@@ -12,7 +12,6 @@ import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
 import edu.unicen.surfforecaster.common.services.dto.SimpleForecasterDTO;
-import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 
 /**
@@ -81,29 +80,19 @@ public interface ForecastService {
 
 	/**
 	 * Create a weka forecaster. This forecaster will use a machine learning
-	 * classifier to learn from past data how WaveWatch forecast affects the
-	 * spot, so the wave height values of this forecaster will be improved by
-	 * the classifier.
+	 * classifier. Classifier will be trained using wavewatch archived data, and
+	 * visual observations.
 	 * 
-	 * @param observationSetId
-	 *            the visual observation set to train the classifier.
-	 * @param modelId
-	 *            the model of wavewatchIII where to aquire wavewatch III data
-	 * @param strategyId
-	 *            the strategy to compose the instances to the classifier.
-	 * @param strategyParameters
-	 *            the parameters to the strategy.
-	 * @param classifierId
-	 *            the weka classifier to perform machine learning from visual
-	 *            observations and WW data.
-	 * @param classifierParameters
-	 *            the parameters to the weka classifier.
+	 * @param spotId
+	 *            the id of the spot to which this forecaster belong.
+	 * @param options
+	 *            a list of options in order to train the classifier.
+	 * 
 	 * @return WekaForecasterEvaluationDTO DTO containing the performance
 	 *         evaluation of the trained classifier and the id of the created
 	 *         forecasters.
 	 */
-	public WekaForecasterEvaluationDTO createWekaForecaster(
-			List<VisualObservationDTO> visualObservations, Integer spotId,
+	public WekaForecasterEvaluationDTO createWekaForecaster(Integer spotId,
 			HashMap<String, Serializable> options);
 
 	public List<WekaForecasterEvaluationDTO> getWekaForecasters(Integer spotId)
