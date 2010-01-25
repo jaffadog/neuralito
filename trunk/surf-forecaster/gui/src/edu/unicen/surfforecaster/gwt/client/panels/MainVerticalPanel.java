@@ -21,7 +21,7 @@ public class MainVerticalPanel extends VerticalPanel {
 	}
 	
 	public void setPanelState(String historyToken){
-		System.out.println("MainVerticalPanel->setPanelState: " + historyToken);
+		//System.out.println("MainVerticalPanel->setPanelState: " + historyToken);
 		this.forecastTabPanel.setPanelState(historyToken);
 	}
 }

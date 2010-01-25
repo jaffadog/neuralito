@@ -119,8 +119,6 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 				forecastService.createWW3Forecaster(result, new PointDTO(buoyLatitudeNum, buoyLongitudeNum));
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - New spot '" + spotName + "' added");
 			}
-			System.out.println(timezone);
-			System.out.println(tz);
 			return result;
 		}
 		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Permissions denied to the current user to perform this action.");
