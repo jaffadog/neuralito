@@ -13,7 +13,7 @@ public class LoadingPanel extends VerticalPanel {
 	
 	public LoadingPanel(){
 		this.setWidth("100%");
-		this.addStyleName("gwt-VerticalPanel-LoadingPanel");
+		this.setStylePrimaryName("gwt-VerticalPanel-LoadingPanel");
 		this.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
 		Image loadingImage = new Image(GWTUtils.IMAGE_BLUE_CIRCLE_LOADER);

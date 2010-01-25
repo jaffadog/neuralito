@@ -43,7 +43,8 @@ public class ForecastPanel extends LazyPanel {
 		this.detailedForecast = new Widget();
 		if (this.loadingPanel != null)
 			this.loadingPanel.removeFromParent();
-		this.loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotForecast()); 
+		this.loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotForecast());
+		this.loadingPanel.addStyleName("gwt-VerticalPanel-LoadingPanel-ForecastTab");
 		container.add(this.loadingPanel);
 		final Integer spotId = new Integer(localizationPanel.getSpotBoxDisplayValue());
 		ForecastServices.Util.getInstance().getLatestForecasts(spotId, new AsyncCallback<Map<String, List<ForecastGwtDTO>>>(){
