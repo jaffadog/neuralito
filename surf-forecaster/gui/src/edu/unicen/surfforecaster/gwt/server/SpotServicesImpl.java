@@ -119,7 +119,8 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 				forecastService.createWW3Forecaster(result, new PointDTO(buoyLatitudeNum, buoyLongitudeNum));
 				logger.log(Level.INFO,"SpotServicesImpl - addSpot - New spot '" + spotName + "' added");
 			}
-			
+			System.out.println(timezone);
+			System.out.println(tz);
 			return result;
 		}
 		logger.log(Level.INFO,"SpotServicesImpl - addSpot - Permissions denied to the current user to perform this action.");
@@ -197,7 +198,8 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 					logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
 					result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, public1, tz).getId();
 				}
-				
+				System.out.println(timezone);
+				System.out.println(tz);
 				if (result != null && changedGridPoint) {
 					//Retrieving the first ww3forecaster for the spot, assuming that had just one spot
 					logger.log(Level.INFO,"SpotServicesImpl - editSpot - Gridpoint changed, updating ww3 forecaster...");
