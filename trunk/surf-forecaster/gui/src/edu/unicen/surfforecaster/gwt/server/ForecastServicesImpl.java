@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Level;
 
@@ -16,7 +15,6 @@ import edu.unicen.surfforecaster.common.services.ForecasterDTO;
 import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.ForecastDTO;
 import edu.unicen.surfforecaster.common.services.dto.PointDTO;
-import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.dto.ForecastGwtDTO;

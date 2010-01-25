@@ -2,8 +2,10 @@ package edu.unicen.surfforecaster.gwt.client;
 
 import java.util.List;
 
-import edu.unicen.surfforecaster.gwt.client.dto.ComparationGwtDTO;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
+import edu.unicen.surfforecaster.gwt.client.dto.ComparationGwtDTO;
 
 public interface ComparationServicesAsync {
 	/**
