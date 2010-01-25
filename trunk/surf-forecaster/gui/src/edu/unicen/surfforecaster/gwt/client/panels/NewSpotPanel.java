@@ -257,28 +257,34 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	    form.addSubmitCompleteHandler(new SubmitCompleteHandler() {
 			@Override
 			public void onSubmitComplete(SubmitCompleteEvent event) { 
-				//TODO revisar estos carteles en ie
 				String results = event.getResults();
-				String sCorrelation = results.substring(results.indexOf("correlation=") + 12, results.indexOf("|", results.indexOf("correlation=")));
-				String sMeanAbsoluteError = results.substring(results.indexOf("|", results.indexOf("correlation=")) + 19, results.indexOf("|", results.indexOf("meanAbsoluteError=")));
-				String classifierName = results.substring(results.indexOf("|", results.indexOf("meanAbsoluteError=")) + 16);
-				double dCorrelation = new Double(sCorrelation);
-				String correlationExpresion = "";
-				if (dCorrelation <= 0.2)
-					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryBad();
-				else if (dCorrelation <= 0.4)
-					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.bad();
-				else if (dCorrelation <= 0.6)
-					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.good();
-				else if (dCorrelation <= 0.8)
-					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryGood();
-				else
-					correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryBad();
-				
-				new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_MESSAGES.wekaTrainingResults(correlationExpresion), MessageBox.IconType.INFO);
-				String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
-				successPanel.setMessage(message);
-				successPanel.setVisible(true);
+				if (results.indexOf("NeuralitoException=") != -1) {
+					successPanel.setVisible(false);
+					errorPanel.setMessage(ClientI18NMessages.getInstance().getMessage(results.substring(results.indexOf("NeuralitoException=") + 19)));
+					errorPanel.setVisible(true);
+				} else {	
+					errorPanel.setVisible(false);
+					String sCorrelation = results.substring(results.indexOf("correlation=") + 12, results.indexOf("|", results.indexOf("correlation=")));
+					String sMeanAbsoluteError = results.substring(results.indexOf("|", results.indexOf("correlation=")) + 19, results.indexOf("|", results.indexOf("meanAbsoluteError=")));
+					String classifierName = results.substring(results.indexOf("|", results.indexOf("meanAbsoluteError=")) + 16);
+					double dCorrelation = new Double(sCorrelation);
+					String correlationExpresion = "";
+					if (dCorrelation <= 0.2)
+						correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryBad();
+					else if (dCorrelation <= 0.4)
+						correlationExpresion = GWTUtils.LOCALE_CONSTANTS.bad();
+					else if (dCorrelation <= 0.6)
+						correlationExpresion = GWTUtils.LOCALE_CONSTANTS.good();
+					else if (dCorrelation <= 0.8)
+						correlationExpresion = GWTUtils.LOCALE_CONSTANTS.veryGood();
+					else
+						correlationExpresion = GWTUtils.LOCALE_CONSTANTS.excelent();
+					
+					new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_MESSAGES.wekaTrainingResults(correlationExpresion), MessageBox.IconType.INFO);
+					String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
+					successPanel.setMessage(message);
+					successPanel.setVisible(true);
+				}
 			}
 		});
 	    
