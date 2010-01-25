@@ -17,12 +17,14 @@ public class SpotComparatorPanel extends VerticalPanel {
 	private static int VIEW_COMP_PANEL_INDEX = -1;
 	public static final int MAX_SPOTS_TO_COMP = 5;
 	public static final int MIN_SPOTS_TO_COMP = 2;
+
+	private ComparationCreatorPanel createComparationPanel;
 	
 	
 	public SpotComparatorPanel() {
 		deckPanel = new DeckPanel();
 		{
-			ComparationCreatorPanel createComparationPanel = new ComparationCreatorPanel();
+			createComparationPanel = new ComparationCreatorPanel();
 			createComparationPanel.setBasePanel(this);
 			deckPanel.add(createComparationPanel);
 			deckPanel.setAnimationEnabled(true);
@@ -57,6 +59,10 @@ public class SpotComparatorPanel extends VerticalPanel {
 				//TODO do something when the getlastest forecasts methos fails
 			}
 		});
+	}
+	
+	public void hideMessagePanels() {
+		this.createComparationPanel.hideMessagePanels();
 	}
 
 }

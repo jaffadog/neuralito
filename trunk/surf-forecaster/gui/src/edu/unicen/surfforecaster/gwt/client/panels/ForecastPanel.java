@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.LazyPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -14,29 +13,21 @@ import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.RenderDetail
 import edu.unicen.surfforecaster.gwt.client.panels.detailedforecast.wgStrategyB.DetailedForecastWgStrategyB;
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 
-public class ForecastPanel extends LazyPanel {
+public class ForecastPanel extends VerticalPanel {
 	
 	private LocalizationPanel localizationPanel = null;;
-	private VerticalPanel container = null;
+	//private VerticalPanel container = null;
 	private Widget detailedForecast = new Widget();
 	private LoadingPanel loadingPanel = null;
 	
 	public ForecastPanel() {
-	}
-
-	@Override
-	protected Widget createWidget() {
-		
-		container = new VerticalPanel();
-		container.setWidth("100%");
+		this.setWidth("100%");
 		
 		{
 			localizationPanel = new LocalizationPanel();
 			localizationPanel.setBasePanel(this);
-			container.add(localizationPanel);
+			this.add(localizationPanel);
 		}
-		
-		return container;
 	}
 	
 	public void getSpotLastestForecast(){
@@ -45,7 +36,7 @@ public class ForecastPanel extends LazyPanel {
 			this.loadingPanel.removeFromParent();
 		this.loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotForecast());
 		this.loadingPanel.addStyleName("gwt-VerticalPanel-LoadingPanel-ForecastTab");
-		container.add(this.loadingPanel);
+		this.add(this.loadingPanel);
 		final Integer spotId = new Integer(localizationPanel.getSpotBoxDisplayValue());
 		ForecastServices.Util.getInstance().getLatestForecasts(spotId, new AsyncCallback<Map<String, List<ForecastGwtDTO>>>(){
 			public void onSuccess(Map<String, List<ForecastGwtDTO>> result) {
@@ -59,11 +50,11 @@ public class ForecastPanel extends LazyPanel {
 	}
 	
 	private void showSpotLatestForecast(Map<String, List<ForecastGwtDTO>> forecasters, Integer spotId) {
-		this.container.clear();
-		this.container.add(this.localizationPanel);
+		this.clear();
+		this.add(this.localizationPanel);
 		RenderDetailedForecastContext renderContext = new RenderDetailedForecastContext(new DetailedForecastWgStrategyB(forecasters, localizationPanel, spotId));
 		this.detailedForecast = renderContext.executeRenderStrategy(); 
-		this.container.add(this.detailedForecast);
+		this.add(this.detailedForecast);
 	}
 
 }
