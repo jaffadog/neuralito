@@ -57,7 +57,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 				else if (historyTokens.get(event.getSelectedItem()).equals("mySpotsTab"))
 					MySpotsPanel.getInstance().hideMessagePanels();
 				
-				System.out.println("ForecastTabPanel->SelectionTabHandler:" + historyTokens.get(event.getSelectedItem()));
+				//System.out.println("ForecastTabPanel->SelectionTabHandler:" + historyTokens.get(event.getSelectedItem()));
 				History.newItem(historyTokens.get(event.getSelectedItem()));
 			}
 		});
@@ -97,7 +97,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		if (index < 0 || index >= this.getTabBar().getTabCount())
 			index = 0;
 		
-		System.out.println("ForecastTabPanel->select tab: " + historyToken);
+		//System.out.println("ForecastTabPanel->select tab: " + historyToken);
 		selectTab(index);
 	}
 	
