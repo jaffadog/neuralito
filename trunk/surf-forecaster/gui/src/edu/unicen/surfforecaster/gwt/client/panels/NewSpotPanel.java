@@ -751,7 +751,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		
 		SpotServices.Util.getInstance().editSpot(spot.getId(), spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
 				mapPanel.getBuoyLat(), mapPanel.getBuoyLong(), zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
-				timeZoneBox.getItemText(timeZoneBox.getSelectedIndex()).trim(), changedGridPoint, new AsyncCallback<Integer>(){
+				timeZoneBox.getValue(timeZoneBox.getSelectedIndex()).trim(), changedGridPoint, new AsyncCallback<Integer>(){
 			public void onSuccess(Integer result){
 				loadingAddingSpotPanel.setVisible(false);
 				String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
