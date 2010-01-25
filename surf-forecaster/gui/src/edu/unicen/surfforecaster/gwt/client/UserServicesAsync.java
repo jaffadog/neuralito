@@ -1,8 +1,9 @@
 package edu.unicen.surfforecaster.gwt.client;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import edu.unicen.surfforecaster.common.services.dto.UserDTO;
 import edu.unicen.surfforecaster.common.services.dto.UserType;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface UserServicesAsync {
 	void login(String userName, String password, AsyncCallback<UserDTO> callback);
