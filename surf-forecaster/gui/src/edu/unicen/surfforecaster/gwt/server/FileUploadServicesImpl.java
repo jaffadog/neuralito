@@ -19,7 +19,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
+import edu.unicen.surfforecaster.common.services.SpotService;
 import edu.unicen.surfforecaster.common.services.dto.VisualObservationDTO;
 import edu.unicen.surfforecaster.common.services.dto.WekaForecasterEvaluationDTO;
 import edu.unicen.surfforecaster.gwt.server.util.VisualObsDTOsLoader;
@@ -34,6 +36,7 @@ public class FileUploadServicesImpl extends ServicesImpl {
 
 	private static final long serialVersionUID = 1L;
 	private ForecastService forecastService;
+	private SpotService spotService;
 	/**
 	 * Logger.
 	 */
@@ -52,7 +55,21 @@ public class FileUploadServicesImpl extends ServicesImpl {
 	public ForecastService getForecastService() {
 		return forecastService;
 	}
+	
+	/**
+	 * @param service the service to set
+	 */
+	public void setSpotService(final SpotService service) {
+		spotService = service;
+	}
 
+	/**
+	 * @return the forecast service
+	 */
+	public SpotService getSpotService() {
+		return spotService;
+	}
+	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		super.doGet(req, resp);
@@ -125,9 +142,14 @@ public class FileUploadServicesImpl extends ServicesImpl {
 				if (spotId != null && hour != null && minutes != null && hour2 != null && minutes2 != null && 
 						latitudeGridPoint != null && longitudeGridPoint != null) {
 					
-					String trainningResp = this.sendData(spotId, obsData, hour, hour2, minutes, minutes2, latitudeGridPoint, longitudeGridPoint, obsAction, 
-							gridPointChanged, dayLightChanged);
-					sendResponseToClient(resp, HttpServletResponse.SC_OK, "OK", trainningResp);
+					try {
+						String trainningResp = this.sendData(spotId, obsData, hour, hour2, minutes, minutes2, latitudeGridPoint, longitudeGridPoint, obsAction, 
+								gridPointChanged, dayLightChanged);
+						sendResponseToClient(resp, HttpServletResponse.SC_OK, "OK", trainningResp);
+					} catch (NeuralitoException e) {
+						logger.log(Level.INFO, "FileUploadServicesImpl - doPost - An error occurred while train the forecaster : " + e.getMessage());
+						sendResponseToClient(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "ERROR", "NeuralitoException=" + e.getErrorCode().toString());
+					}
 				} else
 					logger.log(Level.INFO, "FileUploadServicesImpl - doPost - Couldn't send observation data. Some required form data is missing...");
 
@@ -143,7 +165,7 @@ public class FileUploadServicesImpl extends ServicesImpl {
 	}
 
 	private String sendData(Integer spotId, Vector<VisualObservationDTO> obsData, Integer hour, Integer hour2, Integer minutes, Integer minutes2, 
-			Float latitudeGridPoint, Float longitudeGridPoint, String obsAction, boolean gridPointChanged, boolean dayLightChanged) {
+			Float latitudeGridPoint, Float longitudeGridPoint, String obsAction, boolean gridPointChanged, boolean dayLightChanged) throws NeuralitoException {
 		HashMap<String, Serializable> options = new HashMap<String, Serializable>();
 		options.put("latitudeGridPoint1", latitudeGridPoint);
 		options.put("longitudeGridPoint1", longitudeGridPoint);
@@ -157,30 +179,39 @@ public class FileUploadServicesImpl extends ServicesImpl {
 			//This case is when creates a new spot
 			//This branch should persist observations for the spot and train a forcaster
 			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (1st if branch) Creating wekaForecaster for spot: " + spotId + "...");
-			result = forecastService.createWekaForecaster(obsData, spotId, options);
+			spotService.removeVisualObservations(spotId);
+			spotService.addVisualObservations(spotId, obsData);
+			result = forecastService.createWekaForecaster(spotId, options);
 		
 		} else if (obsData != null && obsAction.equals("replace")){ 
 			//This case is when edit the spot and want to replace the observations and retrain	
 			//This branch should persist the new observations for the spot, remove the oldest and retrain
 			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (2nd if branch) Creating wekaForecaster for spot: " + spotId + "...");
-//			forecastService.removeWekaForecaster(spotId);
-//			forecastService.removeObservations(spotId);
-//			result = forecastService.createWekaForecaster(obsData, spotId, options);
+			spotService.removeVisualObservations(spotId);
+			spotService.addVisualObservations(spotId, obsData);
+			List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
+			if (wekaForecasters.size() > 0)
+				forecastService.removeForecaster(wekaForecasters.get(0).getId());
+			result = forecastService.createWekaForecaster(spotId, options);
 		
 		} else if (obsData != null && obsAction.equals("append")){ 
 			//This case is when edit the spot and want to append observations and retrein
 			//This branch should append the new observations for the spot and retrain
 			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (3rd if branch) Creating wekaForecaster for spot: " + spotId + "...");
-//			forecastService.removeWekaForecaster(spotId);
-//			forecastService.addObservations(spotId, obsData);
-//			result = forecastService.createWekaForecaster(spotId, options);
+			spotService.addVisualObservations(spotId, obsData);
+			List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
+			if (wekaForecasters.size() > 0)
+				forecastService.removeForecaster(wekaForecasters.get(0).getId());
+			result = forecastService.createWekaForecaster(spotId, options);
 		
 		} else if (obsData == null && (gridPointChanged || dayLightChanged)){ 
 			//This case is when edit the spot, don't sent observations but gridpoint or daylight changes and must retrain 
 			//This branch should retrain
 			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (4th if branch) Creating wekaForecaster for spot: " + spotId + "...");
-//			forecastService.removeWekaForecaster(spotId);
-//			result = forecastService.createWekaForecaster(spotId, options);
+			List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
+			if (wekaForecasters.size() > 0)
+				forecastService.removeForecaster(wekaForecasters.get(0).getId());
+			result = forecastService.createWekaForecaster(spotId, options);
 		}
 		
 		if (result != null) {

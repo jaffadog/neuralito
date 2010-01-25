@@ -198,13 +198,12 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 					logger.log(Level.INFO,"SpotServicesImpl - editSpot - editing only the spot: '" + spotId + "'...");
 					result = spotService.updateSpot(spotId, spotName, spotLatitudeNum, spotLongitudeNum, zoneId, public1, tz).getId();
 				}
-				System.out.println(timezone);
-				System.out.println(tz);
 				if (result != null && changedGridPoint) {
 					//Retrieving the first ww3forecaster for the spot, assuming that had just one spot
 					logger.log(Level.INFO,"SpotServicesImpl - editSpot - Gridpoint changed, updating ww3 forecaster...");
-					Integer ww3ForecasterId = forecastService.getSimpleForecastersForSpot(result).get(0).getId();
-					forecastService.removeForecaster(ww3ForecasterId);
+					List<SimpleForecasterDTO> simpleForecasters = forecastService.getSimpleForecastersForSpot(spotId);
+					if (simpleForecasters.size() > 0)
+						forecastService.removeForecaster(simpleForecasters.get(0).getId());
 					forecastService.createWW3Forecaster(result, new PointDTO(buoyLatitudeNum, buoyLongitudeNum));
 					logger.log(Level.INFO,"SpotServicesImpl - editSpot - ww3 forecaster updated.");
 				}
