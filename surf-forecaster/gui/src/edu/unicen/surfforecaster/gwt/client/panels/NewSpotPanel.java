@@ -788,4 +788,9 @@ public class NewSpotPanel extends FlexTable implements Observer{
 		
 		
 	}
+	
+	public void hideMessagePanels() {
+		this.errorPanel.setVisible(false);
+		this.successPanel.setVisible(false);
+	}
 }

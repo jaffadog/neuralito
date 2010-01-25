@@ -34,6 +34,7 @@ public class MySpotsPanel extends FlexTable {
 	private final static String ACTION_ICON_HEIGHT = "20px";
 	private final static String ACTION_ICON_WIDTH = "20px";
 	private DisclosurePanel mySpotsTableContainer;
+	private NewSpotPanel newSpotPanel;
 	
 	public static MySpotsPanel getInstance() {
         if (instance == null) {
@@ -197,7 +198,7 @@ public class MySpotsPanel extends FlexTable {
 		LoadingPanel loadingPanel = new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingSpotData()) ;
 		this.setWidget(4, 0, loadingPanel);
 		
-		NewSpotPanel newSpotPanel = new NewSpotPanel(spot); 
+		newSpotPanel = new NewSpotPanel(spot); 
 		this.setWidget(4, 0, newSpotPanel);
 	}
 	
@@ -250,5 +251,12 @@ public class MySpotsPanel extends FlexTable {
 		mySpotsTable.getRowFormatter().setVisible(rowIndex, false);
 		//Calls to localization utils to update all localization components values
 		LocalizationUtils.getInstance().refresh();
+	}
+	
+	public void hideMessagePanels() {
+		this.errorPanel.setVisible(false);
+		this.successPanel.setVisible(false);
+		if (this.newSpotPanel != null)
+			this.newSpotPanel.hideMessagePanels();
 	}
 }

@@ -18,24 +18,28 @@ import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
 public class ForecastTabPanel extends DecoratedTabPanel {
 	
 	private Vector<String> historyTokens = null;
+	private ForecastPanel forecastPanel;
+	private SpotDescriptionPanel spotDescriptionPanel;
+	private SpotComparatorPanel spotComparatorPanel;
+	private NewSpotPanel newSpotPanel;
 	
 	public ForecastTabPanel() {
 		
 		this.historyTokens = new Vector<String>();
 		
 		{
-			ForecastPanel forecastPanel = new ForecastPanel();
+			forecastPanel = new ForecastPanel();
 			this.add(forecastPanel, GWTUtils.LOCALE_CONSTANTS.forecast());
 			this.historyTokens.add("forecastTab");
 		}
 		{
-			SpotDescriptionPanel waveDescriptionPanel = new SpotDescriptionPanel();
-			this.add(waveDescriptionPanel, GWTUtils.LOCALE_CONSTANTS.spotDescription());
+			spotDescriptionPanel = new SpotDescriptionPanel();
+			this.add(spotDescriptionPanel, GWTUtils.LOCALE_CONSTANTS.spotDescription());
 			this.historyTokens.add("descriptionTab");
 		}
 		{
-			SpotComparatorPanel waveComparatorPanel = new SpotComparatorPanel();
-			this.add(waveComparatorPanel, GWTUtils.LOCALE_CONSTANTS.spotComparer());
+			spotComparatorPanel = new SpotComparatorPanel();
+			this.add(spotComparatorPanel, GWTUtils.LOCALE_CONSTANTS.spotComparer());
 			this.historyTokens.add("comparatorTab");
 		}
 		
@@ -45,6 +49,14 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		
 		addSelectionHandler(new SelectionHandler<Integer>() {
 			public void onSelection(SelectionEvent<Integer> event) {
+				//Hide messages panels
+				if (historyTokens.get(event.getSelectedItem()).equals("comparatorTab"))
+					spotComparatorPanel.hideMessagePanels();
+				else if (historyTokens.get(event.getSelectedItem()).equals("newSpotTab"))
+					newSpotPanel.hideMessagePanels();
+				else if (historyTokens.get(event.getSelectedItem()).equals("mySpotsTab"))
+					MySpotsPanel.getInstance().hideMessagePanels();
+				
 				System.out.println("ForecastTabPanel->SelectionTabHandler:" + historyTokens.get(event.getSelectedItem()));
 				History.newItem(historyTokens.get(event.getSelectedItem()));
 			}
@@ -60,12 +72,11 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		UserServices.Util.getInstance().hasAccessTo("addSpot", new AsyncCallback<Boolean>(){
 			public void onSuccess(Boolean result) {
 				if (result) {
-					NewSpotPanel newSpotPanel = new NewSpotPanel();
+					newSpotPanel = new NewSpotPanel();
 					add(newSpotPanel, GWTUtils.LOCALE_CONSTANTS.newSpot());					
 					historyTokens.add("newSpotTab");
 					
-					MySpotsPanel mySpotsPanel = MySpotsPanel.getInstance();
-					add(mySpotsPanel, GWTUtils.LOCALE_CONSTANTS.mySpots());					
+					add(MySpotsPanel.getInstance(), GWTUtils.LOCALE_CONSTANTS.mySpots());					
 					historyTokens.add("mySpotsTab");
 				}
 				SurfForecaster.getInstance().gotoHistoryToken();

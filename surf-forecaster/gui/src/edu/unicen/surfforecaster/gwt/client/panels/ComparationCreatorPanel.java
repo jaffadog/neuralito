@@ -789,5 +789,10 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			messages.add(GWTUtils.LOCALE_MESSAGES.ALPHANUM_SPACES_NOT_START_WITH_NUM(GWTUtils.LOCALE_CONSTANTS.comparationName()));
 		return messages;
 	}
+	
+	public void hideMessagePanels() {
+		this.errorPanel.setVisible(false);
+		this.successPanel.setVisible(false);
+	}
 
 }
