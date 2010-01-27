@@ -60,6 +60,18 @@
     font-weight: bold;
 }
 
+/** Cross button */
+div#closeBoxDiv{
+	width: 250px;
+	text-align:right;
+}
+
+div#closeBoxDiv a{
+	font-weight:bold;
+        font-size:12pt;
+        cursor:pointer;
+}
+
 /*****************************************************************************/
 /*********************** ComparationViewerPanel ***************************************/
 /*****************************************************************************/
@@ -170,18 +182,6 @@
 
 gwt-LoginBox{
 	z-index:99;
-}
-
-/** Cross button login box */
-div#closeLoginBoxDiv{
-	width: 250px;
-	text-align:right;
-}
-
-div#closeLoginBoxDiv a{
-	font-weight:bold;
-        font-size:12pt;
-        cursor:pointer;
 }
 
 /** Loading image panel login box */
