@@ -65,8 +65,7 @@ public class WgTableB extends FlexTable {
 		this.addStyleName("gwt-FlexTable-WgTable");
 		
 		//FirstRow style
-		this.getRowFormatter().addStyleName(0, "gwt-FlexTable-datesTable");
-		//this.getCellFormatter().addStyleName(0, 1, "gwt-FlexTable-datesTable");
+		this.getCellFormatter().addStyleName(0, 1, "gwt-FlexTable-datesTable");
 		
 		//First cell
 //		VerticalPanel forecastInfo = new VerticalPanel();

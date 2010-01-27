@@ -168,6 +168,20 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		{
 			detailedCompTablePanel = new DisclosurePanel(GWTUtils.LOCALE_CONSTANTS.detailedForecastsTable(), false);
 			detailedCompTablePanel.setAnimationEnabled(true);
+			detailedCompTablePanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
+				public void onOpen(OpenEvent<DisclosurePanel> event) {
+					if (detailedCompTable == null) {
+						detailedCompTablePanel.setContent(new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingDetailedForecasts()));
+						renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
+					}
+					backBtn.setVisible(true);
+				}
+			});
+			detailedCompTablePanel.addCloseHandler(new CloseHandler<DisclosurePanel>() {
+				public void onClose(CloseEvent<DisclosurePanel> event) {
+					backBtn.setVisible(false);
+				}
+			});
 			this.setWidget(8, 0, detailedCompTablePanel);
 			this.getFlexCellFormatter().setColSpan(8, 0, 4);
 		}
@@ -202,27 +216,14 @@ public class ComparationViewerPanel extends FlexTable implements ISurfForecaster
 		this.spotsLatestForecasts = spotsLatestForecasts;
 		this.spotsIds = spotsIds;
 		this.spotsNames = spotsNames;
+		this.detailedCompTable = null;
+		this.detailedCompTablePanel.setOpen(false);
 		
 		if (spotsLatestForecasts.size() >= SpotComparatorPanel.MIN_SPOTS_TO_COMP && spotsLatestForecasts.size() <= SpotComparatorPanel.MAX_SPOTS_TO_COMP 
 				&& spotsNames.size() >= SpotComparatorPanel.MIN_SPOTS_TO_COMP && spotsNames.size() <= SpotComparatorPanel.MAX_SPOTS_TO_COMP) {
 			this.fillSpotProperties();
 			this.drawColumnChart();
 			this.drawMotionChart();
-			detailedCompTablePanel.addOpenHandler(new OpenHandler<DisclosurePanel>() {
-				public void onOpen(OpenEvent<DisclosurePanel> event) {
-					if (detailedCompTable == null) {
-						detailedCompTablePanel.setContent(new LoadingPanel(GWTUtils.LOCALE_CONSTANTS.loadingDetailedForecasts()));
-						renderDetailedCompTable(spotsLatestForecasts, spotsIds, spotsNames);
-					}
-					backBtn.setVisible(true);
-				}
-			});
-			detailedCompTablePanel.addCloseHandler(new CloseHandler<DisclosurePanel>() {
-				public void onClose(CloseEvent<DisclosurePanel> event) {
-					backBtn.setVisible(false);
-				}
-			});
-			
 		} else {
 			new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), GWTUtils.LOCALE_CONSTANTS.twoToFiveSpotsToMakeComparation(), MessageBox.IconType.INFO);
 		}

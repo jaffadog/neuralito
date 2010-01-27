@@ -57,9 +57,6 @@ public class WgTableC extends FlexTable {
 		//This flexTable style
 		this.addStyleName("gwt-FlexTable-WgTable");
 		
-		//FirstRow style
-		this.getRowFormatter().addStyleName(0, "gwt-FlexTable-datesTable");
-		this.getCellFormatter().setStyleName(0, 0, "gwt-FlexTable-whiteCell");
 		//Col 0 width
 		this.getFlexCellFormatter().setWidth(0, 0, WgTableC.LABELS_COL_WIDTH);
 		//Col 0 style
@@ -98,6 +95,8 @@ public class WgTableC extends FlexTable {
 			if (!isDatesAlreadyPrinted){
 				this.setWidget(0, forecastIndex, getDateLabel(forecastDTO));
 				this.getColumnFormatter().setWidth(forecastIndex, WgTableC.DETAILED_FORECAST_COL_WIDTH);
+				//grey gradient background
+				this.getFlexCellFormatter().addStyleName(0, forecastIndex, "gwt-FlexTable-datesTable");
 			}
 			this.setDetailedForecast(forecastDTO, ww3ForecastDTO, currentRow, forecastIndex);
 			forecastIndex++;
