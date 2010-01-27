@@ -18,10 +18,12 @@ import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
 import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
@@ -50,7 +52,7 @@ import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
  * @author MAXI
  *
  */
-public class NewSpotPanel extends FlexTable implements Observer{
+public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 
 	private SpotGwtDTO spot = null;
 	private String panelMode = "create";
@@ -101,6 +103,7 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	private Label lblNewSpotDescription;
 	private Hidden dayHoursChanged;
 	private Hidden gridPointChanged;
+	private Hyperlink lnkObsFormatSample;
 	
 	public NewSpotPanel() {
 		this.panelMode = "create";
@@ -293,7 +296,11 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	    //File Upload
 	    Label lblVisualObs = new Label(GWTUtils.LOCALE_CONSTANTS.visualObservations());
 	    formTable.setWidget(0, 0, lblVisualObs);
-	    formTable.getFlexCellFormatter().setColSpan(0, 0, 10);
+	    formTable.getFlexCellFormatter().setColSpan(0, 0, 7);
+	    lnkObsFormatSample = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.observationsFormatSample(), "");
+	    lnkObsFormatSample.addClickHandler(this);
+	    formTable.setWidget(0, 1, lnkObsFormatSample);
+	    formTable.getFlexCellFormatter().setColSpan(0, 1, 3);
 	    upload = new FileUpload();
 	    upload.setWidth("500px");
 	    upload.setName("uploadFormElement");
@@ -792,5 +799,17 @@ public class NewSpotPanel extends FlexTable implements Observer{
 	public void hideMessagePanels() {
 		this.errorPanel.setVisible(false);
 		this.successPanel.setVisible(false);
+	}
+
+	@Override
+	public void onClick(ClickEvent event) {
+		Widget sender = (Widget) event.getSource();
+		
+		if (sender == this.lnkObsFormatSample)
+			this.showObsSamplePanel();
+	}
+
+	private void showObsSamplePanel() {
+		VisualObservationSampleBox.getInstance().showRelativeTo(lnkObsFormatSample);
 	}
 }

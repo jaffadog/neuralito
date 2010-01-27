@@ -32,7 +32,7 @@ public class LoginBox extends DialogBox{
 	private final Label label_loginMessage;
 	private SimplePanel loadingPanel = null;
 	private HorizontalPanel horizontalPanel = null;
-	private final String crossIconHTML = "<div id=\"closeLoginBoxDiv\" ><a onclick=\"closeDialog()\">X</a></div>";
+	private final String crossIconHTML = "<div id=\"closeBoxDiv\" ><a onclick=\"closeDialog()\">X</a></div>";
 	private Hyperlink registerLink;
 	
 	public static LoginBox getInstance() {

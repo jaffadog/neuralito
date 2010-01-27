@@ -519,6 +519,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Observaciones visuales")
 	String visualObservations();
 	
+	@DefaultStringValue("Formato del archivo")
+	String observationsFormatSample();
+	
 	@DefaultStringValue("Horas de luz solar")
 	String dayLightTime();
 	
@@ -613,6 +616,19 @@ public interface SurfForecasterConstants extends Constants {
 	
 	@DefaultStringValue("Configuraci\u00F3n")
 	String settings();
+	
+	/**
+	 * VisualObservationSampleBox
+	 */
+	@DefaultStringValue("Formato del archivo de observaciones visuales")
+	String observationsFileFormat();
+	
+	@DefaultStringValue("Si desea obtener un pronostico detallado exactamente en la ubicacion de la ola marcada en el mapa, debe proveer al sistema de un archivo " +
+			"indexado por fecha que contenga en cada linea la altura de la ola (METROS) mas grande observada en dicha ubiciacion en el dia especificado como se puede ver " +
+			"en la imagen debajo, donde cada linea del archivo contiene cuatro columnas separadas por un ESPACIO que representan año, mes, dia y altura de ola (METROS) " +
+			"respectivamente. Si la altura de ola contiene valores decimales como se ve en la imagen, utilizar el punto (.) como separador decimal.")
+	String observationsFileFormatDesc();
+	
 	
 	/**
 	 * WekaEvaluationResultsPanel

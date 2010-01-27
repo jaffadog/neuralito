@@ -27,6 +27,7 @@ public final class GWTUtils {
 	public final static String APLICATION_WIDTH = "1000px";
 	
 	//IMAGES URLS
+	public final static String FLAGS_PATH = "images/flags/";
 	public final static String IMAGE_LOGO = "images/logo2.PNG";
 	public final static String IMAGE_SPOT = "images/wave.png";
 	public final static String IMAGE_BUOY_DISABLED = "images/red-ball.gif";
@@ -71,7 +72,10 @@ public final class GWTUtils {
 	//Email pattern
 	public final static String REGEX_EMAIL = "^[a-zA-Z][\\w\\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\\w\\.-]*[a-zA-Z0-9]\\.[a-zA-Z][a-zA-Z\\.]*[a-zA-Z]$";
 	
-	   
+	public static String IMAGE_OBS_SAMPLE() {
+		return "images/obsSample_" + GWTUtils.getCurrentLocaleCode() + ".JPG";
+	}
+	
 	public static boolean isNumeric(String value){
 		try {
 			Integer.parseInt(value);

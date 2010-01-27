@@ -63,7 +63,6 @@ public class UserStatePanel extends Composite {
 		loginPanel = LoginBox.getInstance();
 		loginPanel.hide();
 		
-		
 		//Link to LoginBox
 		lnkLogin = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.signIn(), "");
 		lnkLogin.addClickHandler(new ClickHandler() {
@@ -88,19 +87,15 @@ public class UserStatePanel extends Composite {
 		horizontalPanel.add(flag);
 		// Add the option to change the locale
 	    final ListBox localeBox = new ListBox();
-	    String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
-	    if (currentLocale.equals("default")) {
-	      currentLocale = "es";
-	    }
 	    String[] localeNames = LocaleInfo.getAvailableLocaleNames();
 	    for (String localeName : localeNames) {
 	      if (!localeName.equals("default")) {
 	        String nativeName = LocaleInfo.getLocaleNativeDisplayName(localeName);
 	        nativeName = nativeName.substring(0, 1).toUpperCase() + nativeName.substring(1);
 	        localeBox.addItem(nativeName, localeName);
-	        if (localeName.equals(currentLocale)) {
+	        if (localeName.equals(GWTUtils.getCurrentLocaleCode())) {
 	          localeBox.setSelectedIndex(localeBox.getItemCount() - 1);
-	          flag.setUrl("images/flags/" + localeName + "-flag.png");
+	          flag.setUrl(GWTUtils.FLAGS_PATH + localeName + "-flag.png");
 	        }
 	      }
 	    }
