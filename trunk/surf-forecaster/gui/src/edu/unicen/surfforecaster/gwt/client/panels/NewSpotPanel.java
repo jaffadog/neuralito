@@ -268,8 +268,8 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 				} else {	
 					errorPanel.setVisible(false);
 					String sCorrelation = results.substring(results.indexOf("correlation=") + 12, results.indexOf("|", results.indexOf("correlation=")));
-					String sMeanAbsoluteError = results.substring(results.indexOf("|", results.indexOf("correlation=")) + 19, results.indexOf("|", results.indexOf("meanAbsoluteError=")));
-					String classifierName = results.substring(results.indexOf("|", results.indexOf("meanAbsoluteError=")) + 16);
+//					String sMeanAbsoluteError = results.substring(results.indexOf("|", results.indexOf("correlation=")) + 19, results.indexOf("|", results.indexOf("meanAbsoluteError=")));
+//					String classifierName = results.substring(results.indexOf("|", results.indexOf("meanAbsoluteError=")) + 16);
 					double dCorrelation = new Double(sCorrelation);
 					String correlationExpresion = "";
 					if (dCorrelation <= 0.2)
