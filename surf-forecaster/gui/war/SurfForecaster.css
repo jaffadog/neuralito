@@ -62,7 +62,7 @@
 
 /** Cross button */
 div#closeBoxDiv{
-	width: 250px;
+	width: 100%;
 	text-align:right;
 }
 
