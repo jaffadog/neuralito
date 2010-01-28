@@ -622,11 +622,20 @@ public interface SurfForecasterConstants extends Constants {
 	 */
 	@DefaultStringValue("Formato del archivo de observaciones visuales")
 	String observationsFileFormat();
-	
-	@DefaultStringValue("Si desea obtener un pronostico detallado exactamente en la ubicacion de la ola marcada en el mapa, debe proveer al sistema de un archivo " +
-			"indexado por fecha que contenga en cada linea la altura de la ola (METROS) mas grande observada en dicha ubiciacion en el dia especificado como se puede ver " +
-			"en la imagen debajo, donde cada linea del archivo contiene cuatro columnas separadas por un ESPACIO que representan año, mes, dia y altura de ola (METROS) " +
-			"respectivamente. Si la altura de ola contiene valores decimales como se ve en la imagen, utilizar el punto (.) como separador decimal.")
+	/**
+	 * Unicode character
+	 * 
+	 * á = \u00E1
+	 * é = \u00E9
+	 * í = \u00ED
+	 * ó = \u00F3
+	 * ú = \u00FA
+	 * ñ = \u00F1
+	 */
+	@DefaultStringValue("Si desea obtener un pron\u00F3stico detallado ex\u00E1ctamente en la ubicaci\u00F3n de la ola marcada en el mapa, debe proveer al sistema de un archivo " +
+			"indexado por fecha que contenga en cada l\u00EDnea la altura de la ola (METROS) m\u00E1s grande observada en dicha ubiciaci\u00F3n en el dia especificado, como se puede ver " +
+			"en la imagen debajo, donde cada l\u00EDnea del archivo contiene cuatro columnas separadas por un ESPACIO que representan a\u00F1o, mes, d\u00EDa y altura de ola (METROS) " +
+			"respectivamente. Si la altura de ola contiene valores decimales como se ve en la imagen, utilizar el punto (.) como separador decimal. Use archivos de texto con formato TXT.")
 	String observationsFileFormatDesc();
 	
 	

@@ -104,6 +104,7 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 	private Hidden dayHoursChanged;
 	private Hidden gridPointChanged;
 	private Hyperlink lnkObsFormatSample;
+	private HTMLButtonGrayGrad saveBtn;
 	
 	public NewSpotPanel() {
 		this.panelMode = "create";
@@ -186,23 +187,12 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 		this.setWidget(8, 1, zoneTxt);
 		
 		createZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.createZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
-		createZoneBtn.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-					zoneBox.setEnabled(false);
-					zoneTxt.setVisible(true);
-					chooseZoneBtn.setVisible(true);
-					createZoneBtn.setVisible(false);
-			}
-		});
+		createZoneBtn.addClickHandler(this);
 		this.setWidget(7, 2, createZoneBtn);
 		this.getCellFormatter().setHorizontalAlignment(7, 2, HasHorizontalAlignment.ALIGN_LEFT);
 		
 		chooseZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.chooseZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
-		chooseZoneBtn.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-					chooseZoneBtnOnClick();
-			}
-		});
+		chooseZoneBtn.addClickHandler(this);
 		chooseZoneBtn.setVisible(false);
 		this.setWidget(8, 2, chooseZoneBtn);
 		this.getCellFormatter().setHorizontalAlignment(8, 2, HasHorizontalAlignment.ALIGN_LEFT);
@@ -379,70 +369,12 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 		this.getColumnFormatter().setWidth(1, NewSpotPanel.TABLE_COL_1);
 		this.getColumnFormatter().setWidth(2, NewSpotPanel.TABLE_COL_2);
 		
-		//Save Button	
-		final HTMLButtonGrayGrad saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.save(), "NewSpotDataPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
+		saveBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.save(), "NewSpotDataPanel-Save", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
+		saveBtn.addClickHandler(this);
 		this.setWidget(17, 0, saveBtn);
 		this.getFlexCellFormatter().setColSpan(17, 0, 3);
 		this.getFlexCellFormatter().setHorizontalAlignment(17, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
-		
-		saveBtn.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				Window.scrollTo(0, 0);
-				final Vector<String> messages = new Vector<String>();
-				errorPanel.setVisible(false);
-				successPanel.setVisible(false);
-				loadingAddingSpotPanel.setVisible(true);
-				int countryId = countryBox.getItemCount() == 0 ? 0 : new Integer(countryBox.getValue(countryBox.getSelectedIndex()));
-				messages.addAll(validateForm());
-				if (messages.isEmpty()){
-					int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
-					
-					if (panelMode.equals("create"))
-						SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
-								mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
-								zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
-								timeZoneBox.getValue(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
-							public void onSuccess(Integer result){
-								loadingAddingSpotPanel.setVisible(false);
-								String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
-								if (!upload.getFilename().trim().equals("")) {
-									spotId.setValue(result.toString());
-									latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
-									longitudeGridPoint.setValue(mapPanel.getBuoyLong().replace(",", "."));
-									message += " " + GWTUtils.LOCALE_CONSTANTS.trainingClassifier();
-									form.submit();
-								}
-								clearFields();
-								successPanel.setMessage(message);
-								successPanel.setVisible(true);
-								//refresh localization lists on whole application
-								LocalizationUtils.getInstance().checkCallsAndNotify();
-								MySpotsPanel.getInstance().retrieveMySpots();
-				            }
-							
-							public void onFailure(Throwable caught){
-								loadingAddingSpotPanel.setVisible(false);
-				            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
-										Cookies.getCookie("surfForecaster-Username") != null) {
-									GWTUtils.showSessionExpiredLoginBox();
-								} else {
-									messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
-									errorPanel.setMessages(messages);
-									errorPanel.setVisible(true);
-								}
-				            }
-						});
-					else
-						saveEditedSpot(zoneId, countryId);
-				}
-				else{
-					loadingAddingSpotPanel.setVisible(false);
-					errorPanel.setMessages(messages);
-					errorPanel.setVisible(true);
-				}
-			}
-		});
 		
 		/**
 		 * Make this panel an observer for LocalizationUtils object
@@ -563,7 +495,17 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 		});
 		
 	}
-
+	
+	/**
+	 * Invoked when clicks createZoneBtn
+	 */
+	private void createZoneBtnOnClick() {
+		zoneBox.setEnabled(false);
+		zoneTxt.setVisible(true);
+		chooseZoneBtn.setVisible(true);
+		createZoneBtn.setVisible(false);
+	}
+	
 	/**
 	 * Invoked when clicks chooseZoneBtn
 	 */
@@ -739,6 +681,62 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 		});
 	}
 	
+	private void saveSpot() {
+		Window.scrollTo(0, 0);
+		final Vector<String> messages = new Vector<String>();
+		errorPanel.setVisible(false);
+		successPanel.setVisible(false);
+		loadingAddingSpotPanel.setVisible(true);
+		int countryId = countryBox.getItemCount() == 0 ? 0 : new Integer(countryBox.getValue(countryBox.getSelectedIndex()));
+		messages.addAll(validateForm());
+		if (messages.isEmpty()){
+			int zoneId = zoneBox.getItemCount() == 0 ? 0 : new Integer(zoneBox.getValue(zoneBox.getSelectedIndex()));
+			
+			if (panelMode.equals("create"))
+				SpotServices.Util.getInstance().addSpot(spotTxt.getText().trim(), mapPanel.getSpotLat(), mapPanel.getSpotLong(),
+						mapPanel.getBuoyLat(), mapPanel.getBuoyLong(),  
+						zoneId, countryId, zoneTxt.getText().trim(), radioPublicButton.getValue(), 
+						timeZoneBox.getValue(timeZoneBox.getSelectedIndex()).trim(), new AsyncCallback<Integer>(){
+					public void onSuccess(Integer result){
+						loadingAddingSpotPanel.setVisible(false);
+						String message = ClientI18NMessages.getInstance().getMessage("CHANGES_SAVED_SUCCESFULLY");
+						if (!upload.getFilename().trim().equals("")) {
+							spotId.setValue(result.toString());
+							latitudeGridPoint.setValue(mapPanel.getBuoyLat().replace(",", "."));
+							longitudeGridPoint.setValue(mapPanel.getBuoyLong().replace(",", "."));
+							message += " " + GWTUtils.LOCALE_CONSTANTS.trainingClassifier();
+							form.submit();
+						}
+						clearFields();
+						successPanel.setMessage(message);
+						successPanel.setVisible(true);
+						//refresh localization lists on whole application
+						LocalizationUtils.getInstance().checkCallsAndNotify();
+						MySpotsPanel.getInstance().retrieveMySpots();
+		            }
+					
+					public void onFailure(Throwable caught){
+						loadingAddingSpotPanel.setVisible(false);
+		            	if (((NeuralitoException)caught).getErrorCode().equals(ErrorCode.USER_SESSION_EMPTY_OR_EXPIRED) && 
+								Cookies.getCookie("surfForecaster-Username") != null) {
+							GWTUtils.showSessionExpiredLoginBox();
+						} else {
+							messages.add(ClientI18NMessages.getInstance().getMessage((NeuralitoException)caught));
+							errorPanel.setMessages(messages);
+							errorPanel.setVisible(true);
+						}
+		            }
+				});
+			else
+				saveEditedSpot(zoneId, countryId);
+		}
+		else{
+			loadingAddingSpotPanel.setVisible(false);
+			errorPanel.setMessages(messages);
+			errorPanel.setVisible(true);
+		}
+	}
+	
 	private void saveEditedSpot(Integer zoneId, Integer countryId) {
 		//TODO este getpoint del if en realidad tendria que ser el getGridPoint, pero aun no esta hecho, cambiarlo cuando este , agregar tb al if que si cambio
 		//las horas de luz de dia tambien tiene que reentrenar
@@ -807,9 +805,15 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 		
 		if (sender == this.lnkObsFormatSample)
 			this.showObsSamplePanel();
+		else if (sender == this.saveBtn)
+			this.saveSpot();
+		else if (sender == this.chooseZoneBtn)
+			this.chooseZoneBtnOnClick();
+		else if (sender == this.createZoneBtn)
+			this.createZoneBtnOnClick();
 	}
 
 	private void showObsSamplePanel() {
-		VisualObservationSampleBox.getInstance().showRelativeTo(lnkObsFormatSample);
+		VisualObservationSampleBox.getInstance().center();;
 	}
 }
