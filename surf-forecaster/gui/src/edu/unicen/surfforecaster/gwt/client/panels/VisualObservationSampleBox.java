@@ -1,11 +1,15 @@
 package edu.unicen.surfforecaster.gwt.client.panels;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import edu.unicen.surfforecaster.gwt.client.utils.GWTUtils;
+import edu.unicen.surfforecaster.gwt.client.widgets.HTMLButtonGrayGrad;
 
 public class VisualObservationSampleBox extends DialogBox {
 	
@@ -13,7 +17,7 @@ public class VisualObservationSampleBox extends DialogBox {
 	private final String crossIconHTML = "<div id=\"closeBoxDiv\" ><a onclick=\"closeObsFormatDialog()\">X</a></div>";
 	
 	//this var sets in which row must be inserted each element
-	private int rowIndex = 0;
+	private int rowIndex = -1;
 	
 	public static VisualObservationSampleBox getInstance() {
         if (instance == null) {
@@ -33,21 +37,34 @@ public class VisualObservationSampleBox extends DialogBox {
 		
 		Label lblTitle = new Label(GWTUtils.LOCALE_CONSTANTS.observationsFileFormat());
 		lblTitle.addStyleName("gwt-Label-Title");
-		container.setWidget(this.getRowIndex(), 0, lblTitle);
+		container.setWidget(this.getNextIndex(), 0, lblTitle);
 		
 		Label lblDescription = new Label(GWTUtils.LOCALE_CONSTANTS.observationsFileFormatDesc());
 		lblDescription.addStyleName("gwt-Label-SectionDescription");
-		container.setWidget(this.getRowIndex(), 0, lblDescription);
+		container.setWidget(this.getNextIndex(), 0, lblDescription);
 		
 		Image imgSample = new Image(GWTUtils.IMAGE_OBS_SAMPLE());
-		container.setWidget(this.getRowIndex(), 0, imgSample);
+		container.setWidget(this.getNextIndex(), 0, imgSample);
+		
+		HTMLButtonGrayGrad closeBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.close(), "VisualObservationSampleBox-Close", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_60PX);
+		container.setWidget(this.getNextIndex(), 0, closeBtn);
+		closeBtn.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				hide();
+			}
+		});
+		container.getFlexCellFormatter().setHorizontalAlignment(this.getCurrentRowIndex(), 0, HasHorizontalAlignment.ALIGN_CENTER);
 		
 		this.setWidget(container);
 	}
 	
-	private int getRowIndex() {
+	private int getNextIndex() {
 		rowIndex++;
-		return rowIndex - 1;
+		return rowIndex;
+	}
+	
+	private int getCurrentRowIndex() {
+		return rowIndex;
 	}
 	
 	// Define closeDialog using JSNI
