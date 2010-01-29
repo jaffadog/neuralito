@@ -8,11 +8,15 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class MainVerticalPanel extends VerticalPanel {
 	
 	private ForecastTabPanel forecastTabPanel = null;
+	AnonymousMessagePanel anonymousMessagePanel;
 	
 	public MainVerticalPanel() {
 		
 		this.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		//TODO agregar un panel antes de este que tenga una leyenda de para que registrarse y un link a la pagina de registro
+		{
+			anonymousMessagePanel = new AnonymousMessagePanel();
+			this.add(anonymousMessagePanel);
+		}
 		{
 			forecastTabPanel = new ForecastTabPanel();
 			this.add(forecastTabPanel);
