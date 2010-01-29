@@ -72,6 +72,8 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 		UserServices.Util.getInstance().hasAccessTo("addSpot", new AsyncCallback<Boolean>(){
 			public void onSuccess(Boolean result) {
 				if (result) {
+					ContentPanel.getInstance().mainVerticalPanel.anonymousMessagePanel.setVisible(false);
+					
 					newSpotPanel = new NewSpotPanel();
 					add(newSpotPanel, GWTUtils.LOCALE_CONSTANTS.newSpot());					
 					historyTokens.add("newSpotTab");

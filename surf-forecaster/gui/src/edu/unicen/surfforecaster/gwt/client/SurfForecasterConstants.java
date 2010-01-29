@@ -96,6 +96,18 @@ public interface SurfForecasterConstants extends Constants {
 	String USER_NOT_COMPARISON_OWNER();
 	
 	/**
+	 * AnonymousMessagePanel
+	 */
+	@DefaultStringValue("Esta usando el sistema en forma anonima.")
+	String anonymousMessagePart1();
+	
+	@DefaultStringValue("GRATIS para poder aprovechar todos los servicios de Surf-Forecaster.")
+	String anonymousMessagePart2();
+	
+	@DefaultStringValue("Reg\u00EDstrese")
+	String register2();
+	
+	/**
 	 * Commons translates for more than one panel
 	 */
 	@DefaultStringValue("Iniciar sesi\u00F3n")
@@ -590,17 +602,19 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Administrador")
 	String administrator();
 	
-	//TODO traducir esto
-	@DefaultStringValue("Puedes utilizar el sistema en forma anonima sin tener una cuenta de usuario, pero de esta manera solo tendras acceso a olas " +
-			"creadas y declaradas como PUBLICAS por otros usuarios que tienen la intencion de compartir esas predicciones. Como usuario anonimo " +
-			"podras ver los pronosticos y descripciones de olas publicas, como tambien realizar comparaciones entre dichas olas. Registrarse en el sistema " +
-			"lleva apenas un instante, llenando un simple formulario el cual no requiere datos personales ni privados. Como usuario registrados podras " +
-			"dar de alta tus olas preferidas en el sistema, de cualquier parte del mundo, para poder tener acceso a un pronostico detallado cercano a esa " +
-			"ubicacion, ademas si dispones de informacion historica con la altura de las olas que arribaron a esa costa, podras entrenar un pronosticador " +
-			"especializado para obtener una prediccion aun mas certera exactamente donde rompe esa ola. Por otra parte como usuario registrado podras " +
-			"generar tus propias comparaciones entre olas y guardarlas en el sistema, para tenerlas disponibles en cualquier momento, evitandote el trabajo " +
-			"de tener que generarlas continuamente.")
+	@DefaultStringValue("Por que registrarse?")
 	String whyRegister();
+	
+	@DefaultStringValue("Puedes utilizar el sistema en forma an\u00F3nima sin tener una cuenta de usuario, pero de esta manera solo tendr\u00E1s acceso a olas " +
+			"creadas por t\u00ED o creadas y declaradas como PUBLICAS por otros usuarios que tienen la intenci\u00F3n de compartir esas predicciones. Como usuario an\u00F3nimo " +
+			"podr\u00E1s ver los pron\u00F3sticos y descripciones de olas PUBLICAS, como tambi\u00E9n realizar comparaciones entre dichas olas. Registrarse en el sistema " +
+			"lleva apenas un instante, llenando un simple formulario el cual no requiere datos personales ni privados. Como usuario registrado podr\u00E1s " +
+			"dar de alta tus olas preferidas en el sistema, de cualquier parte del mundo, para poder tener acceso a un pron\u00F3stico detallado cercano a esa " +
+			"ubicaci\u00F3n, adem\u00E1s si dispones de informaci\u00F3n hist\u00F3rica con la altura de las olas que arribaron a esa costa, podr\u00E1s entrenar un pronosticador " +
+			"especializado para obtener una predicci\u00F3n aun m\u00E1s certera ex\u00E1ctamente donde rompe esa ola. Por otra parte como usuario registrado podr\u00E1s " +
+			"generar tus propias comparaciones entre olas y guardarlas en el sistema, para tenerlas disponibles en cualquier momento, evitando el trabajo " +
+			"de tener que generarlas cont\u00EDnuamente. Registrate GRATIS ahora!.")
+	String whyRegisterDesc();
 	
 	/**
 	 * UserStatePanel
@@ -622,16 +636,7 @@ public interface SurfForecasterConstants extends Constants {
 	 */
 	@DefaultStringValue("Formato del archivo de observaciones visuales")
 	String observationsFileFormat();
-	/**
-	 * Unicode character
-	 * 
-	 * á = \u00E1
-	 * é = \u00E9
-	 * í = \u00ED
-	 * ó = \u00F3
-	 * ú = \u00FA
-	 * ñ = \u00F1
-	 */
+
 	@DefaultStringValue("Si desea obtener un pron\u00F3stico detallado ex\u00E1ctamente en la ubicaci\u00F3n de la ola marcada en el mapa, debe proveer al sistema de un archivo " +
 			"indexado por fecha que contenga en cada l\u00EDnea la altura de la ola (METROS) m\u00E1s grande observada en dicha ubiciaci\u00F3n en el dia especificado, como se puede ver " +
 			"en la imagen debajo, donde cada l\u00EDnea del archivo contiene cuatro columnas separadas por un ESPACIO que representan a\u00F1o, mes, d\u00EDa y altura de ola (METROS) " +

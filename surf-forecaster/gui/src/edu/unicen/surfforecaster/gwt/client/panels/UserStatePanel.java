@@ -116,13 +116,9 @@ public class UserStatePanel extends Composite {
 		
 		lnkSettings = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.settings(), "settings");
 		
+		//The link history token calls History.newItem that calls the history change event to reload the view
 		lnkRegister = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.register() + "!!!", "registerNewUser");
 		lnkRegister.addStyleName("gwt-HyperLink-register");
-		lnkRegister.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				//The link history token calls History.newItem that calls the history change event to reload the view
-			}
-		});
 		
 		lnkSignOut = new Hyperlink(GWTUtils.LOCALE_CONSTANTS.signOut(), "");
 		lnkSignOut.addClickHandler(new ClickHandler() {

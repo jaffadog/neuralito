@@ -53,9 +53,13 @@ public class RegisterUserPanel extends VerticalPanel {
 		successPanel.setVisible(false);
 		this.add(successPanel);
 		
-		Label lblRegisterdescription = new Label(GWTUtils.LOCALE_CONSTANTS.whyRegister());
-		lblRegisterdescription.addStyleName("gwt-Label-SectionDescription");
-		add(lblRegisterdescription);
+		Label lblWhyRegisterTitle = new Label(GWTUtils.LOCALE_CONSTANTS.whyRegister());
+		lblWhyRegisterTitle.addStyleName("gwt-Label-Title");
+		add(lblWhyRegisterTitle);
+		
+		Label lblWhyRegisterdescription = new Label(GWTUtils.LOCALE_CONSTANTS.whyRegisterDesc());
+		lblWhyRegisterdescription.addStyleName("gwt-Label-SectionDescription");
+		add(lblWhyRegisterdescription);
 		
 		this.add(flexTable);
 
