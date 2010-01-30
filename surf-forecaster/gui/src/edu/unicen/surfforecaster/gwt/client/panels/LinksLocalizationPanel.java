@@ -58,7 +58,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 			localizationForm = new FlexTable();
 			this.setWidget(localizationForm);
 			{
-				areaLink = new Hyperlink("<Choose area>", "");
+				areaLink = new Hyperlink("<" + GWTUtils.LOCALE_CONSTANTS.chooseArea() + ">", "");
 				localizationForm.setWidget(0, 0, areaLink);
 				areaLink.addClickHandler(this);
 			}
@@ -72,7 +72,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 				localizationForm.setWidget(0, 1, this.getSeparator());
 			}
 			{
-				countryLink = new Hyperlink("<Choose country>", "");
+				countryLink = new Hyperlink("<" + GWTUtils.LOCALE_CONSTANTS.chooseCountry() + ">", "");
 				localizationForm.setWidget(0, 2, countryLink);
 				countryLink.addClickHandler(this);
 			}
@@ -86,7 +86,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 				localizationForm.setWidget(0, 3, this.getSeparator());
 			}
 			{
-				zoneLink = new Hyperlink("<Choose zone>", "");
+				zoneLink = new Hyperlink("<" + GWTUtils.LOCALE_CONSTANTS.chooseZone() + ">", "");
 				localizationForm.setWidget(0, 4, zoneLink);
 				zoneLink.addClickHandler(this);
 			}
@@ -102,7 +102,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 					localizationForm.setWidget(0, 5, this.getSeparator());
 				}
 				{
-					spotLink = new Hyperlink("<Choose spot>", "");
+					spotLink = new Hyperlink("<" + GWTUtils.LOCALE_CONSTANTS.chooseSpot() + ">", "");
 					localizationForm.setWidget(0, 6, spotLink);
 					spotLink.addClickHandler(this);
 				}
@@ -176,6 +176,13 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 	}
 	
 	/**
+	 * @return int - Items count of the component
+	 */
+	public int getZoneBoxItemCount() {
+		return this.zoneBox.getItemCount();
+	}
+	
+	/**
 	 * @return String - The Text showed in the Spot listbox widget
 	 */
 	public String getSpotBoxDisplayText(){
@@ -187,6 +194,13 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 	 */
 	public String getSpotBoxDisplayValue() {
 		return this.spotBox.getValue(this.spotBox.getSelectedIndex());
+	}
+	
+	/**
+	 * @return int - Items count of the component
+	 */
+	public int getSpotBoxItemCount() {
+		return this.spotBox.getItemCount();
 	}
 
 	/**
@@ -212,6 +226,12 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 			if (this.areaBox.getItemCount() > 0) {
 				areaLink.setText(areaBox.getItemText(areaBox.getSelectedIndex()));
 				this.setCountryListItems(new Integer(this.areaBox.getValue(this.areaBox.getSelectedIndex())));
+			} else {
+				areaLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseArea() + ">");
+				countryLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseCountry() + ">");
+				zoneLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseZone() + ">");
+				if (showSpots)
+					spotLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseSpot() + ">");
 			}
 		}
 	}
@@ -237,6 +257,11 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 		if (this.countryBox.getItemCount() > 0) {
 			this.setZoneListItems(new Integer(this.countryBox.getValue(this.countryBox.getSelectedIndex())));
 			countryLink.setText(countryBox.getItemText(countryBox.getSelectedIndex()));
+		} else {
+			countryLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseCountry() + ">");
+			zoneLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseZone() + ">");
+			if (showSpots)
+				spotLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseSpot() + ">");
 		}
 	}
 	
@@ -254,9 +279,14 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 					zoneLink.setText(zoneBox.getItemText(zoneBox.getSelectedIndex()));
 					if (showSpots)
 						setSpotListItems(new Integer(zoneBox.getValue(zoneBox.getSelectedIndex())));
-					if (!showSpots && !showActionButton)
-						executeAction();
+				} else {
+					zoneLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseZone() + ">");
+					if (showSpots)
+						spotLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseSpot() + ">");
 				}
+				
+				if (!showSpots && !showActionButton)
+					executeAction();
 			}
 				
 			public void onFailure(Throwable caught) {
@@ -274,9 +304,10 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 					SpotGwtDTO spot = i.next();
 					spotBox.addItem(spot.getName(), spot.getId().toString());
 				}
-				if (spotBox.getItemCount() > 0) {
+				if (spotBox.getItemCount() > 0)
 					spotLink.setText(spotBox.getItemText(spotBox.getSelectedIndex()));
-				}
+				else
+					spotLink.setText("<" + GWTUtils.LOCALE_CONSTANTS.chooseSpot() + ">");
 				
 				if (!showActionButton)
 					executeAction();
@@ -345,16 +376,16 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 		Widget sender = (Widget) event.getSource();
 		
 		if (sender == areaBox) {
-			areaLink.setText(areaBox.getItemText(areaBox.getSelectedIndex()));
+			areaLink.setText(areaBox.getItemCount() == 0 ? "<" + GWTUtils.LOCALE_CONSTANTS.chooseArea() + ">" : areaBox.getItemText(areaBox.getSelectedIndex()));
 			localizationForm.setWidget(0, 0, areaLink);
 		} else if (sender == countryBox) {
-			countryLink.setText(countryBox.getItemText(countryBox.getSelectedIndex()));
+			countryLink.setText(countryBox.getItemCount() == 0 ? "<" + GWTUtils.LOCALE_CONSTANTS.chooseCountry() + ">" : countryBox.getItemText(countryBox.getSelectedIndex()));
 			localizationForm.setWidget(0, 2, countryLink);
 		} else if (sender == zoneBox) {
-			zoneLink.setText(zoneBox.getItemText(zoneBox.getSelectedIndex()));
+			zoneLink.setText(zoneBox.getItemCount() == 0 ? "<" + GWTUtils.LOCALE_CONSTANTS.chooseZone() + ">" : zoneBox.getItemText(zoneBox.getSelectedIndex()));
 			localizationForm.setWidget(0, 4, zoneLink);
 		} else if (sender == spotBox) {
-			spotLink.setText(spotBox.getItemText(spotBox.getSelectedIndex()));
+			spotLink.setText(spotBox.getItemCount() == 0 ? "<" + GWTUtils.LOCALE_CONSTANTS.chooseSpot() + ">" : spotBox.getItemText(spotBox.getSelectedIndex()));
 			localizationForm.setWidget(0, 6, spotLink);
 		}
 	}
