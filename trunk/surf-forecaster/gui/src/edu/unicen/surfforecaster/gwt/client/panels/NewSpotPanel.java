@@ -186,12 +186,12 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 		zoneTxt.setVisible(false);
 		this.setWidget(8, 1, zoneTxt);
 		
-		createZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.createZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
+		createZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.createAZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
 		createZoneBtn.addClickHandler(this);
 		this.setWidget(7, 2, createZoneBtn);
 		this.getCellFormatter().setHorizontalAlignment(7, 2, HasHorizontalAlignment.ALIGN_LEFT);
 		
-		chooseZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.chooseZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
+		chooseZoneBtn = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.chooseAZone(), "NewSpotDataPanel-CreateZone", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_120PX);
 		chooseZoneBtn.addClickHandler(this);
 		chooseZoneBtn.setVisible(false);
 		this.setWidget(8, 2, chooseZoneBtn);

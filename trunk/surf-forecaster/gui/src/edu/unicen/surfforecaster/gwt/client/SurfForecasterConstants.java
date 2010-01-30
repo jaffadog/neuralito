@@ -447,6 +447,21 @@ public interface SurfForecasterConstants extends Constants {
 	String mySpots();
 	
 	/**
+	 * LinksLocalizationPanel
+	 */
+	@DefaultStringValue("Elegir area")
+	String chooseArea();
+	
+	@DefaultStringValue("Elegir country")
+	String chooseCountry();
+	
+	@DefaultStringValue("Elegir zona")
+	String chooseZone();
+	
+	@DefaultStringValue("Elegir spot")
+	String chooseSpot();
+	
+	/**
 	 * LocalizationPanel
 	 */
 	@DefaultStringValue("Seleccione una ola")
@@ -547,10 +562,10 @@ public interface SurfForecasterConstants extends Constants {
 	String minutes_abbr();
 	
 	@DefaultStringValue("Elegir una zona")
-	String chooseZone();
+	String chooseAZone();
 	
 	@DefaultStringValue("Crear una zona")
-	String createZone();
+	String createAZone();
 	
 	@DefaultStringValue("Reemplazar observaciones")
 	String replaceObservations();

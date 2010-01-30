@@ -239,17 +239,22 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 	 * Fill the spotsSelector once the spots being retrieved
 	 */
 	public void getSpotsAndFillSpotsSelector() {
-		final Integer zoneId = new Integer(localizationPanel.getZoneBoxDisplayValue());
-		SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotGwtDTO>>(){
-			public void onSuccess(List<SpotGwtDTO> result) {
-				fillSpotsListBox(result, zoneId);
-			}
-				
-			public void onFailure(Throwable caught) {
-				System.out.println("ComparationCreatorPanel - getSpots failed for zone: " + zoneId);
-				//TODO do something when the getspots methos fails
-			}
-		});
+		final Integer zoneId = localizationPanel.getZoneBoxItemCount() == 0 ? null : new Integer(localizationPanel.getZoneBoxDisplayValue());
+		if (zoneId != null) {
+			SpotServices.Util.getInstance().getSpots(zoneId, new AsyncCallback<List<SpotGwtDTO>>(){
+				public void onSuccess(List<SpotGwtDTO> result) {
+					fillSpotsListBox(result, zoneId);
+				}
+					
+				public void onFailure(Throwable caught) {
+					System.out.println("ComparationCreatorPanel - getSpots failed for zone: " + zoneId);
+					//TODO do something when the getspots methos fails
+				}
+			});
+		} else {
+			spotBox.clear();
+			this.currentSelectedZone = null;
+		}
 	}
 	
 	/**
@@ -356,7 +361,7 @@ public class ComparationCreatorPanel extends FlexTable implements ISurfForecaste
 			for (int i = selectedSpotsBox.getItemCount() - 1 ; i >= 0; i--) {
 				if (selectedSpotsBox.isItemSelected(i)) {
 					Integer selectedSpotZone = selectedSpots.get(new Integer(selectedSpotsBox.getValue(i)));
-					if (selectedSpotZone != null && selectedSpotZone.intValue() == this.currentSelectedZone.intValue())
+					if (selectedSpotZone != null && this.currentSelectedZone != null && selectedSpotZone.intValue() == this.currentSelectedZone.intValue())
 						spotBox.addItem(selectedSpotsBox.getItemText(i), selectedSpotsBox.getValue(i));
 					selectedSpots.remove(new Integer(selectedSpotsBox.getValue(i)));
 					selectedSpotsBox.removeItem(i);
