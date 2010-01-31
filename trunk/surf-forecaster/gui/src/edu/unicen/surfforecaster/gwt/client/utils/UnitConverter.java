@@ -6,7 +6,7 @@ import edu.unicen.surfforecaster.common.services.dto.Unit;
 public final class UnitConverter {
 
 	public static double convertValue(String value, Unit source, Unit target) throws NeuralitoException {
-		double numValue = new Double(value);
+		double numValue = new Double(value.replace(",", "."));
 		return convertValue(numValue, source,target);
 	}
 	
