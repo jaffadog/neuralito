@@ -2,12 +2,11 @@ package edu.unicen.surfforecaster.gwt.client;
 
 import java.util.List;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
-import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.AreaGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.CountryGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface SpotServicesAsync {
 	void addSpot(String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
@@ -16,9 +15,9 @@ public interface SpotServicesAsync {
 	void editSpot(Integer spotId, String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
 			String zoneName, boolean public_, String timezone, boolean changedGridPoint, AsyncCallback<Integer> callback);
 	
-	void getAreas(AsyncCallback<List<AreaDTO>> callback);
+	void getAreas(String localeCode, AsyncCallback<List<AreaGwtDTO>> callback);
 	
-	void getCountries(AsyncCallback<List<CountryDTO>> callback);
+	void getCountries(String localeCode, AsyncCallback<List<CountryGwtDTO>> callback);
 	
 	void getZones(Integer country, AsyncCallback<List<ZoneDTO>> callback);
 

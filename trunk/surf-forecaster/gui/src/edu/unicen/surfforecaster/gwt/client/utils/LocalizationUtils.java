@@ -6,15 +6,15 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
-import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
+import edu.unicen.surfforecaster.gwt.client.dto.AreaGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.CountryGwtDTO;
 
 public class LocalizationUtils extends Observable{
 	
 	private static LocalizationUtils instance = null;
-	private List<AreaDTO> areas = null;
-	private List<CountryDTO> countries = null;
+	private List<AreaGwtDTO> areas = null;
+	private List<CountryGwtDTO> countries = null;
 	private AsyncCallsQueue callsQueue = null;
 	
 	public AsyncCallsQueue getCallsQueue() {
@@ -49,22 +49,22 @@ public class LocalizationUtils extends Observable{
 		this.initialize();
 	}
 
-	public List<AreaDTO> getAreas() {
-		List<AreaDTO> result = new ArrayList<AreaDTO>();
+	public List<AreaGwtDTO> getAreas() {
+		List<AreaGwtDTO> result = new ArrayList<AreaGwtDTO>();
 		if (this.callsQueue.allFinished()) {
 			result = areas;
 		}
 		return result;
 	}
 
-	public void setAreas(List<AreaDTO> areas) {
+	public void setAreas(List<AreaGwtDTO> areas) {
 		this.areas = areas;
 	}
 	
 	public void setAreas() {
 		this.callsQueue.addCall("getAreas");
-		SpotServices.Util.getInstance().getAreas(new AsyncCallback<List<AreaDTO>>(){
-			public void onSuccess(List<AreaDTO> result) {
+		SpotServices.Util.getInstance().getAreas(GWTUtils.getCurrentLocaleCode(), new AsyncCallback<List<AreaGwtDTO>>(){
+			public void onSuccess(List<AreaGwtDTO> result) {
 				if (result != null) {
 					areas = result;
 				}
@@ -80,18 +80,18 @@ public class LocalizationUtils extends Observable{
 		});
 	}
 
-	public List<CountryDTO> getCountries() {
+	public List<CountryGwtDTO> getCountries() {
 		return countries;
 	}
 
-	public void setCountries(List<CountryDTO> countries) {
+	public void setCountries(List<CountryGwtDTO> countries) {
 		this.countries = countries;
 	}
 	
 	public void setCountries() {
 		this.callsQueue.addCall("getCountries");
-		SpotServices.Util.getInstance().getCountries(new AsyncCallback<List<CountryDTO>>(){
-			public void onSuccess(List<CountryDTO> result) {
+		SpotServices.Util.getInstance().getCountries(GWTUtils.getCurrentLocaleCode(), new AsyncCallback<List<CountryGwtDTO>>(){
+			public void onSuccess(List<CountryGwtDTO> result) {
 				if (result != null) {
 					countries = result;
 				}
@@ -107,12 +107,12 @@ public class LocalizationUtils extends Observable{
 		});
 	}
 	
-	public List<CountryDTO> getCountries(Integer areaId) {
-		List<CountryDTO> countries = new ArrayList<CountryDTO>();
+	public List<CountryGwtDTO> getCountries(Integer areaId) {
+		List<CountryGwtDTO> countries = new ArrayList<CountryGwtDTO>();
 		if (this.callsQueue.allFinished()) {
-			Iterator<CountryDTO> i = this.countries.iterator();
+			Iterator<CountryGwtDTO> i = this.countries.iterator();
 			while (i.hasNext()) {
-				CountryDTO country = i.next();
+				CountryGwtDTO country = i.next();
 				if (country.getAreaDTO().getId().equals(areaId)) {
 					countries.add(country);
 				}
