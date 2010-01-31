@@ -95,7 +95,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			zones = spotService.getZones(country, this.getLoggedUser().getId());
 		else
 			zones = spotService.getZones(country);
-		
+		Collections.sort(zones);
 		return zones;
 	}
 	
@@ -106,7 +106,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			spots = spotService.getSpots(zone, this.getLoggedUser().getId());
 		else
 			spots = spotService.getSpots(zone);
-		
+		Collections.sort(spots);
 		Iterator<SpotDTO> i = spots.iterator();
 		while (i.hasNext()) {
 			SpotDTO spot = i.next();
@@ -161,6 +161,7 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 			List<SpotGwtDTO> spotsGwt = new ArrayList<SpotGwtDTO>();
 			final Integer userId = super.getLoggedUser().getId();
 			spots = spotService.getSpotsCreatedByUser(userId);
+			Collections.sort(spots);
 			Iterator<SpotDTO> i = spots.iterator();
 			while (i.hasNext()) {
 				SpotDTO spot = i.next();
