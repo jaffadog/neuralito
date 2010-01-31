@@ -10,7 +10,7 @@ import java.util.TimeZone;
  * @author esteban
  * 
  */
-public class SpotDTO implements Serializable {
+public class SpotDTO implements Serializable, Comparable<SpotDTO> {
 	/**
 	 * 
 	 */
@@ -142,5 +142,10 @@ public class SpotDTO implements Serializable {
 
 	public void setPoint(final PointDTO point) {
 		this.point = point;
+	}
+
+	@Override
+	public int compareTo(SpotDTO o) {
+		return this.getName().compareTo(o.getName());
 	}
 }
