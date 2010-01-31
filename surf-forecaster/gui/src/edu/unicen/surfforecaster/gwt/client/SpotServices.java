@@ -7,9 +7,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
-import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.AreaGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.CountryGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 
 @RemoteServiceRelativePath("SpotServices")
@@ -34,9 +34,9 @@ public interface SpotServices extends RemoteService {
 	Integer editSpot(Integer spotId, String spotName, String spotLatitude, String spotLongitude, String buoyLatitude, String buoyLongitude, Integer zoneId, Integer countryId, 
 			String zoneName, boolean public_, String timezone, boolean changedGridPoint) throws NeuralitoException;
 	
-	List<AreaDTO> getAreas() throws NeuralitoException;
+	List<AreaGwtDTO> getAreas(String localeCode) throws NeuralitoException;
 	
-	List<CountryDTO> getCountries() throws NeuralitoException;
+	List<CountryGwtDTO> getCountries(String localeCode) throws NeuralitoException;
 	
 	List<ZoneDTO> getZones(Integer country) throws NeuralitoException;
 

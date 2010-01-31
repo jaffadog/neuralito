@@ -31,11 +31,11 @@ import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
-import edu.unicen.surfforecaster.common.services.dto.AreaDTO;
-import edu.unicen.surfforecaster.common.services.dto.CountryDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.ForecastServices;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
+import edu.unicen.surfforecaster.gwt.client.dto.AreaGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.CountryGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.dto.WekaForecasterEvaluationGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.utils.ClientI18NMessages;
@@ -637,20 +637,20 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 	}
 	
 	private void setAreaListItems() {
-		Iterator<AreaDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
+		Iterator<AreaGwtDTO> i = LocalizationUtils.getInstance().getAreas().iterator(); 
 		while (i.hasNext()){
-			AreaDTO area = i.next();
-			this.areaBox.addItem(area.getNames().get(GWTUtils.getCurrentLocaleCode()), area.getId().toString());		
+			AreaGwtDTO area = i.next();
+			this.areaBox.addItem(area.getName(), area.getId().toString());		
 		}
 	}
 	
 	private void setCountryListItems(Integer areaId) {
 		countryBox.clear();
 		zoneBox.clear();
-		Iterator<CountryDTO> i = LocalizationUtils.getInstance().getCountries(areaId).iterator(); 
+		Iterator<CountryGwtDTO> i = LocalizationUtils.getInstance().getCountries(areaId).iterator(); 
 		while (i.hasNext()){
-			CountryDTO country = i.next();
-			this.countryBox.addItem(country.getNames().get(GWTUtils.getCurrentLocaleCode()), country.getId().toString());
+			CountryGwtDTO country = i.next();
+			this.countryBox.addItem(country.getName(), country.getId().toString());
 		}
 		if (this.countryBox.getItemCount() > 0) {
 			if (this.panelMode.equals("edit"))

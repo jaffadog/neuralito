@@ -1,6 +1,7 @@
 package edu.unicen.surfforecaster.gwt.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
@@ -18,6 +19,8 @@ import edu.unicen.surfforecaster.common.services.dto.SimpleForecasterDTO;
 import edu.unicen.surfforecaster.common.services.dto.SpotDTO;
 import edu.unicen.surfforecaster.common.services.dto.ZoneDTO;
 import edu.unicen.surfforecaster.gwt.client.SpotServices;
+import edu.unicen.surfforecaster.gwt.client.dto.AreaGwtDTO;
+import edu.unicen.surfforecaster.gwt.client.dto.CountryGwtDTO;
 import edu.unicen.surfforecaster.gwt.client.dto.SpotGwtDTO;
 
 @SuppressWarnings("serial")
@@ -54,13 +57,36 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		return forecastService;
 	}
 	
-	public List<AreaDTO> getAreas() throws NeuralitoException {
-		return spotService.getAreas();
-			
+	public List<AreaGwtDTO> getAreas(String localeCode) throws NeuralitoException {
+		List<AreaGwtDTO> result = new ArrayList<AreaGwtDTO>();
+		List<AreaDTO> areaDTOs = spotService.getAreas();
+		Iterator<AreaDTO> i = areaDTOs.iterator();
+		while (i.hasNext()) {
+			AreaDTO areaDTO = i.next();
+			result.add(this.getAreaGwtDTO(areaDTO, localeCode));
+		}
+		Collections.sort(result);
+		return result;
 	}
 	
-	public List<CountryDTO> getCountries() throws NeuralitoException {
-		return spotService.getCountries();
+	private AreaGwtDTO getAreaGwtDTO(AreaDTO areaDTO, String localeCode) {
+		return new AreaGwtDTO(areaDTO.getId(), areaDTO.getNames().get(localeCode));
+	}
+	
+	public List<CountryGwtDTO> getCountries(String localeCode) throws NeuralitoException {
+		List<CountryGwtDTO> result = new ArrayList<CountryGwtDTO>();
+		List<CountryDTO> countryDTOs = spotService.getCountries();
+		Iterator<CountryDTO> i = countryDTOs.iterator();
+		while (i.hasNext()) {
+			CountryDTO countryDTO = i.next();
+			result.add(this.getCountryGwtDTO(countryDTO, localeCode));
+		}
+		Collections.sort(result);
+		return result;
+	}
+	
+	private CountryGwtDTO getCountryGwtDTO(CountryDTO countryDTO, String localeCode) {
+		return new CountryGwtDTO(countryDTO.getId(), countryDTO.getNames().get(localeCode), this.getAreaGwtDTO(countryDTO.getAreaDTO(), localeCode));
 	}
 	
 	public List<ZoneDTO> getZones(final Integer country) throws NeuralitoException {
@@ -228,5 +254,4 @@ public class SpotServicesImpl extends ServicesImpl implements SpotServices {
 		logger.log(Level.INFO,"SpotServicesImpl - getSpot - Spot retrieved successfully.");
 		return spotGwtDTO;
 	}
-
 }
