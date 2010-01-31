@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author esteban
  * 
  */
-public class ZoneDTO implements Serializable {
+public class ZoneDTO implements Serializable, Comparable<ZoneDTO> {
 
 	/**
 	 * 
@@ -89,5 +89,10 @@ public class ZoneDTO implements Serializable {
 		hash = 31 * hash + (null == countryDTO ? 0 : countryDTO.hashCode());
 		return hash;
 
+	}
+
+	@Override
+	public int compareTo(ZoneDTO o) {
+		return this.getName().compareTo(o.getName());
 	}
 }
