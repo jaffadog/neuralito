@@ -33,7 +33,7 @@ public final class GWTUtils {
 	public final static String IMAGE_BUOY_DISABLED = "images/red-ball.gif";
 	public final static String IMAGE_BUOY_SELECTED = "images/green-ball.gif";
 	public final static String IMAGE_BLUE_BAR_LOADER = "images/blue-bar-loader.gif";
-	public final static String IMAGE_BLUE_CIRCLE_LOADER = "images/blue-circle-loader.gif";
+	public final static String IMAGE_BLUE_SMALL_BAR_LOADER = "images/blue-small-bar-loader.gif";
 	public final static String IMAGE_ERROR_ICON = "images/Error.png";
 	public final static String IMAGE_GOOD_ICON = "images/Good.png";
 	public final static String IMAGE_WARNING_ICON = "images/Warning.png";
