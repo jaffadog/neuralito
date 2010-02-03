@@ -16,7 +16,7 @@ public class LoadingPanel extends VerticalPanel {
 		this.setStylePrimaryName("gwt-VerticalPanel-LoadingPanel");
 		this.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
-		Image loadingImage = new Image(GWTUtils.IMAGE_BLUE_CIRCLE_LOADER);
+		Image loadingImage = new Image(GWTUtils.IMAGE_BLUE_SMALL_BAR_LOADER);
 		this.add(loadingImage);
 		this.lblText = new Label();
 	}

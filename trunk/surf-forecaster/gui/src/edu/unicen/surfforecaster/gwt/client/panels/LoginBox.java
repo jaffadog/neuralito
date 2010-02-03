@@ -53,7 +53,7 @@ public class LoginBox extends DialogBox{
 		//Loading panel
 		loadingPanel = new SimplePanel();
 		loadingPanel.setStylePrimaryName("gwt-loadingPanelLoginBox"); //to center the loading icon
-		Image loadingImage = new Image(GWTUtils.IMAGE_BLUE_CIRCLE_LOADER);
+		Image loadingImage = new Image(GWTUtils.IMAGE_BLUE_SMALL_BAR_LOADER);
 		loadingPanel.setWidget(loadingImage);
 		
 		//Form panel

@@ -458,7 +458,7 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Elegir zona")
 	String chooseZone();
 	
-	@DefaultStringValue("Elegir spot")
+	@DefaultStringValue("Elegir ola")
 	String chooseSpot();
 	
 	/**
