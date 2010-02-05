@@ -405,4 +405,4 @@ insert  into `country_i18n`(`Country_id`,`names_id`) values (66,144);
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`name`,`lastName`,`email`,`password`,`userName`,`userType`) values (1,'Administrador','Administrador','admin@gmail.com','admin','admin','ADMINISTRATOR');
-insert  into `user`(`id`,`name`,`lastName`,`email`,`password`,`userName`,`userType`) values (2,'maxi','maxi','maxi@gmail.com','maxii','maxi','REGISTERED_USER');
+insert  into `user`(`id`,`name`,`lastName`,`email`,`password`,`userName`,`userType`) values (2,'Maximiliano','Paolucci','maxi@gmail.com','maxii','maxi','REGISTERED_USER');
