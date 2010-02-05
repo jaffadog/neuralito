@@ -252,9 +252,10 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 			public void onSubmitComplete(SubmitCompleteEvent event) { 
 				String results = event.getResults();
 				if (results.indexOf("NeuralitoException=") != -1) {
+					new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), 
+							ClientI18NMessages.getInstance().getMessage(results.substring(results.indexOf("NeuralitoException=") + 19)), MessageBox.IconType.ERROR);
 					successPanel.setVisible(false);
-					errorPanel.setMessage(ClientI18NMessages.getInstance().getMessage(results.substring(results.indexOf("NeuralitoException=") + 19)));
-					errorPanel.setVisible(true);
+					errorPanel.setVisible(false);
 				} else {	
 					errorPanel.setVisible(false);
 					String sCorrelation = results.substring(results.indexOf("correlation=") + 12, results.indexOf("|", results.indexOf("correlation=")));
