@@ -148,7 +148,9 @@ public enum ErrorCode implements Serializable {
 	
 	USER_NOT_SPOT_OWNER(39),
 	
-	USER_NOT_COMPARISON_OWNER(40)
+	USER_NOT_COMPARISON_OWNER(40),
+	
+	NOT_ENOUGH_WEKA_INSTANCES(41)
 	
 	;
 
