@@ -169,7 +169,7 @@ public class FileUploadServicesImpl extends ServicesImpl {
 	private String sendData(Integer spotId, Vector<VisualObservationDTO> obsData, Integer hour, Integer hour2, Integer minutes, Integer minutes2, 
 			Float latitudeGridPoint, Float longitudeGridPoint, String obsAction, boolean gridPointChanged, boolean dayLightChanged) throws NeuralitoException {
 		
-		if (obsData.size() >= FileUploadServicesImpl.MIN_ALLOWED_OBSERVATIONS) {
+		if ((obsAction != null && obsAction.equals("append")) || obsData.size() >= FileUploadServicesImpl.MIN_ALLOWED_OBSERVATIONS) {
 			HashMap<String, Serializable> options = new HashMap<String, Serializable>();
 			options.put("latitudeGridPoint1", latitudeGridPoint);
 			options.put("longitudeGridPoint1", longitudeGridPoint);
