@@ -114,7 +114,7 @@ public class LinksLocalizationPanel extends SimplePanel implements ILocalization
 				
 				if (this.showActionButton) {
 					{
-						actionButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.forecast(), "LinksLocalizationPanel-action-btn", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
+						actionButton = new HTMLButtonGrayGrad(GWTUtils.LOCALE_CONSTANTS.viewForecast(), "LinksLocalizationPanel-action-btn", HTMLButtonGrayGrad.BUTTON_GRAY_GRAD_90PX);
 						actionButton.setEnabled(false);
 						actionButton.addClickHandler(this);
 						localizationForm.setWidget(0, 7, actionButton);

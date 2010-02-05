@@ -128,6 +128,9 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Pron\u00F3stico")
 	String forecast();
 	
+	@DefaultStringValue("Ver pron\u00F3stico")
+	String viewForecast();
+	
 	@DefaultStringValue("Area")
 	String area();
 	
