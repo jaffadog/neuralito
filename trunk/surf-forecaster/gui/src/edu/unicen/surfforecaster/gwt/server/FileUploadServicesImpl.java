@@ -19,6 +19,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ForecastService;
 import edu.unicen.surfforecaster.common.services.SpotService;
@@ -35,6 +36,7 @@ import edu.unicen.surfforecaster.gwt.server.util.VisualObsDTOsLoader;
 public class FileUploadServicesImpl extends ServicesImpl {
 
 	private static final long serialVersionUID = 1L;
+	private static final int MIN_ALLOWED_OBSERVATIONS = 50;
 	private ForecastService forecastService;
 	private SpotService spotService;
 	/**
@@ -147,80 +149,84 @@ public class FileUploadServicesImpl extends ServicesImpl {
 								gridPointChanged, dayLightChanged);
 						sendResponseToClient(resp, HttpServletResponse.SC_OK, "OK", trainningResp);
 					} catch (NeuralitoException e) {
-						logger.log(Level.INFO, "FileUploadServicesImpl - doPost - An error occurred while train the forecaster : " + e.getMessage());
-						sendResponseToClient(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "ERROR", "NeuralitoException=" + e.getErrorCode().toString());
+						logger.log(Level.INFO, "FileUploadServicesImpl - doPost - An error occurred while train the forecaster : " + e.getErrorCode());
+						sendResponseToClient(resp, HttpServletResponse.SC_OK, "ERROR", "NeuralitoException=" + e.getErrorCode().toString());
 					}
 				} else
 					logger.log(Level.INFO, "FileUploadServicesImpl - doPost - Couldn't send observation data. Some required form data is missing...");
 
 			} catch (Exception e) {
 				logger.log(Level.INFO, "FileUploadServicesImpl - doPost - An error occurred while parsing the file : " + e.getMessage());
-				sendResponseToClient(resp, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "ERROR", "An error occurred while parsing the observations file");
+				sendResponseToClient(resp, HttpServletResponse.SC_OK, "ERROR", "NeuralitoException=ERROR_PARSING_OBSERVATIONS_FILE");
 			}
 
 		} else {
 			logger.log(Level.INFO, "Request contents type is not supported by the servlet.");
-			sendResponseToClient(resp, HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "ERROR", "Request contents type is not supported by the servlet.");
+			sendResponseToClient(resp, HttpServletResponse.SC_OK, "ERROR", "NeuralitoException=CONTENT_TYPE_NOT_SUPPORTED");
 		}
 	}
 
 	private String sendData(Integer spotId, Vector<VisualObservationDTO> obsData, Integer hour, Integer hour2, Integer minutes, Integer minutes2, 
 			Float latitudeGridPoint, Float longitudeGridPoint, String obsAction, boolean gridPointChanged, boolean dayLightChanged) throws NeuralitoException {
-		HashMap<String, Serializable> options = new HashMap<String, Serializable>();
-		options.put("latitudeGridPoint1", latitudeGridPoint);
-		options.put("longitudeGridPoint1", longitudeGridPoint);
-		options.put("utcSunriseHour", hour);
-		options.put("utcSunriseMinute", minutes);
-		options.put("utcSunsetHour", hour2);
-		options.put("utcSunsetMinute", minutes2);
 		
-		WekaForecasterEvaluationDTO result = null;
-		if (obsData != null && obsAction == null) { 
-			//This case is when creates a new spot
-			//This branch should persist observations for the spot and train a forcaster
-			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (1st if branch) Creating wekaForecaster for spot: " + spotId + "...");
-			spotService.removeVisualObservations(spotId);
-			spotService.addVisualObservations(spotId, obsData);
-			result = forecastService.createWekaForecaster(spotId, options);
-		
-		} else if (obsData != null && obsAction.equals("replace")){ 
-			//This case is when edit the spot and want to replace the observations and retrain	
-			//This branch should persist the new observations for the spot, remove the oldest and retrain
-			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (2nd if branch) Creating wekaForecaster for spot: " + spotId + "...");
-			spotService.removeVisualObservations(spotId);
-			spotService.addVisualObservations(spotId, obsData);
-			List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
-			if (wekaForecasters.size() > 0)
-				forecastService.removeForecaster(wekaForecasters.get(0).getId());
-			result = forecastService.createWekaForecaster(spotId, options);
-		
-		} else if (obsData != null && obsAction.equals("append")){ 
-			//This case is when edit the spot and want to append observations and retrein
-			//This branch should append the new observations for the spot and retrain
-			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (3rd if branch) Creating wekaForecaster for spot: " + spotId + "...");
-			spotService.addVisualObservations(spotId, obsData);
-			List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
-			if (wekaForecasters.size() > 0)
-				forecastService.removeForecaster(wekaForecasters.get(0).getId());
-			result = forecastService.createWekaForecaster(spotId, options);
-		
-		} else if (obsData == null && (gridPointChanged || dayLightChanged)){ 
-			//This case is when edit the spot, don't sent observations but gridpoint or daylight changes and must retrain 
-			//This branch should retrain
-			logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (4th if branch) Creating wekaForecaster for spot: " + spotId + "...");
-			List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
-			if (wekaForecasters.size() > 0)
-				forecastService.removeForecaster(wekaForecasters.get(0).getId());
-			result = forecastService.createWekaForecaster(spotId, options);
-		}
-		
-		if (result != null) {
-			logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster successfully created.");
-			return "correlation=" + result.getCorrelation() + "|meanAbsoluteError=" + result.getMeanAbsoluteError() + "|classifierName=" + result.getClassifierName();
-		} else {
-			logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster could be created but result is null, something wrong occurs.");
-			return "correlation=" + 0.0 + "|meanAbsoluteError=" + 0.0 + "|classifierName=N/A";
-		}
+		if (obsData.size() >= FileUploadServicesImpl.MIN_ALLOWED_OBSERVATIONS) {
+			HashMap<String, Serializable> options = new HashMap<String, Serializable>();
+			options.put("latitudeGridPoint1", latitudeGridPoint);
+			options.put("longitudeGridPoint1", longitudeGridPoint);
+			options.put("utcSunriseHour", hour);
+			options.put("utcSunriseMinute", minutes);
+			options.put("utcSunsetHour", hour2);
+			options.put("utcSunsetMinute", minutes2);
+			
+			WekaForecasterEvaluationDTO result = null;
+			if (obsData != null && obsAction == null) { 
+				//This case is when creates a new spot
+				//This branch should persist observations for the spot and train a forcaster
+				logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (1st if branch) Creating wekaForecaster for spot: " + spotId + "...");
+				spotService.removeVisualObservations(spotId);
+				spotService.addVisualObservations(spotId, obsData);
+				result = forecastService.createWekaForecaster(spotId, options);
+			
+			} else if (obsData != null && obsAction.equals("replace")){ 
+				//This case is when edit the spot and want to replace the observations and retrain	
+				//This branch should persist the new observations for the spot, remove the oldest and retrain
+				logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (2nd if branch) Creating wekaForecaster for spot: " + spotId + "...");
+				spotService.removeVisualObservations(spotId);
+				spotService.addVisualObservations(spotId, obsData);
+				List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
+				if (wekaForecasters.size() > 0)
+					forecastService.removeForecaster(wekaForecasters.get(0).getId());
+				result = forecastService.createWekaForecaster(spotId, options);
+			
+			} else if (obsData != null && obsAction.equals("append")){ 
+				//This case is when edit the spot and want to append observations and retrein
+				//This branch should append the new observations for the spot and retrain
+				logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (3rd if branch) Creating wekaForecaster for spot: " + spotId + "...");
+				spotService.addVisualObservations(spotId, obsData);
+				List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
+				if (wekaForecasters.size() > 0)
+					forecastService.removeForecaster(wekaForecasters.get(0).getId());
+				result = forecastService.createWekaForecaster(spotId, options);
+			
+			} else if (obsData == null && (gridPointChanged || dayLightChanged)){ 
+				//This case is when edit the spot, don't sent observations but gridpoint or daylight changes and must retrain 
+				//This branch should retrain
+				logger.log(Level.INFO,"FileUploadServicesImpl - sendData - (4th if branch) Creating wekaForecaster for spot: " + spotId + "...");
+				List<WekaForecasterEvaluationDTO> wekaForecasters = forecastService.getWekaForecasters(spotId);
+				if (wekaForecasters.size() > 0)
+					forecastService.removeForecaster(wekaForecasters.get(0).getId());
+				result = forecastService.createWekaForecaster(spotId, options);
+			}
+			
+			if (result != null) {
+				logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster successfully created.");
+				return "correlation=" + result.getCorrelation() + "|meanAbsoluteError=" + result.getMeanAbsoluteError() + "|classifierName=" + result.getClassifierName();
+			} else {
+				logger.log(Level.INFO, "FileUploadServicesImpl - sendData - WekaForecaster could be created but result is null, something wrong occurs.");
+				return "correlation=" + 0.0 + "|meanAbsoluteError=" + 0.0 + "|classifierName=N/A";
+			}
+		} else
+			throw new NeuralitoException(ErrorCode.NOT_ENOUGH_WEKA_INSTANCES);
 
 	}
 	

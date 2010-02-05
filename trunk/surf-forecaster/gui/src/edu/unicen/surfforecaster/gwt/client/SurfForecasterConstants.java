@@ -95,6 +95,18 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("Usted no tiene permisos para modificar o eliminar esta comparaci\u00F3n.")
 	String USER_NOT_COMPARISON_OWNER();
 	
+	@DefaultStringValue("La cantidad m\u00EDnima de observaciones (con fechas diferentes) que debe ingresar son 50. La " +
+			"cantidad recomendada para entrenar un pronosticador es de 100. El pronosticador no fue entrenado, por favor " +
+			"intente entrenarlo nuevamente con 50 o m\u00E1s observaciones desde la secci\u00F3n \"Mis olas\".")
+	String NOT_ENOUGH_WEKA_INSTANCES();
+	
+	@DefaultStringValue("Ha ocurrido un error mientras se leia el archivo de observaciones visuales, por favor intente nuevamente un unos minutos " +
+			"desde la secci\u00F3n \"Mis olas\".")
+	String ERROR_PARSING_OBSERVATIONS_FILE();
+	
+	@DefaultStringValue("El tipo o formato de archivo de observaciones visuales no es correcto, revise el link \"Formato del archivo\" debajo del mapa.")
+	String CONTENT_TYPE_NOT_SUPPORTED();
+	
 	/**
 	 * AnonymousMessagePanel
 	 */
