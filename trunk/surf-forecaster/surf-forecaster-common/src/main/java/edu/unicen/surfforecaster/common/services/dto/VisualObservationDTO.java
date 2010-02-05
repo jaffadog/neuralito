@@ -87,7 +87,7 @@ public class VisualObservationDTO implements Serializable {
 		observationDay.setTime(observationDate);
 
 		final Calendar calendarDate = new GregorianCalendar();
-		observationDay.setTime(date);
+		calendarDate.setTime(date);
 		if (observationDay.get(Calendar.YEAR) == calendarDate
 				.get(Calendar.YEAR))
 			if (observationDay.get(Calendar.MONTH) == calendarDate
