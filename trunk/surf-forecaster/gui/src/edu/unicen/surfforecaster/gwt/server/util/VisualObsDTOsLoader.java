@@ -33,10 +33,8 @@ public class VisualObsDTOsLoader {
 		for (Enumeration<Vector<String>> e = linesValues.elements(); e.hasMoreElements();){
 			Vector<String> lineValues = e.nextElement();
 			VisualObservationDTO visualObservationDTO = this.generateData(lineValues);
-			if (!this.existSameObservationDate(obsData, visualObservationDTO)) {
+			if (!this.existSameObservationDate(obsData, visualObservationDTO))
 				obsData.add(visualObservationDTO);
-				System.out.println(visualObservationDTO.getObservationDate() + " -> " + visualObservationDTO.getWaveHeight());
-			}
 		}
 		return obsData;
 	}
@@ -69,7 +67,7 @@ public class VisualObsDTOsLoader {
 	private boolean existSameObservationDate(Vector<VisualObservationDTO> obsData, VisualObservationDTO visualObservationDTO) {
 		for (Enumeration<VisualObservationDTO> e = obsData.elements(); e.hasMoreElements();) {
 			VisualObservationDTO observation = e.nextElement();
-			if (observation.getObservationDate().equals(visualObservationDTO.getObservationDate()))
+			if (observation.equalsDate(visualObservationDTO.getObservationDate()))
 				return true;
 		}
 		return false;
