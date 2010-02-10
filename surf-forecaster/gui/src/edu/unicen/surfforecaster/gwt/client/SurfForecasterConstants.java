@@ -672,7 +672,7 @@ public interface SurfForecasterConstants extends Constants {
 	String observationsFileFormat();
 
 	@DefaultStringValue("Si desea obtener un pron\u00F3stico detallado ex\u00E1ctamente en la ubicaci\u00F3n de la ola marcada en el mapa, debe proveer al sistema de un archivo " +
-			"indexado por fecha que contenga en cada l\u00EDnea la altura de la ola (METROS) m\u00E1s grande observada en dicha ubiciaci\u00F3n en el dia especificado, como se puede ver " +
+			"indexado por fecha que contenga en cada l\u00EDnea la altura de la ola (METROS) m\u00E1s grande observada en dicha ubicaci\u00F3n en el d\u00EDa especificado, como se puede ver " +
 			"en la imagen debajo, donde cada l\u00EDnea del archivo contiene cuatro columnas separadas por un ESPACIO que representan a\u00F1o, mes, d\u00EDa y altura de ola (METROS) " +
 			"respectivamente. Si la altura de ola contiene valores decimales como se ve en la imagen, utilizar el punto (.) como separador decimal. Use archivos de texto con formato TXT.")
 	String observationsFileFormatDesc();
