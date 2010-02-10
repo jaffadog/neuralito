@@ -150,7 +150,9 @@ public enum ErrorCode implements Serializable {
 	
 	USER_NOT_COMPARISON_OWNER(40),
 	
-	NOT_ENOUGH_WEKA_INSTANCES(41)
+	NOT_ENOUGH_WEKA_INSTANCES(41),
+	
+	NOT_ENOUGH_WW3_HISTORY(42)
 	
 	;
 

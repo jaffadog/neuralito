@@ -91,9 +91,10 @@ public interface ForecastService {
 	 * @return WekaForecasterEvaluationDTO DTO containing the performance
 	 *         evaluation of the trained classifier and the id of the created
 	 *         forecasters.
+	 * @throws NeuralitoException 
 	 */
 	public WekaForecasterEvaluationDTO createWekaForecaster(Integer spotId,
-			HashMap<String, Serializable> options);
+			HashMap<String, Serializable> options) throws NeuralitoException;
 
 	public List<WekaForecasterEvaluationDTO> getWekaForecasters(Integer spotId)
 			throws NeuralitoException;
