@@ -173,6 +173,7 @@ public class ForecastServiceImplementation implements ForecastService {
 
 	/**
 	 * Creates and train a forecaster which uses a machine learner. Inputs are:
+	 * @throws NeuralitoException 
 	 * 
 	 * @see edu.unicen.surfforecaster.common.services.ForecastService#createWW3Forecaster(Integer,
 	 *      PointDTO)
@@ -181,7 +182,7 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Transactional
 	public WekaForecasterEvaluationDTO createWekaForecaster(
 			final Integer spotId,
-			final HashMap<String, Serializable> dataSetStrategyOptions) {
+			final HashMap<String, Serializable> dataSetStrategyOptions) throws NeuralitoException {
 		log.info("Creating weka forecaster");
 		final Spot spot = spotDAO.getSpotById(spotId);
 		final List<VisualObservation> visualObservations = spot
@@ -209,7 +210,9 @@ public class ForecastServiceImplementation implements ForecastService {
 					forecasterId, forecaster.getClassifier().getClass()
 							.getName(), forecaster.getTrainningOptions());
 		} catch (final Exception e) {
-			log.error("Error creating weka forecaster", e);
+			log.error("Error creating weka forecaster");
+			if (e instanceof NeuralitoException)
+				throw (NeuralitoException)e;
 		}
 		return null;
 

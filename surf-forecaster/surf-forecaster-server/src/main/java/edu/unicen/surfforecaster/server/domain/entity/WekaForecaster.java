@@ -20,6 +20,8 @@ import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.core.Instance;
 import weka.core.Instances;
+import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
+import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.dto.Unit;
 import edu.unicen.surfforecaster.common.services.dto.WaveWatchParameter;
 import edu.unicen.surfforecaster.server.domain.wavewatch.WaveWatchSystem;
@@ -41,6 +43,8 @@ public class WekaForecaster extends Forecaster {
 	 */
 	@Transient
 	private final Logger log = Logger.getLogger(this.getClass());
+	
+	private static final int MIN_NUM_INSTANCES_REQUIRED = 50;
 
 	/**
 	 * The Machine Learning Classifier used.
@@ -106,23 +110,26 @@ public class WekaForecaster extends Forecaster {
 			final DataSetGenerationStrategy st,
 			final HashMap<String, Serializable> options,
 			final WaveWatchSystem model,
-			final Collection<VisualObservation> observations, final Spot spot) {
-		try {
+			final Collection<VisualObservation> observations, final Spot spot) throws NeuralitoException {
+
 			classifier = cl;
 			dataSetGenerationStrategy = st;
 			strategyOptions = options;
 			waveWatch = model;
 			trainningInstances = st.generateTrainningInstances(model,
 					observations, options);
-
-			classifier.buildClassifier(trainningInstances);
-			evaluateForecaster();
-			this.spot = spot;
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+			
+			if (trainningInstances.numInstances() < WekaForecaster.MIN_NUM_INSTANCES_REQUIRED)
+				throw new NeuralitoException(ErrorCode.NOT_ENOUGH_WW3_HISTORY);
+			
+			try {
+				classifier.buildClassifier(trainningInstances);
+				evaluateForecaster();
+				this.spot = spot;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 
 	/**
