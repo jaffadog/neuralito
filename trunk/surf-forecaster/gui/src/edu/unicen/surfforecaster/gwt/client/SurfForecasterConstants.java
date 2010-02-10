@@ -107,6 +107,10 @@ public interface SurfForecasterConstants extends Constants {
 	@DefaultStringValue("El tipo o formato de archivo de observaciones visuales no es correcto, revise el link \"Formato del archivo\" debajo del mapa.")
 	String CONTENT_TYPE_NOT_SUPPORTED();
 	
+	@DefaultStringValue("Disculpe, pero Surf-Forecaster no dispone de suficiente informaci\u00F3n historica de las olas en esa ubicaci\u00F3n para entrenar un " +
+			"pronosticador especializado.")
+	String NOT_ENOUGH_WW3_HISTORY();
+	
 	/**
 	 * AnonymousMessagePanel
 	 */

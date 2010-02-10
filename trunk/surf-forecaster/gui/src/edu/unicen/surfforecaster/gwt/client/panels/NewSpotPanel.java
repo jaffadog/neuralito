@@ -255,7 +255,7 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 					results = results.substring(0, results.indexOf("</pre>"));
 				if (results.indexOf("NeuralitoException=") != -1) {
 					new MessageBox(GWTUtils.LOCALE_CONSTANTS.close(), 
-							ClientI18NMessages.getInstance().getMessage(results.substring(results.indexOf("NeuralitoException=") + 19)), MessageBox.IconType.ERROR);
+							ClientI18NMessages.getInstance().getMessage(results.substring(results.indexOf("NeuralitoException=") + 19)), MessageBox.IconType.INFO);
 					successPanel.setVisible(false);
 					errorPanel.setVisible(false);
 				} else {	
@@ -525,7 +525,19 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 		this.chooseZoneBtnOnClick();
 		this.radioPrivateButton.setValue(true);
 		this.mapPanel.clearMap();
+		this.clearFileUploadField();
 	}
+	
+	/**
+	 * Clear all FileUpload widgets
+	 * @return
+	 */
+	public native void clearFileUploadField() /*-{
+		var uploadFileElements = $doc.getElementsByName('uploadFormElement');
+		for (var i = 0; i < uploadFileElements.length; i++)
+			uploadFileElements[i].value = '';
+	}-*/;
+	
 	/**
 	 * This method is called only in edit mode when update observer method is called to update the localization listboxes items after zones list is loaded
 	 */
@@ -778,6 +790,7 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 					form.submit();
 					
 				}
+				clearFileUploadField();
 				successPanel.setMessage(message);
 				successPanel.setVisible(true);
 				MySpotsPanel.getInstance().retrieveMySpots();
