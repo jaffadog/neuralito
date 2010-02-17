@@ -15,7 +15,7 @@ public class LogoPanel extends Composite {
 
 	public LogoPanel() {
 		SimplePanel simplePanel = new SimplePanel();
-		simplePanel.setHeight("105");
+		//simplePanel.setHeight("105");
 		simplePanel.setWidth(GWTUtils.APLICATION_WIDTH);
 		initWidget(simplePanel);
 		

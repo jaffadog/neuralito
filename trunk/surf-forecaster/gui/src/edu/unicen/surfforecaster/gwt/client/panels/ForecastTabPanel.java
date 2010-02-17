@@ -25,6 +25,7 @@ public class ForecastTabPanel extends DecoratedTabPanel {
 	
 	public ForecastTabPanel() {
 		
+		this.addStyleName("gwt-DecoratedTabPanel-MainTabPanel");
 		this.historyTokens = new Vector<String>();
 		
 		{
