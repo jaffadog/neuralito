@@ -28,7 +28,7 @@ public final class GWTUtils {
 	
 	//IMAGES URLS
 	public final static String FLAGS_PATH = "images/flags/";
-	public final static String IMAGE_LOGO = "images/logo2.PNG";
+	public final static String IMAGE_LOGO = "images/banner.jpg";
 	public final static String IMAGE_SPOT = "images/wave.png";
 	public final static String IMAGE_BUOY_DISABLED = "images/red-ball.gif";
 	public final static String IMAGE_BUOY_SELECTED = "images/green-ball.gif";
