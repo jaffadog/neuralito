@@ -91,9 +91,6 @@ public class LoginBox extends DialogBox{
 		loginPassword.setWidth("150");
 		flexTable.getCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
 		flexTable.getFlexCellFormatter().setColSpan(2, 0, 2);
-	
-		loginUserName.setText("maxi");
-		loginPassword.setText("maxii");
 
 		final HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
 		flexTable.setWidget(2, 0, horizontalPanel_1);
