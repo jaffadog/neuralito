@@ -27,9 +27,9 @@
   <!-- If you want to deploy this application outside of localhost,
        you must obtain a Google Maps API key                      -->
   <!-- neuralito -->
-  <!-- <script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAS3DdacZND-p5k9wiKIuVERRWEwDACGOMA3psBdPfW884vKkS7BTrCiKC6rdBb0Pc48l5ASN7U9EGpw" />  -->
+  <script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAS3DdacZND-p5k9wiKIuVERRWEwDACGOMA3psBdPfW884vKkS7BTrCiKC6rdBb0Pc48l5ASN7U9EGpw" />
   <!-- sociedadoro -->
-  <script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAS3DdacZND-p5k9wiKIuVERRVn0Mjdk2FEvWsaU9c0UhfnRBy0RT0X4kq160v4DG8A8SsZ9DOcOE82Q" />
+  <!-- <script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAS3DdacZND-p5k9wiKIuVERRVn0Mjdk2FEvWsaU9c0UhfnRBy0RT0X4kq160v4DG8A8SsZ9DOcOE82Q" />-->s
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='edu.unicen.surfforecaster.gwt.client.SurfForecaster'/>
