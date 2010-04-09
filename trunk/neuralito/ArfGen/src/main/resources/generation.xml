@@ -1,0 +1,25 @@
+<edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
+  <dataSets>
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>true</incremental>
+      <instanceNumber>100</instanceNumber>
+      <beach>nshore</beach>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>nshore</string>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+      </strategyOptions>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.NoBuoyStrategy</strategyName>
+      <percentajeIncrement>15</percentajeIncrement>
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+  </dataSets>
+</edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
