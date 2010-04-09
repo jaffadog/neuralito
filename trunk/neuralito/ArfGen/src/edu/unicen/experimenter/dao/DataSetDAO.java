@@ -5,7 +5,7 @@ package edu.unicen.experimenter.dao;
 
 import java.util.List;
 
-import edu.unicen.experimenter.DataSet;
+import edu.unicen.experimenter.datasetgenerator.DataSet;
 
 /**
  * @author esteban
