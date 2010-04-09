@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import edu.unicen.experimenter.DataSet;
+import edu.unicen.experimenter.datasetgenerator.DataSet;
 
 /**
  * @author esteban
@@ -17,7 +17,7 @@ public class DataSetDAOHibernateImpl extends HibernateDaoSupport implements
 		DataSetDAO {
 
 	/**
-	 * @see edu.unicen.experimenter.dao.DataSetDAO#add(edu.unicen.experimenter.DataSet)
+	 * @see edu.unicen.experimenter.datasetlibrary.dao.DataSetDAO#add(edu.unicen.experimenter.datasetgenerator.edu.unicen.experimenter.core.DataSet)
 	 */
 	@Override
 	public int add(final DataSet dataSet) {
@@ -27,7 +27,7 @@ public class DataSetDAOHibernateImpl extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.experimenter.dao.DataSetDAO#getAllDataSets()
+	 * @see edu.unicen.experimenter.datasetlibrary.dao.DataSetDAO#getAllDataSets()
 	 */
 	@Override
 	public List<DataSet> getAllDataSets() {
@@ -35,7 +35,7 @@ public class DataSetDAOHibernateImpl extends HibernateDaoSupport implements
 	}
 
 	/**
-	 * @see edu.unicen.experimenter.dao.DataSetDAO#getDataSet(int)
+	 * @see edu.unicen.experimenter.datasetlibrary.dao.DataSetDAO#getDataSet(int)
 	 */
 	@Override
 	public DataSet getDataSet(final int id) {
