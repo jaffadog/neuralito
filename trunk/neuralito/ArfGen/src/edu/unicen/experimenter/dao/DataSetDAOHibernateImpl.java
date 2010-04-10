@@ -31,7 +31,7 @@ public class DataSetDAOHibernateImpl extends HibernateDaoSupport implements
 	 */
 	@Override
 	public List<DataSet> getAllDataSets() {
-		return getHibernateTemplate().loadAll(DataSet.class);
+		return new HashSet(getHibernateTemplate().loadAll(DataSet.class));
 	}
 
 	/**

@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import weka.core.Instances;
 import edu.unicen.experimenter.datasetgenerator.DataSet;
 
 /**
@@ -21,28 +20,14 @@ public class DataSetsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int DESCRIPTION = 1;
-
 	private final String[] columnNames = new String[] { "Selected", "DsetId",
 			"Beach", "StrategyName", "StrategyOptions", "#Instances",
 			"attributes" };
-
-	private Instances data;
-	private Instances preprocessed;
-
-	private boolean[] labeled;
-	private boolean[] unlabeled;
-	private boolean[] test;
 
 	private List<DataSet> dataSets;
 	private boolean[] selected;
 
 	public DataSetsTableModel() {
-
-		data = null;
-		labeled = null;
-		unlabeled = null;
-		test = null;
 
 	}
 
@@ -57,7 +42,6 @@ public class DataSetsTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		System.out.println(columnNames.length + "miedaaaaaaaa");
 		if (columnNames != null)
 			return columnNames.length;
 		else
@@ -73,12 +57,9 @@ public class DataSetsTableModel extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(final int col) {
-		System.out.println(columnNames[col].toString() + "miedaaaaaaaa");
 		return columnNames[col].toString();
 	}
 
-	// {"Selected","DsetId",
-	// "StrategyName","StrategyOptions","#Instances","Beach"};
 	public Object getValueAt(final int col, final int row) {
 		// tengo que invertir filas por columnas no se porque razon
 		if (dataSets == null)
@@ -153,141 +134,12 @@ public class DataSetsTableModel extends AbstractTableModel {
 
 	public List<DataSet> getSelectedDataSets() {
 
-		final List<DataSet> selectedDataSets = new ArrayList();
+		final List<DataSet> selectedDataSets = new ArrayList<DataSet>();
 		for (int i = 0; i < selected.length; i++)
 			if (selected[i]) {
 				selectedDataSets.add(dataSets.get(i));
 			}
 		return selectedDataSets;
-		//
-		// List<Integer> labeledRows = new Vector<Integer>();
-		// for (int i = 0; i < this.labeled.length; i++)
-		// if (this.labeled[i])
-		// labeledRows.add(new Integer(i));
-		// return labeledRows;
-
-	}
-
-	// public void setSelectedRows(int[] selectedRows){
-	// for(int i = 0; i < selectedRows.length; i++){
-	// this.labeled[selectedRows[i]] = true;
-	// //this.unlabeled[selectedRows[i]] = false;
-	// //this.test[selectedRows[i]] = false;
-	// }
-	// fireTableRowsUpdated(0, this.labeled.length);
-	// }
-	//
-	// public void setUnlabeledRows(int[] selectedRows){
-	// for(int i = 0; i < selectedRows.length; i++){
-	// //this.labeled[selectedRows[i]] = false;
-	// this.unlabeled[selectedRows[i]] = true;
-	// //this.test[selectedRows[i]] = false;
-	// }
-	// fireTableRowsUpdated(0, this.labeled.length);
-	// }
-	//
-	// public void setTestRows(int[] selectedRows){
-	// for(int i = 0; i < selectedRows.length; i++){
-	// // this.labeled[selectedRows[i]] = false;
-	// // this.unlabeled[selectedRows[i]] = false;
-	// this.test[selectedRows[i]] = true;
-	//
-	// }
-	// fireTableRowsUpdated(0, this.labeled.length);
-	// }
-	// public void setAllTestRows(){
-	// for(int i = 0; i < data.numInstances(); i++){
-	// this.test[i] = true;
-	// }
-	// fireTableRowsUpdated(0, this.labeled.length);
-	// }
-	// public void selectNoneRows(){
-	// for (int i = 0; i < this.labeled.length; i++){
-	// this.labeled[i] = false;
-	// this.unlabeled[i] = false;
-	// this.test[i] = false;
-	// }
-	// fireTableRowsUpdated(0, this.labeled.length);
-	// }
-	//
-	// public void completeSelection(String value){
-	// if (value.equals("E")){
-	// for (int i = 0; i < this.labeled.length; i++){
-	// if (this.labeled[i] == false && this.unlabeled[i] == false &&
-	// this.test[i] == false)
-	// this.labeled[i] = true;
-	// }
-	// }
-	// else if (value.equals("NE")){
-	// for (int i = 0; i < this.labeled.length; i++){
-	// if (this.labeled[i] == false && this.unlabeled[i] == false &&
-	// this.test[i] == false)
-	// this.unlabeled[i] = true;
-	// }
-	// }
-	// else if (value.equals("P")){
-	// for (int i = 0; i < this.labeled.length; i++){
-	// if (this.labeled[i] == false && this.unlabeled[i] == false &&
-	// this.test[i] == false)
-	// this.test[i] = true;
-	// }
-	// }
-	// fireTableRowsUpdated(0, this.labeled.length);
-	// }
-	// //class: the class to be used.
-	// //labeled: porcentage of instances to be added to the set of labeled
-	// instances
-	// //unlabeled: porcentage of instances of the given class to be added to
-	// the unlabeled instances
-	//
-	// public void selectClass(String clase, int labeled, int unlabeled) {
-	// int labeledCount = 0;
-	// int unlabeledCount = 0;
-	//
-	// //Get the total number of instances of the given class
-	// int classCount = getCount(clase);
-	// //Quantity of instances of this class to be added to the labeled set
-	// labeled = classCount * labeled / 100;
-	// //Quantity of instances of this class to be added to the unlabeled set
-	// unlabeled = classCount * unlabeled / 100;
-	//
-	// //From the all instances filter only the class given and add the
-	// corresponding quantity to each sset.
-	// int[] labeledIndex = new int[labeled];
-	// int[] unlabeledIndex = new int[unlabeled];
-	// for (int i = 0; i < data.numInstances(); i++) {
-	// if (data.instance(i).stringValue(
-	// data.instance(i).classIndex())
-	// .equals(clase)) {
-	// if (labeledCount < labeled){
-	// labeledIndex[labeledCount]= i;
-	// labeledCount++;
-	// }
-	// else if (unlabeledCount < unlabeled){
-	// unlabeledIndex[unlabeledCount]= i;
-	// unlabeledCount++;
-	// }
-	//
-	// }
-	//
-	//
-	// }
-	// setLabeledRows(labeledIndex);
-	// setUnlabeledRows(unlabeledIndex);
-	// setAllTestRows();
-	// }
-
-	private int getCount(final String clase) {
-		int count;
-		count = 0;
-		for (int i = 0; i < data.numInstances(); i++) {
-			if (data.instance(i).stringValue(data.instance(i).classIndex())
-					.equals(clase)) {
-				count++;
-
-			}
-		}
-		return count;
 	}
 
 }

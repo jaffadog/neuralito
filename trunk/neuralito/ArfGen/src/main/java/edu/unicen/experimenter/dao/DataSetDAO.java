@@ -35,4 +35,9 @@ public interface DataSetDAO {
 	 * @return
 	 */
 	public DataSet getDataSet(int id);
+
+	/**
+	 * @param beach
+	 */
+	public List<DataSet> getDataSetsByBeach(String beach);
 }
