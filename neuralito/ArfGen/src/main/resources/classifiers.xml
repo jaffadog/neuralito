@@ -1,8 +1,8 @@
-<edu.unicen.experimenter.experiment.xml.ClassifiersConfiguration>
+<edu.unicen.experimenter.evaluator.xml.ClassifiersConfiguration>
   <classifiers>
-    <edu.unicen.experimenter.experiment.xml.ClassifierConfiguration>
+    <edu.unicen.experimenter.evaluator.xml.ClassifierConfiguration>
       <classifierName>weka.classifiers.functions.MultilayerPerceptron</classifierName>
       <options>-L 0.99 -M 0.01 -N 1000 -V 0 -S 0 -E 20 -H 4 -D</options>
-    </edu.unicen.experimenter.experiment.xml.ClassifierConfiguration>
+    </edu.unicen.experimenter.evaluator.xml.ClassifierConfiguration>
   </classifiers>
-</edu.unicen.experimenter.experiment.xml.ClassifiersConfiguration>
+</edu.unicen.experimenter.evaluator.xml.ClassifiersConfiguration>

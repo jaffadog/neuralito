@@ -168,7 +168,7 @@ public class Evaluator {
 		final DefaultListModel defaultListModel = new DefaultListModel();
 		for (final DataSet dataSet : dataSets) {
 			final File file = InstancesCreator.generateFile("tempFile"
-					+ new Date() + ".arff", dataSet);
+					+ new Date().getTime() + ".arff", dataSet);
 			defaultListModel.addElement(file);
 		}
 		return defaultListModel;

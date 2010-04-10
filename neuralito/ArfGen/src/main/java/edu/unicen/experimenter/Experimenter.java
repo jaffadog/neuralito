@@ -1,12 +1,18 @@
 package edu.unicen.experimenter;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
+
+import jxl.write.WriteException;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import edu.unicen.experimenter.dao.DataSetDAO;
+import edu.unicen.experimenter.dao.ResultDAO;
 import edu.unicen.experimenter.datasetgenerator.DataSet;
 import edu.unicen.experimenter.datasetgenerator.DataSetGenerator;
 import edu.unicen.experimenter.evaluator.Evaluator;
@@ -23,6 +29,10 @@ public class Experimenter extends Observable {
 	 */
 	private final DataSetDAO dataSetDAO;
 	/**
+	 * ResultBrowser
+	 */
+	final ResultDAO resultDAO;
+	/**
 	 * The singleton of this class.
 	 */
 	private static Experimenter experimenter;
@@ -37,9 +47,11 @@ public class Experimenter extends Observable {
 
 	/**
 	 * @param dao
+	 * @param resultBrowser2
 	 */
-	private Experimenter(final DataSetDAO dao) {
+	private Experimenter(final DataSetDAO dao, final ResultDAO resultDAO) {
 		dataSetDAO = dao;
+		this.resultDAO = resultDAO;
 	}
 
 	/**
@@ -51,7 +63,9 @@ public class Experimenter extends Observable {
 					new String[] { "dao.xml", });
 			final DataSetDAO dao = (DataSetDAO) appContext
 					.getBean("dataSetDAO");
-			experimenter = new Experimenter(dao);
+			final ResultDAO resultDAO = (ResultDAO) appContext
+					.getBean("resultDAO");
+			experimenter = new Experimenter(dao, resultDAO);
 		}
 		return experimenter;
 	}
@@ -109,6 +123,66 @@ public class Experimenter extends Observable {
 
 		evaluator.evaluate(xmlClassifiers, selectedDataSets);
 
+	}
+
+	/**
+	 * Search all the results for the specified beach and save them into an
+	 * excel file.
+	 * 
+	 * @param beach
+	 * @param optimizedParameters
+	 * @throws WriteException
+	 * @throws IOException
+	 */
+	public void generateExcel(final String beach,
+			final boolean optimizedParameters) throws WriteException,
+			IOException {
+		// Obtain results as written by weka
+		final List<Result> results = resultDAO.getResult(beach);
+		// Average the results
+		final Map columnNamesToAverage = initAverageMap();
+		List<Result> transformedResults = ResultTransformer.averageResults(
+				results, columnNamesToAverage);
+		// Adds extra columns data to results.
+		transformedResults = ResultTransformer
+				.addExtraColumns(transformedResults);
+		// Configure columns to display in the excel file
+		final Map columnNames = initMap();
+		// Configure output file
+		String optimized = "Optimized";
+		if (!optimizedParameters) {
+			optimized = "Non optimized";
+		}
+		final String outputFile = beach + "-AveragedResults-" + optimized
+				+ ".xls";
+		// Write Excel.
+		ExcelWriter.generateExcel(outputFile, transformedResults, columnNames);
+
+	}
+
+	/**
+	 * @return
+	 */
+	private static Map initAverageMap() {
+		final Map columnNames = new HashMap();
+
+		columnNames.put("Correlation", "Avg_Correlation_coefficient");
+
+		return columnNames;
+	}
+
+	/**
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private static Map initMap() {
+		final Map columnNames = new HashMap();
+		columnNames.put("DataSetId", "Key_Dataset");
+		columnNames.put("Classifier", "Key_Scheme");
+		columnNames.put("Correlation", "Avg_Correlation_coefficient");
+		columnNames.put("CorrelationDev", "Avg_Correlation_coefficientDev");
+
+		return columnNames;
 	}
 
 }

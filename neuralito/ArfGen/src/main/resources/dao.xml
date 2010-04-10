@@ -67,5 +67,11 @@
 			</list>
 		</property>
 	</bean>
+	<bean id="resultDAO" class="edu.unicen.experimenter.dao.ResultDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="dataSetDAO" ref="dataSetDAO" />
+	</bean>
+	
+
 
 </beans>

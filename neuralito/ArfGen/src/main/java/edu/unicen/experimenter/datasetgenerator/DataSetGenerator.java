@@ -55,6 +55,7 @@ public class DataSetGenerator {
 	 * @throws Exception
 	 */
 	public List<DataSet> generateFromXML(final File xmlFile) throws Exception {
+		System.out.println("Generating DataSet...");
 		final List<DataSet> dataSets = new ArrayList<DataSet>();
 
 		// Read configuration object from XML
@@ -63,6 +64,7 @@ public class DataSetGenerator {
 		// For each dataset configuration generate data sets.
 		final List<DataSetConfiguration> dataSetsConfiguration = configuration
 				.getDataSets();
+
 		for (final DataSetConfiguration dataSetConfiguration : dataSetsConfiguration) {
 			final String dataSetName = dataSetConfiguration.getDataSetName();
 			final int instanceNumber = dataSetConfiguration.getInstanceNumber();
@@ -85,7 +87,8 @@ public class DataSetGenerator {
 			}
 
 		}
-
+		System.out
+				.println(dataSets.size() + " datasets have been generated...");
 		return dataSets;
 
 	}
@@ -112,6 +115,7 @@ public class DataSetGenerator {
 		// Set the data to use into the generation
 		data.put("obsData", observationForEvaluation.subList(0, instances));
 		data.put("ww3Data", waveWatchData);
+
 		// generate
 		final DataSet dataSet = generationStrategy.generateDataSet(data);
 

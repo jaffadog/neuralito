@@ -18,7 +18,7 @@
           <double>22.0</double>
         </entry>
       </strategyOptions>
-      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.NoBuoyStrategy</strategyName>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
       <percentajeIncrement>15</percentajeIncrement>
     </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
   </dataSets>

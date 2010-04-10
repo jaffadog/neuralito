@@ -3,7 +3,6 @@
  */
 package edu.unicen.experimenter.gui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Event;
@@ -313,9 +312,9 @@ public class Main {
 	private JTabbedPane getJTabbedPane() {
 		if (jTabbedPane == null) {
 			jTabbedPane = new JTabbedPane();
-			jTabbedPane.addTab(null, null, getJPanel(), null);
-			jTabbedPane.addTab(null, null, getJPanel1(), null);
-			jTabbedPane.addTab(null, null, getJTextArea(), null);
+			jTabbedPane.addTab("Dataset Generator", null, getJPanel(), null);
+			jTabbedPane.addTab("Evaluator", null, getJPanel1(), null);
+			jTabbedPane.addTab("Analyzer", null, getJTextArea(), null);
 		}
 		return jTabbedPane;
 	}
