@@ -2,6 +2,7 @@ package edu.unicen.experimenter.datasetgenerator.generators;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -14,6 +15,7 @@ import edu.unicen.experimenter.datasetgenerator.DataSet;
 import edu.unicen.experimenter.datasetgenerator.DataSetInstance;
 import edu.unicen.experimenter.datasetgenerator.data.visualobservation.VisualObservation;
 import edu.unicen.experimenter.datasetgenerator.data.wavewatch.WaveWatchData;
+import edu.unicen.experimenter.datasetgenerator.data.wavewatch.WaveWatchLoader;
 import edu.unicen.experimenter.datasetgenerator.generators.filters.AndFilter;
 import edu.unicen.experimenter.datasetgenerator.generators.filters.DataTimeFilter;
 import edu.unicen.experimenter.datasetgenerator.generators.filters.Filter;
@@ -30,6 +32,7 @@ public class WW3Last3DaysStrategy implements GenerationStrategy {
 	private final String classAttribute = "visualObservation";
 	private Double ww3Y;
 	private Double ww3X;
+	private Map<String, Serializable> options;
 
 	public WW3Last3DaysStrategy() {
 		name = "WW3Last3DaysStrategy";
@@ -59,10 +62,12 @@ public class WW3Last3DaysStrategy implements GenerationStrategy {
 	@Override
 	public DataSet generateDataSet(
 			final Hashtable<String, Object> dataCollection) {
-		Vector<WaveWatchData> ww3DataSet = (Vector<WaveWatchData>) dataCollection
+		final WaveWatchLoader wwLoader = (WaveWatchLoader) dataCollection
 				.get("ww3Data");
-		final Vector<VisualObservation> obsDataSet = (Vector<VisualObservation>) dataCollection
-				.get("obsData");
+		Vector<WaveWatchData> ww3DataSet = (Vector<WaveWatchData>) wwLoader
+				.getWaveWatchData(ww3Y, ww3X);
+		final Vector<VisualObservation> obsDataSet = new Vector<VisualObservation>(
+				(Collection) dataCollection.get("obsData"));
 		final Vector<Filter> filters = new Vector<Filter>();
 
 		filters
@@ -208,6 +213,15 @@ public class WW3Last3DaysStrategy implements GenerationStrategy {
 		ww3Y = (Double) options.get("grid1Lat");
 		ww3X = (Double) options.get("grid1Lon");
 
+		this.options = options;
 	}
 
+	/**
+	 * @see edu.unicen.experimenter.datasetgenerator.generators.GenerationStrategy#getStrategyOptions()
+	 */
+	@Override
+	public Map<String, Serializable> getStrategyOptions() {
+
+		return options;
+	}
 }

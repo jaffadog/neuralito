@@ -45,4 +45,6 @@ public interface GenerationStrategy extends Serializable {
 	 */
 	public void setOptions(Map<String, Serializable> strategyOptions);
 
+	public Map<String, Serializable> getStrategyOptions();
+
 }

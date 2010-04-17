@@ -13,6 +13,7 @@ import java.util.List;
  * 
  */
 public class ClassifiersConfiguration {
+
 	/**
 	 * List of classifierConfiguration
 	 */
@@ -32,4 +33,5 @@ public class ClassifiersConfiguration {
 	public void setClassifiers(final List<ClassifierConfiguration> classifiers) {
 		this.classifiers = classifiers;
 	}
+
 }

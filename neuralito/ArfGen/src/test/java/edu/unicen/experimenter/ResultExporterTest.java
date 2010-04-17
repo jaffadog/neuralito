@@ -16,6 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import edu.unicen.experimenter.dao.DataSetDAO;
 import edu.unicen.experimenter.dao.ResultDAO;
+import edu.unicen.experimenter.export.ExcelWriter;
 
 /**
  * @author esteban

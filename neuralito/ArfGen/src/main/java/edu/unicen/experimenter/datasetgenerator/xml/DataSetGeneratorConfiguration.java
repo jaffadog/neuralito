@@ -13,6 +13,8 @@ public class DataSetGeneratorConfiguration {
 
 	List<DataSetConfiguration> dataSets;
 
+	String dataSetGroupName;
+
 	/**
 	 * @return the dataSets
 	 */
@@ -26,6 +28,21 @@ public class DataSetGeneratorConfiguration {
 	 */
 	public void setDataSets(final List<DataSetConfiguration> dataSets) {
 		this.dataSets = dataSets;
+	}
+
+	/**
+	 * @return the dataSetGroupName
+	 */
+	public String getDataSetGroupName() {
+		return dataSetGroupName;
+	}
+
+	/**
+	 * @param dataSetGroupName
+	 *            the dataSetGroupName to set
+	 */
+	public void setDataSetGroupName(final String dataSetGroupName) {
+		this.dataSetGroupName = dataSetGroupName;
 	}
 
 }

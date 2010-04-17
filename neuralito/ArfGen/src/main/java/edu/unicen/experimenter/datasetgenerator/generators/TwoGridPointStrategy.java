@@ -1,6 +1,7 @@
 package edu.unicen.experimenter.datasetgenerator.generators;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -36,6 +37,7 @@ public class TwoGridPointStrategy implements GenerationStrategy {
 	private Double ww1X;
 	private Double ww2Y;
 	private Double ww2X;
+	private Map<String, Serializable> options;
 
 	public TwoGridPointStrategy() {
 
@@ -62,8 +64,8 @@ public class TwoGridPointStrategy implements GenerationStrategy {
 				.getWaveWatchData(ww2Y, ww2X));
 
 		// Get visual observations
-		final Vector<VisualObservation> obsDataSet = (Vector<VisualObservation>) dataCollection
-				.get("obsData");
+		final Vector<VisualObservation> obsDataSet = new Vector(
+				(Collection) dataCollection.get("obsData"));
 
 		// Combine visual observations and wavewatch data
 		final Vector<Filter> filters = new Vector<Filter>();
@@ -208,6 +210,16 @@ public class TwoGridPointStrategy implements GenerationStrategy {
 		shortDescription = "strategy[nobuoy].beach[" + beach
 				+ ".months[1-12].height[unrestriced].ww3[" + ww1Y + "," + ww1X
 				+ "]";
+		this.options = options;
+	}
+
+	/**
+	 * @see edu.unicen.experimenter.datasetgenerator.generators.GenerationStrategy#getStrategyOptions()
+	 */
+	@Override
+	public Map<String, Serializable> getStrategyOptions() {
+
+		return options;
 	}
 
 }

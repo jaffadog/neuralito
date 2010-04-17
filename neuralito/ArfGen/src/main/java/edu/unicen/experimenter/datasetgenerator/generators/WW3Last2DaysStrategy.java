@@ -1,6 +1,7 @@
 package edu.unicen.experimenter.datasetgenerator.generators;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
@@ -30,6 +31,7 @@ public class WW3Last2DaysStrategy implements GenerationStrategy {
 	private final String classAttribute = "visualObservation";
 	private Double ww3Y;
 	private Double ww3X;
+	private Map<String, Serializable> options;
 
 	public WW3Last2DaysStrategy() {
 		name = "WW3Last2DaysStrategy";
@@ -53,8 +55,8 @@ public class WW3Last2DaysStrategy implements GenerationStrategy {
 				.get("ww3Data");
 		Vector<WaveWatchData> ww3DataSet = (Vector<WaveWatchData>) wwLoader
 				.getWaveWatchData(ww3Y, ww3X);
-		final Vector<VisualObservation> obsDataSet = (Vector<VisualObservation>) dataCollection
-				.get("obsData");
+		final Vector<VisualObservation> obsDataSet = new Vector(
+				(Collection) dataCollection.get("obsData"));
 		final Vector<Filter> filters = new Vector<Filter>();
 
 		filters
@@ -192,6 +194,15 @@ public class WW3Last2DaysStrategy implements GenerationStrategy {
 		beach = (String) options.get("beach");
 		ww3Y = (Double) options.get("grid1Lat");
 		ww3X = (Double) options.get("grid1Lon");
+		this.options = options;
 	}
 
+	/**
+	 * @see edu.unicen.experimenter.datasetgenerator.generators.GenerationStrategy#getStrategyOptions()
+	 */
+	@Override
+	public Map<String, Serializable> getStrategyOptions() {
+
+		return options;
+	}
 }

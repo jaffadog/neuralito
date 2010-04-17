@@ -1,0 +1,210 @@
+<edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
+ <dataSetGroupName>DataSetsForGridPointEvaluation</dataSetGroupName>
+  <dataSets>
+<!--  NORTHSHORE  We all ready now which buoy to use-->
+<!--    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>-->
+<!--      <incremental>true</incremental>-->
+<!--      <instanceNumber>1300</instanceNumber>-->
+<!--      <percentajeIncrement>15</percentajeIncrement>-->
+<!--      <beach>nshore</beach>-->
+<!--      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>-->
+<!--      <strategyOptions>-->
+<!--        <entry>-->
+<!--          <string>grid1Lon</string>-->
+<!--          <double>-158.75</double>-->
+<!--        </entry>-->
+<!--        <entry>-->
+<!--          <string>grid1Lat</string>-->
+<!--          <double>22.0</double>-->
+<!--        </entry>-->
+<!--        <entry>-->
+<!--          <string>beach</string>-->
+<!--          <string>nshore</string>-->
+<!--        </entry>        -->
+<!--      </strategyOptions>      -->
+<!--    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>-->
+
+
+	
+<!--WEST SHORE    we will try 2 buoys (21,-158.75) and (21,-157.5)-->
+<!--    Dset for (21,-158.75) -->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>wshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>wshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>   
+    <!--    Dset for (21,-157.5) -->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>wshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>wshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+<!--ALA MOANA    we will try 2 buoys (21,-158.75) and (21,-157.5)-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>almo</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>almo</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>almo</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>almo</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>     
+<!--Diamond Head  we will try 2 buoys (21,-158.75) and (21,-157.5)-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>dh</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>dh</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>     
+    
+      <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>dh</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>dh</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>    
+  
+<!--WINDWARD  we will try two buoys (22,-157.5) (21,-157.5)-->
+     <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>windward</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>windward</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <instanceNumber>1300</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>windward</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>windward</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>    
+    
+  </dataSets>
+
+</edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>

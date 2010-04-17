@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.experimenter;
+package edu.unicen.experimenter.export;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +12,25 @@ import java.util.Set;
 
 import org.apache.commons.math.stat.descriptive.moment.StandardDeviation;
 
+import edu.unicen.experimenter.Result;
+
 /**
  * 
  * @author esteban
  * 
  */
 public class ResultTransformer {
+
+	private static final Map<String, String> classifiersParameterMap = new HashMap() {
+		{
+			put("weka.classifiers.functions.MultilayerPerceptron",
+					"-L 0.99 -M 0.01 -N 1000 -V 0 -S 0 -E 20 -H 4 -D");
+			put("weka.classifiers.functions.LinearRegression", "-S 0 -R 1.0E-6");
+			put(
+					"weka.classifiers.functions.SMOreg",
+					"-S 0.0080 -C 0.7 -T 0.0080 -P 1.0E-12 -N 0 -K \"weka.classifiers.functions.supportVector.RBFKernel -C 250007 -G 0.5\"");
+		}
+	};
 
 	public static List<Result> averageResults(final List<Result> results,
 			final Map columnNamesToAverage) {
@@ -74,9 +87,12 @@ public class ResultTransformer {
 	 */
 	private static Result cloneResult(final Set<Result> group) {
 		// get any result from the group
-		final HashMap map = new HashMap(group.iterator().next().getData());
+		final Result firstResult = group.iterator().next();
+		final HashMap map = new HashMap(firstResult.getData());
 		// create a new result with its cloned data.
-		return new Result((Map) map.clone());
+		final Result newResult = new Result((Map) map.clone());
+		newResult.setDataSet(firstResult.getDataSet());
+		return newResult;
 	}
 
 	/**
@@ -116,8 +132,31 @@ public class ResultTransformer {
 	 * @return
 	 */
 	public static List<Result> addExtraColumns(final List<Result> results) {
-		// TODO Auto-generated method stub
+		for (final Result result : results) {
+			result.getData().put("optimized", isOptimized(result));
+			result.getData().put("beach", result.getDataSet().getBeach());
+			result.getData().put("GenerationOption",
+					result.getDataSet().getStrategyOptionString());
+		}
 		return results;
 	}
 
+	/**
+	 * @param result
+	 * @return
+	 */
+	private static Boolean isOptimized(final Result result) {
+		final String classifier = (String) result.getData().get("Key_Scheme");
+		final String parameters = (String) result.getData().get(
+				"Key_Scheme_options");
+		final String optimumParametersOfClassifier = classifiersParameterMap
+				.get(classifier);
+		if (optimumParametersOfClassifier == null)
+			return null;
+		if (optimumParametersOfClassifier == parameters)
+			return true;
+		else
+			return false;
+
+	}
 }

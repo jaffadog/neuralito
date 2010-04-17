@@ -4,25 +4,45 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.classic.Session;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
-import edu.unicen.experimenter.datasetgenerator.DataSetInstance;
+import edu.unicen.experimenter.dao.DataSetDAO;
 import edu.unicen.experimenter.datasetgenerator.DataSet;
+import edu.unicen.experimenter.datasetgenerator.DataSetInstance;
 
 public class InstancesCreator {
+	static final DataSetDAO dataSetDAo;
+	static {
+		final ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
+				"dao.xml");
+		dataSetDAo = (DataSetDAO) ctx.getBean("dataSetDAO");
+	}
 
 	public static Instances generateTrainningData(final DataSet dataSet) {
 
 		final Instances instancesDataSet = initDataSet(dataSet);
+		final SessionFactory openSession = dataSetDAo.getSession2();
+		final Session openSession2 = openSession.openSession();
+		final Transaction beginTransaction = openSession2.beginTransaction();
+		openSession2.update(dataSet);
+		System.out.println("To convert: " + dataSet.getInstances().size()
+				+ " dataset says:" + dataSet.getNumberOfInstances());
 		final Collection<DataSetInstance> data = dataSet.getInstances();
 		for (final Iterator it = data.iterator(); it.hasNext();) {
 			final DataSetInstance arf = (DataSetInstance) it.next();
 			final Instance instance = makeInstance(instancesDataSet, arf);
 			instancesDataSet.add(instance);
 		}
+		beginTransaction.commit();
+		openSession2.close();
 		return instancesDataSet;
 	}
 
@@ -106,14 +126,16 @@ public class InstancesCreator {
 	// }
 
 	public static File generateFile(final String fileName, final DataSet dataSet) {
+
 		final ArffSaver saver = new ArffSaver();
 		saver.setInstances(generateTrainningData(dataSet));
+
 		File file = null;
 		try {
 			file = new File(fileName);
 			saver.setFile(file);
-			saver.setDestination(new File(fileName)); // **not** necessary in
-			// 3.5.4 and later
+			// saver.setDestination(new File(fileName)); // **not** necessary in
+			// // 3.5.4 and later
 			saver.writeBatch();
 
 		} catch (final Exception e) {
@@ -122,5 +144,4 @@ public class InstancesCreator {
 		}
 		return file;
 	}
-
 }

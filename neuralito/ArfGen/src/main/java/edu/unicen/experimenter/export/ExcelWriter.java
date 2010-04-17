@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.unicen.experimenter;
+package edu.unicen.experimenter.export;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,8 @@ import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
 import org.apache.commons.lang.math.NumberUtils;
+
+import edu.unicen.experimenter.Result;
 
 /**
  * @author esteban
@@ -63,8 +65,10 @@ public class ExcelWriter {
 			for (final String columnName : columns) {
 				final String data = result.getResult((String) columnNames
 						.get(columnName));
-				if (columnWidth[currentCol] < data.length()) {
-					columnWidth[currentCol] = data.length();
+				if (data != null) {
+					if (columnWidth[currentCol] < data.length()) {
+						columnWidth[currentCol] = data.length();
+					}
 				}
 				if (NumberUtils.isNumber(data)) {
 					final jxl.write.Number number = new jxl.write.Number(

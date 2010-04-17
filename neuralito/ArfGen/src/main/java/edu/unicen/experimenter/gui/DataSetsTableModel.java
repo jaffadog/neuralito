@@ -38,6 +38,7 @@ public class DataSetsTableModel extends AbstractTableModel {
 	public void setData(final List<DataSet> dataSets) {
 		this.dataSets = dataSets;
 		selected = new boolean[dataSets.size()];
+		fireTableDataChanged();
 
 	}
 
@@ -140,6 +141,21 @@ public class DataSetsTableModel extends AbstractTableModel {
 				selectedDataSets.add(dataSets.get(i));
 			}
 		return selectedDataSets;
+	}
+
+	/**
+	 * @param dsName
+	 */
+	public void selectByName(final String dsName) {
+		selected = new boolean[dataSets.size()];
+		for (int i = 0; i < dataSets.size(); i++) {
+			if (dataSets.get(i).getDataSetGroup().equals(dsName)) {
+				selected[i] = true;
+			}
+
+		}
+		fireTableDataChanged();
+
 	}
 
 }

@@ -16,6 +16,8 @@ import edu.unicen.experimenter.dao.ResultDAO;
 import edu.unicen.experimenter.datasetgenerator.DataSet;
 import edu.unicen.experimenter.datasetgenerator.DataSetGenerator;
 import edu.unicen.experimenter.evaluator.Evaluator;
+import edu.unicen.experimenter.export.ExcelWriter;
+import edu.unicen.experimenter.export.ResultTransformer;
 
 /**
  * Experimenter makes possible: 1) Generation of datasets 2) Evaluation of
@@ -52,6 +54,7 @@ public class Experimenter extends Observable {
 	private Experimenter(final DataSetDAO dao, final ResultDAO resultDAO) {
 		dataSetDAO = dao;
 		this.resultDAO = resultDAO;
+		evaluator.setResults(resultDAO);
 	}
 
 	/**
@@ -118,10 +121,26 @@ public class Experimenter extends Observable {
 	 *            parameters
 	 * @throws Exception
 	 */
-	public void evaluate(final List<DataSet> selectedDataSets,
-			final File xmlClassifiers) throws Exception {
+	public void evaluate(final String experimentName,
+			final List<DataSet> selectedDataSets, final File xmlClassifiers)
+			throws Exception {
+		final Thread t = new Thread() {
+			@Override
+			public void run() {
+				try {
 
-		evaluator.evaluate(xmlClassifiers, selectedDataSets);
+					evaluator.evaluate(experimentName, xmlClassifiers,
+							selectedDataSets);
+					setChanged();
+					notifyObservers();
+				} catch (final Exception e) {
+
+					e.printStackTrace();
+				}
+
+			}
+		};
+		t.start();
 
 	}
 
@@ -134,10 +153,10 @@ public class Experimenter extends Observable {
 	 * @throws WriteException
 	 * @throws IOException
 	 */
-	public void generateExcel(final String beach,
-			final boolean optimizedParameters) throws WriteException,
-			IOException {
+	public void generateExcelByBeach(final String beach, final String outputFile)
+			throws WriteException, IOException {
 		// Obtain results as written by weka
+		System.out.println("Exporting results for beach \"" + beach + "\"");
 		final List<Result> results = resultDAO.getResult(beach);
 		// Average the results
 		final Map columnNamesToAverage = initAverageMap();
@@ -148,15 +167,9 @@ public class Experimenter extends Observable {
 				.addExtraColumns(transformedResults);
 		// Configure columns to display in the excel file
 		final Map columnNames = initMap();
-		// Configure output file
-		String optimized = "Optimized";
-		if (!optimizedParameters) {
-			optimized = "Non optimized";
-		}
-		final String outputFile = beach + "-AveragedResults-" + optimized
-				+ ".xls";
 		// Write Excel.
-		ExcelWriter.generateExcel(outputFile, transformedResults, columnNames);
+		ExcelWriter.generateExcel(outputFile + ".xls", transformedResults,
+				columnNames);
 
 	}
 
@@ -167,6 +180,7 @@ public class Experimenter extends Observable {
 		final Map columnNames = new HashMap();
 
 		columnNames.put("Correlation", "Avg_Correlation_coefficient");
+		// columnNames.put("Correlation", "Avg_Correlation_coefficient");
 
 		return columnNames;
 	}
@@ -181,8 +195,33 @@ public class Experimenter extends Observable {
 		columnNames.put("Classifier", "Key_Scheme");
 		columnNames.put("Correlation", "Avg_Correlation_coefficient");
 		columnNames.put("CorrelationDev", "Avg_Correlation_coefficientDev");
+		columnNames.put("Number of instances",
+				"Avg_Number_of_training_instances");
+		columnNames.put("Beach", "beach");
+		columnNames.put("Generation", "GenerationOption");
 
 		return columnNames;
+	}
+
+	/**
+	 * @param experimentName
+	 * @param fileName
+	 * @throws IOException
+	 * @throws WriteException
+	 */
+	public void generateExcel(final String experimentName, final String fileName)
+			throws WriteException, IOException {
+		final List<Result> resultsByExperiment = resultDAO
+				.getResultsByExperiment(experimentName);
+		final Map columnNamesToAverage = initAverageMap();
+		final List<Result> averageResults = ResultTransformer.averageResults(
+				resultsByExperiment, columnNamesToAverage);
+		final List<Result> addExtraColumns = ResultTransformer
+				.addExtraColumns(averageResults);
+		final Map columnNames = initMap();
+		ExcelWriter.generateExcel(fileName + ".xls", addExtraColumns,
+				columnNames);
+
 	}
 
 }

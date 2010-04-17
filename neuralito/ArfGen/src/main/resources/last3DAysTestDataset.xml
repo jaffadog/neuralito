@@ -1,25 +1,32 @@
 <edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
+ 
+ <dataSetGroupName>last3DaysTest</dataSetGroupName>
+ 
   <dataSets>
+<!--  NORTHSHORE-->
+ 
     <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
-      <incremental>false</incremental>
-      <instanceNumber>50</instanceNumber>
+      <incremental>true</incremental>
+      <instanceNumber>2000</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
       <beach>nshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last3DaysStrategy</strategyName>
       <strategyOptions>
         <entry>
           <string>grid1Lon</string>
           <double>-158.75</double>
         </entry>
         <entry>
-          <string>beach</string>
-          <string>nshore</string>
-        </entry>
-        <entry>
           <string>grid1Lat</string>
           <double>22.0</double>
         </entry>
-      </strategyOptions>
-      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
-      <percentajeIncrement>15</percentajeIncrement>
+        <entry>
+          <string>beach</string>
+          <string>nshore</string>
+        </entry>        
+      </strategyOptions>      
     </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+
   </dataSets>
+
 </edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>

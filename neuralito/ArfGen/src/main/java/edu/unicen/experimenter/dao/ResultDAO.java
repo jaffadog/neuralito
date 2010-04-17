@@ -31,6 +31,18 @@ public class ResultDAO {
 	DataSource dataSource;
 	JdbcTemplate template;
 
+	public boolean experimentExists(final String name) {
+		final String query = "select * from " + averagedResultsTable
+				+ " where experimentName ='" + name + "'";
+		template = new JdbcTemplate(dataSource);
+		final List sqlRowResults = template.queryForList(query);
+		if (sqlRowResults.size() < 1)
+			return false;
+		else
+			return true;
+
+	}
+
 	public List<Result> getResult(final String beach) {
 		// para cada dataset de una playa
 		final List<DataSet> dataSetsByBeach = dataSetDAO
@@ -40,24 +52,25 @@ public class ResultDAO {
 		for (final Iterator iterator = dataSetsByBeach.iterator(); iterator
 				.hasNext();) {
 			final DataSet dataSet = (DataSet) iterator.next();
-			final List<Result> results = getResultsByDataSetId(dataSet.getId());
+			final List<Result> results = getResultsByDataSet(dataSet);
 			resultsForBeach.addAll(results);
+
 		}
 		return resultsForBeach;
 	}
 
 	/**
-	 * @param id
+	 * @param dataSet
 	 * @return
 	 */
-	private List<Result> getResultsByDataSetId(final int id) {
+	private List<Result> getResultsByDataSet(final DataSet dataSet) {
 
 		final String query = "select * from " + averagedResultsTable
-				+ " where " + dataSetIdColumn + "='" + id + "'";
+				+ " where " + dataSetIdColumn + "='" + dataSet.getId() + "'";
 		template = new JdbcTemplate(dataSource);
 		System.out.println("Query was: " + query);
-		final List rowResults = template.queryForList(query);
-		final List<Result> results = convertRowToResults(rowResults);
+		final List sqlRowResults = template.queryForList(query);
+		final List<Result> results = createResults(sqlRowResults, dataSet);
 		return results;
 	}
 
@@ -65,10 +78,27 @@ public class ResultDAO {
 	 * @param rowResults
 	 * @return
 	 */
-	private List<Result> convertRowToResults(final List rowResults) {
+	private List<Result> createResults(final List rowResults,
+			final DataSet dataSet) {
 		final List<Result> results = new ArrayList<Result>();
 		for (final Object row : rowResults) {
 			final Result result = getResultFromRow((Map) row);
+			result.setDataSet(dataSet);
+			results.add(result);
+		}
+		return results;
+	}
+
+	/**
+	 * @param rowResults
+	 * @return
+	 */
+	private List<Result> createResults(final List rowResults) {
+		final List<Result> results = new ArrayList<Result>();
+		for (final Object row : rowResults) {
+			final Result result = getResultFromRow((Map) row);
+			result.setDataSet(dataSetDAO.getDataSet(Integer.parseInt(result
+					.getResult("Key_Dataset"))));
 			results.add(result);
 		}
 		return results;
@@ -111,5 +141,19 @@ public class ResultDAO {
 	 */
 	public void setDataSource(final DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+
+	/**
+	 * @param string
+	 * @return
+	 */
+	public List<Result> getResultsByExperiment(final String string) {
+		final String query = "select * from " + averagedResultsTable
+				+ " where experimentName ='" + string + "'";
+		template = new JdbcTemplate(dataSource);
+		final List sqlRowResults = template.queryForList(query);
+
+		final List<Result> results = createResults(sqlRowResults);
+		return results;
 	}
 }
