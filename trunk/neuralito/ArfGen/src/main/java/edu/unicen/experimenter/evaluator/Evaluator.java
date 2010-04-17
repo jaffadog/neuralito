@@ -3,6 +3,7 @@ package edu.unicen.experimenter.evaluator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,7 @@ import weka.experiment.RegressionSplitEvaluator;
 
 import com.thoughtworks.xstream.XStream;
 
+import edu.unicen.experimenter.dao.ResultDAO;
 import edu.unicen.experimenter.datasetgenerator.DataSet;
 import edu.unicen.experimenter.evaluator.xml.ClassifierConfiguration;
 import edu.unicen.experimenter.evaluator.xml.ClassifiersConfiguration;
@@ -30,8 +32,12 @@ import edu.unicen.experimenter.util.InstancesCreator;
  * 
  */
 public class Evaluator {
+	private ResultDAO results;
+
 	/**
 	 * Evaluates each dataset with each classifier.
+	 * 
+	 * @param string
 	 * 
 	 * @param classifiersConf
 	 *            container of the configurations of each classifier to use.
@@ -39,8 +45,10 @@ public class Evaluator {
 	 *            list of datasets to evaluate.
 	 * @throws Exception
 	 */
-	public void evaluate(final ClassifiersConfiguration classifiersConf,
+	public void evaluate(final String experimentName,
+			final ClassifiersConfiguration classifiersConf,
 			final List<DataSet> dataSets) throws Exception {
+		validateExperimentName(experimentName);
 
 		// Obtain classifiers to use from configuration object.
 		final Object[] classifiers2 = getClassifiers(classifiersConf);
@@ -60,8 +68,10 @@ public class Evaluator {
 			se.setClassifier((Classifier) object);
 
 			final AveragingResultProducerExtension rp = new AveragingResultProducerExtension();
+			rp.setExperimentName(experimentName);
 			rp.setCalculateStdDevs(true);
-			final DatabaseResultListener rl = new DatabaseResultListener();
+			final DatabaseResultListener rl = new MyDBResultListener();
+			((MyDBResultListener) rl).setExperimentName(experimentName);
 
 			rl.setDatabaseURL("jdbc:mysql://localhost:3306/weka");
 			rl.setUsername("root");
@@ -91,7 +101,8 @@ public class Evaluator {
 			exp.setDatasets(model);
 
 			// result
-			final DatabaseResultListener irl = new DatabaseResultListener();
+			final MyDBResultListener irl = new MyDBResultListener();
+			irl.setExperimentName(experimentName);
 			irl.setDatabaseURL("jdbc:mysql://localhost:3306/weka");
 			irl.setUsername("root");
 			irl.setPassword("");
@@ -110,6 +121,17 @@ public class Evaluator {
 	}
 
 	/**
+	 * @param experimentName
+	 * @throws Exception
+	 */
+	private void validateExperimentName(final String experimentName)
+			throws Exception {
+		if (results.experimentExists(experimentName))
+			throw new Exception("Experiment name already in use....");
+
+	}
+
+	/**
 	 * Evaluates each dataset with each classifier.
 	 * 
 	 * @param classifiersConfXml
@@ -118,15 +140,16 @@ public class Evaluator {
 	 *            list of datasets to use
 	 * @throws Exception
 	 */
-	public void evaluate(final File classifiersConfXml,
-			final List<DataSet> dataSets) throws Exception {
+	public void evaluate(final String experimentName,
+			final File classifiersConfXml, final List<DataSet> dataSets)
+			throws Exception {
 
 		// Read Classifiers configuration object from xml.
 		final XStream xstream = new XStream();
 		final ClassifiersConfiguration classifiersConf = (ClassifiersConfiguration) xstream
 				.fromXML(new FileInputStream(classifiersConfXml));
 		// Perform evaluation
-		this.evaluate(classifiersConf, dataSets);
+		this.evaluate(experimentName, classifiersConf, dataSets);
 
 	}
 
@@ -149,7 +172,10 @@ public class Evaluator {
 			final String classifierName = classifierConfiguration
 					.getClassifierName();
 			final String optionsString = classifierConfiguration.getOptions();
+			System.out.println(optionsString);
+
 			final String[] options = Utils.splitOptions(optionsString);
+			System.out.println(Arrays.toString(options));
 			final Classifier c = (Classifier) Utils.forName(Classifier.class,
 					classifierName, options);
 			classifiers.add(c);
@@ -174,4 +200,11 @@ public class Evaluator {
 		return defaultListModel;
 	}
 
+	/**
+	 * @param results
+	 *            the results to set
+	 */
+	public void setResults(final ResultDAO results) {
+		this.results = results;
+	}
 }

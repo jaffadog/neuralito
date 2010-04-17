@@ -36,7 +36,10 @@ public class DataSetsXMLTest {
 		dsConfig.setInstanceNumber(100);
 		dsConfig.setStrategyName(OneGridPointStrategy.class.getName());
 		final Map<String, Serializable> strategyOptions = new HashMap<String, Serializable>();
-		strategyOptions.put("beach", "nshore");
+		strategyOptions
+				.put(
+						"beach",
+						"-S 0.0080 -C 0.7 -T 0.0080 -P 1.0E-12 -N 0 -K \\\" weka.classifiers.functions.supportVector.RBFKernel -C 250007 -G 0.5\"");
 		strategyOptions.put("grid1Lat", Util.NORTH);
 		strategyOptions.put("grid1Lon", Util.WEST);
 		dsConfig.setStrategyOptions(strategyOptions);

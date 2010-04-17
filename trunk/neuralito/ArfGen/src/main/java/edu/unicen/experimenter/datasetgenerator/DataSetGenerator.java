@@ -60,6 +60,7 @@ public class DataSetGenerator {
 
 		// Read configuration object from XML
 		final DataSetGeneratorConfiguration configuration = getDataSetConfiguration(xmlFile);
+		final String dataSetGroupName = configuration.getDataSetGroupName();
 
 		// For each dataset configuration generate data sets.
 		final List<DataSetConfiguration> dataSetsConfiguration = configuration
@@ -77,18 +78,20 @@ public class DataSetGenerator {
 			// used.
 			if (!dataSetConfiguration.isIncremental()) {
 				final DataSet generatedDataSet = generateDataSet(
-						instanceNumber, strategyName, strategyOptions);
+						instanceNumber, strategyName, strategyOptions,
+						dataSetGroupName);
 				dataSets.add(generatedDataSet);
 			} else {
 				final List<DataSet> generatedIncrementalDataSets = generateIncrementalDataSets(
 						dataSetName, instanceNumber, percentajeIncrement,
-						strategyName, strategyOptions);
+						strategyName, strategyOptions, dataSetGroupName);
 				dataSets.addAll(generatedIncrementalDataSets);
 			}
 
 		}
-		System.out
-				.println(dataSets.size() + " datasets have been generated...");
+		System.out.println("Finish generating datasets for group: "
+				+ dataSetGroupName + ". " + dataSets.size()
+				+ " datasets have been generated...");
 		return dataSets;
 
 	}
@@ -102,12 +105,16 @@ public class DataSetGenerator {
 	 *            the class name of the generation strategy to use.
 	 * @param strategyOptions
 	 *            the options to pass to the generation strategy to use.
+	 * @param dataSetGroup
 	 * @return
 	 * @throws Exception
 	 */
 	private DataSet generateDataSet(final int instances,
 			final String strategyName,
-			final Map<String, Serializable> strategyOptions) throws Exception {
+			final Map<String, Serializable> strategyOptions,
+			final String dataSetGroup) throws Exception {
+		System.out.println("Generating dataSet: " + strategyName + "with "
+				+ instances + " instances.");
 		// Obtain the strategy to use
 		final GenerationStrategy generationStrategy = getStrategy(strategyName,
 				strategyOptions);
@@ -118,7 +125,8 @@ public class DataSetGenerator {
 
 		// generate
 		final DataSet dataSet = generationStrategy.generateDataSet(data);
-
+		dataSet.setDataSetGroup(dataSetGroup);
+		System.out.println("dataset generated");
 		return dataSet;
 	}
 
@@ -137,13 +145,15 @@ public class DataSetGenerator {
 	 *            the class name of the generation strategy to use.
 	 * @param strategyOptions
 	 *            the options to pass to the generation strategy to use.
+	 * @param dataSetGroup
 	 * @return
 	 * @throws Exception
 	 */
 	private List<DataSet> generateIncrementalDataSets(
 			final String dataSetsName, final int totalInstances,
 			final int percentajeIncrement, final String strategyName,
-			final Map<String, Serializable> strategyOptions) throws Exception {
+			final Map<String, Serializable> strategyOptions,
+			final String dataSetGroup) throws Exception {
 		final List<DataSet> dataSets = new ArrayList<DataSet>();
 		// Number of instances to increment in each dataset
 		final int increment = totalInstances * percentajeIncrement / 100;
@@ -151,12 +161,12 @@ public class DataSetGenerator {
 		for (int instances = increment; instances < totalInstances; instances = instances
 				+ increment) {
 			final DataSet dataSet = generateDataSet(instances, strategyName,
-					strategyOptions);
+					strategyOptions, dataSetGroup);
 			dataSets.add(dataSet);
 		}
 		// Generate one more data set with the total number of instances
 		final DataSet dataSet = generateDataSet(totalInstances, strategyName,
-				strategyOptions);
+				strategyOptions, dataSetGroup);
 		dataSets.add(dataSet);
 
 		return dataSets;
@@ -182,6 +192,7 @@ public class DataSetGenerator {
 		} catch (final Exception ex) {
 			throw new Exception("Can't find class called: " + strategyName);
 		}
+
 		final Class classType = GenerationStrategy.class;
 		if (!classType.isAssignableFrom(c))
 			throw new Exception(classType.getName()

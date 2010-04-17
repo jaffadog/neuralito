@@ -16,10 +16,10 @@ public class ClassifierConfiguration {
 	 */
 	String classifierName;
 	/**
-	 * The options to set to the classifier.
-	 *  i.e: -L 0.99 -M 0.01 -N 1000 -V 0 -S 0 -E 20 -H 4 -D
+	 * The options to set to the classifier. i.e: -L 0.99 -M 0.01 -N 1000 -V 0
+	 * -S 0 -E 20 -H 4 -D
 	 */
-	String options;
+	String options = "";
 
 	/**
 	 * @return the classifierName

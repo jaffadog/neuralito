@@ -1,0 +1,146 @@
+<!--
+
+This configuration generates datasets for 3 beaches: Nshore,Wshore,WIndward. 
+For each beach 2 different strategies are used.OneGridPointStrategy, WW3Last3DaysStrategy.
+For each strategy datasets are generated incrementally.
+
+-->
+<edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
+ <dataSetGroupName>learningCurve</dataSetGroupName>
+  <dataSets>
+<!--  NORTHSHORE-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>true</incremental>
+      <instanceNumber>2000</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>nshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>nshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>true</incremental>
+      <instanceNumber>2000</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>nshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last3DaysStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>nshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+<!--WEST SHORE    -->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>true</incremental>
+      <instanceNumber>2000</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>wshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>wshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+   
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>true</incremental>
+      <instanceNumber>2000</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>wshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last3DaysStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>wshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+<!--WINDWARD  -->
+     <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>true</incremental>
+      <instanceNumber>2000</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>windward</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>windward</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>true</incremental>
+      <instanceNumber>2000</instanceNumber>
+      <percentajeIncrement>15</percentajeIncrement>
+      <beach>windward</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last3DaysStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>windward</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>     
+    
+  </dataSets>
+
+</edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>

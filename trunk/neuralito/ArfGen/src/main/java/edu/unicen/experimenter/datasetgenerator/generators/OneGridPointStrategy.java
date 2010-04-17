@@ -47,6 +47,8 @@ public class OneGridPointStrategy implements GenerationStrategy {
 	 */
 	private Double ww3X;
 
+	private Map<String, Serializable> options;
+
 	public String getBeach() {
 		return beach;
 	}
@@ -182,9 +184,19 @@ public class OneGridPointStrategy implements GenerationStrategy {
 		beach = (String) options.get("beach");
 		ww3Y = (Double) options.get("grid1Lat");
 		ww3X = (Double) options.get("grid1Lon");
+		this.options = options;
 		// shortDescription = "strategy[nobuoy].beach[" + beach
 		// + ".months[1-12].height[unrestriced].ww3[" + ww3Y + "," + ww3X
 		// + "]";
+	}
+
+	/**
+	 * @see edu.unicen.experimenter.datasetgenerator.generators.GenerationStrategy#getStrategyOptions()
+	 */
+	@Override
+	public Map<String, Serializable> getStrategyOptions() {
+		// TODO Auto-generated method stub
+		return options;
 	}
 
 }

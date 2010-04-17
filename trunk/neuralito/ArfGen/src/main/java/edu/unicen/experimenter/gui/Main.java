@@ -4,6 +4,7 @@
 package edu.unicen.experimenter.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.GridBagConstraints;
@@ -13,7 +14,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -34,11 +41,13 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import jxl.write.WriteException;
+
 /**
  * @author esteban
  * 
  */
-public class Main {
+public class Main implements Observer {
 
 	private JFrame jFrame = null; // @jve:decl-index=0:visual-constraint="184,20"
 	private JMenuBar jJMenuBar = null;
@@ -67,21 +76,58 @@ public class Main {
 	private JButton jButton1 = null;
 	private JButton jButton2 = null;
 	protected JFileChooser arfFileChooser;
-	private JTextField arfFileTxt = null;
+	private JTextArea arfFileTxt = null;
 	private JButton jButton3 = null;
 	protected JFileChooser arfFileChooser2;
-	private JTextField jTextField = null;
-	private JTextField arfFileTxt2 = null;
+	private JTextArea arfFileTxt2 = null;
 	private JTextArea jTextArea = null;
+	private JScrollPane jScrollPane1 = null;
+	private JDialog jDialog = null; // @jve:decl-index=0:visual-constraint="725,10"
+	private JPanel jContentPane = null;
+	private JTextField jExperimentName;
+	private JTextField textFieldName;
+	private JButton jButtonSelectDS;
+	private JPanel jPanel3 = null;
+	private JPanel jPanel4 = null;
+	private JPanel jPanel5 = null;
+	private JTextField jTextField = null;
+	private JButton jButton4 = null;
+	private final JLabel jLabel = null;
+	private JLabel jLabel1 = null;
+	private JLabel jLabel2 = null;
+	private JTextField jTextField1 = null;
+	private JButton jButton5 = null;
 
 	public Main() {
 		super();
 		arfFileChooser = new JFileChooser(".");
 		arfFileChooser2 = new JFileChooser(".");
-		getJTextArea();
-		System.setOut(new PrintStream(new TextAreaOutputStream(jTextArea)));
-		System.setErr(new PrintStream(new TextAreaOutputStream(jTextArea)));
+		final Collection<JTextArea> areas = new ArrayList<JTextArea>();
+		areas.add(getJTextAreaAnalyzer());
+		areas.add(getArfFileTxt());
+		areas.add(getArfFileTxt2());
+		System.setOut(new PrintStream(new TextAreaOutputStream(areas,
+				System.out)));
+		System.setErr(new PrintStream(new TextAreaOutputStream(areas,
+				System.err)));
+		controller.experimenter.addObserver(this);
 
+	}
+
+	/**
+	 * @return
+	 */
+	private JTextArea getJTextAreaEvaluator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * @return
+	 */
+	private JTextArea getJTextAreaGenerator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -314,7 +360,8 @@ public class Main {
 			jTabbedPane = new JTabbedPane();
 			jTabbedPane.addTab("Dataset Generator", null, getJPanel(), null);
 			jTabbedPane.addTab("Evaluator", null, getJPanel1(), null);
-			jTabbedPane.addTab("Analyzer", null, getJTextArea(), null);
+
+			jTabbedPane.addTab(null, null, getJPanel3(), null);
 		}
 		return jTabbedPane;
 	}
@@ -330,9 +377,22 @@ public class Main {
 			jPanel.setLayout(new BoxLayout(getJPanel(), BoxLayout.Y_AXIS));
 			jPanel.add(getJButton2(), null);
 			jPanel.add(getArfFileTxt(), null);
+
 			jPanel.add(getJButton3(), null);
 		}
 		return jPanel;
+	}
+
+	/**
+	 * @return
+	 */
+	private JTextField getJTextFieldName() {
+		if (textFieldName == null) {
+			textFieldName = new JTextField();
+			textFieldName.setText("Enter DS Group Name...");
+		}
+		return textFieldName;
+
 	}
 
 	/**
@@ -358,7 +418,7 @@ public class Main {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setPreferredSize(new Dimension(453, 100));
+			jScrollPane.setPreferredSize(new Dimension(453, 380));
 			jScrollPane.setViewportView(getJTable());
 		}
 		return jScrollPane;
@@ -386,31 +446,51 @@ public class Main {
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
-			final GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints2.gridy = 1;
-			gridBagConstraints2.weightx = 1.0;
-			gridBagConstraints2.gridx = 2;
-			final GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints11.gridy = 0;
-			gridBagConstraints11.weightx = 1.0;
-			gridBagConstraints11.gridx = 2;
-			final GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
-			final GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.gridwidth = 2;
-			gridBagConstraints.gridy = 2;
 			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.add(getJButton(), gridBagConstraints);
-			jPanel2.add(getJButton1(), gridBagConstraints1);
-			jPanel2.add(getJTextField(), gridBagConstraints11);
-			jPanel2.add(getArfFileTxt2(), gridBagConstraints2);
+			jPanel2.setLayout(new BoxLayout(getJPanel2(), BoxLayout.Y_AXIS));
+			jPanel2.setPreferredSize(new Dimension(1, 400));
+
+			jPanel2.add(getJTextFieldName());
+			jPanel2.add(getJButtonSelectDS(), null);
+			jPanel2.add(getJButton1(), null);
+			jPanel2.add(getJScrollPane1(), null);
+			jPanel2.add(getJTextField(), null);
+			jPanel2.add(getJButton(), null);
 		}
 		return jPanel2;
+	}
+
+	/**
+	 * @return
+	 */
+	private JButton getJButtonSelectDS() {
+		if (jButtonSelectDS == null) {
+			jButtonSelectDS = new JButton();
+			jButtonSelectDS.setText("Select Dataset by name");
+			jButtonSelectDS
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(
+								final java.awt.event.ActionEvent e) {
+
+							final String dsName = getJTextFieldName().getText();
+							dataSetTableModel.selectByName(dsName);
+
+						}
+					});
+		}
+		return jButtonSelectDS;
+	}
+
+	/**
+	 * @return
+	 */
+	private JTextField getJTextField() {
+		if (jExperimentName == null) {
+			jExperimentName = new JTextField();
+			jExperimentName.setText("Enter experiment name...");
+		}
+
+		return jExperimentName;
 	}
 
 	/**
@@ -427,18 +507,25 @@ public class Main {
 					// System.out.println("There are "
 					// + dataSetTableModel.getSelectedDataSets().size()
 					// + "selected data sets");
-					final File xmlClassifiers = arfFileChooser2
-							.getSelectedFile();
-					try {
-						controller.evaluate(dataSetTableModel
-								.getSelectedDataSets(), xmlClassifiers);
-						arfFileTxt2.setText("experimentOK");
-					} catch (final Exception e1) {
-						// TODO Auto-generated catch block
-						arfFileTxt2.setText(e1.toString());
+					if (dataSetTableModel.getSelectedDataSets().size() == 0) {
+						JOptionPane
+								.showMessageDialog(null,
+										"Eggs are not supposed to be green. So please select a dataset.");
+					} else {
+						final File xmlClassifiers = arfFileChooser2
+								.getSelectedFile();
+						try {
+							final String experimentName = getJTextField()
+									.getText();
+							controller.evaluate(dataSetTableModel
+									.getSelectedDataSets(), xmlClassifiers,
+									experimentName);
+						} catch (final Exception e1) {
+							e1.printStackTrace();
+						}
+						// Event stub
+						// actionPerformed()
 					}
-					// Event stub
-					// actionPerformed()
 				}
 			});
 		}
@@ -458,8 +545,9 @@ public class Main {
 				public void actionPerformed(final java.awt.event.ActionEvent e) {
 					arfFileChooser2.showOpenDialog(null);
 					if (arfFileChooser2.getSelectedFile() != null) {
-						arfFileTxt2.setText(arfFileChooser2.getSelectedFile()
-								.getPath());
+						arfFileTxt2.append(arfFileChooser2.getSelectedFile()
+								.getPath()
+								+ "\n");
 					}
 				}
 			});
@@ -480,8 +568,9 @@ public class Main {
 				public void actionPerformed(final java.awt.event.ActionEvent e) {
 					arfFileChooser.showOpenDialog(null);
 					if (arfFileChooser.getSelectedFile() != null) {
-						arfFileTxt.setText(arfFileChooser.getSelectedFile()
-								.getPath());
+						arfFileTxt.append(arfFileChooser.getSelectedFile()
+								.getPath()
+								+ "\n");
 					}
 				}
 			});
@@ -495,9 +584,9 @@ public class Main {
 	 * 
 	 * @return javax.swing.JTextField
 	 */
-	private JTextField getArfFileTxt() {
+	private JTextArea getArfFileTxt() {
 		if (arfFileTxt == null) {
-			arfFileTxt = new JTextField();
+			arfFileTxt = new JTextArea();
 		}
 		return arfFileTxt;
 	}
@@ -515,17 +604,11 @@ public class Main {
 			jButton3.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(final java.awt.event.ActionEvent e) {
 					try {
-						arfFileTxt.setText("Generating datasets...");
-						arfFileTxt.repaint();
-
 						controller.generateDataSets(arfFileChooser
 								.getSelectedFile());
-						arfFileTxt.setText("Allright");
+
 					} catch (final Exception e1) {
-						arfFileTxt.setText(e1.toString());// TODO
-						// Auto-generated
-						// catch
-						// block
+						e1.printStackTrace();
 
 					}
 				}
@@ -535,25 +618,13 @@ public class Main {
 	}
 
 	/**
-	 * This method initializes jTextField
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getJTextField() {
-		if (jTextField == null) {
-			jTextField = new JTextField();
-		}
-		return jTextField;
-	}
-
-	/**
 	 * This method initializes arfFileTxt2
 	 * 
 	 * @return javax.swing.JTextField
 	 */
-	private JTextField getArfFileTxt2() {
+	private JTextArea getArfFileTxt2() {
 		if (arfFileTxt2 == null) {
-			arfFileTxt2 = new JTextField();
+			arfFileTxt2 = new JTextArea();
 		}
 		return arfFileTxt2;
 	}
@@ -563,11 +634,244 @@ public class Main {
 	 * 
 	 * @return javax.swing.JTextArea
 	 */
-	private JTextArea getJTextArea() {
+	private JTextArea getJTextAreaAnalyzer() {
 		if (jTextArea == null) {
 			jTextArea = new JTextArea();
 		}
 		return jTextArea;
+	}
+
+	/**
+	 * This method initializes jScrollPane1
+	 * 
+	 * @return javax.swing.JScrollPane
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setViewportView(getArfFileTxt2());
+		}
+		return jScrollPane1;
+	}
+
+	/**
+	 * This method initializes jDialog
+	 * 
+	 * @return javax.swing.JDialog
+	 */
+	private JDialog getJDialog() {
+		if (jDialog == null) {
+			jDialog = new JDialog(getJFrame());
+			jDialog.setSize(new Dimension(132, 75));
+			jDialog.setContentPane(getJContentPane());
+		}
+		return jDialog;
+	}
+
+	/**
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJContentPane() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(new BorderLayout());
+		}
+		return jContentPane;
+	}
+
+	/**
+	 * This method initializes jPanel3
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanel3() {
+		if (jPanel3 == null) {
+			jPanel3 = new JPanel();
+			jPanel3.setLayout(new BoxLayout(getJPanel3(), BoxLayout.Y_AXIS));
+			jPanel3.add(getJPanel4(), null);
+			jPanel3.add(getJPanel5(), null);
+		}
+		return jPanel3;
+	}
+
+	/**
+	 * This method initializes jPanel4
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanel4() {
+		if (jPanel4 == null) {
+			final GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 0;
+			gridBagConstraints2.gridy = 0;
+			jLabel1 = new JLabel();
+			jLabel1.setText("Export results by beach: ");
+			final GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+			gridBagConstraints11.gridx = 0;
+			gridBagConstraints11.gridy = 2;
+			final GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = 0;
+			gridBagConstraints1.gridy = 2;
+			final GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.fill = GridBagConstraints.VERTICAL;
+			gridBagConstraints.gridy = 1;
+			gridBagConstraints.weightx = 1.0;
+			gridBagConstraints.gridx = 0;
+			jPanel4 = new JPanel();
+			jPanel4.setLayout(new GridBagLayout());
+			jPanel4.add(jLabel1, gridBagConstraints2);
+			jPanel4.add(getJTextField2(), gridBagConstraints);
+			jPanel4.add(getJButton4(), gridBagConstraints1);
+
+		}
+		return jPanel4;
+	}
+
+	/**
+	 * This method initializes jPanel5
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJPanel5() {
+		if (jPanel5 == null) {
+			final GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 0;
+			gridBagConstraints5.gridy = 2;
+			final GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.fill = GridBagConstraints.VERTICAL;
+			gridBagConstraints4.gridy = 1;
+			gridBagConstraints4.weightx = 1.0;
+			gridBagConstraints4.gridx = 0;
+			final GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 0;
+			gridBagConstraints3.gridy = 0;
+			jLabel2 = new JLabel();
+			jLabel2.setText("Export results by experiment name:");
+			jPanel5 = new JPanel();
+			jPanel5.setLayout(new GridBagLayout());
+			jPanel5.add(jLabel2, gridBagConstraints3);
+			jPanel5.add(getJTextField1(), gridBagConstraints4);
+			jPanel5.add(getJButton5(), gridBagConstraints5);
+		}
+		return jPanel5;
+	}
+
+	/**
+	 * This method initializes jTextField
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getJTextField2() {
+		if (jTextField == null) {
+			jTextField = new JTextField();
+			jTextField.setText("Name                      .");
+			jTextField.setPreferredSize(new Dimension(200, 20));
+		}
+		return jTextField;
+	}
+
+	/**
+	 * This method initializes jButton4
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButton4() {
+		if (jButton4 == null) {
+			jButton4 = new JButton();
+			jButton4.setText("Export");
+			jButton4.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(final java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO
+					arfFileChooser2.showOpenDialog(null);
+					// if (arfFileChooser2.getSelectedFile() != null) {
+					// arfFileTxt2.append(arfFileChooser2.getSelectedFile()
+					// .getPath()
+					// + "\n");
+					// }
+					final String fileName = arfFileChooser2.getSelectedFile()
+							.getAbsolutePath();
+					final String beach = getJTextField2().getText();
+					try {
+						controller.exportResultsByBeach(beach, fileName);
+					} catch (final WriteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (final IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					final Desktop dt = Desktop.getDesktop();
+					try {
+						dt.open(new File(fileName + ".xls"));
+					} catch (final IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+
+				}
+			});
+		}
+		return jButton4;
+	}
+
+	/**
+	 * This method initializes jTextField1
+	 * 
+	 * @return javax.swing.JTextField
+	 */
+	private JTextField getJTextField1() {
+		if (jTextField1 == null) {
+			jTextField1 = new JTextField();
+			jTextField1.setPreferredSize(new Dimension(200, 20));
+		}
+		return jTextField1;
+	}
+
+	/**
+	 * This method initializes jButton5
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButton5() {
+		if (jButton5 == null) {
+			jButton5 = new JButton();
+			jButton5.setText("Export");
+			jButton5.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(final java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO
+					arfFileChooser2.showOpenDialog(null);
+					// if (arfFileChooser2.getSelectedFile() != null) {
+					// arfFileTxt2.append(arfFileChooser2.getSelectedFile()
+					// .getPath()
+					// + "\n");
+					// }
+					final String fileName = arfFileChooser2.getSelectedFile()
+							.getAbsolutePath();
+					final String experimentName = getJTextField1().getText();
+					try {
+						controller.exportResultsByExperimentName(
+								experimentName, fileName);
+					} catch (final WriteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (final IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					final Desktop dt = Desktop.getDesktop();
+					try {
+						dt.open(new File(fileName + ".xls"));
+					} catch (final IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+
+				}
+			});
+		}
+		return jButton5;
 	}
 
 	/**
@@ -580,6 +884,16 @@ public class Main {
 				application.getJFrame().setVisible(true);
 			}
 		});
+	}
+
+	/**
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
+	@Override
+	public void update(final Observable arg0, final Object arg1) {
+		System.out.println("Gui notified");
+		dataSetTableModel.setData(controller.getDataSets());
+
 	}
 
 }

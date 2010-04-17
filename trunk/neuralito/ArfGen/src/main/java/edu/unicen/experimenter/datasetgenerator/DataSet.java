@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,7 +37,7 @@ public class DataSet {
 	 * The date this dataset was created
 	 */
 	private Date creationDate;
-
+	@Column(length = 5000)
 	private GenerationStrategy generationStrategy;
 	// Serialized
 
@@ -48,6 +49,9 @@ public class DataSet {
 		return numberOfInstances;
 	}
 
+	private String dataSetGroup = "NoName";
+
+	@Column(length = 5000)
 	private String[] attributes;
 
 	private String classAttribute;
@@ -63,12 +67,14 @@ public class DataSet {
 	}
 
 	private String dataSetName;
+	@Column(length = 1000)
 	private String dataSetDescription;
 
-	@CollectionOfElements(fetch = FetchType.EAGER)
+	@CollectionOfElements(fetch = FetchType.LAZY)
 	private List<DataSetInstance> instances;
 	private String generationStrategyName;
 	private String attributes_String;
+	private String strategyOptionString;
 
 	public DataSet() {
 		// default empty constructor ORM purpose.
@@ -96,6 +102,9 @@ public class DataSet {
 		creationDate = new Date();
 		attributes_String = Arrays.toString(attributes);
 		numberOfInstances = instances.size();
+		strategyOptionString = generationStrategy.getStrategyOptions()
+				.toString();
+
 	}
 
 	public Collection<DataSetInstance> getInstances() {
@@ -198,6 +207,28 @@ public class DataSet {
 	 */
 	public String getAttributes_String() {
 		return attributes_String;
+	}
+
+	/**
+	 * @return the strategyOptionString
+	 */
+	public String getStrategyOptionString() {
+		return strategyOptionString;
+	}
+
+	/**
+	 * @return the dataSetGroup
+	 */
+	public String getDataSetGroup() {
+		return dataSetGroup;
+	}
+
+	/**
+	 * @param dataSetGroup
+	 *            the dataSetGroup to set
+	 */
+	public void setDataSetGroup(final String dataSetGroup) {
+		this.dataSetGroup = dataSetGroup;
 	}
 
 }
