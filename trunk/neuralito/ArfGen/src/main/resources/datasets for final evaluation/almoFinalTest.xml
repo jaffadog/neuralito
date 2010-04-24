@@ -62,7 +62,7 @@
       <instanceNumber>2000</instanceNumber>
       <percentajeIncrement>15</percentajeIncrement>
       <beach>almo</beach>
-      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last2DaysStrategy.</strategyName>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last2DaysStrategy</strategyName>
       <strategyOptions>
         <entry>
           <string>grid1Lon</string>
@@ -97,7 +97,7 @@
         </entry>    
         <entry>
           <string>beach</string>
-          <string>dh</string>
+          <string>almo</string>
         </entry>        
       </strategyOptions>      
   </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>

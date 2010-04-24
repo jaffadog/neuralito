@@ -60,7 +60,8 @@ public class InstancesCreator {
 		// original dataset.
 		data = new Instances(Integer.toString(dataSet.getId()), attributes,
 				100000);
-		data.setClassIndex(dataSet.getClassAttributeIndex());
+
+		data.setClass(data.attribute("visualObservation"));
 		return data;
 
 	}

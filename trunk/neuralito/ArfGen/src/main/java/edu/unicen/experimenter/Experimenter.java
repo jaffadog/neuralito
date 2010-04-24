@@ -14,7 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import edu.unicen.experimenter.dao.DataSetDAO;
 import edu.unicen.experimenter.dao.ResultDAO;
 import edu.unicen.experimenter.datasetgenerator.DataSet;
-import edu.unicen.experimenter.datasetgenerator.DataSetGenerator;
+import edu.unicen.experimenter.datasetgenerator.DataSetGeneratorYears;
 import edu.unicen.experimenter.evaluator.Evaluator;
 import edu.unicen.experimenter.export.ExcelWriter;
 import edu.unicen.experimenter.export.ResultTransformer;
@@ -41,7 +41,7 @@ public class Experimenter extends Observable {
 	/**
 	 * The DataSetGenerator used to generate DataSets.
 	 */
-	private final DataSetGenerator dataSetGenerator = new DataSetGenerator();
+	private final DataSetGeneratorYears dataSetGenerator = new DataSetGeneratorYears();
 	/**
 	 * The Evaluator used to evaluate datasets.
 	 */
@@ -144,6 +144,30 @@ public class Experimenter extends Observable {
 
 	}
 
+	public void evaluateTestInstances(final String experimentName,
+			final List<DataSet> selectedDataSets,
+			final List<DataSet> selectedTestDataSets, final File xmlClassifiers)
+			throws Exception {
+		final Thread t = new Thread() {
+			@Override
+			public void run() {
+				try {
+
+					evaluator.testSetEvaluation(experimentName, xmlClassifiers,
+							selectedDataSets, selectedTestDataSets.get(0));
+					setChanged();
+					notifyObservers();
+				} catch (final Exception e) {
+
+					e.printStackTrace();
+				}
+
+			}
+		};
+		t.start();
+
+	}
+
 	/**
 	 * Search all the results for the specified beach and save them into an
 	 * excel file.
@@ -193,12 +217,30 @@ public class Experimenter extends Observable {
 		final Map columnNames = new HashMap();
 		columnNames.put("DataSetId", "Key_Dataset");
 		columnNames.put("Classifier", "Key_Scheme");
+		columnNames.put("Years", "Years");
+		columnNames.put("Number of trainning instances",
+				"Avg_Number_of_training_instances");
 		columnNames.put("Correlation", "Avg_Correlation_coefficient");
 		columnNames.put("CorrelationDev", "Avg_Correlation_coefficientDev");
-		columnNames.put("Number of instances",
-				"Avg_Number_of_training_instances");
+		columnNames.put("MAE", "Avg_Mean_absolute_error");
+		columnNames.put("MAEDev", "Dev_Mean_absolute_error");
 		columnNames.put("Beach", "beach");
+		columnNames.put("GenerationStrategy", "Strategy");
 		columnNames.put("Generation", "GenerationOption");
+		return columnNames;
+	}
+
+	/**
+	 * @return
+	 */
+	private static Map initAverageTestMap() {
+		final Map columnNames = new HashMap();
+
+		columnNames.put("Correlation", "Correlation_coefficient");
+		columnNames.put("Absolute Error", "Mean_absolute_error");
+		// columnNames.put("Correlation", "Avg_Correlation_coefficient");
+
+		// columnNames.put("Correlation", "Avg_Correlation_coefficient");
 
 		return columnNames;
 	}
@@ -211,17 +253,80 @@ public class Experimenter extends Observable {
 	 */
 	public void generateExcel(final String experimentName, final String fileName)
 			throws WriteException, IOException {
-		final List<Result> resultsByExperiment = resultDAO
+		List<Result> resultsByExperiment = resultDAO
 				.getResultsByExperiment(experimentName);
-		final Map columnNamesToAverage = initAverageMap();
-		final List<Result> averageResults = ResultTransformer.averageResults(
-				resultsByExperiment, columnNamesToAverage);
+		final Map excelColumnNames;
+		if (isCrossValidationExperiment(resultsByExperiment)) {
+			final Map columnNamesToAverage = initAverageMap();
+			resultsByExperiment = ResultTransformer.averageResults(
+					resultsByExperiment, columnNamesToAverage);
+			excelColumnNames = initMap();
+		} else {
+			final Map columnToAverage = initAverageTestMap();
+			resultsByExperiment = ResultTransformer
+					.averageSameTrainningSizeResults(resultsByExperiment,
+							columnToAverage);
+			excelColumnNames = initMapTestDataSet();
+		}
 		final List<Result> addExtraColumns = ResultTransformer
-				.addExtraColumns(averageResults);
-		final Map columnNames = initMap();
-		ExcelWriter.generateExcel(fileName + ".xls", addExtraColumns,
-				columnNames);
+				.addExtraColumns(resultsByExperiment);
 
+		ExcelWriter.generateExcel(fileName + ".xls", addExtraColumns,
+				excelColumnNames);
+
+	}
+
+	/**
+	 * @return
+	 */
+	private Map initMapTestDataSet() {
+		final Map columnNames = new HashMap();
+		columnNames.put("DataSetId", "Key_Dataset");
+		columnNames.put("Classifier", "Key_Scheme");
+		columnNames.put("Years", "Years");
+		columnNames.put("Number of trainning instances",
+				"Number_of_training_instances");
+		columnNames.put("Number of testing instances",
+				"Number_of_testing_instances");
+		columnNames.put("N Correlation", "Correlation_coefficient");
+		columnNames.put("N CorrelationDev", "Correlation_coefficientDev");
+		// columnNames.put("CorrelationDev", "Avg_Correlation_coefficientDev");
+		columnNames.put("MAE", "Mean_absolute_error");
+		columnNames.put("MAEDev", "Mean_absolute_errorDev");
+		// columnNames.put("MAEDev", "Dev_Mean_absolute_error");
+		columnNames.put("Beach", "beach");
+		columnNames.put("GenerationStrategy", "Strategy");
+		columnNames.put("Generation", "GenerationOption");
+		return columnNames;
+	}
+
+	/**
+	 * @param resultsByExperiment
+	 * @return
+	 */
+	private boolean isCrossValidationExperiment(
+			final List<Result> resultsByExperiment) {
+		final Result result = resultsByExperiment.get(0);
+		if (result.getResult("Num_Fold") == null)
+			return false;
+		else
+			return true;
+	}
+
+	/**
+	 * @return
+	 * 
+	 */
+	public DataSetDAO getDataSetDAO() {
+		// TODO Auto-generated method stub
+		return dataSetDAO;
+	}
+
+	/**
+	 * @return the resultDAO
+	 */
+	public ResultDAO getResultDAO() {
+		return resultDAO;
 	}
 
 }

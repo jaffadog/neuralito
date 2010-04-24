@@ -4,6 +4,7 @@
 package edu.unicen.experimenter.export;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +38,19 @@ public class ResultTransformer {
 
 		final List<Result> averagedResults = new ArrayList<Result>();
 		final List<Set<Result>> crossvalidationGroups = getCrossValidationsGroups(results);
+		for (final Set<Result> group : crossvalidationGroups) {
+			final Result result = averageGroup(group, columnNamesToAverage);
+			averagedResults.add(result);
+		}
+		return averagedResults;
+
+	}
+
+	public static List<Result> averageSameTrainningSizeResults(
+			final List<Result> results, final Map columnNamesToAverage) {
+
+		final List<Result> averagedResults = new ArrayList<Result>();
+		final List<Set<Result>> crossvalidationGroups = getGroupsbySameTrainningSize(results);
 		for (final Set<Result> group : crossvalidationGroups) {
 			final Result result = averageGroup(group, columnNamesToAverage);
 			averagedResults.add(result);
@@ -95,6 +109,38 @@ public class ResultTransformer {
 		return newResult;
 	}
 
+	private static List<Set<Result>> getGroupsbySameTrainningSize(
+			final List<Result> results) {
+		final HashSet<Result> added = new HashSet<Result>();
+		final List<Set<Result>> groups = new ArrayList<Set<Result>>();
+		for (final Result result : results) {
+			final String instances1 = result
+					.getResult("Number_of_training_instances");
+			// final String scheme = result.getResult("Key_Scheme");
+			// final String dataSet = result.getResult("Key_Dataset");
+			// final String options = result.getResult("Key_Scheme_options");
+			final Set group = new HashSet<Result>();
+			for (final Result result2 : results) {
+				final String instances2 = result2
+						.getResult("Number_of_training_instances");
+
+				final int difference = (int) Math.abs(Double
+						.parseDouble(instances1)
+						- Double.parseDouble(instances2));
+				if (!added.contains(result2) && difference < 4) {
+					group.add(result2);
+					added.add(result2);
+				}
+
+			}
+			if (group.size() > 0) {
+				groups.add(group);
+			}
+
+		}
+		return groups;
+	}
+
 	/**
 	 * @param results
 	 * @return
@@ -135,8 +181,12 @@ public class ResultTransformer {
 		for (final Result result : results) {
 			result.getData().put("optimized", isOptimized(result));
 			result.getData().put("beach", result.getDataSet().getBeach());
+			result.getData().put("Strategy",
+					result.getDataSet().getGenerationStrategy().getName());
 			result.getData().put("GenerationOption",
 					result.getDataSet().getStrategyOptionString());
+			result.getData().put("Years",
+					Arrays.toString(result.getDataSet().getYears()));
 		}
 		return results;
 	}

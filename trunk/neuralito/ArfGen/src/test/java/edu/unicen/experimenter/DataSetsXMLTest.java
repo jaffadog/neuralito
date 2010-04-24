@@ -35,6 +35,11 @@ public class DataSetsXMLTest {
 		dsConfig.setPercentajeIncrement(15);
 		dsConfig.setInstanceNumber(100);
 		dsConfig.setStrategyName(OneGridPointStrategy.class.getName());
+		dsConfig.setByYears(true);
+		dsConfig.setNumberOfMonths(12);
+		dsConfig.setYears(new String[] { "1997", "1998" });
+		dsConfig.setRepetitions(2);
+		dsConfig.setRepetitive(true);
 		final Map<String, Serializable> strategyOptions = new HashMap<String, Serializable>();
 		strategyOptions
 				.put(

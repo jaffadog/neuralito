@@ -19,6 +19,11 @@ public class DataSetConfiguration {
 	String strategyName;
 	private int percentajeIncrement;
 	private String dataSetName;
+	private boolean byYears;
+	private String[] years;
+	private int numberOfMonths;
+	private boolean repetitive;
+	private int repetitions;
 
 	/**
 	 * @return the incremental
@@ -125,6 +130,85 @@ public class DataSetConfiguration {
 	 */
 	public void setDataSetName(final String dataSetName) {
 		this.dataSetName = dataSetName;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isByYears() {
+		return byYears;
+
+	}
+
+	/**
+	 * @return
+	 */
+	public String[] getYears() {
+
+		return years;
+	}
+
+	/**
+	 * @param byYears
+	 *            the byYears to set
+	 */
+	public void setByYears(final boolean byYears) {
+		this.byYears = byYears;
+	}
+
+	/**
+	 * @param years
+	 *            the years to set
+	 */
+	public void setYears(final String[] years) {
+		this.years = years;
+	}
+
+	/**
+	 * @return
+	 */
+	public int getNumberOfMonths() {
+		// TODO Auto-generated method stub
+		return numberOfMonths;
+	}
+
+	/**
+	 * @param numberOfMonths
+	 *            the numberOfMonths to set
+	 */
+	public void setNumberOfMonths(final int numberOfMonths) {
+		this.numberOfMonths = numberOfMonths;
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isRepetitive() {
+		// TODO Auto-generated method stub
+		return repetitive;
+	}
+
+	/**
+	 * @param repetitive
+	 *            the repetitive to set
+	 */
+	public void setRepetitive(final boolean repetitive) {
+		this.repetitive = repetitive;
+	}
+
+	/**
+	 * @return the repetitions
+	 */
+	public int getRepetitions() {
+		return repetitions;
+	}
+
+	/**
+	 * @param repetitions
+	 *            the repetitions to set
+	 */
+	public void setRepetitions(final int repetitions) {
+		this.repetitions = repetitions;
 	}
 
 }

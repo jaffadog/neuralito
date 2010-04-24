@@ -8,9 +8,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Vector;
 
 import com.thoughtworks.xstream.XStream;
@@ -27,7 +29,7 @@ import edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguratio
  * generation strategy this class generates Datasets.
  * 
  */
-public class DataSetGenerator {
+public class DataSetGeneratorYears {
 
 	private final int percentajeForParametrization = 0;
 
@@ -40,7 +42,7 @@ public class DataSetGenerator {
 	/**
 	 * Default constructor
 	 */
-	public DataSetGenerator() {
+	public DataSetGeneratorYears() {
 		initVisualObservations();
 	}
 
@@ -67,19 +69,80 @@ public class DataSetGenerator {
 		for (final DataSetConfiguration dataSetConfiguration : dataSetsConfiguration) {
 			final String dataSetName = dataSetConfiguration.getDataSetName();
 			final int instanceNumber = dataSetConfiguration.getInstanceNumber();
+			final String[] years = dataSetConfiguration.getYears();
 			final String strategyName = dataSetConfiguration.getStrategyName();
 			final Map<String, Serializable> strategyOptions = dataSetConfiguration
 					.getStrategyOptions();
 			final Integer percentajeIncrement = dataSetConfiguration
 					.getPercentajeIncrement();
-			// Determines wether single dataset or incremental generation is
-			// used.
+			// Generation by years of visual observations
+			if (dataSetConfiguration.isByYears()) {
+				final List<VisualObservation> observations = getObservationsFor(years);
+				if (dataSetConfiguration.isIncremental()) {
+					System.out.println("Generating datasets  ");
+					final int numberRepetitions = dataSetConfiguration
+							.getRepetitions();
+					for (int dataSetSize = 5; dataSetSize <= observations
+							.size(); dataSetSize = (int) (dataSetSize * 1.35)) {
+						System.out.println("Generating datasets of size: "
+								+ dataSetSize);
+						// Generates X datasets of the same size...
+						for (int j = 0; j < numberRepetitions; j++) {
+							final List observationSublist = getRandomSample(
+									observations, dataSetSize);
+							final DataSet generatedDataSet = generateDataSet(
+									observationSublist, strategyName,
+									strategyOptions, dataSetGroupName);
+							generatedDataSet.setYears(years);
+							dataSets.add(generatedDataSet);
+						}
+						System.out.println(numberRepetitions
+								+ " Datasets of size: " + dataSetSize
+								+ " have been generated.");
+					}
+				} else {
+					if (dataSetConfiguration.isRepetitive()) {
+						final int numberRepetitions = dataSetConfiguration
+								.getRepetitions();
+						final int numberOfInstances = dataSetConfiguration
+								.getInstanceNumber();
+						System.out
+								.println("Generating by years incremental for "
+										+ numberRepetitions
+										+ " repetitions for datasets of size: "
+										+ numberOfInstances + " .");
+						// Generate several datasets with the same number of
+						// instances but with randomly samples.
+						for (int i = 0; i < numberRepetitions; i++) {
+							final List observationSublist = getRandomSample(
+									observations, numberOfInstances);
+							final DataSet generatedDataSet = generateDataSet(
+									observationSublist, strategyName,
+									strategyOptions, dataSetGroupName);
+							generatedDataSet.setYears(years);
+							dataSets.add(generatedDataSet);
+						}
+					} else {
+						System.out
+								.println("Generating by years not incremental.");
+						final DataSet generatedDataSet = generateDataSet(
+								observations, strategyName, strategyOptions,
+								dataSetGroupName);
+						generatedDataSet.setYears(years);
+						dataSets.add(generatedDataSet);
+					}
+				}
+			} else
+			// Generation by number of instances not incremental
 			if (!dataSetConfiguration.isIncremental()) {
-				final DataSet generatedDataSet = generateDataSet(
-						instanceNumber, strategyName, strategyOptions,
-						dataSetGroupName);
+				System.out
+						.println("Generating by # of instances, not incremental");
+				final List<VisualObservation> observations = getObservationsFor(instanceNumber);
+				final DataSet generatedDataSet = generateDataSet(observations,
+						strategyName, strategyOptions, dataSetGroupName);
 				dataSets.add(generatedDataSet);
-			} else {
+			} else { // Generation by number of instances incremental
+				System.out.println("Generating by # of instances, incremental");
 				final List<DataSet> generatedIncrementalDataSets = generateIncrementalDataSets(
 						dataSetName, instanceNumber, percentajeIncrement,
 						strategyName, strategyOptions, dataSetGroupName);
@@ -95,6 +158,31 @@ public class DataSetGenerator {
 	}
 
 	/**
+	 * @param instanceNumber
+	 * @return
+	 */
+	private List<VisualObservation> getObservationsFor(final int instanceNumber) {
+		return observationForEvaluation.subList(0, instanceNumber);
+	}
+
+	/**
+	 * Obtains all the visual observations for the given year.
+	 * 
+	 * @param years
+	 * @return
+	 */
+	private List<VisualObservation> getObservationsFor(final String[] years) {
+		System.out.println("Reading visual observations for years: "
+				+ Arrays.toString(years));
+		final VisualObservationLoader voLoader = new VisualObservationLoader();
+		final Vector<VisualObservation> loadVisualObservations = voLoader
+				.loadVisualObservations(years);
+		System.out.println("Readed " + loadVisualObservations.size()
+				+ " obsevations");
+		return loadVisualObservations;
+	}
+
+	/**
 	 * Generates a data set.
 	 * 
 	 * @param instances
@@ -107,18 +195,18 @@ public class DataSetGenerator {
 	 * @return
 	 * @throws Exception
 	 */
-	private DataSet generateDataSet(final int instances,
+	private DataSet generateDataSet(final List<VisualObservation> observations,
 			final String strategyName,
 			final Map<String, Serializable> strategyOptions,
 			final String dataSetGroup) throws Exception {
 		System.out.println("Generating dataSet: " + strategyName + "with "
-				+ instances + " instances.");
+				+ observations.size() + " visual observations.");
 		// Obtain the strategy to use
 		final GenerationStrategy generationStrategy = getStrategy(strategyName,
 				strategyOptions);
 		final Hashtable<String, Object> data = new Hashtable<String, Object>();
 		// Set the data to use into the generation
-		data.put("obsData", observationForEvaluation.subList(0, instances));
+		data.put("obsData", observations);
 		data.put("ww3Data", waveWatchData);
 
 		// generate
@@ -158,12 +246,14 @@ public class DataSetGenerator {
 		// Generate datasets with incremental number of instances
 		for (int instances = increment; instances < totalInstances; instances = instances
 				+ increment) {
-			final DataSet dataSet = generateDataSet(instances, strategyName,
+			final List<VisualObservation> observations = getObservationsFor(instances);
+			final DataSet dataSet = generateDataSet(observations, strategyName,
 					strategyOptions, dataSetGroup);
 			dataSets.add(dataSet);
 		}
 		// Generate one more data set with the total number of instances
-		final DataSet dataSet = generateDataSet(totalInstances, strategyName,
+		final List<VisualObservation> observations = getObservationsFor(totalInstances);
+		final DataSet dataSet = generateDataSet(observations, strategyName,
 				strategyOptions, dataSetGroup);
 		dataSets.add(dataSet);
 
@@ -249,5 +339,22 @@ public class DataSetGenerator {
 		final DataSetGeneratorConfiguration fromXML = (DataSetGeneratorConfiguration) xstream
 				.fromXML(new FileInputStream(xmlFile));
 		return fromXML;
+	}
+
+	private List<VisualObservation> getRandomSample(
+			final List<VisualObservation> visualObservation,
+			final int sizeOfSample) {
+
+		final int k = visualObservation.size() / sizeOfSample;
+
+		final Random r = new Random();
+
+		final List<VisualObservation> randomSample = new ArrayList<VisualObservation>();
+
+		for (int i = r.nextInt(k); i < visualObservation.size(); i += k) {
+			randomSample.add(visualObservation.get(i));
+		}
+		return randomSample;
+
 	}
 }
