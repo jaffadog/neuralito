@@ -4,10 +4,14 @@
 package edu.unicen.experimenter;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.unicen.experimenter.datasetgenerator.DataSet;
-import edu.unicen.experimenter.datasetgenerator.DataSetGenerator;
+import edu.unicen.experimenter.datasetgenerator.DataSetGeneratorYears;
+import edu.unicen.experimenter.datasetgenerator.DataSetInstance;
+import edu.unicen.experimenter.util.Util;
 
 /**
  * @author esteban
@@ -18,11 +22,24 @@ public class DataSetGeneratorTest {
 
 	public static void main(final String[] args) throws Exception {
 		// The dataset generator
-		final DataSetGenerator t = new DataSetGenerator();
+		final DataSetGeneratorYears t = new DataSetGeneratorYears();
 		// XML with dataset generation configuration
 		final File xml = new File("src/main/resources/generation.xml");
 		// Generate datasets
 		final List<DataSet> generateFromXML = t.generateFromXML(xml);
+		for (final DataSet dataSet : generateFromXML) {
+			final Collection<DataSetInstance> instances = dataSet
+					.getInstances();
+			for (final Iterator iterator = instances.iterator(); iterator
+					.hasNext();) {
+				final DataSetInstance dataSetInstance = (DataSetInstance) iterator
+						.next();
+				System.out.println(Util.getDateFormatter().format(
+						dataSetInstance.getDate().getTime()));
+			}
+			// Util.printCollection(col)
+
+		}
 		// Info
 		System.out.println(generateFromXML.size()
 				+ " datasets have been generated.");

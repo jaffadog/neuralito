@@ -30,6 +30,7 @@ public class ResultDAO {
 
 	DataSource dataSource;
 	JdbcTemplate template;
+	private final String testSetResultsTable = "results2";
 
 	public boolean experimentExists(final String name) {
 		final String query = "select * from " + averagedResultsTable
@@ -148,12 +149,21 @@ public class ResultDAO {
 	 * @return
 	 */
 	public List<Result> getResultsByExperiment(final String string) {
-		final String query = "select * from " + averagedResultsTable
+		String query = "select * from " + averagedResultsTable
 				+ " where experimentName ='" + string + "'";
 		template = new JdbcTemplate(dataSource);
-		final List sqlRowResults = template.queryForList(query);
+		List sqlRowResults = template.queryForList(query);
 
-		final List<Result> results = createResults(sqlRowResults);
+		List<Result> results = createResults(sqlRowResults);
+		// Search in the other table
+		if (results.size() == 0) {
+			query = "select * from " + testSetResultsTable
+					+ " where experimentName ='" + string + "'";
+			template = new JdbcTemplate(dataSource);
+			sqlRowResults = template.queryForList(query);
+
+			results = createResults(sqlRowResults);
+		}
 		return results;
 	}
 }

@@ -30,13 +30,14 @@ public class ExperimentTest {
 		classifier.setClassifierName(LinearRegression.class.getName());
 		// Add it to the list of classifiers to use
 		final ClassifiersConfiguration classifiers = new ClassifiersConfiguration();
-
 		classifiers.getClassifiers().add(classifier);
-
+		// get
 		final Controller controller = new Controller();
 		final List<DataSet> dataSets = controller.getDataSets().subList(0, 1);
 		final Evaluator demo = new Evaluator();
-		demo.evaluate("MyTestExperiment", classifiers, dataSets);
+		demo.setResults(Experimenter.getInstance().getResultDAO());
+		demo.testSetEvaluation("experimentName", classifiers, dataSets,
+				dataSets.get(0));
 	}
 
 }

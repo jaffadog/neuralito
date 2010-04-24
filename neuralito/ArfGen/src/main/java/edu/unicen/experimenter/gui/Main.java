@@ -97,6 +97,8 @@ public class Main implements Observer {
 	private JLabel jLabel2 = null;
 	private JTextField jTextField1 = null;
 	private JButton jButton5 = null;
+	private JButton jButton6 = null;
+	private JButton jButton7 = null;
 
 	public Main() {
 		super();
@@ -433,6 +435,7 @@ public class Main implements Observer {
 		if (jTable == null) {
 			jTable = new JTable();
 			dataSetTableModel.setData(controller.getDataSets());
+			jTable.setAutoCreateRowSorter(true);
 			jTable.setModel(dataSetTableModel);
 
 		}
@@ -452,9 +455,11 @@ public class Main implements Observer {
 
 			jPanel2.add(getJTextFieldName());
 			jPanel2.add(getJButtonSelectDS(), null);
+			jPanel2.add(getJButton6(), null);
 			jPanel2.add(getJButton1(), null);
 			jPanel2.add(getJScrollPane1(), null);
 			jPanel2.add(getJTextField(), null);
+			jPanel2.add(getJButton7(), null);
 			jPanel2.add(getJButton(), null);
 		}
 		return jPanel2;
@@ -473,7 +478,7 @@ public class Main implements Observer {
 								final java.awt.event.ActionEvent e) {
 
 							final String dsName = getJTextFieldName().getText();
-							dataSetTableModel.selectByName(dsName);
+							dataSetTableModel.selectTrainSetsByName(dsName);
 
 						}
 					});
@@ -501,13 +506,13 @@ public class Main implements Observer {
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setText("Start Experiment");
+			jButton.setText("Start CV Evaluation");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(final java.awt.event.ActionEvent e) {
 					// System.out.println("There are "
 					// + dataSetTableModel.getSelectedDataSets().size()
 					// + "selected data sets");
-					if (dataSetTableModel.getSelectedDataSets().size() == 0) {
+					if (dataSetTableModel.getSelectedTrainDataSets().size() == 0) {
 						JOptionPane
 								.showMessageDialog(null,
 										"Eggs are not supposed to be green. So please select a dataset.");
@@ -518,8 +523,8 @@ public class Main implements Observer {
 							final String experimentName = getJTextField()
 									.getText();
 							controller.evaluate(dataSetTableModel
-									.getSelectedDataSets(), xmlClassifiers,
-									experimentName);
+									.getSelectedTrainDataSets(),
+									xmlClassifiers, experimentName);
 						} catch (final Exception e1) {
 							e1.printStackTrace();
 						}
@@ -872,6 +877,69 @@ public class Main implements Observer {
 			});
 		}
 		return jButton5;
+	}
+
+	/**
+	 * This method initializes jButton6
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButton6() {
+		if (jButton6 == null) {
+			jButton6 = new JButton();
+			jButton6.setText("Select Test Dataset by name");
+			jButton6.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(final java.awt.event.ActionEvent e) {
+					final String dsName = getJTextFieldName().getText();
+					dataSetTableModel.selectTestSetsByName(dsName);
+
+				}
+			});
+		}
+		return jButton6;
+	}
+
+	/**
+	 * This method initializes jButton7
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButton7() {
+		if (jButton7 == null) {
+			jButton7 = new JButton();
+			jButton7.setText("Start HoldOut Evaluation");
+			jButton7.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(final java.awt.event.ActionEvent e) {
+					if (dataSetTableModel.getSelectedTestDataSets().size() == 0
+							|| dataSetTableModel.getSelectedTrainDataSets()
+									.size() == 0) {
+						JOptionPane
+								.showMessageDialog(null,
+										"Eggs are not supposed to be green. So please select a  test dataset.");
+					} else {
+						final File xmlClassifiers = arfFileChooser2
+								.getSelectedFile();
+						try {
+							final String experimentName = getJTextField()
+									.getText();
+							controller.experimenter
+									.evaluateTestInstances(
+											experimentName,
+											dataSetTableModel
+													.getSelectedTrainDataSets(),
+											dataSetTableModel
+													.getSelectedTestDataSets(),
+											xmlClassifiers);
+						} catch (final Exception e1) {
+							e1.printStackTrace();
+						}
+						// Event stub
+						// actionPerformed()
+					}
+				}
+			});
+		}
+		return jButton7;
 	}
 
 	/**

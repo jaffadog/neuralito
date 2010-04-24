@@ -75,6 +75,7 @@ public class DataSet {
 	private String generationStrategyName;
 	private String attributes_String;
 	private String strategyOptionString;
+	private String[] years;
 
 	public DataSet() {
 		// default empty constructor ORM purpose.
@@ -229,6 +230,21 @@ public class DataSet {
 	 */
 	public void setDataSetGroup(final String dataSetGroup) {
 		this.dataSetGroup = dataSetGroup;
+	}
+
+	/**
+	 * @param years
+	 */
+	public void setYears(final String[] years) {
+		this.years = years;
+
+	}
+
+	/**
+	 * @return the years
+	 */
+	public String[] getYears() {
+		return years;
 	}
 
 }

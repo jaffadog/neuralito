@@ -22,8 +22,7 @@ public class VisualObservationLoader {
 		return loadVisualObservations(availableYears);
 	}
 
-	private Vector<VisualObservation> loadVisualObservations(
-			final String[] years) {
+	public Vector<VisualObservation> loadVisualObservations(final String[] years) {
 		final Vector<VisualObservation> obsData = new Vector<VisualObservation>();
 		for (int f = 0; f < years.length; f++) {
 			final String fileName = ".//files//observations//oahu" + years[f]

@@ -62,7 +62,7 @@
       <instanceNumber>2000</instanceNumber>
       <percentajeIncrement>15</percentajeIncrement>
       <beach>dh</beach>
-      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last2DaysStrategy.</strategyName>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last2DaysStrategy</strategyName>
       <strategyOptions>
         <entry>
           <string>grid1Lon</string>
