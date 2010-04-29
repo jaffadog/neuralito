@@ -37,7 +37,13 @@ public class ResultDAO {
 				+ " where experimentName ='" + name + "'";
 		template = new JdbcTemplate(dataSource);
 		final List sqlRowResults = template.queryForList(query);
-		if (sqlRowResults.size() < 1)
+
+		final String query2 = "select * from " + nonAveragedResultsTable
+				+ " where experimentName ='" + name + "'";
+		template = new JdbcTemplate(dataSource);
+		final List sqlRowResults2 = template.queryForList(query2);
+
+		if (sqlRowResults.size() < 1 && sqlRowResults2.size() < 1)
 			return false;
 		else
 			return true;

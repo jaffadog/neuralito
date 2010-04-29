@@ -122,4 +122,20 @@ public class DataSetDAOHibernateImpl extends HibernateDaoSupport implements
 		// TODO Auto-generated method stub
 		return getSessionFactory();
 	}
+
+	/**
+	 * @see edu.unicen.experimenter.dao.DataSetDAO#existsDataSetGroup(java.lang.String)
+	 */
+	@Override
+	public boolean existsDataSetGroup(final String dataSetGroupName) {
+		final DetachedCriteria crit = DetachedCriteria.forClass(DataSet.class)
+				.add(Restrictions.eq("dataSetGroup", dataSetGroupName));
+		crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		final List findByCriteria = getHibernateTemplate().findByCriteria(crit);
+		if (findByCriteria != null && findByCriteria.size() > 0)
+			return true;
+		else
+			return false;
+	}
+
 }

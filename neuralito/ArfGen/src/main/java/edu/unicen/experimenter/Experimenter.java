@@ -1,6 +1,7 @@
 package edu.unicen.experimenter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +12,13 @@ import jxl.write.WriteException;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.thoughtworks.xstream.XStream;
+
 import edu.unicen.experimenter.dao.DataSetDAO;
 import edu.unicen.experimenter.dao.ResultDAO;
 import edu.unicen.experimenter.datasetgenerator.DataSet;
 import edu.unicen.experimenter.datasetgenerator.DataSetGeneratorYears;
+import edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration;
 import edu.unicen.experimenter.evaluator.Evaluator;
 import edu.unicen.experimenter.export.ExcelWriter;
 import edu.unicen.experimenter.export.ResultTransformer;
@@ -94,12 +98,24 @@ public class Experimenter extends Observable {
 			public void run() {
 				List<DataSet> generateFromXML;
 				try {
-					generateFromXML = dataSetGenerator.generateFromXML(xml);
-					for (final DataSet dataSet : generateFromXML) {
-						dataSetDAO.add(dataSet);
+					// Read configuration object from XML
+					final XStream xstream = new XStream();
+					xstream.alias("DataSet", DataSet.class);
+					final DataSetGeneratorConfiguration configuration = (DataSetGeneratorConfiguration) xstream
+							.fromXML(new FileInputStream(xml));
+					final String dataSetGroupName = configuration
+							.getDataSetGroupName();
+					if (!dataSetDAO.existsDataSetGroup(dataSetGroupName)) {
+						generateFromXML = dataSetGenerator.generateFromXML(xml);
+						for (final DataSet dataSet : generateFromXML) {
+							dataSetDAO.add(dataSet);
+						}
+						setChanged();
+						notifyObservers(generateFromXML);
+					} else {
+						System.out
+								.println("DataSet Group name already exists.");
 					}
-					setChanged();
-					notifyObservers(generateFromXML);
 				} catch (final Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

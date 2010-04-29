@@ -1,0 +1,132 @@
+<!--
+
+
+-->
+<edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
+ <dataSetGroupName>2003TestSet</dataSetGroupName>
+  <dataSets>
+<!--  NORTHSHORE-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <byYears>true</byYears>
+      <years>
+        <string>2003</string>
+      </years>
+      <beach>nshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>nshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+   
+<!--  Almo-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <byYears>true</byYears>
+      <years>
+        <string>2003</string>
+      </years>
+      <beach>almo</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>almo</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    <!--  DH-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <byYears>true</byYears>
+      <years>
+        <string>2003</string>
+      </years>
+      <beach>dh</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>dh</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    <!--  Windward-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <byYears>true</byYears>
+      <years>
+        <string>2003</string>
+      </years>
+      <beach>windward</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-157.5</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>22.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>windward</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    <!--  wshore-->
+    <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+      <incremental>false</incremental>
+      <byYears>true</byYears>
+      <years>
+        <string>2003</string>
+      </years>
+      <beach>wshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
+      <strategyOptions>
+        <entry>
+          <string>grid1Lon</string>
+          <double>-158.75</double>
+        </entry>
+        <entry>
+          <string>grid1Lat</string>
+          <double>21.0</double>
+        </entry>
+        <entry>
+          <string>beach</string>
+          <string>wshore</string>
+        </entry>        
+      </strategyOptions>      
+    </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>    
+
+  </dataSets>
+
+</edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>

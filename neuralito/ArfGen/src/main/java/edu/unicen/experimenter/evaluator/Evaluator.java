@@ -124,6 +124,7 @@ public class Evaluator {
 	public void testSetEvaluation(final String experimentName,
 			final File classifiersConfXml, final List<DataSet> dataSets,
 			final DataSet testSet) throws Exception {
+		validateExperimentName(experimentName);
 		// Read Classifiers configuration object from xml.
 		final XStream xstream = new XStream();
 		final ClassifiersConfiguration classifiersConf = (ClassifiersConfiguration) xstream

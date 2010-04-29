@@ -58,4 +58,10 @@ public interface DataSetDAO {
 	public Collection<DataSetInstance> getInstances(int dataSetId);
 
 	public SessionFactory getSession2();
+
+	/**
+	 * @param dataSetGroupName
+	 * @return
+	 */
+	public boolean existsDataSetGroup(String dataSetGroupName);
 }
