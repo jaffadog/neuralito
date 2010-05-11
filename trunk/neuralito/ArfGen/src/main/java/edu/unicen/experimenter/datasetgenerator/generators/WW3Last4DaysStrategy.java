@@ -176,19 +176,22 @@ public class WW3Last4DaysStrategy implements GenerationStrategy {
 				data.put("ww3Direct3DayPrev", ww3Data3DayPrev.getDirection());
 				data.put("visualObservation", obsData.getWaveHeight(beach));
 
-				// Generate attributes array with the data hash keys, just first
-				// time
 				if (strategyAttributes.length == 0) {
 					final Set<String> attributes = data.keySet();
 					strategyAttributes = new String[attributes.size()];
 					final Iterator<String> it = attributes.iterator();
 					int j = 0;
 					while (it.hasNext()) {
-						strategyAttributes[j] = it.next();
-						j++;
+						final String attribute = it.next();
+						if (!attribute.equals("visualObservation")) {
+							strategyAttributes[j] = attribute;
+							j++;
+						}
 					}
+					// Visual observation is the class attribute and should be
+					// the last in the list.
+					strategyAttributes[j] = "visualObservation";
 				}
-
 				final DataSetInstance arfData = new DataSetInstance(data);
 				arfData.setDate(ww3Data.getDate());
 				arfDataSet.add(arfData);

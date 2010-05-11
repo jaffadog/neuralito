@@ -6,9 +6,9 @@ For each strategy datasets are generated incrementally.
 
 -->
 <edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
- <dataSetGroupName>NshoreInstancesModels</dataSetGroupName>
+ <dataSetGroupName>wshoreInstancesModelsGood</dataSetGroupName>
   <dataSets>
-<!--  NORTHSHORE-->
+<!--  WESTSHORE-->
        
     <edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
       <incremental>false</incremental>
@@ -17,7 +17,7 @@ For each strategy datasets are generated incrementally.
         <string>2003</string>
         <string>2004</string>
       </years>
-      <beach>nshore</beach>
+      <beach>wshore</beach>
       <strategyName>edu.unicen.experimenter.datasetgenerator.generators.OneGridPointStrategy</strategyName>
       <strategyOptions>
         <entry>
@@ -26,11 +26,11 @@ For each strategy datasets are generated incrementally.
         </entry>
         <entry>
           <string>grid1Lat</string>
-          <double>22.0</double>
+          <double>21.0</double>
         </entry>
         <entry>
           <string>beach</string>
-          <string>nshore</string>
+          <string>wshore</string>
         </entry>        
       </strategyOptions>      
     </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
@@ -42,7 +42,7 @@ For each strategy datasets are generated incrementally.
         <string>2003</string>
         <string>2004</string>
       </years>
-      <beach>nshore</beach>
+      <beach>wshore</beach>
       <strategyName>edu.unicen.experimenter.datasetgenerator.generators.TwoGridPointStrategy</strategyName>
       <strategyOptions>
         <entry>
@@ -51,7 +51,7 @@ For each strategy datasets are generated incrementally.
         </entry>
         <entry>
           <string>grid1Lat</string>
-          <double>22.0</double>
+          <double>21.0</double>
         </entry>
         
         <entry>
@@ -60,14 +60,11 @@ For each strategy datasets are generated incrementally.
         </entry>
         <entry>
           <string>grid2Lat</string>
-          <double>21.0</double>
+          <double>22.0</double>
         </entry>
-        
-        
-        
         <entry>
           <string>beach</string>
-          <string>nshore</string>
+          <string>wshore</string>
         </entry>        
       </strategyOptions>      
     </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
@@ -79,7 +76,7 @@ For each strategy datasets are generated incrementally.
         <string>2003</string>
         <string>2004</string>
       </years>
-      <beach>nshore</beach>
+      <beach>wshore</beach>
       <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last2DaysStrategy</strategyName>
       <strategyOptions>
         <entry>
@@ -88,11 +85,11 @@ For each strategy datasets are generated incrementally.
         </entry>
         <entry>
           <string>grid1Lat</string>
-          <double>22.0</double>
+          <double>21.0</double>
         </entry>
         <entry>
           <string>beach</string>
-          <string>nshore</string>
+          <string>wshore</string>
         </entry>        
       </strategyOptions>      
     </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
@@ -104,8 +101,8 @@ For each strategy datasets are generated incrementally.
         <string>2003</string>
         <string>2004</string>
       </years>
-      <beach>nshore</beach>
-       <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last3DaysStrategy</strategyName>
+      <beach>wshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last3DaysStrategy</strategyName>
       <strategyOptions>
         <entry>
           <string>grid1Lon</string>
@@ -113,11 +110,11 @@ For each strategy datasets are generated incrementally.
         </entry>
         <entry>
           <string>grid1Lat</string>
-          <double>22.0</double>
+          <double>21.0</double>
         </entry>
         <entry>
           <string>beach</string>
-          <string>nshore</string>
+          <string>wshore</string>
         </entry>        
       </strategyOptions>      
     </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
@@ -129,8 +126,8 @@ For each strategy datasets are generated incrementally.
         <string>2003</string>
         <string>2004</string>
       </years>
-      <beach>nshore</beach>
-       <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last4DaysStrategy</strategyName>
+      <beach>wshore</beach>
+      <strategyName>edu.unicen.experimenter.datasetgenerator.generators.WW3Last4DaysStrategy</strategyName>
       <strategyOptions>
         <entry>
           <string>grid1Lon</string>
@@ -138,14 +135,15 @@ For each strategy datasets are generated incrementally.
         </entry>
         <entry>
           <string>grid1Lat</string>
-          <double>22.0</double>
+          <double>21.0</double>
         </entry>
         <entry>
           <string>beach</string>
-          <string>nshore</string>
+          <string>wshore</string>
         </entry>        
       </strategyOptions>      
     </edu.unicen.experimenter.datasetgenerator.xml.DataSetConfiguration>
+    
     
   </dataSets>
     

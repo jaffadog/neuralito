@@ -259,9 +259,11 @@ public class Evaluator {
 					.getClassifierName();
 			final String optionsString = classifierConfiguration.getOptions();
 			System.out.println(optionsString);
-
-			final String[] options = Utils.splitOptions(optionsString);
-			System.out.println(Arrays.toString(options));
+			String[] options = null;
+			if (optionsString != null && !optionsString.equals("")) {
+				options = Utils.splitOptions(optionsString);
+				System.out.println(Arrays.toString(options));
+			}
 			final Classifier c = (Classifier) Utils.forName(Classifier.class,
 					classifierName, options);
 			classifiers.add(c);

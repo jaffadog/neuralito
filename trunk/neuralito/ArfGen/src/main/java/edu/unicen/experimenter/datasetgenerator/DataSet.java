@@ -73,6 +73,7 @@ public class DataSet {
 	@CollectionOfElements(fetch = FetchType.LAZY)
 	private List<DataSetInstance> instances;
 	private String generationStrategyName;
+	@Column(length = 1000)
 	private String attributes_String;
 	private String strategyOptionString;
 	private String[] years;
