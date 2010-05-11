@@ -6,7 +6,7 @@ For each strategy datasets are generated incrementally.
 
 -->
 <edu.unicen.experimenter.datasetgenerator.xml.DataSetGeneratorConfiguration>
- <dataSetGroupName>NshoreInstancesModels</dataSetGroupName>
+ <dataSetGroupName>NshoreInstancesModelsGood</dataSetGroupName>
   <dataSets>
 <!--  NORTHSHORE-->
        
