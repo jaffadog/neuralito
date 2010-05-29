@@ -116,7 +116,7 @@ public class ForecastServiceImplementationTest {
 			final List<VisualObservationDTO> visualObservations = VisualObservationsLoader
 					.loadVisualObservations(
 							new File(
-									"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu1997.dat"),
+									"C:\\Users\\esteban\\workspace\\arfgen\\files\\observations\\oahu2003.dat"),
 							Unit.Meters);
 
 			spotService.addVisualObservations(spot2Id, visualObservations);
@@ -254,6 +254,8 @@ public class ForecastServiceImplementationTest {
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Assert.fail();
+
 		}
 	}
 

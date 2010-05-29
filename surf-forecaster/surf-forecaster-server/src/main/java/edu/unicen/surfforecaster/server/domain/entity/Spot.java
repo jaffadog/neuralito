@@ -91,7 +91,7 @@ public class Spot implements Serializable {
 	/**
 	 * The Visual Observations available for this spot.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private final List<VisualObservation> visualObservations = new ArrayList<VisualObservation>();
 
 	public Integer getId() {

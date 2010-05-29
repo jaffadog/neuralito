@@ -43,13 +43,13 @@ public class WekaForecaster extends Forecaster {
 	 */
 	@Transient
 	private final Logger log = Logger.getLogger(this.getClass());
-	
+
 	private static final int MIN_NUM_INSTANCES_REQUIRED = 50;
 
 	/**
 	 * The Machine Learning Classifier used.
 	 */
-	@Column(length = 257)
+	@Column(length = 512)
 	// NOTE: Length is set greater than 256 this is a workaround for 'field too
 	// long' error when serializing to DB.
 	private Classifier classifier;
@@ -57,6 +57,7 @@ public class WekaForecaster extends Forecaster {
 	/**
 	 * The strategy to generate instances.
 	 */
+	@Column(length = 1048)
 	private DataSetGenerationStrategy dataSetGenerationStrategy;
 
 	/**
@@ -110,26 +111,27 @@ public class WekaForecaster extends Forecaster {
 			final DataSetGenerationStrategy st,
 			final HashMap<String, Serializable> options,
 			final WaveWatchSystem model,
-			final Collection<VisualObservation> observations, final Spot spot) throws NeuralitoException {
+			final Collection<VisualObservation> observations, final Spot spot)
+			throws NeuralitoException {
 
-			classifier = cl;
-			dataSetGenerationStrategy = st;
-			strategyOptions = options;
-			waveWatch = model;
-			trainningInstances = st.generateTrainningInstances(model,
-					observations, options);
-			
-			if (trainningInstances.numInstances() < WekaForecaster.MIN_NUM_INSTANCES_REQUIRED)
-				throw new NeuralitoException(ErrorCode.NOT_ENOUGH_WW3_HISTORY);
-			
-			try {
-				classifier.buildClassifier(trainningInstances);
-				evaluateForecaster();
-				this.spot = spot;
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		classifier = cl;
+		dataSetGenerationStrategy = st;
+		strategyOptions = options;
+		waveWatch = model;
+		trainningInstances = st.generateTrainningInstances(model, observations,
+				options);
+
+		if (trainningInstances.numInstances() < WekaForecaster.MIN_NUM_INSTANCES_REQUIRED)
+			throw new NeuralitoException(ErrorCode.NOT_ENOUGH_WW3_HISTORY);
+
+		try {
+			classifier.buildClassifier(trainningInstances);
+			evaluateForecaster();
+			this.spot = spot;
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

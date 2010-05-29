@@ -37,10 +37,19 @@
 			<groupId>edu.unicen.surf-forecaster</groupId>
 			<artifactId>surf-forecaster-common</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate</artifactId>
-		</dependency>
+
+   <dependency>  
+		<groupId>org.hibernate</groupId>  
+		<artifactId>hibernate-entitymanager</artifactId>  
+		
+	</dependency>  
+	<dependency>  
+		<groupId>org.hibernate.java-persistence</groupId>  
+		<artifactId>jpa-api</artifactId>  
+		
+	</dependency> 
+
+
 		<dependency>
 			<groupId>geronimo-spec</groupId>
 			<artifactId>geronimo-spec-jta</artifactId>
@@ -53,10 +62,10 @@
 			<groupId>opensymphony</groupId>
 			<artifactId>quartz</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-		</dependency>
+		
+		
+		
+		
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
