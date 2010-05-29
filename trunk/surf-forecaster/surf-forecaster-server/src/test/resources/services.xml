@@ -33,8 +33,9 @@
 		<property name="forecastDAO" ref="forecastDAO"></property>
 		<property name="spotDAO" ref="spotDAO"></property>
 		<property name="waveWatchSystem" ref="waveWatchSystemV2"></property>
-		<property name="classifierName" value="weka.classifiers.functions.LinearRegression"/>
+		<property name="classifierName" value="weka.classifiers.functions.SMOreg"/>
 		<property name="dataSetGenerationStrategy" ref="dataSetGenerationStrategy"></property>
+		<property name="classifierOptionsString"> <value>-S 0.0080 -C 0.7 -T 0.0080 -P 1.0E-12 -N 0 -K "weka.classifiers.functions.supportVector.RBFKernel -C 250007 -G 0.5"</value></property>
 	</bean>
 	<bean id="comparationService"
 		class="edu.unicen.surfforecaster.server.services.ComparationServiceImplementation">
@@ -46,8 +47,9 @@
 <!--		<property name="classifierName" value="weka.classifiers.functions.LinearRegression"/>-->
 <!--		<property name="dataSetGenerationStrategy" ref="dataSetGenerationStrategy"></property>-->
 	</bean>
-	<bean id="dataSetGenerationStrategy"
-		class="edu.unicen.surfforecaster.server.domain.weka.strategy.SimpleDataSetGenerationStrategy" />
+	<bean id="dataSetGenerationStrategy" class="edu.unicen.surfforecaster.server.domain.weka.strategy.WW3LastNLecturesStrategy">
+		<property name ="lastNLectures" value="3" />
+	</bean>
 
 	<bean id="ftpGribAccess"
 		class="edu.unicen.surfforecaster.server.domain.wavewatch.gribAccess.FtpGribAccess">

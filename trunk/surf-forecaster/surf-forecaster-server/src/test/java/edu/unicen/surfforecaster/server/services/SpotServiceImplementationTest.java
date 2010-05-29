@@ -161,7 +161,9 @@ public class SpotServiceImplementationTest {
 		final VisualObservationDTO visualObservation2 = new VisualObservationDTO(
 				21.3F, new Date(), Unit.Meters);
 		observations.add(visualObservation2);
+
 		spotService.removeVisualObservations(spot1Id);
+
 		List<VisualObservationDTO> visualObservations = spotService
 				.getVisualObservations(spot1Id);
 		Assert.assertEquals(0, visualObservations.size());
@@ -174,7 +176,6 @@ public class SpotServiceImplementationTest {
 				visualObservations.get(0).getWaveHeight(), 0.1F);
 		Assert.assertEquals(visualObservation2.getWaveHeight(),
 				visualObservations.get(1).getWaveHeight(), 0.1F);
-
 		observations.clear();
 		final VisualObservationDTO visualObservation3 = new VisualObservationDTO(
 				22.3F, new Date(), Unit.Meters);

@@ -6,6 +6,7 @@ package edu.unicen.surfforecaster.server.services;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 import weka.classifiers.Classifier;
+import weka.core.Utils;
 import edu.unicen.surfforecaster.common.exceptions.ErrorCode;
 import edu.unicen.surfforecaster.common.exceptions.NeuralitoException;
 import edu.unicen.surfforecaster.common.services.ArchiveDetailDTO;
@@ -70,6 +72,8 @@ public class ForecastServiceImplementation implements ForecastService {
 	private SpotDAO spotDAO;
 
 	private String classifierName;
+
+	private String classifierOptionsString;
 
 	/**
 	 * 
@@ -173,7 +177,8 @@ public class ForecastServiceImplementation implements ForecastService {
 
 	/**
 	 * Creates and train a forecaster which uses a machine learner. Inputs are:
-	 * @throws NeuralitoException 
+	 * 
+	 * @throws NeuralitoException
 	 * 
 	 * @see edu.unicen.surfforecaster.common.services.ForecastService#createWW3Forecaster(Integer,
 	 *      PointDTO)
@@ -182,14 +187,26 @@ public class ForecastServiceImplementation implements ForecastService {
 	@Transactional
 	public WekaForecasterEvaluationDTO createWekaForecaster(
 			final Integer spotId,
-			final HashMap<String, Serializable> dataSetStrategyOptions) throws NeuralitoException {
+			final HashMap<String, Serializable> dataSetStrategyOptions)
+			throws NeuralitoException {
 		log.info("Creating weka forecaster");
 		final Spot spot = spotDAO.getSpotById(spotId);
 		final List<VisualObservation> visualObservations = spot
 				.getVisualObservations();
 		Classifier classifier;
 		try {
-			classifier = Classifier.forName(classifierName, null);
+			String[] options = null;
+			if (classifierOptionsString != null
+					&& !classifierOptionsString.equals("")) {
+				options = Utils.splitOptions(classifierOptionsString);
+				log.info("Options for classifiers are:"
+						+ Arrays.toString(options));
+			}
+			// Instantiate the classifier with the given options(parameters).
+			classifier = (Classifier) Utils.forName(Classifier.class,
+					classifierName, options);
+
+			// classifier = Classifier.forName(classifierName, null);
 
 			final WekaForecaster forecaster = new WekaForecaster(classifier,
 					dataSetGenerationStrategy, dataSetStrategyOptions,
@@ -210,9 +227,9 @@ public class ForecastServiceImplementation implements ForecastService {
 					forecasterId, forecaster.getClassifier().getClass()
 							.getName(), forecaster.getTrainningOptions());
 		} catch (final Exception e) {
-			log.error("Error creating weka forecaster");
+			log.error("Error creating weka forecaster", e);
 			if (e instanceof NeuralitoException)
-				throw (NeuralitoException)e;
+				throw (NeuralitoException) e;
 		}
 		return null;
 
@@ -461,5 +478,13 @@ public class ForecastServiceImplementation implements ForecastService {
 			throws NeuralitoException {
 		validateForecasterExists(forecasterId);
 		forecastDAO.removeForecaster(forecasterId);
+	}
+
+	/**
+	 * @param classifierOptionsString
+	 *            the classifierOptionsString to set
+	 */
+	public void setClassifierOptionsString(final String classifierOptionsString) {
+		this.classifierOptionsString = classifierOptionsString;
 	}
 }
