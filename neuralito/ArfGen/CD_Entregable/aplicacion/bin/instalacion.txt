@@ -1,0 +1,40 @@
+****************************************************************************
+Instrucciones para la instalación de Surf-Forecaster
+****************************************************************************
+
+Requisitos:
+	- Java runtime edition 1.6
+	- MySQL 5.1
+	- Apache Tomcat 6
+	- Acceso a internet
+
+Instalación:
+
+1) Expander el límite de memoria máximo de Tomcat:( Necesario cuando se decodifica y procesa la información de pronosticos descargada )
+	- En windows:
+		Agregar al archivo(si no existe crearlo): "TomcatHome/bin/catalina.bat" la siguiente linea:
+		   set JAVA_OPTS=-Xms800m -Xmx1200m 
+	- En linux:
+		Agregar al archivo(si no existe crearlo): "TomcatHome/bin/catalina.sh" la siguiente linea:
+		   set JAVA_OPTS=-Xms800m -Xmx1200m 
+
+2) Configurar Mysql:( necesario por la gran cantidad de particiones de la tabla WaveWatchArchive )
+	- En $MYSQL_HOME/mysql.ini agregar las siquientes lineas debajo de [mysqld]
+				#
+				# 
+				# Surf-Forecaster specific configuration.
+				#
+				open-files-limit=10000
+
+3) Correr los scripts SQL ubicados en scripts.rar:
+	a) Tablas básicas (DB_init.sql, Obligatorio): Inicializa el esquema de la base de datos utilizado por la aplicación.
+	b) Areas y usuarios (DB_areas.sql, Opcional): Carga de áreas y países de la aplicación. De no ejecutarse este script deberán cargarse las areas y paises deseados mediante un script propio.
+	c) Histórico WaveWatch III (DB_wavewatch_archive.sql, opcional): Archivo histórico del wavewatch III con las condiciones de alta mar cerca de la isla de oahu para el rango de años 1997-2004.
+
+4) Deployar el archivo Surf-forecaster.war en Tomcat.
+
+5) En la carpeta expandida generada por Tomcat($TOMCAT_HOME\webapps\SurfForecaster\WEB-INF) editar dao.xml( User,Pass, y Url) para la conexion a la base de datos.
+
+6) Para utilizar la aplicación Acceder a : http://localhost:8080/SurfForecaster/
+
+***********************
