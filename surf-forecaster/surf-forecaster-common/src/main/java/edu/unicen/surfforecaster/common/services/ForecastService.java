@@ -112,10 +112,11 @@ public interface ForecastService {
 
 	/**
 	 * Returns the number of forecasts available for each month on a specific
-	 * grid point.
+	 * grid point. NOT FULLY IMPLEMENTED
 	 * 
 	 * @return
 	 */
+	// TODO finish this method implementation.
 	public List<ArchiveDetailDTO> getAvailableWekaArchive(PointDTO point)
 			throws NeuralitoException;
 
