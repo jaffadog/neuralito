@@ -76,10 +76,7 @@
 			<artifactId>jpeg2000</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
@@ -103,10 +100,7 @@
 			<artifactId>commons-lang</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-		</dependency>
+	
 
 		<dependency>
 			<groupId>com.enterprisedt</groupId>
