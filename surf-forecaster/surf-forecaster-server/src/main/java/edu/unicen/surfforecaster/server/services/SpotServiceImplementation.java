@@ -520,10 +520,29 @@ public class SpotServiceImplementation implements SpotService {
 				.hasNext();) {
 			final Spot spot = (Spot) iterator.next();
 			if (spot.getZone().getCountry().getId().equals(idCountry)) {
-				zonesDtos.add(spot.getZone().getDTO());
+
+				if (!contains(zonesDtos, spot.getZone().getId())) {
+					zonesDtos.add(spot.getZone().getDTO());
+				}
+
 			}
 		}
 		return new ArrayList<ZoneDTO>(zonesDtos);
+	}
+
+	/**
+	 * Check if the given zone is not in the zonesDto collection.
+	 * 
+	 * @param zonesDtos
+	 * @param id
+	 * @return
+	 */
+	private boolean contains(final Set<ZoneDTO> zonesDtos, final Integer id) {
+		for (final ZoneDTO zoneDTO : zonesDtos) {
+			if (zoneDTO.getId() == id)
+				return true;
+		}
+		return false;
 	}
 
 	/**
