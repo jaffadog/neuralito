@@ -31,6 +31,7 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	private Map<String, List<ForecastGwtDTO>> forecasters = null;
 	private ILocalizationPanel localizationPanel = null;
 	private HorizontalPanel spotDataHPanel = null;
+	private static final String MAP_COORDINATE_FORMAT = "##0.0#####";
 	
 	/**
 	 * This Strategy shows 2 panels with the next two forecasts (now and +3 hours), and shows below a detalied forecast
@@ -61,17 +62,17 @@ public class DetailedForecastWgStrategyB implements IRenderDetailedForecastStrat
 	
 	private void fillSpotInfo(SpotGwtDTO spot) {
 		Label spotLat = new Label(GWTUtils.LOCALE_CONSTANTS.spot() + " " + GWTUtils.LOCALE_CONSTANTS.lat_abbr() + ": ");
-		Label spotLatValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getPoint().getLatitude()));
+		Label spotLatValue = new Label(NumberFormat.getFormat(DetailedForecastWgStrategyB.MAP_COORDINATE_FORMAT).format(spot.getPoint().getLatitude()));
 		spotLatValue.addStyleName("gwt-Label-SpotDataValue");
 		Label spotLon = new Label(", " + GWTUtils.LOCALE_CONSTANTS.lon_abbr() + ": ");
-		Label spotLonValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getPoint().getLongitude()));
+		Label spotLonValue = new Label(NumberFormat.getFormat(DetailedForecastWgStrategyB.MAP_COORDINATE_FORMAT).format(spot.getPoint().getLongitude()));
 		spotLonValue.addStyleName("gwt-Label-SpotDataValue");
 		
 		Label ww3Lat = new Label(", " + GWTUtils.LOCALE_CONSTANTS.justWW3GridPoint() + " " + GWTUtils.LOCALE_CONSTANTS.lat_abbr() + ": ");
-		Label ww3LatValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getGridPoint().getLatitude()));
+		Label ww3LatValue = new Label(NumberFormat.getFormat(DetailedForecastWgStrategyB.MAP_COORDINATE_FORMAT).format(spot.getGridPoint().getLatitude()));
 		ww3LatValue.addStyleName("gwt-Label-SpotDataValue");
 		Label ww3Lon = new Label(", " + GWTUtils.LOCALE_CONSTANTS.lon_abbr() + ": ");
-		Label ww3LonValue = new Label(NumberFormat.getFormat("##0.0#").format(spot.getGridPoint().getLongitude()));
+		Label ww3LonValue = new Label(NumberFormat.getFormat(DetailedForecastWgStrategyB.MAP_COORDINATE_FORMAT).format(spot.getGridPoint().getLongitude()));
 		ww3LonValue.addStyleName("gwt-Label-SpotDataValue");
 		
 		Label timezone = new Label(", " + GWTUtils.LOCALE_CONSTANTS.timeZone() + ": ");

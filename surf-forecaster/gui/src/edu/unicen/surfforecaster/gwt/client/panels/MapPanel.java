@@ -34,7 +34,7 @@ public class MapPanel extends VerticalPanel {
 	private TextBox txtBuoyLat = null;
 	private static final String MAP_HEIGHT = "600px";
 	private static final String MAP_WIDTH = "870px";
-	private static final String MAP_COORDINATE_FORMAT = "##0.0#";
+	private static final String MAP_COORDINATE_FORMAT = "##0.0##########";
 	private static final String INPUT_WIDTH = "70px";
 	
 	private List<Marker> spotGridPoints = null;
@@ -118,7 +118,7 @@ public class MapPanel extends VerticalPanel {
 	    
 	    txtSpotLat = new TextBox();
 	    txtSpotLat.setEnabled(false);
-	    txtSpotLat.setMaxLength(10);
+	    txtSpotLat.setMaxLength(15);
 	    txtSpotLat.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(2, 0, txtSpotLat);
 	    txtSpotLat.setWidth(MapPanel.INPUT_WIDTH);
@@ -128,7 +128,7 @@ public class MapPanel extends VerticalPanel {
 	    
 	    txtSpotLong = new TextBox();
 	    txtSpotLong.setEnabled(false);
-	    txtSpotLong.setMaxLength(10);
+	    txtSpotLong.setMaxLength(15);
 	    txtSpotLong.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(4, 0, txtSpotLong);
 	    txtSpotLong.setWidth(MapPanel.INPUT_WIDTH);
@@ -146,7 +146,7 @@ public class MapPanel extends VerticalPanel {
 	    
 	    txtBuoyLat = new TextBox();
 	    txtBuoyLat.setEnabled(false);
-	    txtBuoyLat.setMaxLength(10);
+	    txtBuoyLat.setMaxLength(15);
 	    txtBuoyLat.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(8, 0, txtBuoyLat);
 	    txtBuoyLat.setWidth(MapPanel.INPUT_WIDTH);
@@ -156,7 +156,7 @@ public class MapPanel extends VerticalPanel {
 	    
 	    txtBuoyLong = new TextBox();
 	    txtBuoyLong.setEnabled(false);
-	    txtBuoyLong.setMaxLength(10);
+	    txtBuoyLong.setMaxLength(15);
 	    txtBuoyLong.setTextAlignment(TextBoxBase.ALIGN_RIGHT);
 	    flexTable.setWidget(10, 0, txtBuoyLong);
 	    txtBuoyLong.setWidth(MapPanel.INPUT_WIDTH);
