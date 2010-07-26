@@ -753,9 +753,6 @@ public class NewSpotPanel extends FlexTable implements Observer, ClickHandler{
 	}
 	
 	private void saveEditedSpot(Integer zoneId, Integer countryId) {
-		//TODO este getpoint del if en realidad tendria que ser el getGridPoint, pero aun no esta hecho, cambiarlo cuando este , agregar tb al if que si cambio
-		//las horas de luz de dia tambien tiene que reentrenar
-		
 		//check if gridPoint changed
 		boolean changedBuoy = false;
 		if (spot.getGridPoint().getLatitude() != new Float(mapPanel.getBuoyLat()).floatValue() || spot.getGridPoint().getLongitude() != new Float(mapPanel.getBuoyLong()).floatValue()) {
