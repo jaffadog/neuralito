@@ -1,6 +1,0 @@
-The times are given for waves coming from 300 degrees. 
-  
-Wave period 	Travel time 
-14 seconds 	12 hours 
-17 seconds 	10 hours 
-20 seconds 	8 & 1/2 hours 
