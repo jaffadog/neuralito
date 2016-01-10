@@ -1,0 +1,12 @@
+# Introduction #
+
+Every day check the issues list ordered by priority.
+
+
+# Details #
+
+Issue priority:
+  * **Critical:** Must be solved urgently, it is a blocking issue.
+  * **High:** Needed to solve it in the current day if it is possible. Maybe somebody couldn't finish a started task.
+  * **Medium:** Isn't urgent to be solved, catch these when all highest priorities issues were solved.
+  * **Low:** Solve these could be cool!!!
